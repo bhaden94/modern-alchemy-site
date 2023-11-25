@@ -5,7 +5,7 @@ export default function Container({ children }: { children: React.ReactNode }) {
     <div className="container">
       <header className="header">
         <Link className="header__title" href="/">
-          Next.js + Sanity
+          Bookings
         </Link>
       </header>
       <main>{children}</main>
@@ -27,7 +27,7 @@ export default function Container({ children }: { children: React.ReactNode }) {
               strokeWidth="1.2"
             ></path>
           </svg>{' '}
-          at Sanity
+          by Brady Haden
         </p>
       </footer>
     </div>

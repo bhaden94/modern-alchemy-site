@@ -4,15 +4,15 @@ import Image from 'next/image'
 import { useLiveQuery } from 'next-sanity/preview'
 
 import Container from '~/components/Container'
-import { readToken } from '~/lib/sanity.api'
-import { getClient } from '~/lib/sanity.client'
-import { urlForImage } from '~/lib/sanity.image'
+import { readToken } from '~/lib/sanity/sanity.api'
+import { getClient } from '~/lib/sanity/sanity.client'
+import { urlForImage } from '~/lib/sanity/sanity.image'
 import {
   getPost,
   type Post,
   postBySlugQuery,
   postSlugsQuery,
-} from '~/lib/sanity.queries'
+} from '~/lib/sanity/sanity.queries'
 import type { SharedPageProps } from '~/pages/_app'
 import { formatDate } from '~/utils'
 
@@ -20,6 +20,7 @@ interface Query {
   [key: string]: string
 }
 
+// TODO: remove post pages
 export const getStaticProps: GetStaticProps<
   SharedPageProps & {
     post: Post

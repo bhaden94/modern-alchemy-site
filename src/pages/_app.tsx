@@ -1,10 +1,20 @@
 import '~/styles/global.css'
 
 import type { AppProps } from 'next/app'
+import { SessionProvider } from 'next-auth/react'
 import { IBM_Plex_Mono, Inter, PT_Serif } from 'next/font/google'
-import { lazy } from 'react'
+import { lazy, useEffect, useState } from 'react'
+import { FeatureProvider, useFeatures } from '~/components/FeatureProvider'
+import { getClient } from '~/lib/sanity/sanity.client'
+import { groq } from 'next-sanity'
+import {
+  FeatureFlag,
+  getFeatureFlags,
+  listenForFeatureFlagChanges,
+} from '~/lib/sanity/sanity.queries'
 
 export interface SharedPageProps {
+  //session: Session | null
   draftMode: boolean
   token: string
 }
@@ -30,11 +40,13 @@ const serif = PT_Serif({
   weight: ['400', '700'],
 })
 
+// CSS for site or add Material UI
 export default function App({
   Component,
-  pageProps,
-}: AppProps<SharedPageProps>) {
+  pageProps: { session, ...pageProps },
+}: AppProps) {
   const { draftMode, token } = pageProps
+
   return (
     <>
       <style jsx global>
@@ -46,13 +58,17 @@ export default function App({
           }
         `}
       </style>
-      {draftMode ? (
-        <PreviewProvider token={token}>
-          <Component {...pageProps} />
-        </PreviewProvider>
-      ) : (
-        <Component {...pageProps} />
-      )}
+      <SessionProvider session={session}>
+        <FeatureProvider>
+          {draftMode ? (
+            <PreviewProvider token={token}>
+              <Component {...pageProps} />
+            </PreviewProvider>
+          ) : (
+            <Component {...pageProps} />
+          )}
+        </FeatureProvider>
+      </SessionProvider>
     </>
   )
 }

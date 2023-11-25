@@ -16,6 +16,7 @@ export const projectId = assertValue(
 )
 
 export const readToken = process.env.SANITY_API_READ_TOKEN || ''
+export const writeToken = process.env.SANITY_API_WRITE_TOKEN || ''
 
 // see https://www.sanity.io/docs/api-versioning for how versioning works
 export const apiVersion =

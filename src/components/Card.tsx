@@ -1,7 +1,7 @@
 import Image from 'next/image'
 
-import { urlForImage } from '~/lib/sanity.image'
-import { type Post } from '~/lib/sanity.queries'
+import { urlForImage } from '~/lib/sanity/sanity.image'
+import { type Post } from '~/lib/sanity/sanity.queries'
 import { formatDate } from '~/utils'
 
 export default function Card({ post }: { post: Post }) {
@@ -27,6 +27,6 @@ export default function Card({ post }: { post: Post }) {
         <p className="card__excerpt">{post.excerpt}</p>
         <p className="card__date">{formatDate(post._createdAt)}</p>
       </div>
-    </div>
+          </div>
   )
 }
