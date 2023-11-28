@@ -2,7 +2,7 @@ import { createContext, useContext, useState } from 'react'
 
 // TODO: split into proper folders and clean up types
 export type FeatureType = {
-  [key in Feature]: boolean
+  [key: string]: boolean
 }
 
 type FeatureProviderProps = {
@@ -10,15 +10,16 @@ type FeatureProviderProps = {
 }
 
 interface FeatureFlagsContextValue {
-  features: FeatureType
+  features: FeatureType | null
   setFeatureFlags: React.Dispatch<React.SetStateAction<FeatureType>>
 }
 
-export const FeatureFlagsContext =
-  createContext<FeatureFlagsContextValue>(undefined)
+export const FeatureFlagsContext = createContext<
+  FeatureFlagsContextValue | undefined
+>(undefined)
 
 export function FeatureProvider({ children }: FeatureProviderProps) {
-  const [featureFlags, setFeatureFlags] = useState<FeatureType>(null)
+  const [featureFlags, setFeatureFlags] = useState<FeatureType | null>(null)
 
   return (
     <FeatureFlagsContext.Provider
@@ -30,11 +31,11 @@ export function FeatureProvider({ children }: FeatureProviderProps) {
 }
 
 export function useFeatures(): FeatureFlagsContextValue {
-  const { features, setFeatureFlags } = useContext(FeatureFlagsContext)
-  if (features === undefined) {
+  const context = useContext(FeatureFlagsContext)
+  if (context === undefined) {
     throw new Error('useFeature must be used within a FeatureProvider')
   }
-  return { features, setFeatureFlags }
+  return context
 }
 
 export enum Feature {

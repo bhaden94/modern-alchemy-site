@@ -3,8 +3,6 @@ import type { ImageAsset, Slug } from '@sanity/types'
 import groq from 'groq'
 import { type SanityClient } from 'next-sanity'
 
-import { Feature } from '~/components/FeatureProvider'
-
 // split out queries into specific folders
 const featureFlagParams = { flagType: 'featureFlag' }
 const featureFlagQuery = groq`*[_type == $flagType]`

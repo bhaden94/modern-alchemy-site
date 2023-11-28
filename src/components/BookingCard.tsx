@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import { useState } from 'react'
+
 import { urlForImage } from '~/lib/sanity/sanity.image'
 import { type Booking } from '~/lib/sanity/sanity.queries'
 import { formatDate } from '~/utils'

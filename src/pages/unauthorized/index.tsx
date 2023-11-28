@@ -14,7 +14,9 @@ export default function UnauthorizedPage() {
       <p>You are not authoirzed to view this page.</p>
       <button
         onClick={() =>
-          signIn(undefined, { callbackUrl: searchParams.get(REDIRECT_URL) })
+          signIn(undefined, {
+            callbackUrl: searchParams?.get(REDIRECT_URL) || undefined,
+          })
         }
       >
         Sign with a different account

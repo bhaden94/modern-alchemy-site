@@ -61,7 +61,7 @@ export default function Home({ postsList }: { postsList: Post[] }) {
     return () => {
       subscription.unsubscribe()
     }
-  }, [])
+  }, [features, setFeatureFlags])
 
   return (
     <Container>

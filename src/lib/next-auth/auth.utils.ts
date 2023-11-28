@@ -12,7 +12,7 @@ export enum UserRoles {
 }
 
 export const checkIfAuthorized = async (token: JWT): Promise<boolean> => {
-  const authClient = getClient({ token: readToken })
+  const authClient = getClient(readToken)
   const allowedUsers = await getAllowedUsers(authClient)
 
   return allowedUsers.some((user) => user?.email === token?.email)

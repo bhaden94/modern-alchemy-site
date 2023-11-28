@@ -29,7 +29,8 @@ export default function Bookings({ bookings }: IBookings) {
     return () => {
       sub.unsubscribe()
     }
-  }, [])
+  }, [client])
+
   return (
     <section>
       {bookingsList?.length ? (
