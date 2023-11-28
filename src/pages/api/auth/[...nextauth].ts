@@ -1,7 +1,8 @@
 import NextAuth from 'next-auth'
 import GithubProvider from 'next-auth/providers/github'
 import GoogleProvider from 'next-auth/providers/google'
-import { UserRoles, checkIfAuthorized } from '~/lib/next-auth/auth.utils'
+
+import { checkIfAuthorized,UserRoles } from '~/lib/next-auth/auth.utils'
 
 export default NextAuth({
   providers: [

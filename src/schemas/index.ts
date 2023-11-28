@@ -1,10 +1,10 @@
 import { SchemaTypeDefinition } from 'sanity'
 
-import blockContent from './blockContent'
-import post from './post'
-import booking from './booking'
 import allowedUser from './allowed-user'
+import blockContent from './blockContent'
+import booking from './booking'
 import featureFlags from './feature-flags'
+import post from './post'
 
 // TODO: figure out how to generate types to use in code
 export const schemaTypes = {

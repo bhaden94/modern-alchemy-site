@@ -2,6 +2,7 @@ import type { PortableTextBlock } from '@portabletext/types'
 import type { ImageAsset, Slug } from '@sanity/types'
 import groq from 'groq'
 import { type SanityClient } from 'next-sanity'
+
 import { Feature } from '~/components/FeatureProvider'
 
 // split out queries into specific folders
@@ -27,7 +28,7 @@ export async function getAllowedUsers(
 
 export const bookingsQuery = groq`*[_type == "booking"] | order(_createdAt asc)`
 export async function getBookings(client: SanityClient): Promise<Booking[]> {
-  return await client.fetch(bookingsQuery)
+  return await client.fetch(bookingsQuery, {}, { cache: 'no-store' })
 }
 
 export async function deleteBooking(

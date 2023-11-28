@@ -1,5 +1,6 @@
-import { withAuth } from 'next-auth/middleware'
 import { NextResponse } from 'next/server'
+import { withAuth } from 'next-auth/middleware'
+
 import { REDIRECT_URL, UserRoles } from './lib/next-auth/auth.utils'
 
 export default withAuth(

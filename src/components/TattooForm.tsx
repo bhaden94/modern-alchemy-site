@@ -1,8 +1,10 @@
 import { UploadBody } from 'next-sanity'
-import { useForm } from 'react-hook-form'
 import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+
 import { getClient } from '~/lib/sanity/sanity.client'
 import { schemaTypes } from '~/schemas'
+
 import { Feature } from './FeatureProvider'
 
 // TODO: split into components

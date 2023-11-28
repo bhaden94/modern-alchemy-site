@@ -1,7 +1,8 @@
 import { JWT } from 'next-auth/jwt'
+
+import { readToken } from '../sanity/sanity.api'
 import { getClient } from '../sanity/sanity.client'
 import { getAllowedUsers } from '../sanity/sanity.queries'
-import { readToken } from '../sanity/sanity.api'
 
 export const REDIRECT_URL = 'redirectUrl'
 export const AUTHORIZED_ROLE = 'authorizedUser'

@@ -1,8 +1,9 @@
 'use client'
 
+import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { signIn } from 'next-auth/react'
-import Link from 'next/link'
+
 import { REDIRECT_URL } from '~/lib/next-auth/auth.utils'
 
 export default function UnauthorizedPage() {

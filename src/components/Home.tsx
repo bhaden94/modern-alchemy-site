@@ -1,6 +1,7 @@
-import type { GetStaticProps, InferGetStaticPropsType } from 'next'
-import { useLiveQuery } from 'next-sanity/preview'
+'use client'
+
 import Link from 'next/link'
+import { useLiveQuery } from 'next-sanity/preview'
 import { useEffect } from 'react'
 
 import Card from '~/components/Card'
@@ -8,34 +9,15 @@ import Container from '~/components/Container'
 import { Feature, FeatureType, useFeatures } from '~/components/FeatureProvider'
 import TattooForm from '~/components/TattooForm'
 import Welcome from '~/components/Welcome'
-import { readToken, writeToken } from '~/lib/sanity/sanity.api'
+import { writeToken } from '~/lib/sanity/sanity.api'
 import { getClient } from '~/lib/sanity/sanity.client'
 import {
-  getPosts,
-  type Post,
-  postsQuery,
   FeatureFlag,
   getFeatureFlags,
   listenForFeatureFlagChanges,
+  type Post,
+  postsQuery,
 } from '~/lib/sanity/sanity.queries'
-import type { SharedPageProps } from '~/pages/_app'
-
-export const getStaticProps: GetStaticProps<
-  SharedPageProps & {
-    posts: Post[]
-  }
-> = async ({ draftMode = false }) => {
-  const client = getClient(draftMode ? { token: readToken } : undefined)
-  const posts = await getPosts(client)
-
-  return {
-    props: {
-      draftMode,
-      token: writeToken,
-      posts,
-    },
-  }
-}
 
 function createProviderFlags(flags: FeatureFlag[]): FeatureType {
   let flagsObj: FeatureType = {
@@ -51,10 +33,8 @@ function createProviderFlags(flags: FeatureFlag[]): FeatureType {
   return flagsObj
 }
 
-export default function IndexPage(
-  props: InferGetStaticPropsType<typeof getStaticProps>,
-) {
-  const [posts] = useLiveQuery<Post[]>(props.posts, postsQuery)
+export default function Home({ postsList }: { postsList: Post[] }) {
+  const [posts] = useLiveQuery<Post[]>(postsList, postsQuery)
   const { features, setFeatureFlags } = useFeatures()
 
   useEffect(() => {
@@ -93,7 +73,7 @@ export default function IndexPage(
         )}
         <Link href="/bookings">Bookings</Link>
         {features?.booksOpen ? (
-          <TattooForm writeToken={props.token} />
+          <TattooForm writeToken={writeToken} />
         ) : undefined}
       </section>
     </Container>

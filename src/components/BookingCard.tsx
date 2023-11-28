@@ -1,9 +1,12 @@
+'use client'
+
 import Image from 'next/image'
 import { useState } from 'react'
-import { getClient } from '~/lib/sanity/sanity.client'
 
+import { writeToken } from '~/lib/sanity/sanity.api'
+import { getClient } from '~/lib/sanity/sanity.client'
 import { urlForImage } from '~/lib/sanity/sanity.image'
-import { deleteBooking, type Booking } from '~/lib/sanity/sanity.queries'
+import { type Booking, deleteBooking } from '~/lib/sanity/sanity.queries'
 import { formatDate } from '~/utils'
 
 interface IBookingCardProps {
@@ -11,12 +14,14 @@ interface IBookingCardProps {
   token: string
 }
 
+// TODO: move any logic related to getting the sanity client to an API route
+// This is so we will have access to the sanity tokens on server side only
 export default function BookingCard({ booking, token }: IBookingCardProps) {
   const [isDeleting, setIsDeleting] = useState<boolean>(false)
 
   const deleteBookingById = async () => {
     setIsDeleting(true)
-    const client = getClient({ token: token })
+    const client = getClient(writeToken)
     await deleteBooking(client, booking._id)
     setIsDeleting(false)
   }
@@ -26,7 +31,7 @@ export default function BookingCard({ booking, token }: IBookingCardProps) {
       {booking.showcaseImages[0] ? (
         <Image
           className="card__cover"
-          src={urlForImage(booking.showcaseImages[0])
+          src={urlForImage(booking.showcaseImages[0])!
             .width(500)
             .height(300)
             .url()}
