@@ -17,6 +17,7 @@ const TattooForm = ({ writeToken }) => {
   } = useForm()
   // const isBooksOpen = useFeature(Feature.BooksOpen)
 
+  // TODO: move this to an api route
   const onSubmit = async (data) => {
     setIsSubmitting(true)
 
