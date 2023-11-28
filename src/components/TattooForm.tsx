@@ -1,9 +1,7 @@
 import { UploadBody } from 'next-sanity'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-
 import { getClient } from '~/lib/sanity/sanity.client'
-import { schemaTypes } from '~/schemas'
 
 // TODO: split into components
 const TattooForm = ({ writeToken }) => {
@@ -13,47 +11,39 @@ const TattooForm = ({ writeToken }) => {
     handleSubmit,
     formState: { errors },
   } = useForm()
-  // const isBooksOpen = useFeature(Feature.BooksOpen)
 
   // TODO: move this to an api route
   const onSubmit = async (data) => {
     setIsSubmitting(true)
 
     const client = getClient(writeToken)
-    // verify books are open before submitting form
-    // return error if the books are closed so we can
-    // display that on the screen for the user
-    // console.log('Books open when submitting form: ', isBooksOpen)
+    const imagesArray = Array.from(data.showcaseImages)
 
-    try {
-      const imagesArray = Array.from(data.showcaseImages)
+    // TODO: find out how to move this image uploading to the server via an api route
+    // Upload images to Sanity and get their references
+    const imageReferences = await Promise.all(
+      imagesArray.map(async (image: UploadBody) => {
+        const imageData = await client.assets.upload('image', image)
+        return {
+          _key: imageData._id,
+          _type: 'image',
+          asset: {
+            _ref: imageData._id,
+            _type: 'reference',
+          },
+        }
+      }),
+    )
 
-      // Upload images to Sanity and get their references
-      const imageReferences = await Promise.all(
-        imagesArray.map(async (image: UploadBody) => {
-          const imageData = await client.assets.upload('image', image)
-          return {
-            _key: imageData._id,
-            _type: 'image',
-            asset: {
-              _ref: imageData._id,
-              _type: 'reference',
-            },
-          }
-        }),
-      )
-
-      // Submit the form data to Sanity CMS
-      await client.create({
-        _type: schemaTypes.booking.name,
+    const response = await fetch('/api/sanity/submitbooking', {
+      method: 'PUT',
+      body: JSON.stringify({
         ...data,
-        showcaseImages: imageReferences,
-      })
-    } catch (error) {
-      console.error('Error submitting form:', error)
-    } finally {
-      setIsSubmitting(false)
-    }
+        imageReferences: imageReferences,
+      }),
+    })
+    // TODO: handle errors
+    setIsSubmitting(false)
   }
 
   return (

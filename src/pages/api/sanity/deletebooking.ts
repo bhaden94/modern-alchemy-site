@@ -13,7 +13,7 @@ export default async function handler(
   const body = JSON.parse(req.body)
 
   if (method !== 'DELETE')
-    return res.status(400).json('requsted method no available')
+    return res.status(400).json('requsted method not available')
   if (!body.id) return res.status(400).json('id not given')
 
   const response = await client
