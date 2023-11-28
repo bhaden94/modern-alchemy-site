@@ -4,7 +4,6 @@ import { signOut } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 
 import BookingCard from '~/components/BookingCard'
-import { writeToken } from '~/lib/sanity/sanity.api'
 import { getClient } from '~/lib/sanity/sanity.client'
 import {
   Booking,
@@ -39,11 +38,7 @@ export default function Bookings({ bookings }: IBookings) {
             Sign Out
           </button>
           {bookingsList.map((booking) => (
-            <BookingCard
-              key={booking._id}
-              booking={booking}
-              token={writeToken}
-            />
+            <BookingCard key={booking._id} booking={booking} />
           ))}
         </>
       ) : (

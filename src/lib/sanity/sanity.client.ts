@@ -13,7 +13,6 @@ export function getClient(token?: string): SanityClient {
   if (!token) {
     return client
   }
-  console.log(token)
   return client.withConfig({
     token: token,
     useCdn: false,

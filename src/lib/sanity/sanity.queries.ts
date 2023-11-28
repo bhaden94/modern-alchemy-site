@@ -31,13 +31,6 @@ export async function getBookings(client: SanityClient): Promise<Booking[]> {
   return await client.fetch(bookingsQuery, {}, { cache: 'no-store' })
 }
 
-export async function deleteBooking(
-  client: SanityClient,
-  id: string,
-): Promise<any> {
-  return await client.delete(id)
-}
-
 export const postsQuery = groq`*[_type == "post" && defined(slug.current)] | order(_createdAt desc)`
 export async function getPosts(client: SanityClient): Promise<Post[]> {
   return await client.fetch(postsQuery)
