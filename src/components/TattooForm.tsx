@@ -1,10 +1,8 @@
-import { UploadBody } from 'next-sanity'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { getClient } from '~/lib/sanity/sanity.client'
 
 // TODO: split into components
-const TattooForm = ({ writeToken }) => {
+const TattooForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const {
     register,
@@ -12,34 +10,27 @@ const TattooForm = ({ writeToken }) => {
     formState: { errors },
   } = useForm()
 
-  // TODO: move this to an api route
   const onSubmit = async (data) => {
     setIsSubmitting(true)
+    const formData = new FormData()
+    const images: FileList = data.showcaseImages
+    Array.from(images).forEach((file, i) => {
+      formData.append(`image-${i}`, file)
+    })
 
-    const client = getClient(writeToken)
-    const imagesArray = Array.from(data.showcaseImages)
+    const imageUploadResponse = await fetch('/api/sanity/images', {
+      method: 'PUT',
+      body: formData,
+    })
+    // TODO: handle errors
+    const { imageReferences } = await imageUploadResponse.json()
 
-    // TODO: find out how to move this image uploading to the server via an api route
-    // Upload images to Sanity and get their references
-    const imageReferences = await Promise.all(
-      imagesArray.map(async (image: UploadBody) => {
-        const imageData = await client.assets.upload('image', image)
-        return {
-          _key: imageData._id,
-          _type: 'image',
-          asset: {
-            _ref: imageData._id,
-            _type: 'reference',
-          },
-        }
-      }),
-    )
-
-    const response = await fetch('/api/sanity/submitbooking', {
+    /* Create booking */
+    const response = await fetch('/api/sanity/booking', {
       method: 'PUT',
       body: JSON.stringify({
         ...data,
-        imageReferences: imageReferences,
+        showcaseImages: imageReferences,
       }),
     })
     // TODO: handle errors

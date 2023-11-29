@@ -14,6 +14,7 @@ interface IBookingCardProps {
 export default function BookingCard({ booking }: IBookingCardProps) {
   const [isDeleting, setIsDeleting] = useState<boolean>(false)
 
+  // TODO: move this to app/api/sanity/booking delete route
   const deleteBookingById = async () => {
     setIsDeleting(true)
     const response = await fetch('/api/sanity/deletebooking', {

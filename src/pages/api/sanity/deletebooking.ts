@@ -4,6 +4,7 @@ import { getClient } from '~/lib/sanity/sanity.client'
 
 const token = process.env.SANITY_API_WRITE_TOKEN
 
+// TODO: move to app/api/sanity/booking
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,

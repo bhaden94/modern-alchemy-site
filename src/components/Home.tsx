@@ -72,9 +72,7 @@ export default function Home({ postsList }: { postsList: Post[] }) {
           <Welcome />
         )}
         <Link href="/bookings">Bookings</Link>
-        {features?.booksOpen ? (
-          <TattooForm writeToken={writeToken} />
-        ) : undefined}
+        {features?.booksOpen ? <TattooForm /> : undefined}
       </section>
     </Container>
   )
