@@ -3,6 +3,7 @@ import { getClient } from '~/lib/sanity/sanity.client'
 
 const token = process.env.SANITY_API_WRITE_TOKEN
 
+// TODO: improve responses for both routes
 export async function PUT(request: NextRequest) {
   const client = getClient(token)
   const body = await request.json()
@@ -21,4 +22,15 @@ export async function PUT(request: NextRequest) {
   }
 }
 
-// TODO: Add delete route
+export async function DELETE(request: NextRequest) {
+  const client = getClient(token)
+  const body = await request.json()
+
+  if (!body.id) return NextResponse.json({ status: 'id not given' })
+
+  const response = await client
+    .delete(body.id)
+    .catch((err) => NextResponse.json(err))
+
+  return NextResponse.json(response)
+}

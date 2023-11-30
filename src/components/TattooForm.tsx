@@ -18,6 +18,7 @@ const TattooForm = () => {
       formData.append(`image-${i}`, file)
     })
 
+    /* Upload images */
     const imageUploadResponse = await fetch('/api/sanity/images', {
       method: 'PUT',
       body: formData,
