@@ -1,6 +1,5 @@
 import { JWT } from 'next-auth/jwt'
 
-import { readToken } from '../sanity/sanity.api'
 import { getClient } from '../sanity/sanity.client'
 import { getAllowedUsers } from '../sanity/sanity.queries'
 
@@ -12,7 +11,7 @@ export enum UserRoles {
 }
 
 export const checkIfAuthorized = async (token: JWT): Promise<boolean> => {
-  const authClient = getClient(readToken)
+  const authClient = getClient(undefined)
   const allowedUsers = await getAllowedUsers(authClient)
 
   return allowedUsers.some((user) => user?.email === token?.email)

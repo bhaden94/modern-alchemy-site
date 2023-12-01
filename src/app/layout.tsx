@@ -2,6 +2,8 @@ import './styles/global.css'
 
 import { IBM_Plex_Mono, Inter, PT_Serif } from 'next/font/google'
 
+import Providers from '~/components/Providers'
+
 const mono = IBM_Plex_Mono({
   variable: '--font-family-mono',
   subsets: ['latin'],
@@ -31,7 +33,9 @@ export default function RootLayout({
       lang="en"
       className={`${serif.variable} ${sans.variable} ${mono.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   )
 }

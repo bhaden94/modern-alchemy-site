@@ -1,20 +1,31 @@
 import type { PortableTextBlock } from '@portabletext/types'
 import type { ImageAsset, Slug } from '@sanity/types'
 import groq from 'groq'
-import { type SanityClient } from 'next-sanity'
+import { ListenEvent, MutationEvent,type SanityClient } from 'next-sanity'
+import { Observable } from 'rxjs'
 
-// split out queries into specific folders
+// TODO: split out queries into specific folders
 const featureFlagParams = { flagType: 'featureFlag' }
-const featureFlagQuery = groq`*[_type == $flagType]`
+const featureFlagsQuery = groq`*[_type == $flagType]`
+const featureFlagQueryByKey = groq`*[_type == $flagType && key == $key][0]`
 export async function getFeatureFlags(
   client: SanityClient,
 ): Promise<FeatureFlag[]> {
-  return await client.fetch(featureFlagQuery, featureFlagParams)
+  return await client.fetch(featureFlagsQuery, featureFlagParams)
+}
+export async function getSingleFeatureFlag(
+  client: SanityClient,
+  key: string,
+): Promise<FeatureFlag> {
+  featureFlagParams['key'] = key
+  return await client.fetch(featureFlagQueryByKey, featureFlagParams)
 }
 export function listenForFeatureFlagChanges(
   client: SanityClient,
-): any /**Figure return type for subscription */ {
-  return client.listen(featureFlagQuery, featureFlagParams)
+): Observable<
+  Record<string, any>
+> /* return type is Observable from RxJS. Can't import that */ {
+  return client.listen(featureFlagsQuery, featureFlagParams)
 }
 
 export const allowedUsersQuery = groq`*[_type == "allowedUser"]`

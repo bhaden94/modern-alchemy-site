@@ -1,4 +1,5 @@
 import Container from '~/components/Container'
+import Features from '~/components/Features'
 import { getClient } from '~/lib/sanity/sanity.client'
 import { getBookings } from '~/lib/sanity/sanity.queries'
 
@@ -13,6 +14,7 @@ export default async function BookingsPage() {
 
   return (
     <Container>
+      <Features />
       <Bookings bookings={bookings} />
     </Container>
   )

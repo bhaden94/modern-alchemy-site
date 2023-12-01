@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+
 import { getClient } from '~/lib/sanity/sanity.client'
 
 const token = process.env.SANITY_API_WRITE_TOKEN
