@@ -1,7 +1,7 @@
 import Image from 'next/image'
 
-import { urlForImage } from '~/lib/sanity.image'
-import { type Post } from '~/lib/sanity.queries'
+import { urlForImage } from '~/lib/sanity/sanity.image'
+import { type Post } from '~/lib/sanity/sanity.queries'
 import { formatDate } from '~/utils'
 
 export default function Card({ post }: { post: Post }) {
@@ -10,7 +10,7 @@ export default function Card({ post }: { post: Post }) {
       {post.mainImage ? (
         <Image
           className="card__cover"
-          src={urlForImage(post.mainImage).width(500).height(300).url()}
+          src={urlForImage(post.mainImage)!.width(500).height(300).url()}
           height={300}
           width={500}
           alt=""

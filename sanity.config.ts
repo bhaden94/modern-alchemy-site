@@ -18,7 +18,7 @@ import {
   dataset,
   previewSecretId,
   projectId,
-} from '~/lib/sanity.api'
+} from '~/lib/sanity/sanity.api'
 import { schema } from '~/schemas'
 
 const iframeOptions = {
@@ -30,10 +30,11 @@ const iframeOptions = {
   reload: { button: true },
 } satisfies IframeOptions
 
+// TODO: change preview plugin to not be specific to posts
 export default defineConfig({
   basePath: '/studio',
-  name: 'project-name',
-  title: 'Project Name',
+  name: 'nextjs-bookings',
+  title: 'Bookings',
   projectId,
   dataset,
   //edit schemas in './src/schemas'

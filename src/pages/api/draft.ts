@@ -1,14 +1,16 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { isValidSecret } from 'sanity-plugin-iframe-pane/is-valid-secret'
 
-import { previewSecretId, readToken } from '~/lib/sanity.api'
-import { getClient } from '~/lib/sanity.client'
+import { previewSecretId } from '~/lib/sanity/sanity.api'
+import { getPreviewClient } from '~/lib/sanity/sanity.client'
+
+const token = process.env.SANITY_API_READ_TOKEN
 
 export default async function preview(
   req: NextApiRequest,
   res: NextApiResponse<string | void>,
 ) {
-  if (!readToken) {
+  if (!token) {
     res.status(500).send('Misconfigured server')
     return
   }
@@ -24,9 +26,9 @@ export default async function preview(
     return
   }
 
-  const authClient = getClient({ token: readToken }).withConfig({
+  const authClient = getPreviewClient({ token: token }).withConfig({
     useCdn: false,
-    token: readToken,
+    token: token,
   })
 
   // This is the most common way to check for auth, but we encourage you to use your existing auth
