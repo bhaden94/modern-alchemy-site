@@ -1,7 +1,7 @@
 import type { PortableTextBlock } from '@portabletext/types'
 import type { ImageAsset, Slug } from '@sanity/types'
 import groq from 'groq'
-import { ListenEvent, MutationEvent,type SanityClient } from 'next-sanity'
+import { ListenEvent, MutationEvent, type SanityClient } from 'next-sanity'
 import { Observable } from 'rxjs'
 
 // TODO: split out queries into specific folders
@@ -22,9 +22,7 @@ export async function getSingleFeatureFlag(
 }
 export function listenForFeatureFlagChanges(
   client: SanityClient,
-): Observable<
-  Record<string, any>
-> /* return type is Observable from RxJS. Can't import that */ {
+): Observable<Record<string, any>> {
   return client.listen(featureFlagsQuery, featureFlagParams)
 }
 
