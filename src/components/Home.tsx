@@ -3,9 +3,9 @@
 import Link from 'next/link'
 
 import Container from '~/components/Container'
-import { useFeatures } from '~/components/FeatureProvider'
 import TattooForm from '~/components/TattooForm'
 import Welcome from '~/components/Welcome'
+import { useFeatures } from '~/hooks/useFeatures'
 
 export default function Home() {
   const { features } = useFeatures()

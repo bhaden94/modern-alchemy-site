@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useEffect,useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 
 import { getClient } from '~/lib/sanity/sanity.client'
 import {
