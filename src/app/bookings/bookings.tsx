@@ -4,12 +4,12 @@ import { signOut } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 
 import BookingCard from '~/components/BookingCard'
-import { getClient } from '~/lib/sanity/sanity.client'
 import {
-  Booking,
   bookingsQuery,
   getBookings,
-} from '~/lib/sanity/sanity.queries'
+} from '~/lib/sanity/queries/sanity.bookingsQuery'
+import { getClient } from '~/lib/sanity/sanity.client'
+import { Booking } from '~/types/SchemaTypes'
 
 interface IBookings {
   bookings: Booking[]

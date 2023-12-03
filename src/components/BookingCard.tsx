@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { useState } from 'react'
 
 import { urlForImage } from '~/lib/sanity/sanity.image'
-import { type Booking } from '~/lib/sanity/sanity.queries'
+import { Booking } from '~/types/SchemaTypes'
 import { formatDate } from '~/utils'
 
 interface IBookingCardProps {

@@ -2,17 +2,17 @@
 
 import { createContext, useEffect, useState } from 'react'
 
-import { getClient } from '~/lib/sanity/sanity.client'
 import {
-  FeatureFlag,
   getFeatureFlags,
   listenForFeatureFlagChanges,
-} from '~/lib/sanity/sanity.queries'
+} from '~/lib/sanity/queries/sanity.featuresQuery'
+import { getClient } from '~/lib/sanity/sanity.client'
 import { Feature } from '~/types/FeatureEnum'
 import {
   FeatureFlagsContextValue,
   FeatureType,
 } from '~/types/FeatureFlagContextValue'
+import { FeatureFlag } from '~/types/SchemaTypes'
 
 type FeatureProviderProps = {
   children: React.ReactNode

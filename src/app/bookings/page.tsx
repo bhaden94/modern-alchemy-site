@@ -1,7 +1,7 @@
 import Container from '~/components/Container'
 import Features from '~/components/Features'
+import { getBookings } from '~/lib/sanity/queries/sanity.bookingsQuery'
 import { getClient } from '~/lib/sanity/sanity.client'
-import { getBookings } from '~/lib/sanity/sanity.queries'
 
 import Bookings from './bookings'
 
