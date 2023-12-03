@@ -1,9 +1,9 @@
+import { NextAuthOptions } from 'next-auth'
 import { JWT } from 'next-auth/jwt'
+import GoogleProvider from 'next-auth/providers/google'
 
 import { getClient } from '../sanity/sanity.client'
 import { getAllowedUsers } from '../sanity/sanity.queries'
-import { NextAuthOptions } from 'next-auth'
-import GoogleProvider from 'next-auth/providers/google'
 
 export const REDIRECT_URL = 'redirectUrl'
 export const AUTHORIZED_ROLE = 'authorizedUser'

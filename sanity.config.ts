@@ -32,6 +32,7 @@ const iframeOptions = {
 } satisfies IframeOptions
 
 // TODO: change preview plugin to not be specific to posts
+// This may help: https://github.com/sanity-io/template-nextjs-personal-website/blob/main/sanity.config.ts
 export default defineConfig({
   basePath: '/studio',
   name: 'nextjs-bookings',
