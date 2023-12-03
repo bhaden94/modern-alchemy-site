@@ -1,7 +1,7 @@
 import type { PortableTextBlock } from '@portabletext/types'
+import { SanityClient } from '@sanity/client'
 import type { ImageAsset, Slug } from '@sanity/types'
 import groq from 'groq'
-import { type SanityClient } from 'next-sanity'
 import { Observable } from 'rxjs'
 
 // TODO: split out queries into specific folders
@@ -20,6 +20,7 @@ export async function getSingleFeatureFlag(
   featureFlagParams['key'] = key
   return await client.fetch(featureFlagQueryByKey, featureFlagParams)
 }
+// TODO: updating next-sanity broke the listen function
 export function listenForFeatureFlagChanges(
   client: SanityClient,
 ): Observable<Record<string, any>> {

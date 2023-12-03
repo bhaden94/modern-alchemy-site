@@ -1,4 +1,4 @@
-import { createClient, type SanityClient } from 'next-sanity'
+import { createClient, SanityClient } from '@sanity/client'
 
 import { apiVersion, dataset, projectId, useCdn } from '~/lib/sanity/sanity.api'
 
