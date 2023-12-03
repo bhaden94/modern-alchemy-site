@@ -20,7 +20,6 @@ export async function getSingleFeatureFlag(
   featureFlagParams['key'] = key
   return await client.fetch(featureFlagQueryByKey, featureFlagParams)
 }
-// TODO: updating next-sanity broke the listen function
 export function listenForFeatureFlagChanges(
   client: SanityClient,
 ): Observable<Record<string, any>> {
