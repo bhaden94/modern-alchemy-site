@@ -1,39 +1,20 @@
 'use client'
 
-import { createContext, useContext, useEffect, useState } from 'react'
-
+import { createContext, useState, useEffect } from 'react'
 import { getClient } from '~/lib/sanity/sanity.client'
 import {
   FeatureFlag,
   getFeatureFlags,
   listenForFeatureFlagChanges,
 } from '~/lib/sanity/sanity.queries'
-
-// TODO: split into proper folders and clean up types
-export type FeatureType = {
-  [key: string]: boolean
-}
+import { Feature } from '~/types/FeatureEnum'
+import {
+  FeatureFlagsContextValue,
+  FeatureType,
+} from '~/types/FeatureFlagContextValue'
 
 type FeatureProviderProps = {
   children: React.ReactNode
-}
-
-interface FeatureFlagsContextValue {
-  features: FeatureType | null
-}
-
-function createProviderFlags(flags: FeatureFlag[]): FeatureType {
-  let flagsObj: FeatureType = {
-    [Feature.BooksOpen]: false,
-  }
-
-  flags.forEach((feature: FeatureFlag) => {
-    const key = feature.key
-    const status = feature.status
-    flagsObj[key] = status
-  })
-
-  return flagsObj
 }
 
 export const FeatureFlagsContext = createContext<
@@ -76,14 +57,16 @@ export function FeatureProvider({ children }: FeatureProviderProps) {
   )
 }
 
-export function useFeatures(): FeatureFlagsContextValue {
-  const context = useContext(FeatureFlagsContext)
-  if (context === undefined) {
-    throw new Error('useFeature must be used within a FeatureProvider')
+function createProviderFlags(flags: FeatureFlag[]): FeatureType {
+  let flagsObj: FeatureType = {
+    [Feature.BooksOpen]: false,
   }
-  return context
-}
 
-export enum Feature {
-  BooksOpen = 'booksOpen',
+  flags.forEach((feature: FeatureFlag) => {
+    const key = feature.key
+    const status = feature.status
+    flagsObj[key] = status
+  })
+
+  return flagsObj
 }

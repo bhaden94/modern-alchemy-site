@@ -1,7 +1,7 @@
 import type { PortableTextBlock } from '@portabletext/types'
 import type { ImageAsset, Slug } from '@sanity/types'
 import groq from 'groq'
-import { ListenEvent, MutationEvent, type SanityClient } from 'next-sanity'
+import { type SanityClient } from 'next-sanity'
 import { Observable } from 'rxjs'
 
 // TODO: split out queries into specific folders

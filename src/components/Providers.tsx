@@ -1,6 +1,6 @@
 'use client'
 
-import { FeatureProvider } from '~/components/FeatureProvider'
+import { FeatureProvider } from '~/context/FeatureFlagsContext'
 
 // TODO: choose where we want live previews and how to set them up without exposing sanity tokens to the client
 // const PreviewProvider = lazy(() => import('~/components/PreviewProvider'))

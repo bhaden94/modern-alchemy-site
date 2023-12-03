@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-
-import { Feature, useFeatures } from './FeatureProvider'
+import { useFeatures } from '~/hooks/useFeatures'
+import { Feature } from '~/types/FeatureEnum'
 
 export default function Features() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
