@@ -28,8 +28,8 @@ export function FeatureProvider({ children }: FeatureProviderProps) {
   useEffect(() => {
     const client = getClient(undefined)
     const fetchFeatureFlags = async () => {
-      const featureFlags = await getFeatureFlags(client)
-      const flags = createProviderFlags(featureFlags)
+      const currentFeatures = await getFeatureFlags(client)
+      const flags = createProviderFlags(currentFeatures)
       setFeatureFlags(flags)
     }
 
@@ -49,7 +49,9 @@ export function FeatureProvider({ children }: FeatureProviderProps) {
     return () => {
       subscription.unsubscribe()
     }
-  }, [featureFlags, setFeatureFlags])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  // featureFlags is not a real dependency here
+  // because it is only read in the subscription
 
   return (
     <FeatureFlagsContext.Provider value={{ features: featureFlags }}>
