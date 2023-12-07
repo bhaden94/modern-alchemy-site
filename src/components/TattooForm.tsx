@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 // TODO: split into components
+// TODO: implement reCAPTCHA for form submission
+// TODO: implement Nodemailer to send email confirming form submission
 const TattooForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const {
