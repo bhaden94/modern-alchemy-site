@@ -22,7 +22,7 @@ const TattooForm = () => {
   const onSubmit: SubmitHandler<TBookingSchema> = async (data) => {
     setIsSubmitting(true)
     const formData = new FormData()
-    const images: FileList = data.showcaseImages
+    const images: File[] = data.showcaseImages
     Array.from(images).forEach((file, i) => {
       formData.append(`image-${i}`, file)
     })

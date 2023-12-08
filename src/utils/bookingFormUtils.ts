@@ -22,7 +22,7 @@ export const bookingSchema = z.object({
   style: z.string(),
   priorTattoo: z.string(),
   preferredDay: z.string(),
-  showcaseImages: z.custom<FileList>().superRefine((files, ctx) => {
+  showcaseImages: z.custom<File[]>().superRefine((files, ctx) => {
     if (files.length === 0) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
