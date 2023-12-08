@@ -1,6 +1,6 @@
 import './styles/global.css'
-// import '@/styles/globals.css'
 
+// import '@/styles/globals.css'
 import { IBM_Plex_Mono, Inter, PT_Serif } from 'next/font/google'
 
 import Providers from '~/components/Providers'

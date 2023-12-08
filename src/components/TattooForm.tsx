@@ -1,10 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useState } from 'react'
-import { SubmitHandler, useForm } from 'react-hook-form'
 import { Button } from '@nextui-org/button'
 import { Input } from '@nextui-org/input'
-import { Select, SelectItem } from '@nextui-org/select'
 import { Textarea } from '@nextui-org/react'
+import { Select, SelectItem } from '@nextui-org/select'
+import { useState } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
+
 import { bookingSchema, TBookingSchema } from '~/utils/bookingFormUtils'
 
 // TODO: split into components

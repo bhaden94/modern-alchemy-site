@@ -2,6 +2,7 @@
 
 import { NextUIProvider } from '@nextui-org/react'
 import { ThemeProvider as NextThemesProvider } from 'next-themes'
+
 import { FeatureProvider } from '~/context/FeatureFlagsContext'
 
 // TODO: choose where we want live previews and how to set them up without exposing sanity tokens to the client
