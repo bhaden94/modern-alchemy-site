@@ -157,7 +157,7 @@ const TattooForm = () => {
       {errors.showcaseImages && <span>{errors.showcaseImages.message}</span>}
 
       {/* Submit button */}
-      <Button type="submit" disabled={isSubmitting}>
+      <Button type="submit" color="primary" isDisabled={isSubmitting}>
         Submit
       </Button>
     </form>
