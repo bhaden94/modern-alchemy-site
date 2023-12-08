@@ -22,6 +22,14 @@ export default function BookingCard({ booking }: IBookingCardProps) {
     })
     // TODO: handle error in response
     setIsDeleting(false)
+
+    if (response.ok) {
+      // trigger without awaiting so it does not hold up the UI
+      fetch('/api/sanity/images', {
+        method: 'DELETE',
+        body: JSON.stringify({ imageReferences: booking.showcaseImages }),
+      })
+    }
   }
 
   return (

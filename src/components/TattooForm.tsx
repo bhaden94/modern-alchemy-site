@@ -1,7 +1,8 @@
-import { useState } from 'react'
-import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { TBookingSchema, bookingSchema } from '~/utils/bookingFormUtils'
+import { useState } from 'react'
+import { SubmitHandler,useForm } from 'react-hook-form'
+
+import { bookingSchema,TBookingSchema } from '~/utils/bookingFormUtils'
 
 // TODO: split into components
 // TODO: implement reCAPTCHA for form submission
