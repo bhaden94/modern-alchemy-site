@@ -1,8 +1,10 @@
 import './styles/global.css'
+// import '@/styles/globals.css'
 
 import { IBM_Plex_Mono, Inter, PT_Serif } from 'next/font/google'
 
 import Providers from '~/components/Providers'
+import { ThemeSwitcher } from '~/components/ThemeSwitcher'
 
 const mono = IBM_Plex_Mono({
   variable: '--font-family-mono',
@@ -34,7 +36,10 @@ export default function RootLayout({
       className={`${serif.variable} ${sans.variable} ${mono.variable}`}
     >
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          <ThemeSwitcher />
+          {children}
+        </Providers>
       </body>
     </html>
   )

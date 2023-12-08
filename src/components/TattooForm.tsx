@@ -1,7 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-
+import { Button } from '@nextui-org/button'
+import { Input } from '@nextui-org/input'
+import { Select, SelectItem } from '@nextui-org/select'
+import { Textarea } from '@nextui-org/react'
 import { bookingSchema, TBookingSchema } from '~/utils/bookingFormUtils'
 
 // TODO: split into components
@@ -49,66 +52,100 @@ const TattooForm = () => {
     <form onSubmit={handleSubmit(onSubmit)}>
       {/* Name */}
       <label htmlFor="name">Name:</label>
-      <input type="text" id="name" {...register('name')} />
+      <Input type="text" id="name" {...register('name')} />
       {errors.name && <span>{errors.name.message}</span>}
 
       {/* Phone Number */}
       <label htmlFor="phoneNumber">Phone Number:</label>
-      <input type="tel" id="phoneNumber" {...register('phoneNumber')} />
+      <Input type="tel" id="phoneNumber" {...register('phoneNumber')} />
       {errors.phoneNumber && <span>{errors.phoneNumber.message}</span>}
 
       {/* Email */}
       <label htmlFor="email">Email:</label>
-      <input type="email" id="email" {...register('email')} />
+      <Input type="email" id="email" {...register('email')} />
       {errors.email && <span>{errors.email.message}</span>}
 
       {/* Characters */}
       <label htmlFor="characters">Characters:</label>
-      <input type="text" id="characters" {...register('characters')} />
+      <Input type="text" id="characters" {...register('characters')} />
       {errors.characters && <span>{errors.characters.message}</span>}
 
       {/* Description */}
       <label htmlFor="description">Description:</label>
-      <textarea id="description" {...register('description')} />
+      <Textarea id="description" {...register('description')} />
       {errors.description && <span>{errors.description.message}</span>}
 
       {/* Location */}
       <label htmlFor="location">Location:</label>
-      <input type="text" id="location" {...register('location')} />
+      <Input type="text" id="location" {...register('location')} />
       {errors.location && <span>{errors.location.message}</span>}
 
       {/* Style */}
       <label htmlFor="style">Style:</label>
-      <select id="style" {...register('style')}>
-        <option value="color">Color</option>
-        <option value="black_and_grey">Black and Grey</option>
-      </select>
+      <Select
+        isRequired
+        id="style"
+        defaultSelectedKeys={['color']}
+        {...register('style')}
+      >
+        <SelectItem key="color" value="color">
+          Color
+        </SelectItem>
+        <SelectItem key="black_and_grey" value="black_and_grey">
+          Black and Grey
+        </SelectItem>
+      </Select>
       {errors.style && <span>{errors.style.message}</span>}
 
       {/* Prior Tattoo */}
       <label htmlFor="priorTattoo">Prior Tattoo:</label>
-      <select id="priorTattoo" {...register('priorTattoo')}>
-        <option value="new_tattoo">Yes - I want a new tattoo</option>
-        <option value="ongoing_project">
+      <Select
+        isRequired
+        id="priorTattoo"
+        defaultSelectedKeys={['new_tattoo']}
+        {...register('priorTattoo')}
+      >
+        <SelectItem key="new_tattoo" value="new_tattoo">
+          Yes - I want a new tattoo
+        </SelectItem>
+        <SelectItem key="ongoing_project" value="ongoing_project">
           Yes - this is an ongoing project
-        </option>
-        <option value="no">No</option>
-      </select>
+        </SelectItem>
+        <SelectItem key="no" value="no">
+          No
+        </SelectItem>
+      </Select>
       {errors.priorTattoo && <span>{errors.priorTattoo.message}</span>}
 
       {/* Preferred Day */}
       <label htmlFor="preferredDay">Preferred Day:</label>
-      <select id="preferredDay" {...register('preferredDay')}>
-        <option value="monday">Monday</option>
-        <option value="tuesday">Tuesday</option>
-        <option value="wednesday">Wednesday</option>
-        <option value="thursday">Thursday</option>
-        <option value="friday">Friday</option>
-      </select>
+      <Select
+        isRequired
+        id="preferredDay"
+        defaultSelectedKeys={['monday']}
+        {...register('preferredDay')}
+      >
+        <SelectItem key="monday" value="monday">
+          Monday
+        </SelectItem>
+        <SelectItem key="tuesday" value="tuesday">
+          Tuesday
+        </SelectItem>
+        <SelectItem key="wednesday" value="wednesday">
+          Wednesday
+        </SelectItem>
+        <SelectItem key="thursday" value="thursday">
+          Thursday
+        </SelectItem>
+        <SelectItem key="friday" value="friday">
+          Friday
+        </SelectItem>
+      </Select>
       {errors.preferredDay && <span>{errors.preferredDay.message}</span>}
 
       {/* Showcase Images */}
       {/* Need to make this a better experience and obvious multiple uploads can be done */}
+      {/* https://react-dropzone.js.org/#section-previews */}
       <label htmlFor="showcaseImages">Showcase Images:</label>
       <input
         type="file"
@@ -119,9 +156,9 @@ const TattooForm = () => {
       {errors.showcaseImages && <span>{errors.showcaseImages.message}</span>}
 
       {/* Submit button */}
-      <button type="submit" disabled={isSubmitting}>
+      <Button type="submit" disabled={isSubmitting}>
         Submit
-      </button>
+      </Button>
     </form>
   )
 }

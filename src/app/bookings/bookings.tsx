@@ -15,6 +15,9 @@ interface IBookings {
   bookings: Booking[]
 }
 
+// TODO: simple pagination
+// TODO: add refresh button when there are new bookings to load and don't automatically show them
+// This is because it could cause wierd things to happen if we have pagination for bookings
 export default function Bookings({ bookings }: IBookings) {
   const client = getClient(undefined)
   const [bookingsList, setBookingsList] = useState<Booking[]>(bookings)
