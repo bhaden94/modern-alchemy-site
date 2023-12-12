@@ -1,9 +1,10 @@
 'use client'
 
-import styles from './ImageDropzone.module.css'
 import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card'
 import { Image } from '@nextui-org/image'
-import { useState, forwardRef } from 'react'
+import { forwardRef,useState } from 'react'
+
+import styles from './ImageDropzone.module.css'
 
 interface ImageDropzoneProps {
   label: string
