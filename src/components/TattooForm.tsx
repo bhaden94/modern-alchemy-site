@@ -6,7 +6,12 @@ import { Select, SelectItem } from '@nextui-org/select'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
-import { bookingSchema, TBookingSchema } from '~/utils/bookingFormUtils'
+import {
+  ACCEPTED_IMAGE_TYPES,
+  bookingSchema,
+  TBookingSchema,
+} from '~/utils/bookingFormUtils'
+import ImageDropzone from './ImageDropzone/ImageDropzone'
 
 // TODO: split into components
 // TODO: implement reCAPTCHA for form submission
@@ -52,38 +57,80 @@ const TattooForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       {/* Name */}
-      <label htmlFor="name">Name:</label>
-      <Input type="text" id="name" {...register('name')} />
+      <Input
+        isRequired
+        label="Name"
+        labelPlacement="outside"
+        placeholder="Enter your name"
+        type="text"
+        id="name"
+        {...register('name')}
+      />
       {errors.name && <span>{errors.name.message}</span>}
 
       {/* Phone Number */}
-      <label htmlFor="phoneNumber">Phone Number:</label>
-      <Input type="tel" id="phoneNumber" {...register('phoneNumber')} />
+      <Input
+        isRequired
+        label="Phone Number"
+        labelPlacement="outside"
+        placeholder="Enter your phone number"
+        type="tel"
+        id="phoneNumber"
+        {...register('phoneNumber')}
+      />
       {errors.phoneNumber && <span>{errors.phoneNumber.message}</span>}
 
       {/* Email */}
-      <label htmlFor="email">Email:</label>
-      <Input type="email" id="email" {...register('email')} />
+      <Input
+        isRequired
+        label="Email"
+        labelPlacement="outside"
+        placeholder="Enter your email"
+        type="email"
+        id="email"
+        {...register('email')}
+      />
       {errors.email && <span>{errors.email.message}</span>}
 
       {/* Characters */}
-      <label htmlFor="characters">Characters:</label>
-      <Input type="text" id="characters" {...register('characters')} />
+      <Input
+        isRequired
+        label="Characters"
+        labelPlacement="outside"
+        placeholder="Enter the list of characters"
+        type="text"
+        id="characters"
+        {...register('characters')}
+      />
       {errors.characters && <span>{errors.characters.message}</span>}
 
       {/* Description */}
-      <label htmlFor="description">Description:</label>
-      <Textarea id="description" {...register('description')} />
+      <Textarea
+        label="Description"
+        labelPlacement="outside"
+        placeholder="Describe your tattoo idea"
+        id="description"
+        isRequired
+        {...register('description')}
+      />
       {errors.description && <span>{errors.description.message}</span>}
 
       {/* Location */}
-      <label htmlFor="location">Location:</label>
-      <Input type="text" id="location" {...register('location')} />
+      <Input
+        isRequired
+        label="Location"
+        labelPlacement="outside"
+        placeholder="Enter the location on your body"
+        type="text"
+        id="location"
+        {...register('location')}
+      />
       {errors.location && <span>{errors.location.message}</span>}
 
       {/* Style */}
-      <label htmlFor="style">Style:</label>
       <Select
+        label="Style"
+        labelPlacement="outside"
         isRequired
         id="style"
         defaultSelectedKeys={['color']}
@@ -99,8 +146,9 @@ const TattooForm = () => {
       {errors.style && <span>{errors.style.message}</span>}
 
       {/* Prior Tattoo */}
-      <label htmlFor="priorTattoo">Prior Tattoo:</label>
       <Select
+        label="Prior Tattoo"
+        labelPlacement="outside"
         isRequired
         id="priorTattoo"
         defaultSelectedKeys={['new_tattoo']}
@@ -119,8 +167,9 @@ const TattooForm = () => {
       {errors.priorTattoo && <span>{errors.priorTattoo.message}</span>}
 
       {/* Preferred Day */}
-      <label htmlFor="preferredDay">Preferred Day:</label>
       <Select
+        label="Preferred Day"
+        labelPlacement="outside"
         isRequired
         id="preferredDay"
         defaultSelectedKeys={['monday']}
@@ -144,14 +193,13 @@ const TattooForm = () => {
       </Select>
       {errors.preferredDay && <span>{errors.preferredDay.message}</span>}
 
-      {/* Showcase Images */}
-      {/* Need to make this a better experience and obvious multiple uploads can be done */}
-      {/* https://react-dropzone.js.org/#section-previews */}
-      <label htmlFor="showcaseImages">Showcase Images:</label>
-      <input
+      {/* Images */}
+      <ImageDropzone
+        label="Showcase images"
         type="file"
         id="showcaseImages"
         multiple
+        accept={ACCEPTED_IMAGE_TYPES.join(',')}
         {...register('showcaseImages')}
       />
       {errors.showcaseImages && <span>{errors.showcaseImages.message}</span>}

@@ -5,7 +5,7 @@ const phoneRegex = new RegExp(
 )
 
 const MAX_FILE_SIZE = 10485760 // 10MB
-const ACCEPTED_IMAGE_TYPES = [
+export const ACCEPTED_IMAGE_TYPES = [
   'image/jpeg',
   'image/jpg',
   'image/png',
