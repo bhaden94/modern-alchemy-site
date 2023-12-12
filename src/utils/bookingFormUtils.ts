@@ -12,6 +12,55 @@ export const ACCEPTED_IMAGE_TYPES = [
   'image/webp',
 ]
 
+export const styleOptions = [
+  {
+    value: 'color',
+    label: 'Color',
+  },
+  {
+    value: 'black_and_grey',
+    label: 'Black and Grey',
+  },
+]
+
+export const priorTattooOptions = [
+  {
+    value: 'new_tattoo',
+    label: 'Yes - I want a new tattoo',
+  },
+  {
+    value: 'ongoing_project',
+    label: 'Yes - this is an ongoing project',
+  },
+  {
+    value: 'no',
+    label: 'No',
+  },
+]
+
+export const preferredDayOptions = [
+  {
+    value: 'monday',
+    label: 'Monday',
+  },
+  {
+    value: 'tuesday',
+    label: 'Tuesday',
+  },
+  {
+    value: 'wednesday',
+    label: 'Wednesday',
+  },
+  {
+    value: 'thursday',
+    label: 'Thursday',
+  },
+  {
+    value: 'friday',
+    label: 'Friday',
+  },
+]
+
 export const bookingSchema = z.object({
   name: z.string(),
   phoneNumber: z.string().regex(phoneRegex, 'Invalid phone number'),

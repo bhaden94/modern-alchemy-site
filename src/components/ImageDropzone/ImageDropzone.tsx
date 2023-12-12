@@ -1,8 +1,8 @@
 'use client'
 
-import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card'
-import { Image } from '@nextui-org/image'
-import { forwardRef,useState } from 'react'
+import { Image } from '@mantine/core'
+import NextImage from 'next/image'
+import { forwardRef, useState } from 'react'
 
 import styles from './ImageDropzone.module.css'
 
@@ -16,7 +16,7 @@ interface ImageDropzoneProps {
 export type Ref = HTMLInputElement
 
 const ImageDropzone = forwardRef<Ref, ImageDropzoneProps>(
-  function ImageDropzon(props, ref) {
+  function ImageDropzone(props, ref) {
     const { label, ...otherProps } = props
     const [files, setFiles] = useState<any[]>()
 
@@ -44,6 +44,7 @@ const ImageDropzone = forwardRef<Ref, ImageDropzoneProps>(
 
     const thumbs = files?.map((file) => (
       <Image
+        component={NextImage}
         src={file.preview}
         onLoad={() => {
           URL.revokeObjectURL(file.preview)
@@ -52,24 +53,28 @@ const ImageDropzone = forwardRef<Ref, ImageDropzoneProps>(
         key={file.name}
         width={75}
         height={75}
-        radius="sm"
+        w={75}
+        h={75}
+        radius="md"
         className="aspect-square"
       />
     ))
 
+    // TODO: Move to mantine dropzone component
     return (
-      <Card>
-        <CardHeader>{label}</CardHeader>
-        <CardBody>
+      <div>
+        <div>{label}</div>
+        <div>
           <input
             {...otherProps}
+            type="file"
             ref={ref}
             onChange={onDrop}
             className={`${styles.input} active:bg-slate-100 focus:bg-slate-100 hover:bg-slate-100 hover:cursor-pointer rounded`}
           />
-        </CardBody>
-        <CardFooter className="flex flex-wrap gap-2">{thumbs}</CardFooter>
-      </Card>
+        </div>
+        <div className="flex flex-wrap gap-2 my-4">{thumbs}</div>
+      </div>
     )
   },
 )

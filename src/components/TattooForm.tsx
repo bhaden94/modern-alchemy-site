@@ -1,19 +1,23 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button } from '@nextui-org/button'
-import { Input } from '@nextui-org/input'
-import { Textarea } from '@nextui-org/react'
-import { Select, SelectItem } from '@nextui-org/select'
+import { Button } from '@mantine/core'
+import { TextInput } from '@mantine/core'
+import { Textarea } from '@mantine/core'
+import { Select } from '@mantine/core'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import {
   ACCEPTED_IMAGE_TYPES,
   bookingSchema,
+  preferredDayOptions,
+  priorTattooOptions,
+  styleOptions,
   TBookingSchema,
 } from '~/utils/bookingFormUtils'
 
 import ImageDropzone from './ImageDropzone/ImageDropzone'
 
+// TODO: move to mantine form
 // TODO: split into components
 // TODO: implement reCAPTCHA for form submission
 // TODO: implement Nodemailer to send email confirming form submission
@@ -58,22 +62,20 @@ const TattooForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       {/* Name */}
-      <Input
-        isRequired
+      {/* TODO: Error showing that is can't get name when changing select options, but booking still goes through */}
+      <TextInput
+        withAsterisk
         label="Name"
-        labelPlacement="outside"
         placeholder="Enter your name"
-        type="text"
         id="name"
         {...register('name')}
       />
       {errors.name && <span>{errors.name.message}</span>}
 
       {/* Phone Number */}
-      <Input
-        isRequired
+      <TextInput
+        withAsterisk
         label="Phone Number"
-        labelPlacement="outside"
         placeholder="Enter your phone number"
         type="tel"
         id="phoneNumber"
@@ -82,10 +84,9 @@ const TattooForm = () => {
       {errors.phoneNumber && <span>{errors.phoneNumber.message}</span>}
 
       {/* Email */}
-      <Input
-        isRequired
+      <TextInput
+        withAsterisk
         label="Email"
-        labelPlacement="outside"
         placeholder="Enter your email"
         type="email"
         id="email"
@@ -94,10 +95,9 @@ const TattooForm = () => {
       {errors.email && <span>{errors.email.message}</span>}
 
       {/* Characters */}
-      <Input
-        isRequired
+      <TextInput
+        withAsterisk
         label="Characters"
-        labelPlacement="outside"
         placeholder="Enter the list of characters"
         type="text"
         id="characters"
@@ -107,22 +107,19 @@ const TattooForm = () => {
 
       {/* Description */}
       <Textarea
+        withAsterisk
         label="Description"
-        labelPlacement="outside"
         placeholder="Describe your tattoo idea"
         id="description"
-        isRequired
         {...register('description')}
       />
       {errors.description && <span>{errors.description.message}</span>}
 
       {/* Location */}
-      <Input
-        isRequired
+      <TextInput
+        withAsterisk
         label="Location"
-        labelPlacement="outside"
         placeholder="Enter the location on your body"
-        type="text"
         id="location"
         {...register('location')}
       />
@@ -130,32 +127,32 @@ const TattooForm = () => {
 
       {/* Style */}
       <Select
+        withAsterisk
         label="Style"
-        labelPlacement="outside"
-        isRequired
         id="style"
-        defaultSelectedKeys={['color']}
+        defaultValue={'color'}
+        data={styleOptions}
         {...register('style')}
-      >
-        <SelectItem key="color" value="color">
+      />
+      {/* <SelectItem key="color" value="color">
           Color
         </SelectItem>
         <SelectItem key="black_and_grey" value="black_and_grey">
           Black and Grey
-        </SelectItem>
-      </Select>
+        </SelectItem> */}
+      {/* </Select> */}
       {errors.style && <span>{errors.style.message}</span>}
 
       {/* Prior Tattoo */}
       <Select
+        withAsterisk
         label="Prior Tattoo"
-        labelPlacement="outside"
-        isRequired
         id="priorTattoo"
-        defaultSelectedKeys={['new_tattoo']}
+        defaultValue={'new_tattoo'}
+        data={priorTattooOptions}
         {...register('priorTattoo')}
-      >
-        <SelectItem key="new_tattoo" value="new_tattoo">
+      />
+      {/* <SelectItem key="new_tattoo" value="new_tattoo">
           Yes - I want a new tattoo
         </SelectItem>
         <SelectItem key="ongoing_project" value="ongoing_project">
@@ -164,19 +161,19 @@ const TattooForm = () => {
         <SelectItem key="no" value="no">
           No
         </SelectItem>
-      </Select>
+      </Select> */}
       {errors.priorTattoo && <span>{errors.priorTattoo.message}</span>}
 
       {/* Preferred Day */}
       <Select
+        withAsterisk
         label="Preferred Day"
-        labelPlacement="outside"
-        isRequired
         id="preferredDay"
-        defaultSelectedKeys={['monday']}
+        defaultValue={'monday'}
+        data={preferredDayOptions}
         {...register('preferredDay')}
-      >
-        <SelectItem key="monday" value="monday">
+      />
+      {/* <SelectItem key="monday" value="monday">
           Monday
         </SelectItem>
         <SelectItem key="tuesday" value="tuesday">
@@ -191,7 +188,7 @@ const TattooForm = () => {
         <SelectItem key="friday" value="friday">
           Friday
         </SelectItem>
-      </Select>
+      </Select> */}
       {errors.preferredDay && <span>{errors.preferredDay.message}</span>}
 
       {/* Images */}
@@ -206,7 +203,7 @@ const TattooForm = () => {
       {errors.showcaseImages && <span>{errors.showcaseImages.message}</span>}
 
       {/* Submit button */}
-      <Button type="submit" color="primary" isDisabled={isSubmitting}>
+      <Button type="submit" loading={isSubmitting}>
         Submit
       </Button>
     </form>

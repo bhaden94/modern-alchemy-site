@@ -1,4 +1,5 @@
 import './styles/global.css'
+import '@mantine/core/styles.css'
 
 // import '@/styles/globals.css'
 import { IBM_Plex_Mono, Inter, PT_Serif } from 'next/font/google'
@@ -37,7 +38,7 @@ export default function RootLayout({
     >
       <body>
         <Providers>
-          <ThemeSwitcher />
+          {/* <ThemeSwitcher /> */}
           {children}
         </Providers>
       </body>
