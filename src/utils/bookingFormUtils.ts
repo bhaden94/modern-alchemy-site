@@ -1,18 +1,22 @@
+import { ComboboxItem } from '@mantine/core'
 import z from 'zod'
 
 const phoneRegex = new RegExp(
   /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/,
 )
 
-const MAX_FILE_SIZE = 10485760 // 10MB
+export const MAX_FILES = 5
+export const MAX_FILE_SIZE = 10485760 // 10MB
 export const ACCEPTED_IMAGE_TYPES = [
-  'image/jpeg',
-  'image/jpg',
   'image/png',
+  'image/gif',
+  'image/jpeg',
+  'image/svg+xml',
   'image/webp',
+  'image/avif',
 ]
 
-export const styleOptions = [
+export const styleOptions: ComboboxItem[] = [
   {
     value: 'color',
     label: 'Color',
@@ -23,7 +27,7 @@ export const styleOptions = [
   },
 ]
 
-export const priorTattooOptions = [
+export const priorTattooOptions: ComboboxItem[] = [
   {
     value: 'new_tattoo',
     label: 'Yes - I want a new tattoo',
@@ -38,7 +42,7 @@ export const priorTattooOptions = [
   },
 ]
 
-export const preferredDayOptions = [
+export const preferredDayOptions: ComboboxItem[] = [
   {
     value: 'monday',
     label: 'Monday',
@@ -80,7 +84,7 @@ export const bookingSchema = z.object({
       return false
     }
 
-    if (files.length > 5) {
+    if (files.length > MAX_FILES) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: 'A maximum of 5 images can be uploaded',

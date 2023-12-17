@@ -1,13 +1,13 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button } from '@mantine/core'
+import { Button, NativeSelect } from '@mantine/core'
 import { TextInput } from '@mantine/core'
 import { Textarea } from '@mantine/core'
 import { Select } from '@mantine/core'
-import { useState } from 'react'
+import { FileWithPath } from '@mantine/dropzone'
+import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import {
-  ACCEPTED_IMAGE_TYPES,
   bookingSchema,
   preferredDayOptions,
   priorTattooOptions,
@@ -16,6 +16,7 @@ import {
 } from '~/utils/bookingFormUtils'
 
 import ImageDropzone from './ImageDropzone/ImageDropzone'
+import ImageThumbnails from './ImageDropzone/ImageThumbnails'
 
 // TODO: move to mantine form
 // TODO: split into components
@@ -23,11 +24,13 @@ import ImageDropzone from './ImageDropzone/ImageDropzone'
 // TODO: implement Nodemailer to send email confirming form submission
 const TattooForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<TBookingSchema>({ resolver: zodResolver(bookingSchema) })
+  const [imageFiles, setImageFiles] = useState<FileWithPath[]>([])
+  const { register, handleSubmit, formState, setValue, reset } =
+    useForm<TBookingSchema>({ resolver: zodResolver(bookingSchema) })
+
+  useEffect(() => {
+    register('showcaseImages')
+  }, [register])
 
   const onSubmit: SubmitHandler<TBookingSchema> = async (data) => {
     setIsSubmitting(true)
@@ -57,6 +60,21 @@ const TattooForm = () => {
     })
     // TODO: handle errors
     setIsSubmitting(false)
+    if (imageUploadResponse.ok && response.ok) {
+      reset()
+      setImageFiles([])
+    }
+  }
+
+  const onImageDrop = (files: FileWithPath[]) => {
+    setImageFiles(files)
+    setValue('showcaseImages', files)
+  }
+
+  const onImageRemove = (name: string) => {
+    const filteredFiles = imageFiles.filter((image) => image.name !== name)
+    setImageFiles(filteredFiles)
+    setValue('showcaseImages', filteredFiles)
   }
 
   return (
@@ -70,7 +88,7 @@ const TattooForm = () => {
         id="name"
         {...register('name')}
       />
-      {errors.name && <span>{errors.name.message}</span>}
+      {formState.errors.name && <span>{formState.errors.name.message}</span>}
 
       {/* Phone Number */}
       <TextInput
@@ -81,7 +99,9 @@ const TattooForm = () => {
         id="phoneNumber"
         {...register('phoneNumber')}
       />
-      {errors.phoneNumber && <span>{errors.phoneNumber.message}</span>}
+      {formState.errors.phoneNumber && (
+        <span>{formState.errors.phoneNumber.message}</span>
+      )}
 
       {/* Email */}
       <TextInput
@@ -92,7 +112,7 @@ const TattooForm = () => {
         id="email"
         {...register('email')}
       />
-      {errors.email && <span>{errors.email.message}</span>}
+      {formState.errors.email && <span>{formState.errors.email.message}</span>}
 
       {/* Characters */}
       <TextInput
@@ -103,7 +123,9 @@ const TattooForm = () => {
         id="characters"
         {...register('characters')}
       />
-      {errors.characters && <span>{errors.characters.message}</span>}
+      {formState.errors.characters && (
+        <span>{formState.errors.characters.message}</span>
+      )}
 
       {/* Description */}
       <Textarea
@@ -113,7 +135,9 @@ const TattooForm = () => {
         id="description"
         {...register('description')}
       />
-      {errors.description && <span>{errors.description.message}</span>}
+      {formState.errors.description && (
+        <span>{formState.errors.description.message}</span>
+      )}
 
       {/* Location */}
       <TextInput
@@ -123,84 +147,56 @@ const TattooForm = () => {
         id="location"
         {...register('location')}
       />
-      {errors.location && <span>{errors.location.message}</span>}
+      {formState.errors.location && (
+        <span>{formState.errors.location.message}</span>
+      )}
 
       {/* Style */}
-      <Select
+      <NativeSelect
         withAsterisk
         label="Style"
         id="style"
-        defaultValue={'color'}
+        defaultValue="color"
         data={styleOptions}
         {...register('style')}
       />
-      {/* <SelectItem key="color" value="color">
-          Color
-        </SelectItem>
-        <SelectItem key="black_and_grey" value="black_and_grey">
-          Black and Grey
-        </SelectItem> */}
-      {/* </Select> */}
-      {errors.style && <span>{errors.style.message}</span>}
+      {formState.errors.style && <span>{formState.errors.style.message}</span>}
 
       {/* Prior Tattoo */}
-      <Select
+      <NativeSelect
         withAsterisk
         label="Prior Tattoo"
         id="priorTattoo"
-        defaultValue={'new_tattoo'}
+        defaultValue="new_tattoo"
         data={priorTattooOptions}
         {...register('priorTattoo')}
       />
-      {/* <SelectItem key="new_tattoo" value="new_tattoo">
-          Yes - I want a new tattoo
-        </SelectItem>
-        <SelectItem key="ongoing_project" value="ongoing_project">
-          Yes - this is an ongoing project
-        </SelectItem>
-        <SelectItem key="no" value="no">
-          No
-        </SelectItem>
-      </Select> */}
-      {errors.priorTattoo && <span>{errors.priorTattoo.message}</span>}
+      {formState.errors.priorTattoo && (
+        <span>{formState.errors.priorTattoo.message}</span>
+      )}
 
       {/* Preferred Day */}
-      <Select
+      <NativeSelect
         withAsterisk
         label="Preferred Day"
         id="preferredDay"
-        defaultValue={'monday'}
+        defaultValue="monday"
         data={preferredDayOptions}
         {...register('preferredDay')}
       />
-      {/* <SelectItem key="monday" value="monday">
-          Monday
-        </SelectItem>
-        <SelectItem key="tuesday" value="tuesday">
-          Tuesday
-        </SelectItem>
-        <SelectItem key="wednesday" value="wednesday">
-          Wednesday
-        </SelectItem>
-        <SelectItem key="thursday" value="thursday">
-          Thursday
-        </SelectItem>
-        <SelectItem key="friday" value="friday">
-          Friday
-        </SelectItem>
-      </Select> */}
-      {errors.preferredDay && <span>{errors.preferredDay.message}</span>}
+      {formState.errors.preferredDay && (
+        <span>{formState.errors.preferredDay.message}</span>
+      )}
 
       {/* Images */}
-      <ImageDropzone
-        label="Showcase images"
-        type="file"
-        id="showcaseImages"
-        multiple
-        accept={ACCEPTED_IMAGE_TYPES.join(',')}
-        {...register('showcaseImages')}
+      <ImageDropzone onImageDrop={(files) => onImageDrop(files)} />
+      <ImageThumbnails
+        imageFiles={imageFiles}
+        onImageRemove={(name) => onImageRemove(name)}
       />
-      {errors.showcaseImages && <span>{errors.showcaseImages.message}</span>}
+      {formState.errors.showcaseImages && (
+        <span>{formState.errors.showcaseImages.message}</span>
+      )}
 
       {/* Submit button */}
       <Button type="submit" loading={isSubmitting}>

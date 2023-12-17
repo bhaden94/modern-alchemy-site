@@ -1,82 +1,83 @@
 'use client'
 
-import { Image } from '@mantine/core'
-import NextImage from 'next/image'
-import { forwardRef, useState } from 'react'
+import { Button, Group, rem, Text } from '@mantine/core'
+import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from '@mantine/dropzone'
+import { IconPhoto, IconUpload, IconX } from '@tabler/icons-react'
+import { useRef } from 'react'
 
-import styles from './ImageDropzone.module.css'
+import { formatBytes } from '~/utils'
+import { MAX_FILE_SIZE, MAX_FILES } from '~/utils/bookingFormUtils'
 
 interface ImageDropzoneProps {
-  label: string
-  type: string
-  id: string
-  multiple: boolean
-  accept: string
+  onImageDrop: (files: FileWithPath[]) => void
 }
-export type Ref = HTMLInputElement
 
-const ImageDropzone = forwardRef<Ref, ImageDropzoneProps>(
-  function ImageDropzone(props, ref) {
-    const { label, ...otherProps } = props
-    const [files, setFiles] = useState<any[]>()
+const ImageDropzone = ({ onImageDrop }: ImageDropzoneProps) => {
+  const openRef = useRef<() => void>(null)
 
-    const onDrop = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const length = e.target.files?.length || 0
-      const droppedList: File[] = []
-
-      for (let i = 0; i < length; i++) {
-        const currFile =
-          e.target.files?.item(i) ||
-          new File(['foo'], 'foo.txt', {
-            type: 'text/plain',
-          })
-        droppedList.push(currFile)
-      }
-
-      setFiles(
-        droppedList.map((file) =>
-          Object.assign(file, {
-            preview: URL.createObjectURL(file),
-          }),
-        ),
-      )
-    }
-
-    const thumbs = files?.map((file) => (
-      <Image
-        component={NextImage}
-        src={file.preview}
-        onLoad={() => {
-          URL.revokeObjectURL(file.preview)
-        }}
-        alt={file.name}
-        key={file.name}
-        width={75}
-        height={75}
-        w={75}
-        h={75}
+  return (
+    <>
+      <Dropzone
+        openRef={openRef}
+        onDrop={(files) => onImageDrop(files)}
         radius="md"
-        className="aspect-square"
-      />
-    ))
+        accept={IMAGE_MIME_TYPE}
+        aria-label="Image dropzone"
+        maxSize={MAX_FILE_SIZE}
+        maxFiles={MAX_FILES}
+      >
+        <Group justify="center" style={{ pointerEvents: 'none' }}>
+          <Dropzone.Accept>
+            <IconUpload
+              style={{
+                width: rem(52),
+                height: rem(52),
+                color: 'var(--mantine-color-blue-6)',
+              }}
+              stroke={1.5}
+            />
+          </Dropzone.Accept>
+          <Dropzone.Reject>
+            <IconX
+              style={{
+                width: rem(52),
+                height: rem(52),
+                color: 'var(--mantine-color-red-6)',
+              }}
+              stroke={1.5}
+            />
+          </Dropzone.Reject>
+          <Dropzone.Idle>
+            <IconPhoto
+              style={{
+                width: rem(52),
+                height: rem(52),
+                color: 'var(--mantine-color-dimmed)',
+              }}
+              stroke={1.5}
+            />
+          </Dropzone.Idle>
+        </Group>
 
-    // TODO: Move to mantine dropzone component
-    return (
-      <div>
-        <div>{label}</div>
-        <div>
-          <input
-            {...otherProps}
-            type="file"
-            ref={ref}
-            onChange={onDrop}
-            className={`${styles.input} active:bg-slate-100 focus:bg-slate-100 hover:bg-slate-100 hover:cursor-pointer rounded`}
-          />
+        <div className="flex flex-col justify-center items-center gap-3">
+          <Text size="xl">
+            <Dropzone.Accept>Drop images here</Dropzone.Accept>
+            <Dropzone.Reject>
+              There is a max of {MAX_FILES} image files allowed up to{' '}
+              {formatBytes(MAX_FILE_SIZE)} in size
+            </Dropzone.Reject>
+            <Dropzone.Idle>Drag&apos;n&apos;drop images here</Dropzone.Idle>
+          </Text>
+          <Text size="md" c="dimmed">
+            or
+          </Text>
+          <Button size="md" onClick={() => openRef.current?.()}>
+            Attach files
+          </Button>
         </div>
-        <div className="flex flex-wrap gap-2 my-4">{thumbs}</div>
-      </div>
-    )
-  },
-)
+      </Dropzone>
+    </>
+  )
+}
 
 export default ImageDropzone

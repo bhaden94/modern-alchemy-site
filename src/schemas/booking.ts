@@ -11,7 +11,7 @@ export default defineType({
       title: 'First/Last Name',
     }),
     defineField({
-      name: 'phone_number',
+      name: 'phoneNumber',
       type: 'string',
       title: 'Phone Number',
     }),
@@ -47,7 +47,7 @@ export default defineType({
       },
     }),
     defineField({
-      name: 'prior_tattoo',
+      name: 'priorTattoo',
       type: 'string',
       title: 'Have you been tattooed by Larry before',
       options: {
@@ -62,7 +62,7 @@ export default defineType({
       },
     }),
     defineField({
-      name: 'preferred_day',
+      name: 'preferredDay',
       type: 'string',
       title: 'Preferred days of appointment',
       options: {
