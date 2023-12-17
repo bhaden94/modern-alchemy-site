@@ -1,3 +1,5 @@
+'use client'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, NativeSelect } from '@mantine/core'
 import { TextInput } from '@mantine/core'
