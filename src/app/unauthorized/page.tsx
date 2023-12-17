@@ -6,6 +6,7 @@ import { signIn } from 'next-auth/react'
 
 import { REDIRECT_URL } from '~/lib/next-auth/auth.utils'
 
+// TODO: fix error - Entire page /unauthorized deopted into client-side rendering. https://nextjs.org/docs/messages/deopted-into-client-rendering /unauthorized
 export default function UnauthorizedPage() {
   const searchParams = useSearchParams()
 

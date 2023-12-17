@@ -4,7 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, NativeSelect } from '@mantine/core'
 import { TextInput } from '@mantine/core'
 import { Textarea } from '@mantine/core'
-import { Select } from '@mantine/core'
 import { FileWithPath } from '@mantine/dropzone'
 import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -201,6 +200,7 @@ const TattooForm = () => {
       )}
 
       {/* Submit button */}
+      {/* TODO: fix mantine buttons not showing on vercel prod */}
       <Button type="submit" loading={isSubmitting}>
         Submit
       </Button>
