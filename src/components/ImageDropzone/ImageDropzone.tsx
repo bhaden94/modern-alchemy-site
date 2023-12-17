@@ -71,7 +71,11 @@ const ImageDropzone = ({ onImageDrop }: ImageDropzoneProps) => {
           <Text size="md" c="dimmed">
             or
           </Text>
-          <Button size="md" onClick={() => openRef.current?.()}>
+          <Button
+            variant="filled"
+            size="md"
+            onClick={() => openRef.current?.()}
+          >
             Attach files
           </Button>
         </div>

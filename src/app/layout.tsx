@@ -2,11 +2,11 @@ import './styles/global.css'
 import '@mantine/core/styles.css'
 import '@mantine/dropzone/styles.css'
 
+import { ColorSchemeScript } from '@mantine/core'
 // import '@/styles/globals.css'
 import { IBM_Plex_Mono, Inter, PT_Serif } from 'next/font/google'
 
 import Providers from '~/components/Providers'
-import { ThemeSwitcher } from '~/components/ThemeSwitcher'
 
 const mono = IBM_Plex_Mono({
   variable: '--font-family-mono',
@@ -37,11 +37,11 @@ export default function RootLayout({
       lang="en"
       className={`${serif.variable} ${sans.variable} ${mono.variable}`}
     >
+      <head>
+        <ColorSchemeScript />
+      </head>
       <body>
-        <Providers>
-          {/* <ThemeSwitcher /> */}
-          {children}
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   )

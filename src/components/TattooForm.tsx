@@ -201,7 +201,7 @@ const TattooForm = () => {
 
       {/* Submit button */}
       {/* TODO: fix mantine buttons not showing on vercel prod */}
-      <Button type="submit" loading={isSubmitting}>
+      <Button variant="filled" type="submit" loading={isSubmitting}>
         Submit
       </Button>
     </form>
