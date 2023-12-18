@@ -1,10 +1,10 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, NativeSelect } from '@mantine/core'
+import { Alert, Button, List, NativeSelect } from '@mantine/core'
 import { TextInput } from '@mantine/core'
 import { Textarea } from '@mantine/core'
-import { FileWithPath } from '@mantine/dropzone'
+import { FileRejection, FileWithPath } from '@mantine/dropzone'
 import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
@@ -18,6 +18,10 @@ import {
 
 import ImageDropzone from './ImageDropzone/ImageDropzone'
 import ImageThumbnails from './ImageDropzone/ImageThumbnails'
+import ImageErrors from './ImageDropzone/ImageErrors'
+import { IconExclamationCircle } from '@tabler/icons-react'
+
+const alertIcon = <IconExclamationCircle />
 
 // TODO: move to mantine form
 // TODO: split into components
@@ -26,7 +30,10 @@ import ImageThumbnails from './ImageDropzone/ImageThumbnails'
 const TattooForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [imageFiles, setImageFiles] = useState<FileWithPath[]>([])
-  const { register, handleSubmit, formState, setValue, reset } =
+  const [imageUploadRejections, setImageUploadRejections] = useState<
+    FileRejection[]
+  >([])
+  const { register, handleSubmit, formState, setValue, reset, clearErrors } =
     useForm<TBookingSchema>({ resolver: zodResolver(bookingSchema) })
 
   useEffect(() => {
@@ -67,7 +74,14 @@ const TattooForm = () => {
     }
   }
 
+  const onImageReject = (rejections: FileRejection[]) => {
+    setImageUploadRejections(rejections)
+  }
+
   const onImageDrop = (files: FileWithPath[]) => {
+    clearErrors('showcaseImages')
+    setImageUploadRejections([])
+
     setImageFiles(files)
     setValue('showcaseImages', files)
   }
@@ -81,15 +95,14 @@ const TattooForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       {/* Name */}
-      {/* TODO: Error showing that is can't get name when changing select options, but booking still goes through */}
       <TextInput
         withAsterisk
         label="Name"
         placeholder="Enter your name"
         id="name"
+        error={formState.errors.name?.message}
         {...register('name')}
       />
-      {formState.errors.name && <span>{formState.errors.name.message}</span>}
 
       {/* Phone Number */}
       <TextInput
@@ -98,11 +111,9 @@ const TattooForm = () => {
         placeholder="Enter your phone number"
         type="tel"
         id="phoneNumber"
+        error={formState.errors.phoneNumber?.message}
         {...register('phoneNumber')}
       />
-      {formState.errors.phoneNumber && (
-        <span>{formState.errors.phoneNumber.message}</span>
-      )}
 
       {/* Email */}
       <TextInput
@@ -111,22 +122,21 @@ const TattooForm = () => {
         placeholder="Enter your email"
         type="email"
         id="email"
+        error={formState.errors.email?.message}
         {...register('email')}
       />
-      {formState.errors.email && <span>{formState.errors.email.message}</span>}
 
       {/* Characters */}
+      {/* TODO: make a multi tag input */}
       <TextInput
         withAsterisk
         label="Characters"
         placeholder="Enter the list of characters"
         type="text"
         id="characters"
+        error={formState.errors.characters?.message}
         {...register('characters')}
       />
-      {formState.errors.characters && (
-        <span>{formState.errors.characters.message}</span>
-      )}
 
       {/* Description */}
       <Textarea
@@ -134,11 +144,9 @@ const TattooForm = () => {
         label="Description"
         placeholder="Describe your tattoo idea"
         id="description"
+        error={formState.errors.description?.message}
         {...register('description')}
       />
-      {formState.errors.description && (
-        <span>{formState.errors.description.message}</span>
-      )}
 
       {/* Location */}
       <TextInput
@@ -146,11 +154,9 @@ const TattooForm = () => {
         label="Location"
         placeholder="Enter the location on your body"
         id="location"
+        error={formState.errors.location?.message}
         {...register('location')}
       />
-      {formState.errors.location && (
-        <span>{formState.errors.location.message}</span>
-      )}
 
       {/* Style */}
       <NativeSelect
@@ -159,9 +165,9 @@ const TattooForm = () => {
         id="style"
         defaultValue="color"
         data={styleOptions}
+        error={formState.errors.style?.message}
         {...register('style')}
       />
-      {formState.errors.style && <span>{formState.errors.style.message}</span>}
 
       {/* Prior Tattoo */}
       <NativeSelect
@@ -170,11 +176,9 @@ const TattooForm = () => {
         id="priorTattoo"
         defaultValue="new_tattoo"
         data={priorTattooOptions}
+        error={formState.errors.priorTattoo?.message}
         {...register('priorTattoo')}
       />
-      {formState.errors.priorTattoo && (
-        <span>{formState.errors.priorTattoo.message}</span>
-      )}
 
       {/* Preferred Day */}
       <NativeSelect
@@ -183,24 +187,25 @@ const TattooForm = () => {
         id="preferredDay"
         defaultValue="monday"
         data={preferredDayOptions}
+        error={formState.errors.preferredDay?.message}
         {...register('preferredDay')}
       />
-      {formState.errors.preferredDay && (
-        <span>{formState.errors.preferredDay.message}</span>
-      )}
 
       {/* Images */}
-      <ImageDropzone onImageDrop={(files) => onImageDrop(files)} />
+      <ImageDropzone
+        onImageDrop={(files) => onImageDrop(files)}
+        onImageReject={(rejections) => onImageReject(rejections)}
+      />
       <ImageThumbnails
         imageFiles={imageFiles}
         onImageRemove={(name) => onImageRemove(name)}
       />
-      {formState.errors.showcaseImages && (
-        <span>{formState.errors.showcaseImages.message}</span>
-      )}
+      <ImageErrors
+        imageUploadRejections={imageUploadRejections}
+        formError={formState.errors.showcaseImages?.message}
+      />
 
       {/* Submit button */}
-      {/* TODO: fix mantine buttons not showing on vercel prod */}
       <Button variant="filled" type="submit" loading={isSubmitting}>
         Submit
       </Button>

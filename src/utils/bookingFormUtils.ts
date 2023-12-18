@@ -2,7 +2,7 @@ import { ComboboxItem } from '@mantine/core'
 import z from 'zod'
 
 const phoneRegex = new RegExp(
-  /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/,
+  /^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/,
 )
 
 export const MAX_FILES = 5
@@ -65,21 +65,40 @@ export const preferredDayOptions: ComboboxItem[] = [
   },
 ]
 
+const nameError = 'Please enter your full name'
+const phoneNumberRegexError = 'Invalid phone number'
+const phoneNumberError = 'Please enter your phone number'
+const emailError = 'Invalid email address'
+const charactersError = 'Please enter the list of characters you would like'
+const descriptionError = 'Please describe your idea'
+const locationError = 'Please enter where on your body you would like the art'
+
 export const bookingSchema = z.object({
-  name: z.string(),
-  phoneNumber: z.string().regex(phoneRegex, 'Invalid phone number'),
-  email: z.string().email({ message: 'Invalid email address' }),
-  characters: z.string(),
-  description: z.string(),
-  location: z.string(),
+  name: z.string({ required_error: nameError }).min(1, nameError),
+  phoneNumber: z
+    .string()
+    .min(1, phoneNumberError)
+    .regex(phoneRegex, phoneNumberRegexError),
+  email: z.string().email({ message: emailError }),
+  characters: z
+    .string({
+      required_error: charactersError,
+    })
+    .min(1, charactersError),
+  description: z.string({ required_error: descriptionError }).min(1),
+  location: z
+    .string({
+      required_error: locationError,
+    })
+    .min(1, locationError),
   style: z.string(),
   priorTattoo: z.string(),
   preferredDay: z.string(),
   showcaseImages: z.custom<File[]>().superRefine((files, ctx) => {
-    if (files.length === 0) {
+    if (!files || files.length === 0) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: 'File must be provided',
+        message: 'At least 1 image must be provided',
       })
       return false
     }
