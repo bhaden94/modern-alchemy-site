@@ -5,6 +5,7 @@ import { Alert, Button, List, NativeSelect } from '@mantine/core'
 import { TextInput } from '@mantine/core'
 import { Textarea } from '@mantine/core'
 import { FileRejection, FileWithPath } from '@mantine/dropzone'
+import { IconExclamationCircle } from '@tabler/icons-react'
 import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
@@ -17,9 +18,8 @@ import {
 } from '~/utils/bookingFormUtils'
 
 import ImageDropzone from './ImageDropzone/ImageDropzone'
-import ImageThumbnails from './ImageDropzone/ImageThumbnails'
 import ImageErrors from './ImageDropzone/ImageErrors'
-import { IconExclamationCircle } from '@tabler/icons-react'
+import ImageThumbnails from './ImageDropzone/ImageThumbnails'
 
 const alertIcon = <IconExclamationCircle />
 
