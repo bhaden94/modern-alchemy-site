@@ -23,8 +23,8 @@ export async function PUT(request: NextRequest) {
 
   // Upload images to Sanity and get their references
   const imageReferences: ImageReference[] = await Promise.all(
-    imagesArray.map(async (image: File) => {
-      const imageData = await client.assets.upload('image', image)
+    imagesArray.map(async (image: FormDataEntryValue) => {
+      const imageData = await client.assets.upload('image', image as File)
       return {
         _key: imageData._id,
         _type: 'image',

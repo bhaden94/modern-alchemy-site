@@ -1,12 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import {
-  Box,
-  Button,
-  LoadingOverlay,
-  NativeSelect,
-} from '@mantine/core'
+import { Box, Button, LoadingOverlay, NativeSelect } from '@mantine/core'
 import { TextInput } from '@mantine/core'
 import { Textarea } from '@mantine/core'
 import { FileRejection, FileWithPath } from '@mantine/dropzone'
@@ -107,7 +102,7 @@ const TattooForm = () => {
       <LoadingOverlay
         visible={isSubmitting}
         zIndex={1000}
-        overlayProps={{ radius: 'md', blur: 2 }}
+        overlayProps={{ radius: 'sm', blur: 2 }}
         loaderProps={{
           children: isUploadingImages
             ? 'Uploading images...'

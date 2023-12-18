@@ -36,7 +36,7 @@ export function FeatureProvider({ children }: FeatureProviderProps) {
     fetchFeatureFlags()
 
     const subscription = listenForFeatureFlagChanges(client).subscribe(
-      (update: { result: FeatureFlag }) => {
+      (update: Record<string, any>) => {
         let currentFeatures = { ...featureFlags }
         if (currentFeatures) {
           currentFeatures[update?.result?.key || 'missingKey'] =
