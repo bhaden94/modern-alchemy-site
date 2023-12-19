@@ -80,11 +80,7 @@ export const bookingSchema = z.object({
     .min(1, phoneNumberError)
     .regex(phoneRegex, phoneNumberRegexError),
   email: z.string().email({ message: emailError }),
-  characters: z
-    .string({
-      required_error: charactersError,
-    })
-    .min(1, charactersError),
+  characters: z.string().array().min(1, charactersError),
   description: z.string({ required_error: descriptionError }).min(1),
   location: z
     .string({

@@ -22,8 +22,15 @@ export default defineType({
     }),
     defineField({
       name: 'characters',
-      type: 'string',
+      type: 'array',
       title: 'Character List',
+      of: [
+        defineArrayMember({
+          title: 'Character',
+          type: 'string',
+          name: 'character',
+        }),
+      ],
     }),
     defineField({
       name: 'description',

@@ -1,7 +1,13 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Box, Button, LoadingOverlay, NativeSelect } from '@mantine/core'
+import {
+  Box,
+  Button,
+  LoadingOverlay,
+  NativeSelect,
+  TagsInput,
+} from '@mantine/core'
 import { TextInput } from '@mantine/core'
 import { Textarea } from '@mantine/core'
 import { FileRejection, FileWithPath } from '@mantine/dropzone'
@@ -29,6 +35,7 @@ const alertIcon = <IconExclamationCircle />
 // TODO: implement Nodemailer to send email confirming form submission
 const TattooForm = () => {
   const [isUploadingImages, setIsUploadingImages] = useState<boolean>(false)
+  const [characters, setCharacters] = useState<string[]>([])
   const [isSubmittingForm, setIsSubmittingForm] = useState<boolean>(false)
   const [imageFiles, setImageFiles] = useState<FileWithPath[]>([])
   const [imageUploadRejections, setImageUploadRejections] = useState<
@@ -41,9 +48,11 @@ const TattooForm = () => {
 
   useEffect(() => {
     register('showcaseImages')
+    register('characters')
   }, [register])
 
   const onSubmit: SubmitHandler<TBookingSchema> = async (data) => {
+    console.log(data.characters)
     setIsUploadingImages(true)
     const formData = new FormData()
     const images: File[] = data.showcaseImages
@@ -76,6 +85,7 @@ const TattooForm = () => {
     if (imageUploadResponse.ok && response.ok) {
       reset()
       setImageFiles([])
+      setCharacters([])
     }
   }
 
@@ -95,6 +105,12 @@ const TattooForm = () => {
     const filteredFiles = imageFiles.filter((image) => image.name !== name)
     setImageFiles(filteredFiles)
     setValue('showcaseImages', filteredFiles)
+  }
+
+  const onCharacterChange = (characters: string[]) => {
+    clearErrors('characters')
+    setCharacters(characters)
+    setValue('characters', characters)
   }
 
   return (
@@ -143,15 +159,14 @@ const TattooForm = () => {
         />
 
         {/* Characters */}
-        {/* TODO: make a multi tag input */}
-        <TextInput
+        <TagsInput
           withAsterisk
           label="Characters"
-          placeholder="Enter the list of characters"
-          type="text"
+          placeholder="Enter the list of characters you would like"
           id="characters"
           error={formState.errors.characters?.message}
-          {...register('characters')}
+          value={characters}
+          onChange={onCharacterChange}
         />
 
         {/* Description */}
