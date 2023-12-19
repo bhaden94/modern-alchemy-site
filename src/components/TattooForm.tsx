@@ -52,7 +52,6 @@ const TattooForm = () => {
   }, [register])
 
   const onSubmit: SubmitHandler<TBookingSchema> = async (data) => {
-    console.log(data.characters)
     setIsUploadingImages(true)
     const formData = new FormData()
     const images: File[] = data.showcaseImages
