@@ -27,8 +27,6 @@ import ImageDropzone from './ImageDropzone/ImageDropzone'
 import ImageErrors from './ImageDropzone/ImageErrors'
 import ImageThumbnails from './ImageDropzone/ImageThumbnails'
 
-const alertIcon = <IconExclamationCircle />
-
 // TODO: move to mantine form
 // TODO: split into components
 // TODO: implement reCAPTCHA for form submission
