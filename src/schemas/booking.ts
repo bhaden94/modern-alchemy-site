@@ -20,27 +20,27 @@ export default defineType({
       type: 'string',
       title: 'Email',
     }),
+    // defineField({
+    //   name: 'characters',
+    //   type: 'array',
+    //   title: 'Character List',
+    //   of: [
+    //     defineArrayMember({
+    //       title: 'Character',
+    //       type: 'string',
+    //       name: 'character',
+    //     }),
+    //   ],
+    // }),
     defineField({
-      name: 'characters',
-      type: 'array',
-      title: 'Character List',
-      of: [
-        defineArrayMember({
-          title: 'Character',
-          type: 'string',
-          name: 'character',
-        }),
-      ],
+      name: 'location',
+      type: 'string',
+      title: 'Location of Tattoo',
     }),
     defineField({
       name: 'description',
       type: 'text',
       title: 'Description',
-    }),
-    defineField({
-      name: 'location',
-      type: 'string',
-      title: 'Location of Tattoo',
     }),
     defineField({
       name: 'style',
@@ -53,39 +53,39 @@ export default defineType({
         ],
       },
     }),
+    // defineField({
+    //   name: 'priorTattoo',
+    //   type: 'string',
+    //   title: 'Have you been tattooed by Larry before',
+    //   options: {
+    //     list: [
+    //       { title: 'No', value: 'no' },
+    //       { title: 'Yes - I want a new tattoo', value: 'new_tattoo' },
+    //       {
+    //         title: 'Yes - this is an ongoing project',
+    //         value: 'ongoing_project',
+    //       },
+    //     ],
+    //   },
+    // }),
+    // defineField({
+    //   name: 'preferredDay',
+    //   type: 'string',
+    //   title: 'Preferred days of appointment',
+    //   options: {
+    //     list: [
+    //       { title: 'Monday', value: 'monday' },
+    //       { title: 'Tuesday', value: 'tuesday' },
+    //       { title: 'Wednesday', value: 'wednesday' },
+    //       { title: 'Thursday', value: 'thursday' },
+    //       { title: 'Friday', value: 'friday' },
+    //     ],
+    //   },
+    // }),
     defineField({
-      name: 'priorTattoo',
-      type: 'string',
-      title: 'Have you been tattooed by Larry before',
-      options: {
-        list: [
-          { title: 'No', value: 'no' },
-          { title: 'Yes - I want a new tattoo', value: 'new_tattoo' },
-          {
-            title: 'Yes - this is an ongoing project',
-            value: 'ongoing_project',
-          },
-        ],
-      },
-    }),
-    defineField({
-      name: 'preferredDay',
-      type: 'string',
-      title: 'Preferred days of appointment',
-      options: {
-        list: [
-          { title: 'Monday', value: 'monday' },
-          { title: 'Tuesday', value: 'tuesday' },
-          { title: 'Wednesday', value: 'wednesday' },
-          { title: 'Thursday', value: 'thursday' },
-          { title: 'Friday', value: 'friday' },
-        ],
-      },
-    }),
-    defineField({
-      name: 'showcaseImages',
+      name: 'referenceImages',
       type: 'array',
-      title: 'Showcased Images',
+      title: 'Reference Images',
       of: [
         defineArrayMember({
           title: 'Image',

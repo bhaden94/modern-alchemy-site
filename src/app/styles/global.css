@@ -13,10 +13,6 @@
   --space-8: 136px;
   --space-9: 220px;
 
-  --font-family-sans: var(--font-family-sans);
-  --font-family-serif: var(--font-family-serif);
-  --font-family-mono: var(--font-family-mono);
-
   --font-size-0: 12px;
   --font-size-1: 14px;
   --font-size-2: 16px;
@@ -55,7 +51,6 @@
 }
 
 html {
-  font-family: var(--font-family-sans), var(--font-family-serif), sans-serif;
   -webkit-text-size-adjust: 100%;
   -moz-text-size-adjust: 100%;
   text-size-adjust: 100%;
@@ -176,7 +171,6 @@ main {
 }
 
 .steps .steps__text {
-  font-family: var(--font-family-serif);
   line-height: var(--line-height-2);
 }
 
@@ -201,7 +195,7 @@ main {
     position: absolute;
     width: 375px;
     height: 115px;
-    background: var(--blue-600);
+    background: var(--mantine-color-green-light);
     filter: blur(82px);
     transform: rotate(-19deg);
     z-index: -1;
@@ -209,7 +203,6 @@ main {
 
   .logos .logos__plus {
     display: flex;
-    font-family: var(--font-family-sans);
     font-weight: 800;
     font-size: var(--font-size-7);
     line-height: var(--line-height-6);
@@ -264,7 +257,6 @@ main {
 }
 
 .card .card__title {
-  font-family: var(--font-family-sans);
   font-weight: 800;
   font-size: var(--font-size-7);
   line-height: var(--line-height-6);
@@ -273,7 +265,6 @@ main {
 }
 
 .card .card__excerpt {
-  font-family: var(--font-family-serif);
   font-weight: 400;
   font-size: var(--font-size-4);
   line-height: var(--line-height-3);
@@ -282,7 +273,6 @@ main {
 
 .card .card__date {
   font-weight: 600;
-  font-family: var(--font-family-sans);
   font-size: var(--font-size-1);
   margin-top: calc(var(----space-4) + 7);
 }

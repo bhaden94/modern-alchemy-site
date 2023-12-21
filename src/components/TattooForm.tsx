@@ -4,21 +4,20 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Box,
   Button,
+  Loader,
   LoadingOverlay,
   NativeSelect,
-  TagsInput,
+  Text,
 } from '@mantine/core'
 import { TextInput } from '@mantine/core'
 import { Textarea } from '@mantine/core'
 import { FileRejection, FileWithPath } from '@mantine/dropzone'
-import { IconExclamationCircle } from '@tabler/icons-react'
 import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import {
+  BookingField,
   bookingSchema,
-  preferredDayOptions,
-  priorTattooOptions,
   styleOptions,
   TBookingSchema,
 } from '~/utils/bookingFormUtils'
@@ -27,13 +26,21 @@ import ImageDropzone from './ImageDropzone/ImageDropzone'
 import ImageErrors from './ImageDropzone/ImageErrors'
 import ImageThumbnails from './ImageDropzone/ImageThumbnails'
 
-// TODO: move to mantine form
+const CustomLoader = ({ label }: { label: string }) => {
+  return (
+    <div className="flex flex-col justify-center items-center	gap-4">
+      <Loader />
+      <Text>{label}</Text>
+    </div>
+  )
+}
+
+// TODO: move to mantine form (maybe)
 // TODO: split into components
 // TODO: implement reCAPTCHA for form submission
 // TODO: implement Nodemailer to send email confirming form submission
 const TattooForm = () => {
   const [isUploadingImages, setIsUploadingImages] = useState<boolean>(false)
-  const [characters, setCharacters] = useState<string[]>([])
   const [isSubmittingForm, setIsSubmittingForm] = useState<boolean>(false)
   const [imageFiles, setImageFiles] = useState<FileWithPath[]>([])
   const [imageUploadRejections, setImageUploadRejections] = useState<
@@ -45,14 +52,13 @@ const TattooForm = () => {
   const isSubmitting = isUploadingImages || isSubmittingForm
 
   useEffect(() => {
-    register('showcaseImages')
-    register('characters')
+    register(BookingField.ReferenceImages)
   }, [register])
 
   const onSubmit: SubmitHandler<TBookingSchema> = async (data) => {
     setIsUploadingImages(true)
     const formData = new FormData()
-    const images: File[] = data.showcaseImages
+    const images: File[] = data.referenceImages
     Array.from(images).forEach((file, i) => {
       formData.append(`image-${i}`, file)
     })
@@ -74,7 +80,7 @@ const TattooForm = () => {
       method: 'PUT',
       body: JSON.stringify({
         ...data,
-        showcaseImages: imageReferences,
+        [BookingField.ReferenceImages]: imageReferences,
       }),
     })
     // TODO: handle errors
@@ -82,7 +88,6 @@ const TattooForm = () => {
     if (imageUploadResponse.ok && response.ok) {
       reset()
       setImageFiles([])
-      setCharacters([])
     }
   }
 
@@ -91,23 +96,17 @@ const TattooForm = () => {
   }
 
   const onImageDrop = (files: FileWithPath[]) => {
-    clearErrors('showcaseImages')
+    clearErrors(BookingField.ReferenceImages)
     setImageUploadRejections([])
 
     setImageFiles(files)
-    setValue('showcaseImages', files)
+    setValue(BookingField.ReferenceImages, files)
   }
 
   const onImageRemove = (name: string) => {
     const filteredFiles = imageFiles.filter((image) => image.name !== name)
     setImageFiles(filteredFiles)
-    setValue('showcaseImages', filteredFiles)
-  }
-
-  const onCharacterChange = (characters: string[]) => {
-    clearErrors('characters')
-    setCharacters(characters)
-    setValue('characters', characters)
+    setValue(BookingField.ReferenceImages, filteredFiles)
   }
 
   return (
@@ -117,112 +116,98 @@ const TattooForm = () => {
         zIndex={1000}
         overlayProps={{ radius: 'sm', blur: 2 }}
         loaderProps={{
-          children: isUploadingImages
-            ? 'Uploading images...'
-            : 'Submitting form...',
+          children: isUploadingImages ? (
+            <CustomLoader label={'Uploading images'} />
+          ) : (
+            <CustomLoader label={'Submitting booking'} />
+          ),
         }}
       />
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col justify-center items-center gap-4 px-4"
+      >
         {/* Name */}
         <TextInput
+          className="w-full"
           withAsterisk
-          label="Name"
+          label={<Text span>First and Last Name</Text>}
           placeholder="Enter your name"
-          id="name"
+          id={BookingField.Name}
           error={formState.errors.name?.message}
-          {...register('name')}
+          disabled={isSubmitting}
+          {...register(BookingField.Name)}
         />
 
         {/* Phone Number */}
         <TextInput
+          className="w-full"
           withAsterisk
-          label="Phone Number"
+          label={<Text span>Phone Number</Text>}
           placeholder="Enter your phone number"
           type="tel"
-          id="phoneNumber"
+          id={BookingField.PhoneNumber}
           error={formState.errors.phoneNumber?.message}
-          {...register('phoneNumber')}
+          disabled={isSubmitting}
+          {...register(BookingField.PhoneNumber)}
         />
 
         {/* Email */}
         <TextInput
+          className="w-full"
           withAsterisk
-          label="Email"
+          label={<Text span>Email</Text>}
           placeholder="Enter your email"
           type="email"
-          id="email"
+          id={BookingField.Email}
           error={formState.errors.email?.message}
-          {...register('email')}
-        />
-
-        {/* Characters */}
-        <TagsInput
-          withAsterisk
-          label="Characters"
-          placeholder="Enter the list of characters you would like"
-          id="characters"
-          error={formState.errors.characters?.message}
-          value={characters}
-          onChange={onCharacterChange}
-        />
-
-        {/* Description */}
-        <Textarea
-          withAsterisk
-          label="Description"
-          placeholder="Describe your tattoo idea"
-          id="description"
-          error={formState.errors.description?.message}
-          {...register('description')}
+          disabled={isSubmitting}
+          {...register(BookingField.Email)}
         />
 
         {/* Location */}
         <TextInput
+          className="w-full"
           withAsterisk
-          label="Location"
+          label={<Text span>Body Location</Text>}
           placeholder="Enter the location on your body"
-          id="location"
+          id={BookingField.Location}
           error={formState.errors.location?.message}
-          {...register('location')}
+          disabled={isSubmitting}
+          {...register(BookingField.Location)}
         />
 
         {/* Style */}
         <NativeSelect
+          className="w-full"
           withAsterisk
-          label="Style"
-          id="style"
+          label={<Text span>Tattoo Style</Text>}
+          id={BookingField.Style}
           defaultValue="color"
           data={styleOptions}
           error={formState.errors.style?.message}
-          {...register('style')}
+          disabled={isSubmitting}
+          {...register(BookingField.Style)}
         />
 
-        {/* Prior Tattoo */}
-        <NativeSelect
+        {/* Description */}
+        <Textarea
+          className="w-full"
           withAsterisk
-          label="Prior Tattoo"
-          id="priorTattoo"
-          defaultValue="new_tattoo"
-          data={priorTattooOptions}
-          error={formState.errors.priorTattoo?.message}
-          {...register('priorTattoo')}
-        />
-
-        {/* Preferred Day */}
-        <NativeSelect
-          withAsterisk
-          label="Preferred Day"
-          id="preferredDay"
-          defaultValue="monday"
-          data={preferredDayOptions}
-          error={formState.errors.preferredDay?.message}
-          {...register('preferredDay')}
+          label={<Text span>Tattoo Idea</Text>}
+          placeholder="Describe your tattoo idea"
+          id={BookingField.Description}
+          error={formState.errors.description?.message}
+          disabled={isSubmitting}
+          {...register(BookingField.Description)}
         />
 
         {/* Images */}
         <ImageDropzone
           onImageDrop={(files) => onImageDrop(files)}
           onImageReject={(rejections) => onImageReject(rejections)}
+          disabled={isSubmitting}
+          dropzoneProps={{ className: 'w-full' }}
         />
         <ImageThumbnails
           imageFiles={imageFiles}
@@ -230,12 +215,12 @@ const TattooForm = () => {
         />
         <ImageErrors
           imageUploadRejections={imageUploadRejections}
-          formError={formState.errors.showcaseImages?.message}
+          formError={formState.errors.referenceImages?.message}
         />
 
         {/* Submit button */}
-        <Button variant="filled" type="submit" loading={isSubmitting}>
-          Submit
+        <Button size="lg" variant="filled" type="submit" loading={isSubmitting}>
+          Send Request
         </Button>
       </form>
     </Box>

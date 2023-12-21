@@ -45,11 +45,7 @@ const ImageThumbnails = ({ imageFiles, onImageRemove }: IImageThumbnails) => {
     )
   })
 
-  return (
-    <div className="flex flex-wrap gap-2 my-4 min-h-[75px]">
-      {previewThumbnails}
-    </div>
-  )
+  return <div className="flex flex-wrap gap-2 my-4">{previewThumbnails}</div>
 }
 
 export default ImageThumbnails

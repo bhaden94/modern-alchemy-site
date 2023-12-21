@@ -1,3 +1,4 @@
+import { Title } from '@mantine/core'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -14,17 +15,23 @@ export default function Welcome() {
         <Image className="logos__entry" src={SanityLogo} alt="Sanity Logo" />
       </div>
       <div className="steps">
-        <h2 className="steps__title">Next steps</h2>
+        <Title order={2} className="steps__title">
+          Next steps
+        </Title>
         <ul className="steps__list">
           <li className="steps__entry">
-            <h3 className="steps__subtitle">Publish a post in your Studio</h3>
+            <Title order={3} className="steps__subtitle">
+              Publish a post in your Studio
+            </Title>
             <p className="steps__text">
               Visit the <Link href="/studio">Sanity Studio</Link> and publish a
               new document of type post.
             </p>
           </li>
           <li className="steps__entry">
-            <h3 className="step__title">Dive into the documentation</h3>
+            <Title order={3} className="step__title">
+              Dive into the documentation
+            </Title>
             <p className="steps__text">
               Check out{' '}
               <a
@@ -38,7 +45,9 @@ export default function Welcome() {
             </p>
           </li>
           <li className="steps__entry">
-            <h3 className="steps__subtitle">Join the Sanity Community</h3>
+            <Title order={3} className="steps__subtitle">
+              Join the Sanity Community
+            </Title>
             <p className="steps__text">
               Leverage{' '}
               <a

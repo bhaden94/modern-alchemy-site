@@ -3,6 +3,7 @@
 import { Button, Group, rem, Text } from '@mantine/core'
 import {
   Dropzone,
+  DropzoneProps,
   FileRejection,
   FileWithPath,
   IMAGE_MIME_TYPE,
@@ -16,9 +17,16 @@ import { MAX_FILE_SIZE, MAX_FILES } from '~/utils/bookingFormUtils'
 interface ImageDropzoneProps {
   onImageDrop: (files: FileWithPath[]) => void
   onImageReject: (rejections: FileRejection[]) => void
+  disabled?: boolean
+  dropzoneProps?: Partial<DropzoneProps>
 }
 
-const ImageDropzone = ({ onImageDrop, onImageReject }: ImageDropzoneProps) => {
+const ImageDropzone = ({
+  onImageDrop,
+  onImageReject,
+  disabled = false,
+  dropzoneProps,
+}: ImageDropzoneProps) => {
   const openRef = useRef<() => void>(null)
 
   return (
@@ -27,11 +35,12 @@ const ImageDropzone = ({ onImageDrop, onImageReject }: ImageDropzoneProps) => {
         openRef={openRef}
         onDrop={(files) => onImageDrop(files)}
         onReject={(rejections) => onImageReject(rejections)}
-        radius="md"
         accept={IMAGE_MIME_TYPE}
         aria-label="Image dropzone"
         maxSize={MAX_FILE_SIZE}
         maxFiles={MAX_FILES}
+        disabled={disabled}
+        {...dropzoneProps}
       >
         <Group justify="center" style={{ pointerEvents: 'none' }}>
           <Dropzone.Accept>
@@ -39,7 +48,7 @@ const ImageDropzone = ({ onImageDrop, onImageReject }: ImageDropzoneProps) => {
               style={{
                 width: rem(52),
                 height: rem(52),
-                color: 'var(--mantine-color-blue-6)',
+                color: 'primary',
               }}
               stroke={1.5}
             />
@@ -80,8 +89,9 @@ const ImageDropzone = ({ onImageDrop, onImageReject }: ImageDropzoneProps) => {
           </Text>
           <Button
             variant="filled"
-            size="md"
+            size="sm"
             onClick={() => openRef.current?.()}
+            disabled={disabled}
           >
             Attach files
           </Button>

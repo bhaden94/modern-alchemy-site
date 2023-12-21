@@ -27,49 +27,49 @@ export const styleOptions: ComboboxItem[] = [
   },
 ]
 
-export const priorTattooOptions: ComboboxItem[] = [
-  {
-    value: 'new_tattoo',
-    label: 'Yes - I want a new tattoo',
-  },
-  {
-    value: 'ongoing_project',
-    label: 'Yes - this is an ongoing project',
-  },
-  {
-    value: 'no',
-    label: 'No',
-  },
-]
+// export const priorTattooOptions: ComboboxItem[] = [
+//   {
+//     value: 'new_tattoo',
+//     label: 'Yes - I want a new tattoo',
+//   },
+//   {
+//     value: 'ongoing_project',
+//     label: 'Yes - this is an ongoing project',
+//   },
+//   {
+//     value: 'no',
+//     label: 'No',
+//   },
+// ]
 
-export const preferredDayOptions: ComboboxItem[] = [
-  {
-    value: 'monday',
-    label: 'Monday',
-  },
-  {
-    value: 'tuesday',
-    label: 'Tuesday',
-  },
-  {
-    value: 'wednesday',
-    label: 'Wednesday',
-  },
-  {
-    value: 'thursday',
-    label: 'Thursday',
-  },
-  {
-    value: 'friday',
-    label: 'Friday',
-  },
-]
+// export const preferredDayOptions: ComboboxItem[] = [
+//   {
+//     value: 'monday',
+//     label: 'Monday',
+//   },
+//   {
+//     value: 'tuesday',
+//     label: 'Tuesday',
+//   },
+//   {
+//     value: 'wednesday',
+//     label: 'Wednesday',
+//   },
+//   {
+//     value: 'thursday',
+//     label: 'Thursday',
+//   },
+//   {
+//     value: 'friday',
+//     label: 'Friday',
+//   },
+// ]
 
 const nameError = 'Please enter your full name'
 const phoneNumberRegexError = 'Invalid phone number'
 const phoneNumberError = 'Please enter your phone number'
 const emailError = 'Invalid email address'
-const charactersError = 'Please enter the list of characters you would like'
+// const charactersError = 'Please enter the list of characters you would like'
 const descriptionError = 'Please describe your idea'
 const locationError = 'Please enter where on your body you would like the art'
 
@@ -80,7 +80,7 @@ export const bookingSchema = z.object({
     .min(1, phoneNumberError)
     .regex(phoneRegex, phoneNumberRegexError),
   email: z.string().email({ message: emailError }),
-  characters: z.string().array().min(1, charactersError),
+  // characters: z.string().array().min(1, charactersError),
   description: z.string({ required_error: descriptionError }).min(1),
   location: z
     .string({
@@ -88,9 +88,9 @@ export const bookingSchema = z.object({
     })
     .min(1, locationError),
   style: z.string(),
-  priorTattoo: z.string(),
-  preferredDay: z.string(),
-  showcaseImages: z.custom<File[]>().superRefine((files, ctx) => {
+  // priorTattoo: z.string(),
+  // preferredDay: z.string(),
+  referenceImages: z.custom<File[]>().superRefine((files, ctx) => {
     if (!files || files.length === 0) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
@@ -133,3 +133,13 @@ export const bookingSchema = z.object({
 
 // extracting the type
 export type TBookingSchema = z.infer<typeof bookingSchema>
+
+export enum BookingField {
+  Name = 'name',
+  PhoneNumber = 'phoneNumber',
+  Email = 'email',
+  Description = 'description',
+  Location = 'location',
+  Style = 'style',
+  ReferenceImages = 'referenceImages',
+}
