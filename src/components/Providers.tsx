@@ -10,7 +10,7 @@ import { theme } from '~/utils/theme'
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <MantineProvider theme={theme} defaultColorScheme="light">
+    <MantineProvider theme={theme} defaultColorScheme="dark">
       <FeatureProvider>{children}</FeatureProvider>
     </MantineProvider>
   )

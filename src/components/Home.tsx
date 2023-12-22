@@ -11,12 +11,10 @@ export default function Home() {
   const { features } = useFeatures()
 
   return (
-    <Container>
-      <section>
-        <Welcome />
-        <Link href="/bookings">Bookings</Link>
-        {/* {features?.booksOpen ? <TattooForm /> : undefined} */}
-      </section>
-    </Container>
+    <section>
+      <Welcome />
+      <Link href="/bookings">Bookings</Link>
+      {/* {features?.booksOpen ? <TattooForm /> : undefined} */}
+    </section>
   )
 }

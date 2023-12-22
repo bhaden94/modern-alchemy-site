@@ -1,3 +1,8 @@
+import { Button } from '@mantine/core'
+import { IconArrowLeft } from '@tabler/icons-react'
+import Link from 'next/link'
+
+import Container from '~/components/Container'
 import TattooForm from '~/components/TattooForm'
 
 const artists = ['artist1', 'artist2', 'artist3']
@@ -11,6 +16,12 @@ const ArtistPortfolioPage = ({ params }: { params: { name: string } }) => {
 
   return (
     <>
+      <Link href="/artists">
+        <Button variant="outline">
+          <IconArrowLeft />
+          Back to artists
+        </Button>
+      </Link>
       <div>Artist: {params.name}</div>
       <TattooForm />
     </>

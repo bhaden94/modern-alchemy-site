@@ -195,7 +195,7 @@ main {
     position: absolute;
     width: 375px;
     height: 115px;
-    background: var(--mantine-color-green-light);
+    background: var(--mantine-primary-color-filled);
     filter: blur(82px);
     transform: rotate(-19deg);
     z-index: -1;

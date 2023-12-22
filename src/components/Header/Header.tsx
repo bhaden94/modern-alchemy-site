@@ -4,17 +4,11 @@ import { Burger, Container, Drawer, Group, List } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { IconPhoto } from '@tabler/icons-react'
 import Link from 'next/link'
-import { usePathname,useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
+
+import { NavLinks } from '~/utils/navigation'
 
 import classes from './Header.module.css'
-
-const links = [
-  { link: '/', label: 'Home' },
-  { link: '/artists', label: 'Artists' },
-  { link: '/booking-info', label: 'Booking Info' },
-  { link: '/faq', label: 'FAQ' },
-  { link: '/aftercare-info', label: 'Aftercare Info' },
-]
 
 const chooseActiveHeader = (pathname: string | null, link: string): boolean => {
   const path = pathname?.substring(1)
@@ -29,19 +23,19 @@ const Header = () => {
   const pathname = usePathname()
   const [opened, { toggle, close }] = useDisclosure(false)
 
-  const items = links.map((link) => (
+  const items = NavLinks.map(({ link, label }) => (
     <a
-      key={link.label}
-      href={link.link}
+      key={label}
+      href={link}
       className={classes.link}
-      data-active={chooseActiveHeader(pathname, link.link) || undefined}
+      data-active={chooseActiveHeader(pathname, link) || undefined}
       onClick={(event) => {
         event.preventDefault()
-        router.push(link.link)
+        router.push(link)
         close()
       }}
     >
-      {link.label}
+      {label}
     </a>
   ))
 

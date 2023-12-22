@@ -13,9 +13,9 @@ export default async function BookingsPage() {
   const bookings = await getBookings(client)
 
   return (
-    <Container>
+    <>
       <Features />
       <Bookings bookings={bookings} />
-    </Container>
+    </>
   )
 }

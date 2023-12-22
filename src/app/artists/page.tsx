@@ -1,3 +1,5 @@
+import Container from '~/components/Container'
+
 import ArtistList from './ArtistList'
 
 const ArtistsShowcasePage = () => {
