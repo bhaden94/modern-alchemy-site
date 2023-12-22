@@ -1,13 +1,10 @@
 import Link from 'next/link'
 
+import Header from './Header/Header'
+
 export default function Container({ children }: { children: React.ReactNode }) {
   return (
     <div className="container">
-      <header className="header">
-        <Link className="header__title" href="/">
-          Bookings
-        </Link>
-      </header>
       <main>{children}</main>
       <footer className="footer">
         <p className="footer__text">

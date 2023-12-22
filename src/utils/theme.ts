@@ -6,7 +6,7 @@ import {
   Loader,
   mergeMantineTheme,
 } from '@mantine/core'
-import { Open_Sans,Raleway } from 'next/font/google'
+import { Open_Sans, Raleway } from 'next/font/google'
 
 const openSans = Open_Sans({
   subsets: ['latin'],
@@ -47,32 +47,32 @@ const themeOverride = createTheme({
     }),
   },
   colors: {
-    secondary: [
-      '#F3F2FF',
-      '#C1C2FF',
-      '#8F97FB',
-      '#5C6FF3',
-      '#2B4DE3',
-      '#0E36B4',
-      '#032A85',
-      '#001F55',
-      '#001026',
-      '#001026',
-    ],
-    primary: [
-      '#D0DBD0',
-      '#B4C6B4',
-      '#A1B8A2',
-      // other
-      '#325433',
-      '#6fa971',
-      '#2C492C',
-      '#253E25',
-      // background colors
-      '#142214',
-      '#0D160E',
-      '#070B07',
-    ],
+    // secondary: [
+    //   '#F3F2FF',
+    //   '#C1C2FF',
+    //   '#8F97FB',
+    //   '#5C6FF3',
+    //   '#2B4DE3',
+    //   '#0E36B4',
+    //   '#032A85',
+    //   '#001F55',
+    //   '#001026',
+    //   '#001026',
+    // ],
+    // primary: [
+    //   '#D0DBD0',
+    //   '#B4C6B4',
+    //   '#A1B8A2',
+    //   // other
+    //   '#325433',
+    //   '#6fa971',
+    //   '#2C492C',
+    //   '#253E25',
+    //   // background colors
+    //   '#142214',
+    //   '#0D160E',
+    //   '#070B07',
+    // ],
     // dark: [
     //   '#C9C9C9', // primary text color
     //   '#000000', // secondary text? (need to find out)

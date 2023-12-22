@@ -27,17 +27,17 @@ export default function BookingCard({ booking }: IBookingCardProps) {
       // trigger without awaiting so it does not hold up the UI
       fetch('/api/sanity/images', {
         method: 'DELETE',
-        body: JSON.stringify({ imageReferences: booking.showcaseImages }),
+        body: JSON.stringify({ imageReferences: booking.referenceImages }),
       })
     }
   }
 
   return (
     <div className="card">
-      {booking.showcaseImages[0] ? (
+      {booking.referenceImages[0] ? (
         <Image
           className="card__cover"
-          src={urlForImage(booking.showcaseImages[0])!
+          src={urlForImage(booking.referenceImages[0])!
             .width(500)
             .height(300)
             .url()}

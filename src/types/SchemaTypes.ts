@@ -19,13 +19,13 @@ export interface Booking {
   name: string
   phone_number: string
   email: string
-  characters: string
+  // characters: string
   description: string
   location: string
   style: string
-  prior_tattoo: string
-  preffered_day: string
-  showcaseImages: ImageAsset[]
+  // prior_tattoo: string
+  // preffered_day: string
+  referenceImages: ImageAsset[]
 }
 
 export interface AllowedUser {

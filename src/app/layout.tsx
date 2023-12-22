@@ -4,6 +4,7 @@ import '@mantine/dropzone/styles.css'
 
 import { ColorSchemeScript } from '@mantine/core'
 
+import Header from '~/components/Header/Header'
 import Providers from '~/components/Providers'
 
 export default function RootLayout({
@@ -17,7 +18,10 @@ export default function RootLayout({
         <ColorSchemeScript defaultColorScheme="light" />
       </head>
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          <Header />
+          {children}
+        </Providers>
       </body>
     </html>
   )
