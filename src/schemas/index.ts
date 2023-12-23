@@ -1,6 +1,6 @@
 import { SchemaTypeDefinition } from 'sanity'
 
-import allowedUser from './allowed-user'
+import artist from './artist'
 import blockContent from './blockContent'
 import booking from './booking'
 import featureFlags from './feature-flags'
@@ -11,9 +11,9 @@ export const schemaTypes = {
   post,
   blockContent,
   booking,
-  allowedUser,
+  artist,
   featureFlags,
 }
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [post, blockContent, booking, allowedUser, featureFlags],
+  types: [post, blockContent, booking, artist, featureFlags],
 }

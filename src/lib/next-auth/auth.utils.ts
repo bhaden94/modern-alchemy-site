@@ -2,21 +2,21 @@ import { NextAuthOptions } from 'next-auth'
 import { JWT } from 'next-auth/jwt'
 import GoogleProvider from 'next-auth/providers/google'
 
-import { getAllowedUsers } from '../sanity/queries/sanity.allowedUsersQuery'
+import { Role } from '~/types/SchemaTypes'
+
+import { getArtistByEmail } from '../sanity/queries/sanity.artistsQuery'
 import { getClient } from '../sanity/sanity.client'
 
 export const REDIRECT_URL = 'redirectUrl'
 export const AUTHORIZED_ROLE = 'authorizedUser'
 
-export enum UserRoles {
-  ADMIN,
-}
+const getUserRole = async (token: JWT): Promise<Role | null> => {
+  if (!token?.email) return null
 
-export const checkIfAuthorized = async (token: JWT): Promise<boolean> => {
   const authClient = getClient(undefined)
-  const allowedUsers = await getAllowedUsers(authClient)
+  const artist = await getArtistByEmail(authClient, token?.email)
 
-  return allowedUsers.some((user) => user?.email === token?.email)
+  return artist.role
 }
 
 export const authOptions: NextAuthOptions = {
@@ -39,11 +39,10 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async jwt({ token }) {
-      const isAuthorized = await checkIfAuthorized(token)
+      // const isAuthorized = await checkIfAuthorized(token)
+      const userRole = await getUserRole(token)
 
-      if (isAuthorized) {
-        token.role = UserRoles.ADMIN
-      }
+      token.role = userRole
 
       return token
     },

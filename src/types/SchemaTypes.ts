@@ -1,6 +1,11 @@
 import type { PortableTextBlock } from '@portabletext/types'
 import type { ImageAsset, Slug } from '@sanity/types'
 
+export enum Role {
+  OWNER = 'owner',
+  EMPLOYEE = 'employee',
+}
+
 export interface Post {
   _type: 'post'
   _id: string
@@ -26,13 +31,20 @@ export interface Booking {
   // prior_tattoo: string
   // preffered_day: string
   referenceImages: ImageAsset[]
+  artist: any
 }
 
-export interface AllowedUser {
-  _type: 'allowedUser'
+export interface Artist {
+  _type: 'artist'
   _id: string
   _createdAt: string
   email: string
+  name: string
+  instagram: string
+  booksOpen: boolean
+  booksOpenAt: Date
+  portfolioImages: ImageAsset[]
+  role: Role
 }
 
 export interface FeatureFlag {

@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server'
 import { withAuth } from 'next-auth/middleware'
 
-import { REDIRECT_URL, UserRoles } from './lib/next-auth/auth.utils'
+import { REDIRECT_URL } from './lib/next-auth/auth.utils'
 
 export default withAuth(
   function middleware(req) {
-    if (req.nextauth.token?.role !== UserRoles.ADMIN) {
+    if (!req.nextauth.token?.role) {
       return NextResponse.redirect(
         new URL(
           `/unauthorized?${REDIRECT_URL}=${encodeURIComponent(

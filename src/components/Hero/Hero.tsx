@@ -1,4 +1,4 @@
-import { Button, Container, Overlay, Text,Title } from '@mantine/core'
+import { Button, Container, Overlay, Text, Title } from '@mantine/core'
 import Image from 'next/image'
 
 import classes from './Hero.module.css'

@@ -4,15 +4,30 @@ import Link from 'next/link'
 
 import PageContainer from '~/components/Container'
 import TattooForm from '~/components/TattooForm'
+import {
+  getArtistBooksStatus,
+  getArtistByName,
+  getArtists,
+} from '~/lib/sanity/queries/sanity.artistsQuery'
+import { getClient } from '~/lib/sanity/sanity.client'
 
-const artists = ['artist1', 'artist2', 'artist3']
+import BooksStatus from './BooksStatus'
 
-export const generateStaticParams = () => {
-  return artists.map((artist) => ({ name: artist }))
+export const generateStaticParams = async () => {
+  const client = getClient(undefined)
+  const artists = await getArtists(client)
+  return artists.map((artist) => ({ name: artist.name }))
 }
 
-const ArtistPortfolioPage = ({ params }: { params: { name: string } }) => {
-  if (!artists.some((artist) => params.name === artist)) return <div>404</div>
+const ArtistPortfolioPage = async ({
+  params,
+}: {
+  params: { name: string }
+}) => {
+  const client = getClient(undefined)
+  const artist = await getArtistByName(client, decodeURI(params.name))
+
+  if (!artist) return <div>404</div>
 
   return (
     <PageContainer>
@@ -22,8 +37,10 @@ const ArtistPortfolioPage = ({ params }: { params: { name: string } }) => {
           Back to artists
         </Button>
       </Link>
-      <div>Artist: {params.name}</div>
-      <TattooForm />
+      <div>Artist: {artist.name}</div>
+      <div>Email: {artist.email}</div>
+      <div>Instagram: {artist.instagram}</div>
+      <BooksStatus name={params.name} />
     </PageContainer>
   )
 }

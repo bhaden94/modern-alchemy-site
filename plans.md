@@ -41,7 +41,7 @@ https://ui.mantine.dev/category/hero/
 
 # Admin Views
 
-There will be three types of roles: Owner, employee, and developer.
+There will be two types of roles: Owner and employee.
 
 ## Employee
 
@@ -71,10 +71,7 @@ Powers
 
 ## Developer
 
-Powers
-
-- All the powers of owner
-- Modify employee data
+Will have direct access to the dataset.
 
 # Mailing list
 

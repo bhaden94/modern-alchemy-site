@@ -3,14 +3,14 @@
 import { List } from '@mantine/core'
 import Link from 'next/link'
 
-const artists = ['artist1', 'artist2', 'artist3']
+import { Artist } from '~/types/SchemaTypes'
 
-const ArtistList = () => {
+const ArtistList = ({ artists }: { artists: Artist[] }) => {
   return (
     <List>
       {artists.map((artist) => (
-        <Link key={artist} href={`/artists/${artist}`}>
-          <List.Item>{artist}</List.Item>
+        <Link key={artist.name} href={`/artists/${artist.name}`}>
+          <List.Item>{artist.name}</List.Item>
         </Link>
       ))}
     </List>
