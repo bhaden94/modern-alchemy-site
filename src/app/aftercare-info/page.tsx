@@ -1,5 +1,7 @@
+import PageContainer from '~/components/Container'
+
 const AftercareInfoPage = () => {
-  return <div>aftercare info</div>
+  return <PageContainer>aftercare info</PageContainer>
 }
 
 export default AftercareInfoPage

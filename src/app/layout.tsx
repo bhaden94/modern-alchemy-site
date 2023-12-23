@@ -4,7 +4,7 @@ import '@mantine/dropzone/styles.css'
 
 import { ColorSchemeScript } from '@mantine/core'
 
-import Container from '~/components/Container'
+import PageContainer from '~/components/Container'
 import Footer from '~/components/Footer/Footer'
 import Header from '~/components/Header/Header'
 import Providers from '~/components/Providers'
@@ -22,7 +22,7 @@ export default function RootLayout({
       <body>
         <Providers>
           <Header />
-          <Container>{children}</Container>
+          {children}
           <Footer />
         </Providers>
       </body>

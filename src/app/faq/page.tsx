@@ -1,5 +1,7 @@
+import PageContainer from '~/components/Container'
+
 const FaqPage = () => {
-  return <div>FAQ</div>
+  return <PageContainer>FAQ</PageContainer>
 }
 
 export default FaqPage

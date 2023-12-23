@@ -1,5 +1,7 @@
+import PageContainer from '~/components/Container'
+
 const BookingInfoPage = () => {
-  return <div>Booking info</div>
+  return <PageContainer>Booking info</PageContainer>
 }
 
 export default BookingInfoPage

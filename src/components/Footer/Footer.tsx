@@ -1,7 +1,7 @@
 'use client'
 
-import { ActionIcon, Container, Group, rem,Text } from '@mantine/core'
-import { IconBrandFacebook,IconBrandInstagram } from '@tabler/icons-react'
+import { ActionIcon, Container, Group, rem, Text } from '@mantine/core'
+import { IconBrandFacebook, IconBrandInstagram } from '@tabler/icons-react'
 import { IconPhoto } from '@tabler/icons-react'
 
 import { ExtraNavLinks, NavLinks } from '~/utils/navigation'

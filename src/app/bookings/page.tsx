@@ -1,4 +1,4 @@
-import Container from '~/components/Container'
+import PageContainer from '~/components/Container'
 import Features from '~/components/Features'
 import { getBookings } from '~/lib/sanity/queries/sanity.bookingsQuery'
 import { getClient } from '~/lib/sanity/sanity.client'
@@ -13,9 +13,9 @@ export default async function BookingsPage() {
   const bookings = await getBookings(client)
 
   return (
-    <>
+    <PageContainer>
       <Features />
       <Bookings bookings={bookings} />
-    </>
+    </PageContainer>
   )
 }
