@@ -16,7 +16,7 @@ const BooksOpenAt = ({ date }: { date: Date | null }) => {
   return <div>{dateType.toLocaleString()}</div>
 }
 
-const BooksStatus = ({ name, id }: { name: string, id: string }) => {
+const BooksStatus = ({ name, id }: { name: string; id: string }) => {
   const [booksStatus, setBooksStatus] = useState<BooksStatus>({
     booksOpen: false,
     booksOpenAt: null,
