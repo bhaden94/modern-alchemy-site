@@ -16,7 +16,7 @@ const BooksOpenAt = ({ date }: { date: Date | null }) => {
   return <div>{dateType.toLocaleString()}</div>
 }
 
-const BooksStatus = ({ name }: { name: string }) => {
+const BooksStatus = ({ name, id }: { name: string, id: string }) => {
   const [booksStatus, setBooksStatus] = useState<BooksStatus>({
     booksOpen: false,
     booksOpenAt: null,
@@ -52,7 +52,7 @@ const BooksStatus = ({ name }: { name: string }) => {
   return (
     <>
       {booksStatus.booksOpen ? (
-        <TattooForm />
+        <TattooForm artistName={name} artistId={id} />
       ) : (
         <BooksOpenAt date={booksStatus.booksOpenAt} />
       )}

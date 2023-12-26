@@ -39,7 +39,13 @@ const CustomLoader = ({ label }: { label: string }) => {
 // TODO: split into components
 // TODO: implement reCAPTCHA for form submission
 // TODO: implement Nodemailer to send email confirming form submission
-const TattooForm = () => {
+const TattooForm = ({
+  artistName,
+  artistId,
+}: {
+  artistName: string
+  artistId: string
+}) => {
   const [isUploadingImages, setIsUploadingImages] = useState<boolean>(false)
   const [isSubmittingForm, setIsSubmittingForm] = useState<boolean>(false)
   const [imageFiles, setImageFiles] = useState<FileWithPath[]>([])
@@ -80,6 +86,7 @@ const TattooForm = () => {
       method: 'PUT',
       body: JSON.stringify({
         ...data,
+        artist: { _ref: artistId, _type: 'reference', _weak: true },
         [BookingField.ReferenceImages]: imageReferences,
       }),
     })
