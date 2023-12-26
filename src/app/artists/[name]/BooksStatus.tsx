@@ -12,8 +12,16 @@ import { getClient } from '~/lib/sanity/sanity.client'
 
 const BooksOpenAt = ({ date }: { date: Date | null }) => {
   if (!date) return undefined
+  const options = {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+  } as const
   const dateType = new Date(date)
-  return <div>{dateType.toLocaleString()}</div>
+  return <div>{dateType.toLocaleString('en-US', options)}</div>
 }
 
 const BooksStatus = ({ name, id }: { name: string; id: string }) => {

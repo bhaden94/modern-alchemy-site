@@ -46,6 +46,7 @@ export async function PUT(
   return NextResponse.json({ imageReferences: imageReferences })
 }
 
+// TODO: Check request is coming from authenticated user
 export async function DELETE(request: NextRequest) {
   const client = getClient(token)
   const body: { imageReferences: ImageReference[] } = await request.json()

@@ -1,3 +1,4 @@
+import { DateValue } from '@mantine/dates'
 import { groq } from 'next-sanity'
 import { Observable } from 'rxjs'
 import { SanityClient } from 'sanity'
@@ -29,7 +30,7 @@ export async function getArtistByName(
 
 export interface BooksStatus {
   booksOpen: boolean
-  booksOpenAt: Date | null
+  booksOpenAt: DateValue
 }
 
 const artistsBooksStatus = groq`*[_type == "artist" && name == $name][0]{booksOpen, booksOpenAt}`

@@ -1,6 +1,10 @@
+import AdminBooksStatus from '~/components/AdminBooksStatus/AdminBooksStatus'
 import PageContainer from '~/components/Container'
 import Features from '~/components/Features'
-import { getArtistByName } from '~/lib/sanity/queries/sanity.artistsQuery'
+import {
+  getArtistBooksStatus,
+  getArtistByName,
+} from '~/lib/sanity/queries/sanity.artistsQuery'
 import { getBookingsByArtistId } from '~/lib/sanity/queries/sanity.bookingsQuery'
 import { getClient } from '~/lib/sanity/sanity.client'
 
@@ -13,10 +17,14 @@ const BookingsPage = async ({ params }: { params: { name: string } }) => {
   const client = getClient(undefined)
   const artist = await getArtistByName(client, decodeURI(params.name))
   const bookings = await getBookingsByArtistId(client, artist._id)
+  const currBooksStatus = await getArtistBooksStatus(
+    client,
+    decodeURI(params.name),
+  )
 
   return (
     <PageContainer>
-      <Features />
+      <AdminBooksStatus artistId={artist._id} booksStatus={currBooksStatus} />
       <Bookings bookings={bookings} artistId={artist._id} />
     </PageContainer>
   )

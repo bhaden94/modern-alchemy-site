@@ -1,10 +1,10 @@
 import './styles/global.css'
 import '@mantine/core/styles.css'
 import '@mantine/dropzone/styles.css'
+import '@mantine/dates/styles.css'
 
 import { ColorSchemeScript } from '@mantine/core'
 
-import PageContainer from '~/components/Container'
 import Footer from '~/components/Footer/Footer'
 import Header from '~/components/Header/Header'
 import Providers from '~/components/Providers'

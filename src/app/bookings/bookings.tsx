@@ -51,10 +51,18 @@ export default function Bookings({ bookings, artistId }: IBookings) {
 
   return (
     <section>
-      <button onClick={() => signOut({ callbackUrl: '/' })}>Sign Out</button>
-      <Button disabled={refreshDisabled} onClick={refreshList}>
-        Refresh list
-      </Button>
+      <div>
+        <Button disabled={refreshDisabled} onClick={refreshList}>
+          Refresh list
+        </Button>
+        <Button
+          className="float-right"
+          variant="outline"
+          onClick={() => signOut({ callbackUrl: '/' })}
+        >
+          Sign Out
+        </Button>
+      </div>
       {bookingsList?.length ? (
         <>
           {bookingsList.map((booking) => (
