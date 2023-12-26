@@ -3,9 +3,7 @@ import { IconArrowLeft } from '@tabler/icons-react'
 import Link from 'next/link'
 
 import PageContainer from '~/components/Container'
-import TattooForm from '~/components/TattooForm'
 import {
-  getArtistBooksStatus,
   getArtistByName,
   getArtists,
 } from '~/lib/sanity/queries/sanity.artistsQuery'

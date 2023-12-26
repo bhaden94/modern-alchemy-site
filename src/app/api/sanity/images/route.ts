@@ -14,9 +14,15 @@ type ImageReference = {
   }
 }
 
+interface ImagesPutResponseBody {
+  imageReferences: ImageReference[]
+}
+
 // upload image assets to sanity
 // return references
-export async function PUT(request: NextRequest) {
+export async function PUT(
+  request: NextRequest,
+): Promise<NextResponse<ImagesPutResponseBody>> {
   const client = getClient(token)
   const data = Object.fromEntries(await request.formData())
   const imagesArray = Array.from(Object.values(data))

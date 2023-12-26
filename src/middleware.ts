@@ -15,6 +15,20 @@ export default withAuth(
         ),
       )
     }
+
+    if (
+      req.nextUrl.pathname === config.matcher[0] &&
+      req.nextauth.token?.name
+    ) {
+      return NextResponse.redirect(
+        new URL(
+          `${req.nextUrl.pathname}/${encodeURIComponent(
+            req.nextauth.token?.name,
+          )}`,
+          req.url,
+        ),
+      )
+    }
   },
   {
     callbacks: {
@@ -25,5 +39,5 @@ export default withAuth(
 )
 
 export const config = {
-  matcher: '/bookings',
+  matcher: ['/bookings', '/bookings/:name'],
 }

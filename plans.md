@@ -92,3 +92,7 @@ TBD
 ## Aftercare Info
 
 ## Booking Info
+
+# Notes
+
+- Storing artists in a provider could be useful since we are quering for them often.
