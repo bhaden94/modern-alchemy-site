@@ -1,5 +1,5 @@
 import { Button, Container, Overlay, Text, Title } from '@mantine/core'
-import Image from "next/legacy/image"
+import Image from "next/image"
 
 import classes from './Hero.module.css'
 
@@ -15,10 +15,12 @@ const Hero = () => {
         className={classes.heroImage}
         src="/tattoo-shop.jpg"
         alt="Picture of shop"
-        layout="fill"
-        objectFit="cover"
-        objectPosition="center"
-      />
+        fill
+        sizes="100vw"
+        style={{
+          objectFit: "cover",
+          objectPosition: "center"
+        }} />
       <Container className={`${classes.container}`} size="md">
         <Title className={classes.title}>
           A fully featured React components library
@@ -39,7 +41,7 @@ const Hero = () => {
         </Button>
       </Container>
     </div>
-  )
+  );
 }
 
 export default Hero
