@@ -32,6 +32,23 @@ export default defineType({
       title: 'Books Open At',
     }),
     defineField({
+      name: 'headshot',
+      type: 'image',
+      title: 'Headshot',
+    }),
+    defineField({
+      name: 'styles',
+      type: 'array',
+      title: 'Styles',
+      of: [
+        defineArrayMember({
+          title: 'Style',
+          type: 'string',
+          name: 'style',
+        }),
+      ],
+    }),
+    defineField({
       name: 'portfolioImages',
       type: 'array',
       title: 'Portfolio Images',

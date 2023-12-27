@@ -18,7 +18,7 @@ https://ui.mantine.dev/category/hero/
 
 ## Artists
 
-- Each artist ha a headshot, their name, their styles, and a link to their portfolio.
+- Each artist has a headshot, their name, their styles, and a link to their portfolio.
   - Fallback image here of a general person icon.
 - Each artist will have their booking status and a link to book with them if open.
 
