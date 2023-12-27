@@ -7,7 +7,7 @@ export const NavLinks: NavigationLink[] = [
   { link: '/', label: 'Home' },
   { link: '/artists', label: 'Artists' },
   { link: '/booking-info', label: 'Booking Info' },
-  { link: '/faq', label: 'FAQ' },
+  { link: '/faq', label: 'FAQs' },
   { link: '/aftercare-info', label: 'Aftercare Info' },
 ]
 

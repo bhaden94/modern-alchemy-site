@@ -3,7 +3,7 @@
 import { List } from '@mantine/core'
 import Link from 'next/link'
 
-import { Artist } from '~/types/SchemaTypes'
+import { Artist } from '~/types/SanitySchemaTypes'
 
 const ArtistList = ({ artists }: { artists: Artist[] }) => {
   return (

@@ -2,7 +2,7 @@
 
 import { Burger, Container, Drawer, Group, List } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import { IconPhoto } from '@tabler/icons-react'
+import { IconFlask2 } from '@tabler/icons-react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 
@@ -43,7 +43,7 @@ const Header = () => {
     <header className={classes.header}>
       <Container size="md" className={classes.inner}>
         <Link href={'/'}>
-          <IconPhoto size={28} />
+          <IconFlask2 size={36} />
         </Link>
         <Group gap={5} visibleFrom="xs">
           {items}

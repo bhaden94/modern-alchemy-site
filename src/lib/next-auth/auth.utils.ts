@@ -2,7 +2,7 @@ import { NextAuthOptions } from 'next-auth'
 import { JWT } from 'next-auth/jwt'
 import GoogleProvider from 'next-auth/providers/google'
 
-import { Artist, Role } from '~/types/SchemaTypes'
+import { Artist, Role } from '~/types/SanitySchemaTypes'
 
 import { getArtistByEmail } from '../sanity/queries/sanity.artistsQuery'
 import { getClient } from '../sanity/sanity.client'

@@ -2,7 +2,7 @@ import { groq } from 'next-sanity'
 import { Observable } from 'rxjs'
 import { SanityClient } from 'sanity'
 
-import { Booking } from '~/types/SchemaTypes'
+import { Booking } from '~/types/SanitySchemaTypes'
 
 export const bookingsQuery = groq`*[_type == "booking"] | order(_createdAt asc)`
 export async function getBookings(client: SanityClient): Promise<Booking[]> {

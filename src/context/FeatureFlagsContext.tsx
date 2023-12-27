@@ -12,7 +12,7 @@ import {
   FeatureFlagsContextValue,
   FeatureType,
 } from '~/types/FeatureFlagContextValue'
-import { FeatureFlag } from '~/types/SchemaTypes'
+import { FeatureFlag } from '~/types/SanitySchemaTypes'
 
 type FeatureProviderProps = {
   children: React.ReactNode

@@ -10,7 +10,7 @@ import {
   listenForBookingChanges,
 } from '~/lib/sanity/queries/sanity.bookingsQuery'
 import { getClient } from '~/lib/sanity/sanity.client'
-import { Booking } from '~/types/SchemaTypes'
+import { Booking } from '~/types/SanitySchemaTypes'
 
 interface IBookings {
   bookings: Booking[]

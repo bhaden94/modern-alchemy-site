@@ -2,7 +2,7 @@ import { groq } from 'next-sanity'
 import { Observable } from 'rxjs'
 import { SanityClient } from 'sanity'
 
-import { FeatureFlag } from '~/types/SchemaTypes'
+import { FeatureFlag } from '~/types/SanitySchemaTypes'
 
 type paramsType = { [key: string]: string; flagType: 'featureFlag' }
 

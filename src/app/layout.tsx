@@ -8,6 +8,7 @@ import { ColorSchemeScript } from '@mantine/core'
 import Footer from '~/components/Footer/Footer'
 import Header from '~/components/Header/Header'
 import Providers from '~/components/Providers'
+import { colorScheme } from '~/utils/theme'
 
 export default function RootLayout({
   children,
@@ -17,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <ColorSchemeScript defaultColorScheme="dark" />
+        <ColorSchemeScript defaultColorScheme={colorScheme} />
       </head>
       <body>
         <Providers>

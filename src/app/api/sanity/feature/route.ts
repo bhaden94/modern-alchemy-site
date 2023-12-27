@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { getSingleFeatureFlag } from '~/lib/sanity/queries/sanity.featuresQuery'
 import { getClient } from '~/lib/sanity/sanity.client'
-import { FeatureFlag } from '~/types/SchemaTypes'
+import { FeatureFlag } from '~/types/SanitySchemaTypes'
 
 const token = process.env.SANITY_API_WRITE_TOKEN
 

@@ -1,9 +1,15 @@
 import { Button, Container, Overlay, Text, Title } from '@mantine/core'
-import Image from "next/image"
+import Image from 'next/image'
+import Link from 'next/link'
 
 import classes from './Hero.module.css'
 
-const Hero = () => {
+interface IHero {
+  title: string
+  description?: string
+}
+
+const Hero = ({ title, description }: IHero) => {
   return (
     <div className={classes.hero}>
       <Overlay
@@ -18,30 +24,31 @@ const Hero = () => {
         fill
         sizes="100vw"
         style={{
-          objectFit: "cover",
-          objectPosition: "center"
-        }} />
-      <Container className={`${classes.container}`} size="md">
-        <Title className={classes.title}>
-          A fully featured React components library
-        </Title>
-        <Text className={classes.description} size="xl" mt="xl">
-          Build fully functional accessible web applications faster than ever –
-          Mantine includes more than 120 customizable components and hooks to
-          cover you in any situation
-        </Text>
+          objectFit: 'cover',
+          objectPosition: 'center',
+        }}
+      />
+      <Container className={classes.container} size="md">
+        <Title className={classes.title}>{title}</Title>
+        {description ? (
+          <Text className={classes.description} size="xl" mt="xl">
+            {description}
+          </Text>
+        ) : undefined}
 
-        <Button
-          variant="gradient"
-          size="xl"
-          radius="xl"
-          className={classes.control}
-        >
-          Get started
-        </Button>
+        <Link href="/artists">
+          <Button
+            variant="gradient"
+            size="xl"
+            radius="xl"
+            className={classes.control}
+          >
+            View Our Artists
+          </Button>
+        </Link>
       </Container>
     </div>
-  );
+  )
 }
 
 export default Hero

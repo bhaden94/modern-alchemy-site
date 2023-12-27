@@ -3,7 +3,7 @@ import { groq } from 'next-sanity'
 import { Observable } from 'rxjs'
 import { SanityClient } from 'sanity'
 
-import { Artist } from '~/types/SchemaTypes'
+import { Artist } from '~/types/SanitySchemaTypes'
 
 const artistssQuery = groq`*[_type == "artist"]`
 export async function getArtists(client: SanityClient): Promise<Artist[]> {

@@ -1,5 +1,6 @@
 import type { PortableTextBlock } from '@portabletext/types'
 import type { ImageAsset, Slug } from '@sanity/types'
+import { TypedObject } from 'sanity'
 
 export enum Role {
   OWNER = 'owner',
@@ -55,4 +56,25 @@ export interface FeatureFlag {
   key: string
   description?: string
   status: boolean
+}
+
+export interface RootPageContent {
+  _type: 'rootPageContent'
+  _id: string
+  _createdAt: string
+  heroTitle: string
+  heroDescription?: string
+  homeContent?: string
+}
+
+export interface Faq {
+  question: string
+  answer: TypedObject | TypedObject[]
+}
+
+export interface FaqPageContent {
+  _type: 'faqPageContent'
+  _id: string
+  _createdAt: string
+  faqs: Faq[]
 }
