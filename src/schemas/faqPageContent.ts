@@ -6,6 +6,11 @@ export default defineType({
   title: 'FAQ Page Text',
   fields: [
     defineField({
+      name: 'pageTitle',
+      type: 'string',
+      title: 'Page Title',
+    }),
+    defineField({
       name: 'faqs',
       type: 'array',
       title: 'FAQs',

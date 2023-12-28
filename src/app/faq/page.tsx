@@ -11,7 +11,7 @@ const FaqPage = async () => {
 
   return (
     <PageContainer>
-      <Faqs faqs={content.faqs} />
+      <Faqs {...content} />
     </PageContainer>
   )
 }

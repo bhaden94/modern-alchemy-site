@@ -7,10 +7,20 @@ export enum Role {
   EMPLOYEE = 'employee',
 }
 
-export interface Post {
-  _type: 'post'
+export interface BlockContentImage {
+  _type: 'image'
+  _key: string
+  altText: string
+  asset: ImageAsset
+}
+
+type BasePageContent<T extends string> = {
+  _type: T
   _id: string
   _createdAt: string
+}
+
+export interface Post extends BasePageContent<'post'> {
   title?: string
   slug: Slug
   excerpt?: string
@@ -18,10 +28,7 @@ export interface Post {
   body: PortableTextBlock[]
 }
 
-export interface Booking {
-  _type: 'booking'
-  _id: string
-  _createdAt: string
+export interface Booking extends BasePageContent<'booking'> {
   name: string
   phone_number: string
   email: string
@@ -35,10 +42,7 @@ export interface Booking {
   artist: any
 }
 
-export interface Artist {
-  _type: 'artist'
-  _id: string
-  _createdAt: string
+export interface Artist extends BasePageContent<'artist'> {
   email: string
   name: string
   instagram: string
@@ -48,33 +52,31 @@ export interface Artist {
   role: Role
 }
 
-export interface FeatureFlag {
-  _type: 'featureFlag'
-  _id: string
-  _createdAt: string
+export interface FeatureFlag extends BasePageContent<'featureFlag'> {
   title: string
   key: string
   description?: string
   status: boolean
 }
 
-export interface RootPageContent {
-  _type: 'rootPageContent'
-  _id: string
-  _createdAt: string
+export interface RootPageContent extends BasePageContent<'rootPageContent'> {
   heroTitle: string
   heroDescription?: string
   homeContent?: string
 }
 
-export interface Faq {
+interface Faq {
   question: string
   answer: TypedObject | TypedObject[]
 }
 
-export interface FaqPageContent {
-  _type: 'faqPageContent'
-  _id: string
-  _createdAt: string
+export interface FaqPageContent extends BasePageContent<'faqPageContent'> {
+  pageTitle: string
   faqs: Faq[]
+}
+
+export interface AftercareInfoPageContent
+  extends BasePageContent<'aftercareInfoPageContent'> {
+  pageTitle: string
+  information: TypedObject | TypedObject[]
 }
