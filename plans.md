@@ -20,12 +20,12 @@ https://ui.mantine.dev/category/hero/
 
 - Each artist has a headshot, their name, their styles, and a link to their portfolio.
   - Fallback image here of a general person icon.
-- Each artist will have their booking status and a link to book with them if open.
 
 ### Artist page
 
-- Image gallery of their work,
-- Booking status and button to book with them if open.
+- Headshot and styles shown again.
+- Image gallery of their work.
+- Booking status and form to book with them if open.
 - Link to socials.
 
 ## Booking info
