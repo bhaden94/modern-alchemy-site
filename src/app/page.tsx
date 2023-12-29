@@ -1,5 +1,5 @@
-import PageContainer from '~/components/Container'
 import Hero from '~/components/Hero/Hero'
+import PageContainer from '~/components/PageContainer'
 import { getRootPageContent } from '~/lib/sanity/queries/sanity.pageContentQueries'
 import { getClient } from '~/lib/sanity/sanity.client'
 

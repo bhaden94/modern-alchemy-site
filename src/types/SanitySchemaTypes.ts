@@ -48,6 +48,8 @@ export interface Artist extends BasePageContent<'artist'> {
   instagram: string
   booksOpen: boolean
   booksOpenAt: Date
+  headshot: { asset: ImageAsset }
+  styles: string[]
   portfolioImages: ImageAsset[]
   role: Role
 }
@@ -79,4 +81,9 @@ export interface AftercareInfoPageContent
   extends BasePageContent<'aftercareInfoPageContent'> {
   pageTitle: string
   information: TypedObject | TypedObject[]
+}
+
+export interface ArtistsPageContent
+  extends BasePageContent<'artistsPageContent'> {
+  pageTitle: string
 }

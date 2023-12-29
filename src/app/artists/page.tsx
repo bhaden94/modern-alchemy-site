@@ -1,17 +1,19 @@
-import PageContainer from '~/components/Container'
+import Artists from '~/components/Artists/Artists'
+import PageContainer from '~/components/PageContainer'
 import { getArtists } from '~/lib/sanity/queries/sanity.artistsQuery'
+import { getArtistsPageContent } from '~/lib/sanity/queries/sanity.pageContentQueries'
 import { getClient } from '~/lib/sanity/sanity.client'
-
-import ArtistList from './ArtistList'
 
 const ArtistsShowcasePage = async () => {
   const client = getClient(undefined)
   const artists = await getArtists(client)
+  const content = await getArtistsPageContent(client)
+
+  if (!content) return undefined
 
   return (
     <PageContainer>
-      <div>Artists page</div>
-      <ArtistList artists={artists} />
+      <Artists content={content} artists={artists} />
     </PageContainer>
   )
 }

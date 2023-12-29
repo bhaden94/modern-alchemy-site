@@ -1,4 +1,4 @@
-import PageContainer from '~/components/Container'
+import PageContainer from '~/components/PageContainer'
 
 const BookingInfoPage = () => {
   return <PageContainer>Booking info</PageContainer>

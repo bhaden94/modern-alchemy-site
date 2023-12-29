@@ -2,7 +2,7 @@ import { Button } from '@mantine/core'
 import { IconArrowLeft } from '@tabler/icons-react'
 import Link from 'next/link'
 
-import PageContainer from '~/components/Container'
+import PageContainer from '~/components/PageContainer'
 import {
   getArtistByName,
   getArtists,

@@ -2,6 +2,7 @@ import { SchemaTypeDefinition } from 'sanity'
 
 import aftercareInfoPageContent from './aftercareInfoPageContent'
 import artist from './artist'
+import artistsPageContent from './artistsPageContent'
 import blockContent from './blockContent'
 import booking from './booking'
 import faqPageContent from './faqPageContent'
@@ -19,6 +20,7 @@ export const schemaTypes = {
   rootPageContent,
   faqPageContent,
   aftercareInfoPageContent,
+  artistsPageContent,
 }
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -30,5 +32,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     rootPageContent,
     faqPageContent,
     aftercareInfoPageContent,
+    artistsPageContent,
   ],
 }

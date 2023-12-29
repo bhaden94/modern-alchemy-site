@@ -1,5 +1,5 @@
-import PageContainer from '~/components/Container'
 import Faqs from '~/components/Faqs/Faqs'
+import PageContainer from '~/components/PageContainer'
 import { getFaqPageContent } from '~/lib/sanity/queries/sanity.pageContentQueries'
 import { getClient } from '~/lib/sanity/sanity.client'
 

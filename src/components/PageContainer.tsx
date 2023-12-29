@@ -4,7 +4,7 @@ export default function PageContainer({
   children: React.ReactNode
 }) {
   return (
-    <div className="container">
+    <div className="container mx-auto px-4 xl:max-w-[--mantine-breakpoint-xl]">
       <main>{children}</main>
     </div>
   )

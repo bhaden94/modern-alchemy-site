@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 
-import PageContainer from '~/components/Container'
+import PageContainer from '~/components/PageContainer'
 import { REDIRECT_URL } from '~/lib/next-auth/auth.utils'
 
 // TODO: fix error - Entire page /unauthorized deopted into client-side rendering. https://nextjs.org/docs/messages/deopted-into-client-rendering /unauthorized

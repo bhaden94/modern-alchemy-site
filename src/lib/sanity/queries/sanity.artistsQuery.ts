@@ -5,12 +5,30 @@ import { SanityClient } from 'sanity'
 
 import { Artist } from '~/types/SanitySchemaTypes'
 
-const artistssQuery = groq`*[_type == "artist"]`
+const artistssQuery = groq`*[_type == "artist"]{
+  ...,
+  headshot{
+    ...,
+    _type == "image" => {
+      ...,
+      asset->
+    }
+  }
+}`
 export async function getArtists(client: SanityClient): Promise<Artist[]> {
   return await client.fetch(artistssQuery)
 }
 
-const artistsEmailQuery = groq`*[_type == "artist" && email == $email][0]`
+const artistsEmailQuery = groq`*[_type == "artist" && email == $email][0]{
+  ...,
+  headshot{
+    ...,
+    _type == "image" => {
+      ...,
+      asset->
+    }
+  }
+}`
 export async function getArtistByEmail(
   client: SanityClient,
   email: string,
@@ -19,7 +37,25 @@ export async function getArtistByEmail(
   return await client.fetch(artistsEmailQuery, emailParam)
 }
 
-const artistsNameQuery = groq`*[_type == "artist" && name == $name][0]`
+const artistsIdByNameQuery = groq`*[_type == "artist" && name == $name][0]{_id}`
+export async function getArtistIdByName(
+  client: SanityClient,
+  name: string,
+): Promise<{ _id: string }> {
+  const nameParam = { name: name }
+  return await client.fetch(artistsIdByNameQuery, nameParam)
+}
+
+const artistsNameQuery = groq`*[_type == "artist" && name == $name][0]{
+  ...,
+  headshot{
+    ...,
+    _type == "image" => {
+      ...,
+      asset->
+    }
+  }
+}`
 export async function getArtistByName(
   client: SanityClient,
   name: string,
