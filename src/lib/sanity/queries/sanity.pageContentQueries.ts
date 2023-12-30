@@ -4,6 +4,7 @@ import { SanityClient } from 'sanity'
 import {
   AftercareInfoPageContent,
   ArtistsPageContent,
+  BookingInfoPageContent,
   FaqPageContent,
   RootPageContent,
 } from '~/types/SanitySchemaTypes'
@@ -58,4 +59,20 @@ export async function getArtistsPageContent(
   client: SanityClient,
 ): Promise<ArtistsPageContent> {
   return await client.fetch(artistsPageContentQuery)
+}
+
+const bookingInfoPageContentQuery = groq`*[_type == "bookingInfoPageContent"][0]{
+  ...,
+  information[]{
+    ...,
+    _type == "image" => {
+      ...,
+      asset->
+    }
+  }
+}`
+export async function getBookingInfoPageContent(
+  client: SanityClient,
+): Promise<BookingInfoPageContent> {
+  return await client.fetch(bookingInfoPageContentQuery)
 }

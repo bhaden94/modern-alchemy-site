@@ -38,7 +38,7 @@ const ArtistPortfolioPage = async ({
       <div>Artist: {artist.name}</div>
       <div>Email: {artist.email}</div>
       <div>Instagram: {artist.instagram}</div>
-      <BooksStatus name={params.name} id={artist._id} />
+      <BooksStatus name={decodeURI(params.name)} id={artist._id} showForm />
     </PageContainer>
   )
 }

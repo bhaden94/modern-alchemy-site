@@ -1,9 +1,9 @@
 import { defineField, defineType } from 'sanity'
 
 export default defineType({
-  name: 'rootPageContent',
+  name: 'bookingInfoPageContent',
   type: 'document',
-  title: 'Root Page Text',
+  title: 'Booking Info Page Text',
   fields: [
     defineField({
       name: 'pageTitle',
@@ -11,14 +11,9 @@ export default defineType({
       title: 'Page Title',
     }),
     defineField({
-      name: 'heroDescription',
-      type: 'string',
-      title: 'Hero Description',
-    }),
-    defineField({
-      name: 'homeContent',
-      type: 'string',
-      title: 'Home Content',
+      name: 'information',
+      title: 'Information',
+      type: 'blockContent',
     }),
   ],
 })

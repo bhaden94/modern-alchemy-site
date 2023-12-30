@@ -39,13 +39,7 @@ const CustomLoader = ({ label }: { label: string }) => {
 // TODO: split into components
 // TODO: implement reCAPTCHA for form submission
 // TODO: implement Nodemailer to send email confirming form submission
-const TattooForm = ({
-  artistName,
-  artistId,
-}: {
-  artistName: string
-  artistId: string
-}) => {
+const TattooForm = ({ artistId }: { artistId: string }) => {
   const [isUploadingImages, setIsUploadingImages] = useState<boolean>(false)
   const [isSubmittingForm, setIsSubmittingForm] = useState<boolean>(false)
   const [imageFiles, setImageFiles] = useState<FileWithPath[]>([])

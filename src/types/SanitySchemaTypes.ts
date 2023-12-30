@@ -2,6 +2,22 @@ import type { PortableTextBlock } from '@portabletext/types'
 import type { ImageAsset, Slug } from '@sanity/types'
 import { TypedObject } from 'sanity'
 
+type BaseSanitySchema<T extends string> = {
+  _type: T
+  _id: string
+  _createdAt: string
+}
+
+type BasePageContent = {
+  pageTitle: string
+}
+
+interface Faq {
+  question: string
+  answer: TypedObject | TypedObject[]
+}
+
+/** Sanity Documents */
 export enum Role {
   OWNER = 'owner',
   EMPLOYEE = 'employee',
@@ -14,13 +30,7 @@ export interface BlockContentImage {
   asset: ImageAsset
 }
 
-type BasePageContent<T extends string> = {
-  _type: T
-  _id: string
-  _createdAt: string
-}
-
-export interface Post extends BasePageContent<'post'> {
+export interface Post extends BaseSanitySchema<'post'> {
   title?: string
   slug: Slug
   excerpt?: string
@@ -28,7 +38,7 @@ export interface Post extends BasePageContent<'post'> {
   body: PortableTextBlock[]
 }
 
-export interface Booking extends BasePageContent<'booking'> {
+export interface Booking extends BaseSanitySchema<'booking'> {
   name: string
   phone_number: string
   email: string
@@ -42,7 +52,7 @@ export interface Booking extends BasePageContent<'booking'> {
   artist: any
 }
 
-export interface Artist extends BasePageContent<'artist'> {
+export interface Artist extends BaseSanitySchema<'artist'> {
   email: string
   name: string
   instagram: string
@@ -54,36 +64,39 @@ export interface Artist extends BasePageContent<'artist'> {
   role: Role
 }
 
-export interface FeatureFlag extends BasePageContent<'featureFlag'> {
+export interface FeatureFlag extends BaseSanitySchema<'featureFlag'> {
   title: string
   key: string
   description?: string
   status: boolean
 }
 
-export interface RootPageContent extends BasePageContent<'rootPageContent'> {
-  heroTitle: string
+/** Pages */
+export interface RootPageContent
+  extends BaseSanitySchema<'rootPageContent'>,
+    BasePageContent {
   heroDescription?: string
   homeContent?: string
 }
 
-interface Faq {
-  question: string
-  answer: TypedObject | TypedObject[]
-}
-
-export interface FaqPageContent extends BasePageContent<'faqPageContent'> {
-  pageTitle: string
+export interface FaqPageContent
+  extends BaseSanitySchema<'faqPageContent'>,
+    BasePageContent {
   faqs: Faq[]
 }
 
 export interface AftercareInfoPageContent
-  extends BasePageContent<'aftercareInfoPageContent'> {
-  pageTitle: string
+  extends BaseSanitySchema<'aftercareInfoPageContent'>,
+    BasePageContent {
   information: TypedObject | TypedObject[]
 }
 
 export interface ArtistsPageContent
-  extends BasePageContent<'artistsPageContent'> {
-  pageTitle: string
+  extends BaseSanitySchema<'artistsPageContent'>,
+    BasePageContent {}
+
+export interface BookingInfoPageContent
+  extends BaseSanitySchema<'bookingInfoPageContent'>,
+    BasePageContent {
+  information: TypedObject | TypedObject[]
 }

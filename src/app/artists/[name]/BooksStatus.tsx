@@ -1,5 +1,7 @@
 'use client'
 
+import { Text } from '@mantine/core'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
 import TattooForm from '~/components/TattooForm'
@@ -9,6 +11,12 @@ import {
   listenForArtistsBookStatusChanges,
 } from '~/lib/sanity/queries/sanity.artistsQuery'
 import { getClient } from '~/lib/sanity/sanity.client'
+
+interface IBooksStatus {
+  name: string
+  id: string
+  showForm?: boolean
+}
 
 const BooksOpenAt = ({ date }: { date: Date | null }) => {
   if (!date) return undefined
@@ -21,22 +29,42 @@ const BooksOpenAt = ({ date }: { date: Date | null }) => {
     hour12: true,
   } as const
   const dateType = new Date(date)
-  return <div>{dateType.toLocaleString('en-US', options)}</div>
+  return <Text span>{dateType.toLocaleString('en-US', options)}</Text>
 }
 
-const BooksStatus = ({ name, id }: { name: string; id: string }) => {
+const BooksStatus = (props: IBooksStatus) => {
+  const { name, id, showForm } = props
+
   const [booksStatus, setBooksStatus] = useState<BooksStatus>({
     booksOpen: false,
     booksOpenAt: null,
   })
 
+  const ShowWhenBooksOpen = () => {
+    if (showForm) {
+      return <TattooForm artistId={id} />
+    }
+
+    return (
+      <Link href={`/artists/${name}`}>
+        <Text>{name}:&nbsp;Click to book now</Text>
+      </Link>
+    )
+  }
+
+  const ShowWhenBooksClosed = () => {
+    return (
+      <>
+        <Text span>{name}:&nbsp;</Text>
+        <BooksOpenAt date={booksStatus.booksOpenAt} />
+      </>
+    )
+  }
+
   useEffect(() => {
     const client = getClient(undefined)
     const fetchBooksStatus = async () => {
-      const currBooksStatus = await getArtistBooksStatus(
-        client,
-        decodeURI(name),
-      )
+      const currBooksStatus = await getArtistBooksStatus(client, name)
       setBooksStatus(currBooksStatus)
     }
 
@@ -44,7 +72,7 @@ const BooksStatus = ({ name, id }: { name: string; id: string }) => {
 
     const subscription = listenForArtistsBookStatusChanges(
       client,
-      decodeURI(name),
+      name,
     ).subscribe((update) => {
       setBooksStatus({
         booksOpen: update?.result?.booksOpen,
@@ -59,11 +87,7 @@ const BooksStatus = ({ name, id }: { name: string; id: string }) => {
 
   return (
     <>
-      {booksStatus.booksOpen ? (
-        <TattooForm artistName={name} artistId={id} />
-      ) : (
-        <BooksOpenAt date={booksStatus.booksOpenAt} />
-      )}
+      {booksStatus.booksOpen ? <ShowWhenBooksOpen /> : <ShowWhenBooksClosed />}
     </>
   )
 }

@@ -13,7 +13,7 @@ export default async function RootPage() {
 
   return (
     <>
-      <Hero title={content.heroTitle} description={content.heroDescription} />
+      <Hero title={content.pageTitle} description={content.heroDescription} />
       <PageContainer>
         <Home content={content.homeContent} />
       </PageContainer>

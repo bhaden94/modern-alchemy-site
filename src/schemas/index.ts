@@ -5,6 +5,7 @@ import artist from './artist'
 import artistsPageContent from './artistsPageContent'
 import blockContent from './blockContent'
 import booking from './booking'
+import bookingInfoPageContent from './bookingInfoPageContent'
 import faqPageContent from './faqPageContent'
 import featureFlags from './feature-flags'
 import post from './post'
@@ -21,6 +22,7 @@ export const schemaTypes = {
   faqPageContent,
   aftercareInfoPageContent,
   artistsPageContent,
+  bookingInfoPageContent,
 }
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -33,5 +35,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     faqPageContent,
     aftercareInfoPageContent,
     artistsPageContent,
+    bookingInfoPageContent,
   ],
 }
