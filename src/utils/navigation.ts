@@ -1,17 +1,28 @@
+export enum NavigationPages {
+  Home = '/',
+  Artists = '/artists',
+  BookingInfo = '/booking-info',
+  Faqs = '/faq',
+  AftercareInfo = '/aftercare-info',
+  BookingRequest = '/booking-request',
+  EmployeePortal = '/bookings',
+  Studio = '/studio',
+}
+
 interface NavigationLink {
-  link: string
+  link: NavigationPages
   label: string
 }
 
 export const NavLinks: NavigationLink[] = [
-  { link: '/', label: 'Home' },
-  { link: '/artists', label: 'Artists' },
-  { link: '/booking-info', label: 'Booking Info' },
-  { link: '/faq', label: 'FAQs' },
-  { link: '/aftercare-info', label: 'Aftercare Info' },
+  { link: NavigationPages.Home, label: 'Home' },
+  { link: NavigationPages.Artists, label: 'Artists' },
+  { link: NavigationPages.BookingInfo, label: 'Booking Info' },
+  { link: NavigationPages.Faqs, label: 'FAQs' },
+  { link: NavigationPages.AftercareInfo, label: 'Aftercare Info' },
 ]
 
 export const ExtraNavLinks: NavigationLink[] = [
-  { link: '/bookings', label: 'Employee Portal' },
-  { link: '/studio', label: 'Studio' },
+  { link: NavigationPages.EmployeePortal, label: 'Employee Portal' },
+  { link: NavigationPages.Studio, label: 'Studio' },
 ]

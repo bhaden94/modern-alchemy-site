@@ -11,6 +11,7 @@ import {
   listenForArtistsBookStatusChanges,
 } from '~/lib/sanity/queries/sanity.artistsQuery'
 import { getClient } from '~/lib/sanity/sanity.client'
+import { NavigationPages } from '~/utils/navigation'
 
 interface IBooksStatus {
   name: string
@@ -46,7 +47,7 @@ const BooksStatus = (props: IBooksStatus) => {
     }
 
     return (
-      <Link href={`/artists/${name}`}>
+      <Link href={`${NavigationPages.BookingRequest}/${name}`}>
         <Text>{name}:&nbsp;Click to book now</Text>
       </Link>
     )

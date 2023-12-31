@@ -1,15 +1,15 @@
-import { Button } from '@mantine/core'
+import { Button, Tabs } from '@mantine/core'
 import { IconArrowLeft } from '@tabler/icons-react'
 import Link from 'next/link'
 
+import ArtistCard from '~/components/Artists/ArtistCard'
 import PageContainer from '~/components/PageContainer'
 import {
   getArtistByName,
   getArtists,
 } from '~/lib/sanity/queries/sanity.artistsQuery'
 import { getClient } from '~/lib/sanity/sanity.client'
-
-import BooksStatus from './BooksStatus'
+import { NavigationPages } from '~/utils/navigation'
 
 export const generateStaticParams = async () => {
   const client = getClient(undefined)
@@ -29,16 +29,18 @@ const ArtistPortfolioPage = async ({
 
   return (
     <PageContainer>
-      <Link href="/artists">
+      <Link href={NavigationPages.Artists}>
         <Button variant="outline">
           <IconArrowLeft />
           Back to artists
         </Button>
       </Link>
-      <div>Artist: {artist.name}</div>
-      <div>Email: {artist.email}</div>
-      <div>Instagram: {artist.instagram}</div>
-      <BooksStatus name={decodeURI(params.name)} id={artist._id} showForm />
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-8 my-8">
+        <div className="md:col-span-2 justify-self-center">
+          <ArtistCard artist={artist} />
+        </div>
+        <div className="md:col-span-3">Portfolio</div>
+      </div>
     </PageContainer>
   )
 }

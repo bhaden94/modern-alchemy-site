@@ -3,7 +3,7 @@
 import { Text } from '@mantine/core'
 import { PortableText } from '@portabletext/react'
 
-import BooksStatus from '~/app/artists/[name]/BooksStatus'
+import BooksStatus from '~/components/BooksStatus/BooksStatus'
 import { Artist, BookingInfoPageContent } from '~/types/SanitySchemaTypes'
 
 import PageTitle from '../PageTitle/PageTitle'

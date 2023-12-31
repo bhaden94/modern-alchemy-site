@@ -2,6 +2,8 @@ import { Button, Container, Overlay, Text, Title } from '@mantine/core'
 import Image from 'next/image'
 import Link from 'next/link'
 
+import { NavigationPages } from '~/utils/navigation'
+
 import classes from './Hero.module.css'
 
 interface IHero {
@@ -36,7 +38,7 @@ const Hero = ({ title, description }: IHero) => {
           </Text>
         ) : undefined}
 
-        <Link href="/artists">
+        <Link href={NavigationPages.Artists}>
           <Button
             variant="gradient"
             size="xl"
