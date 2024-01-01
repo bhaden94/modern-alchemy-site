@@ -60,7 +60,7 @@ export interface Artist extends BaseSanitySchema<'artist'> {
   booksOpenAt: Date
   headshot: { asset: ImageAsset }
   styles: string[]
-  portfolioImages: ImageAsset[]
+  portfolioImages: { asset: ImageAsset }[]
   role: Role
 }
 

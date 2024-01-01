@@ -1,9 +1,10 @@
-import { Button, Tabs } from '@mantine/core'
+import { Button } from '@mantine/core'
 import { IconArrowLeft } from '@tabler/icons-react'
 import Link from 'next/link'
 
 import ArtistCard from '~/components/Artists/ArtistCard'
 import PageContainer from '~/components/PageContainer'
+import PortfolioCarousel from '~/components/PortfolioCarousel/PortfolioCarousel'
 import {
   getArtistByName,
   getArtists,
@@ -39,7 +40,11 @@ const ArtistPortfolioPage = async ({
         <div className="md:col-span-2 justify-self-center">
           <ArtistCard artist={artist} />
         </div>
-        <div className="md:col-span-3">Portfolio</div>
+        <div className="md:col-span-3">
+          {artist.portfolioImages?.length > 0 ? (
+            <PortfolioCarousel images={artist.portfolioImages} />
+          ) : undefined}
+        </div>
       </div>
     </PageContainer>
   )

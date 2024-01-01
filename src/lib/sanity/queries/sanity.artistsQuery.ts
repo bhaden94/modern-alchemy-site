@@ -54,6 +54,13 @@ const artistsNameQuery = groq`*[_type == "artist" && name == $name][0]{
       ...,
       asset->
     }
+  },
+  portfolioImages[]{
+    ...,
+    _type == "image" => {
+      ...,
+      asset->
+    }
   }
 }`
 export async function getArtistByName(
