@@ -9,6 +9,12 @@ const PortfolioCarousel = ({ images }: { images: { asset: ImageAsset }[] }) => {
   const [embla, setEmbla] = useState<Embla | null>(null)
   const [thumbIndex, setThumbIndex] = useState<number>(0)
 
+  const setBorderColor = (i: number): string => {
+    return i === thumbIndex
+      ? 'border-[var(--mantine-primary-color-filled)]'
+      : ''
+  }
+
   const scrollTo = (index: number) => {
     if (embla) {
       embla.scrollTo(index)
@@ -24,7 +30,6 @@ const PortfolioCarousel = ({ images }: { images: { asset: ImageAsset }[] }) => {
           className="flex-1"
           align="center"
           getEmblaApi={setEmbla}
-          withIndicators
           loop
         >
           {images?.map((image) => (
@@ -41,9 +46,12 @@ const PortfolioCarousel = ({ images }: { images: { asset: ImageAsset }[] }) => {
           ))}
         </Carousel>
       </div>
-      <div className="w-full">
+      <div className="flex gap-2 w-full">
         {images?.map((image, i) => (
           <Image
+            className={`${setBorderColor(
+              i,
+            )} rounded-md border-solid cursor-pointer transition duration-300 ease-in-out hover:opacity-50`}
             src={image.asset.url}
             key={image.asset.originalFilename}
             alt="Portfolio image thumbnail"

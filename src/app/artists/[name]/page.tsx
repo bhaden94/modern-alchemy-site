@@ -43,7 +43,9 @@ const ArtistPortfolioPage = async ({
         <div className="md:col-span-3">
           {artist.portfolioImages?.length > 0 ? (
             <PortfolioCarousel images={artist.portfolioImages} />
-          ) : undefined}
+          ) : (
+            'Portfolio in progress...'
+          )}
         </div>
       </div>
     </PageContainer>
