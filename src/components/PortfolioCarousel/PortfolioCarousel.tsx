@@ -1,28 +1,60 @@
 'use client'
 
-import { Carousel, Embla } from '@mantine/carousel'
-import Image from 'next/image'
+import { Carousel, CarouselProps, Embla } from '@mantine/carousel'
 import { useCallback, useEffect, useState } from 'react'
 import { ImageAsset } from 'sanity'
 
+import PortfolioCarouselImage from './PortfolioCarouselImage'
+import PortfolioCarouselThumbnail from './PortfolioCarouselThumbnail'
+
+const sharedCarouselProps: Partial<CarouselProps> = {
+  controlsOffset: 'xs',
+  height: '100%',
+  align: 'center',
+  loop: true,
+}
+
 const PortfolioCarousel = ({ images }: { images: { asset: ImageAsset }[] }) => {
   const [embla, setEmbla] = useState<Embla | null>(null)
+  const [emblaThumbs, setEmblaThumbs] = useState<Embla | null>(null)
   const [thumbIndex, setThumbIndex] = useState<number>(0)
 
+  const mainImageSlides = images?.map((image) => (
+    <Carousel.Slide key={image.asset.originalFilename}>
+      <PortfolioCarouselImage image={image.asset} />
+    </Carousel.Slide>
+  ))
+
+  const thumbnails = images?.map((image, i) => (
+    <Carousel.Slide
+      key={image.asset.originalFilename}
+      className="flex justify-center"
+    >
+      <PortfolioCarouselThumbnail
+        image={image.asset}
+        selected={i === thumbIndex}
+        index={i}
+        onClick={scrollTo}
+        key={image.asset.originalFilename}
+      />
+    </Carousel.Slide>
+  ))
+
   const onSelect = useCallback(() => {
-    if (embla) {
+    if (embla && emblaThumbs) {
       setThumbIndex(embla.selectedScrollSnap())
+      emblaThumbs.scrollTo(embla.selectedScrollSnap())
     }
-  }, [embla, setThumbIndex])
+  }, [embla, emblaThumbs, setThumbIndex])
 
   const scrollTo = useCallback(
     (index: number) => {
-      if (embla) {
-        embla.scrollTo(index)
+      if (embla && emblaThumbs) {
         setThumbIndex(index)
+        embla.scrollTo(index)
       }
     },
-    [embla],
+    [embla, emblaThumbs, setThumbIndex],
   )
 
   useEffect(() => {
@@ -33,46 +65,27 @@ const PortfolioCarousel = ({ images }: { images: { asset: ImageAsset }[] }) => {
   }, [embla, onSelect])
 
   return (
-    <div className="flex flex-wrap">
-      <div className=" flex w-full h-[400px]">
+    <div className="flex flex-wrap gap-2">
+      <div className="flex w-full h-[400px]">
         <Carousel
-          height="100%"
+          {...sharedCarouselProps}
           className="flex-1"
-          align="center"
           getEmblaApi={setEmbla}
-          loop
         >
-          {images?.map((image) => (
-            <Carousel.Slide key={image.asset.originalFilename}>
-              <Image
-                src={image.asset.url}
-                alt="Portfolio image thumbnail"
-                fill
-                sizes="100%"
-                style={{
-                  objectFit: 'contain',
-                }}
-              />
-            </Carousel.Slide>
-          ))}
+          {mainImageSlides}
         </Carousel>
       </div>
-      <div className="flex gap-2 w-full">
-        {images?.map((image, i) => (
-          <Image
-            className={`${
-              i === thumbIndex
-                ? 'border-[var(--mantine-primary-color-filled)]'
-                : ''
-            } rounded-md border-solid cursor-pointer transition duration-300 ease-in-out hover:opacity-50`}
-            src={image.asset.url}
-            key={image.asset.originalFilename}
-            alt="Portfolio image thumbnail"
-            onClick={() => scrollTo(i)}
-            width={75}
-            height={75}
-          />
-        ))}
+      <div className="flex w-full overflow-hidden">
+        <Carousel
+          {...sharedCarouselProps}
+          className="w-full"
+          getEmblaApi={setEmblaThumbs}
+          dragFree
+          slideSize="10%"
+          slideGap={0}
+        >
+          {thumbnails}
+        </Carousel>
       </div>
     </div>
   )

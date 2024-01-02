@@ -5,6 +5,8 @@ import { FileWithPath } from '@mantine/dropzone'
 import { IconX } from '@tabler/icons-react'
 import NextImage from 'next/image'
 
+import { generateNextImagePlaceholder } from '~/utils'
+
 interface IImageThumbnails {
   imageFiles: FileWithPath[]
   onImageRemove: (name: string) => void
@@ -28,6 +30,7 @@ const ImageThumbnails = ({ imageFiles, onImageRemove }: IImageThumbnails) => {
           h={75}
           radius="md"
           className="aspect-square"
+          placeholder={generateNextImagePlaceholder(75, 75)}
         />
         <div className="absolute top-0 right-0">
           <ActionIcon

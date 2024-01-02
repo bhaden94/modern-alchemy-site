@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import { Artist } from '~/types/SanitySchemaTypes'
+import { generateNextImagePlaceholder } from '~/utils'
 import { NavigationPages } from '~/utils/navigation'
 
 interface IArtistCard {
@@ -35,6 +36,7 @@ const ArtistCard = ({ artist, showPortfolioLink }: IArtistCard) => {
           alt="Artist headshot"
           width={300}
           height={250}
+          placeholder={generateNextImagePlaceholder(300, 250)}
         />
       </Card.Section>
 

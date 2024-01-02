@@ -2,6 +2,7 @@ import { Button, Container, Overlay, Text, Title } from '@mantine/core'
 import Image from 'next/image'
 import Link from 'next/link'
 
+import { Base64heroImage } from '~/utils'
 import { NavigationPages } from '~/utils/navigation'
 
 import classes from './Hero.module.css'
@@ -29,6 +30,8 @@ const Hero = ({ title, description }: IHero) => {
           objectFit: 'cover',
           objectPosition: 'center',
         }}
+        placeholder="blur"
+        blurDataURL={Base64heroImage}
       />
       <Container className={classes.container} size="md">
         <Title className={classes.title}>{title}</Title>

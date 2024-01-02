@@ -24,7 +24,13 @@ export const PortableTextComponents: Partial<PortableTextReactComponents> = {
   },
   types: {
     image: ({ value }: { value: BlockContentImage }) => {
-      return <Image src={value.asset.url} alt={value.altText} />
+      return (
+        <Image
+          src={value.asset.url}
+          alt={value.altText}
+          radius="var(--mantine-radius-default)"
+        />
+      )
     },
   },
 }
