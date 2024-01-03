@@ -1,7 +1,6 @@
 import BooksStatus from '~/components/BooksStatus/BooksStatus'
 import PageContainer from '~/components/PageContainer'
 import PageTitle from '~/components/PageTitle/PageTitle'
-import TattooForm from '~/components/TattooForm'
 import {
   getArtistByName,
   getArtists,
@@ -11,7 +10,7 @@ import { getClient } from '~/lib/sanity/sanity.client'
 export const generateStaticParams = async () => {
   const client = getClient(undefined)
   const artists = await getArtists(client)
-  return artists.map((artist) => ({ name: artist.name }))
+  return artists.map((artist) => ({ name: encodeURIComponent(artist.name) }))
 }
 
 const ArtistBookingRequestPage = async ({

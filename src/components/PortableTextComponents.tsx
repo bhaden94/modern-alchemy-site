@@ -7,7 +7,7 @@ import { BlockContentImage } from '~/types/SanitySchemaTypes'
 export const PortableTextComponents: Partial<PortableTextReactComponents> = {
   marks: {
     internalLink: ({ value, children }) => {
-      const href = `/${value.page}`
+      const href = `/${encodeURIComponent(value.page)}`
       return <Link href={href}>{children}</Link>
     },
     link: ({ value, children }) => {

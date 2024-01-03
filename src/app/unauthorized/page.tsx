@@ -6,6 +6,7 @@ import { signIn } from 'next-auth/react'
 
 import PageContainer from '~/components/PageContainer'
 import { REDIRECT_URL } from '~/lib/next-auth/auth.utils'
+import { NavigationPages } from '~/utils/navigation'
 
 // TODO: fix error - Entire page /unauthorized deopted into client-side rendering. https://nextjs.org/docs/messages/deopted-into-client-rendering /unauthorized
 export default function UnauthorizedPage() {
@@ -23,7 +24,7 @@ export default function UnauthorizedPage() {
       >
         Sign with a different account
       </button>
-      <Link href="/">Home</Link>
+      <Link href={NavigationPages.Home}>Home</Link>
     </PageContainer>
   )
 }

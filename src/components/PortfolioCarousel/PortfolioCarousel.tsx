@@ -19,27 +19,6 @@ const PortfolioCarousel = ({ images }: { images: { asset: ImageAsset }[] }) => {
   const [emblaThumbs, setEmblaThumbs] = useState<Embla | null>(null)
   const [thumbIndex, setThumbIndex] = useState<number>(0)
 
-  const mainImageSlides = images?.map((image) => (
-    <Carousel.Slide key={image.asset.originalFilename}>
-      <PortfolioCarouselImage image={image.asset} />
-    </Carousel.Slide>
-  ))
-
-  const thumbnails = images?.map((image, i) => (
-    <Carousel.Slide
-      key={image.asset.originalFilename}
-      className="flex justify-center"
-    >
-      <PortfolioCarouselThumbnail
-        image={image.asset}
-        selected={i === thumbIndex}
-        index={i}
-        onClick={scrollTo}
-        key={image.asset.originalFilename}
-      />
-    </Carousel.Slide>
-  ))
-
   const onSelect = useCallback(() => {
     if (embla && emblaThumbs) {
       setThumbIndex(embla.selectedScrollSnap())
@@ -63,6 +42,27 @@ const PortfolioCarousel = ({ images }: { images: { asset: ImageAsset }[] }) => {
       embla.on('reInit', onSelect)
     }
   }, [embla, onSelect])
+
+  const mainImageSlides = images?.map((image) => (
+    <Carousel.Slide key={image.asset.originalFilename}>
+      <PortfolioCarouselImage image={image.asset} />
+    </Carousel.Slide>
+  ))
+
+  const thumbnails = images?.map((image, i) => (
+    <Carousel.Slide
+      key={image.asset.originalFilename}
+      className="flex justify-center"
+    >
+      <PortfolioCarouselThumbnail
+        image={image.asset}
+        selected={i === thumbIndex}
+        index={i}
+        onClick={scrollTo}
+        key={image.asset.originalFilename}
+      />
+    </Carousel.Slide>
+  ))
 
   return (
     <div className="flex flex-wrap gap-2">

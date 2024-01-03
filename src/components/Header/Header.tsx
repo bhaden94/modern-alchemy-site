@@ -6,7 +6,7 @@ import { IconFlask2 } from '@tabler/icons-react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 
-import { NavLinks } from '~/utils/navigation'
+import { NavigationPages,NavLinks } from '~/utils/navigation'
 
 import classes from './Header.module.css'
 
@@ -42,7 +42,7 @@ const Header = () => {
   return (
     <header className={classes.header}>
       <Container size="md" className={classes.inner}>
-        <Link href={'/'}>
+        <Link href={NavigationPages.Home}>
           <IconFlask2 size={36} />
         </Link>
         <Group gap={5} visibleFrom="xs">

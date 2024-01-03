@@ -47,7 +47,9 @@ const BooksStatus = (props: IBooksStatus) => {
     }
 
     return (
-      <Link href={`${NavigationPages.BookingRequest}/${name}`}>
+      <Link
+        href={`${NavigationPages.BookingRequest}/${encodeURIComponent(name)}`}
+      >
         <Text>{name}:&nbsp;Click to book now</Text>
       </Link>
     )

@@ -18,7 +18,11 @@ const ArtistCard = ({ artist, showPortfolioLink }: IArtistCard) => {
     if (artist.booksOpen) {
       return (
         <Group justify="center" mt="auto" pb={6} pt={18}>
-          <Link href={`${NavigationPages.BookingRequest}/${artist.name}`}>
+          <Link
+            href={`${NavigationPages.BookingRequest}/${encodeURIComponent(
+              artist.name,
+            )}`}
+          >
             <Button radius="sm">submit booking request</Button>
           </Link>
         </Group>
@@ -55,7 +59,11 @@ const ArtistCard = ({ artist, showPortfolioLink }: IArtistCard) => {
 
       {showPortfolioLink ? (
         <Group justify="center" mt="auto" pb={6} pt={18}>
-          <Link href={`${NavigationPages.Artists}/${artist.name}`}>
+          <Link
+            href={`${NavigationPages.Artists}/${encodeURIComponent(
+              artist.name,
+            )}`}
+          >
             <Button radius="sm">View Portfolio</Button>
           </Link>
         </Group>
