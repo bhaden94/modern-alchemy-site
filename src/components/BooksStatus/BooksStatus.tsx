@@ -4,7 +4,7 @@ import { Text } from '@mantine/core'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
-import TattooForm from '~/components/TattooForm'
+import TattooForm from '~/components/BooksStatus/TattooForm'
 import {
   BooksStatus,
   getArtistBooksStatus,
