@@ -1,4 +1,4 @@
-import { Container,Text, Title } from '@mantine/core'
+import { Container, Text, Title } from '@mantine/core'
 
 import classes from './SuccessfullBooking.module.css'
 

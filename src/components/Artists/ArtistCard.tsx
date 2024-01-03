@@ -8,6 +8,8 @@ import { Artist } from '~/types/SanitySchemaTypes'
 import { generateNextImagePlaceholder } from '~/utils'
 import { NavigationPages } from '~/utils/navigation'
 
+import BooksOpenAt from '../BooksStatus/BooksOpenAt'
+
 interface IArtistCard {
   artist: Artist
   showPortfolioLink?: boolean
@@ -29,7 +31,12 @@ const ArtistCard = ({ artist, showPortfolioLink }: IArtistCard) => {
       )
     }
 
-    return undefined
+    return (
+      <Group justify="center" mt="auto" pb={6} pt={18}>
+        <Text>Books closed and will open on</Text>
+        <BooksOpenAt date={artist.booksOpenAt} />
+      </Group>
+    )
   }
 
   return (

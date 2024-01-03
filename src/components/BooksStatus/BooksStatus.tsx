@@ -13,24 +13,12 @@ import {
 import { getClient } from '~/lib/sanity/sanity.client'
 import { NavigationPages } from '~/utils/navigation'
 
+import BooksOpenAt from './BooksOpenAt'
+
 interface IBooksStatus {
   name: string
   id: string
   showForm?: boolean
-}
-
-const BooksOpenAt = ({ date }: { date: Date | null }) => {
-  if (!date) return undefined
-  const options = {
-    day: '2-digit',
-    month: 'long',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: true,
-  } as const
-  const dateType = new Date(date)
-  return <Text span>{dateType.toLocaleString('en-US', options)}</Text>
 }
 
 const BooksStatus = (props: IBooksStatus) => {
