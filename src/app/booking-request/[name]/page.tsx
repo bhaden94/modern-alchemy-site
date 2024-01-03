@@ -1,10 +1,7 @@
 import BooksStatus from '~/components/BooksStatus/BooksStatus'
 import PageContainer from '~/components/PageContainer'
 import PageTitle from '~/components/PageTitle/PageTitle'
-import {
-  getArtistByName,
-  getArtists,
-} from '~/lib/sanity/queries/sanity.artistsQuery'
+import { getArtistByName } from '~/lib/sanity/queries/sanity.artistsQuery'
 import { getClient } from '~/lib/sanity/sanity.client'
 
 // export const generateStaticParams = async () => {

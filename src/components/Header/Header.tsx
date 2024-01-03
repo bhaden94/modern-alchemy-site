@@ -6,7 +6,7 @@ import { IconFlask2 } from '@tabler/icons-react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 
-import { NavigationPages,NavLinks } from '~/utils/navigation'
+import { NavigationPages, NavLinks } from '~/utils/navigation'
 
 import classes from './Header.module.css'
 

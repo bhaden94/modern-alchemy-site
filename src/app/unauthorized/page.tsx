@@ -14,7 +14,7 @@ export default function UnauthorizedPage() {
 
   return (
     <PageContainer>
-      <p>You are not authoirzed to view this page.</p>
+      <p>You are not authorized to view this page.</p>
       <button
         onClick={() =>
           signIn(undefined, {

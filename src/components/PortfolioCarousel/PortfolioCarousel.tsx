@@ -4,6 +4,7 @@ import { Carousel, CarouselProps, Embla } from '@mantine/carousel'
 import { useCallback, useEffect, useState } from 'react'
 import { ImageAsset } from 'sanity'
 
+import classes from './PortfolioCarousel.module.css'
 import PortfolioCarouselImage from './PortfolioCarouselImage'
 import PortfolioCarouselThumbnail from './PortfolioCarouselThumbnail'
 
@@ -12,6 +13,7 @@ const sharedCarouselProps: Partial<CarouselProps> = {
   height: '100%',
   align: 'center',
   loop: true,
+  classNames: { controls: classes.controls },
 }
 
 const PortfolioCarousel = ({ images }: { images: { asset: ImageAsset }[] }) => {
