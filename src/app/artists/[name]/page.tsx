@@ -6,11 +6,11 @@ import {
 } from '~/lib/sanity/queries/sanity.artistsQuery'
 import { getClient } from '~/lib/sanity/sanity.client'
 
-export const generateStaticParams = async () => {
-  const client = getClient(undefined)
-  const artists = await getArtists(client)
-  return artists.map((artist) => ({ name: encodeURIComponent(artist.name) }))
-}
+// export const generateStaticParams = async () => {
+//   const client = getClient(undefined)
+//   const artists = await getArtists(client)
+//   return artists.map((artist) => ({ name: encodeURIComponent(artist.name) }))
+// }
 
 const ArtistPortfolioPage = async ({
   params,
