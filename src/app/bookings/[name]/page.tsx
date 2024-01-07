@@ -9,6 +9,7 @@ import { getClient } from '~/lib/sanity/sanity.client'
 
 import Bookings from '../bookings'
 
+// TODO: change to use artist ID for page routing instead of name
 // TODO: generalize into an admin dashboard that shows artists requests for bookings
 // TODO: come up with what the admin can do on this dashboard
 

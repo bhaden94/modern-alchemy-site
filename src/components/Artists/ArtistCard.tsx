@@ -8,7 +8,7 @@ import { Artist } from '~/types/SanitySchemaTypes'
 import { generateNextImagePlaceholder } from '~/utils'
 import { NavigationPages } from '~/utils/navigation'
 
-import BooksOpenAt from '../BooksStatus/BooksOpenAt'
+import ArtistCardBookingRequest from './ArtistCardBookingRequest'
 
 interface IArtistCard {
   artist: Artist
@@ -16,29 +16,6 @@ interface IArtistCard {
 }
 
 const ArtistCard = ({ artist, showPortfolioLink }: IArtistCard) => {
-  const BookingRequestButton = () => {
-    if (artist.booksOpen) {
-      return (
-        <Group justify="center" mt="auto" pb={6} pt={18}>
-          <Link
-            href={`${NavigationPages.BookingRequest}/${encodeURIComponent(
-              artist.name,
-            )}`}
-          >
-            <Button radius="sm">submit booking request</Button>
-          </Link>
-        </Group>
-      )
-    }
-
-    return (
-      <Group justify="center" mt="auto" pb={6} pt={18}>
-        <Text>Books closed and will open on</Text>
-        <BooksOpenAt date={artist.booksOpenAt} />
-      </Group>
-    )
-  }
-
   return (
     <Card shadow="sm" key={artist.name} className="max-w-[300px]">
       <Card.Section mb={6}>
@@ -68,14 +45,14 @@ const ArtistCard = ({ artist, showPortfolioLink }: IArtistCard) => {
         <Group justify="center" mt="auto" pb={6} pt={18}>
           <Link
             href={`${NavigationPages.Artists}/${encodeURIComponent(
-              artist.name,
+              artist._id,
             )}`}
           >
             <Button radius="sm">View Portfolio</Button>
           </Link>
         </Group>
       ) : (
-        <BookingRequestButton />
+        <ArtistCardBookingRequest artist={artist} />
       )}
     </Card>
   )

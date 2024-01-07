@@ -93,6 +93,7 @@ const TattooForm = ({ artistId }: ITattooForm) => {
     // TODO: handle errors
 
     setIsSubmittingForm(false)
+
     if (imageUploadResponse.ok && response.ok) {
       reset()
       setImageFiles([])
