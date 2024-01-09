@@ -1,11 +1,11 @@
 import AdminBooksStatus from '~/components/AdminBooksStatus/AdminBooksStatus'
 import PageContainer from '~/components/PageContainer'
+import PageTitle from '~/components/PageTitle/PageTitle'
 import { getArtistById } from '~/lib/sanity/queries/sanity.artistsQuery'
 import { getBookingsByArtistId } from '~/lib/sanity/queries/sanity.bookingsQuery'
 import { getClient } from '~/lib/sanity/sanity.client'
 
 import Bookings from '../bookings'
-import PageTitle from '~/components/PageTitle/PageTitle'
 
 // TODO: generalize into an admin dashboard that shows artists requests for bookings
 // TODO: come up with what the admin can do on this dashboard
