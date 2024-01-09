@@ -78,24 +78,6 @@ export interface BooksStatus {
   _id: string
 }
 
-const artistsBooksStatus = groq`*[_type == "artist" && name == $name][0]{booksOpen, booksOpenAt, name, _id}`
-export function getArtistBooksStatus(
-  client: SanityClient,
-  name: string,
-): Promise<BooksStatus> {
-  const nameParam = { name: name }
-  return client.fetch(artistsBooksStatus, nameParam)
-}
-
-const artistBookingStatusesQuery = groq`*[_type == "artist" && _id in $artistIds]{booksOpen, booksOpenAt, name, _id}`
-export function getArtistBookingStatuses(
-  client: SanityClient,
-  artistIds: string[],
-): Promise<BooksStatus[]> {
-  const idsParam = { artistIds: artistIds }
-  return client.fetch(artistBookingStatusesQuery, idsParam)
-}
-
 const artistsBooksstatusChangesById = groq`*[_type == "artist" && _id == $id][0]{booksOpen, booksOpenAt, name, _id}`
 export function listenForArtistsBookStatusChanges(
   client: SanityClient,

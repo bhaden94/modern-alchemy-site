@@ -3,7 +3,6 @@
 import { Text } from '@mantine/core'
 import { PortableText } from '@portabletext/react'
 
-import ArtistBooksStatus from '~/components/BooksStatus/ArtistBooksStatus'
 import { Artist, BookingInfoPageContent } from '~/types/SanitySchemaTypes'
 
 import BookStatuses from '../BooksStatus/BookStatuses'
@@ -31,9 +30,6 @@ const BookingInfo = ({ content, artists }: IBookingInfo) => {
             Book Statuses
           </Text>
           <BookStatuses artists={artists} />
-          {/* {artists.map((artist) => (
-            <BooksStatus key={artist.name} name={artist.name} id={artist._id} />
-          ))} */}
         </div>
       </div>
     </>

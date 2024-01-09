@@ -1,7 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, Group, Radio } from '@mantine/core'
+import { Accordion, Button, Group, Radio } from '@mantine/core'
 import { DateTimePicker, DateValue } from '@mantine/dates'
 import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -69,32 +69,42 @@ const AdminBooksStatus = ({ artistId, booksStatus }: IAdminBooksStatus) => {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <Radio.Group
-        value={booksOpen ? 'open' : 'closed'}
-        name="booksOpen"
-        label="Books Open"
-        onChange={onBooksOpenChange}
-        error={formState.errors.booksOpen?.message}
-      >
-        <Group mt="xs">
-          <Radio value="open" label="Open" />
-          <Radio value="closed" label="Closed" />
-        </Group>
-      </Radio.Group>
-      <DateTimePicker
-        name="booksOpenAt"
-        value={booksOpenAt}
-        valueFormat="DD MMM YYYY hh:mm A"
-        onChange={onBooksOpenAtChange}
-        label="Books open at"
-        placeholder="When will your books open again?"
-        error={formState.errors.booksOpenAt?.message}
-      />
-      <Button variant="filled" type="submit" loading={isSubmitting}>
-        Update Books
-      </Button>
-    </form>
+    <Accordion variant="separated">
+      <Accordion.Item value="books-status-form">
+        <Accordion.Control>Update Books Status</Accordion.Control>
+        <Accordion.Panel>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex flex-col justify-center gap-4"
+          >
+            <Radio.Group
+              value={booksOpen ? 'open' : 'closed'}
+              name="booksOpen"
+              label="Books Open"
+              onChange={onBooksOpenChange}
+              error={formState.errors.booksOpen?.message}
+            >
+              <Group mt="xs">
+                <Radio value="open" label="Open" />
+                <Radio value="closed" label="Closed" />
+              </Group>
+            </Radio.Group>
+            <DateTimePicker
+              name="booksOpenAt"
+              value={booksOpenAt}
+              valueFormat="DD MMM YYYY hh:mm A"
+              onChange={onBooksOpenAtChange}
+              label="Books open at"
+              placeholder="When will your books open again?"
+              error={formState.errors.booksOpenAt?.message}
+            />
+            <Button variant="filled" type="submit" loading={isSubmitting}>
+              Update Books
+            </Button>
+          </form>
+        </Accordion.Panel>
+      </Accordion.Item>
+    </Accordion>
   )
 }
 

@@ -18,12 +18,12 @@ export default withAuth(
 
     if (
       req.nextUrl.pathname === config.matcher[0] &&
-      req.nextauth.token?.name
+      req.nextauth.token?.artistId
     ) {
       return NextResponse.redirect(
         new URL(
           `${req.nextUrl.pathname}/${encodeURIComponent(
-            req.nextauth.token?.name,
+            req.nextauth.token?.artistId,
           )}`,
           req.url,
         ),
@@ -39,5 +39,5 @@ export default withAuth(
 )
 
 export const config = {
-  matcher: ['/bookings', '/bookings/:name'],
+  matcher: ['/bookings', '/bookings/:id'],
 }

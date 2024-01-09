@@ -44,6 +44,7 @@ export const authOptions: NextAuthOptions = {
 
       token.role = artist?.role
       token.name = artist?.name
+      token.artistId = artist?._id
 
       return token
     },
