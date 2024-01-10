@@ -1,10 +1,24 @@
-import { DateValue } from '@mantine/dates'
+export function formatPhoneNumber(number: string) {
+  //Filter only numbers from the input
+  let cleaned = ('' + number).replace(/\D/g, '')
+
+  //Check if the input is of correct length
+  let match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/)
+
+  if (match) {
+    return '(' + match[1] + ') ' + match[2] + '-' + match[3]
+  }
+
+  return null
+}
 
 export function formatDate(date: string) {
   return new Date(date).toLocaleDateString('en-US', {
     month: 'long',
     day: 'numeric',
     year: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
   })
 }
 

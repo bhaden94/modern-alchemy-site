@@ -13,6 +13,8 @@ export const generateStaticParams = async () => {
   return artists.map((artist) => ({ id: artist._id }))
 }
 
+// TODO: Add artist form submission instructions to schema and on this page
+// This way each artist can have their own instructions for the information they are looking for
 const ArtistBookingRequestPage = async ({
   params,
 }: {

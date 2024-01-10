@@ -229,14 +229,14 @@ body {
 
 .card .card__cover {
   width: 100%;
-  height: 231px;
-  -o-object-fit: cover;
-  object-fit: cover;
+  height: auto;
+  -o-object-fit: contain;
+  object-fit: contain;
 }
 
 .card .card__cover--none {
   width: 100%;
-  height: 231px;
+  height: auto;
   background: var(--black);
 }
 
@@ -311,10 +311,10 @@ body {
     margin: 0 var(--space-4) 0;
   }
 
-  .card .card__cover,
+  /* .card .card__cover,
   .card .card__cover--none {
     min-width: 366.5px;
     max-width: 366.5px;
     max-height: 231px;
-  }
+  } */
 }

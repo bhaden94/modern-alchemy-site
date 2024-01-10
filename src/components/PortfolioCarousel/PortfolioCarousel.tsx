@@ -73,22 +73,25 @@ const PortfolioCarousel = ({ images }: { images: { asset: ImageAsset }[] }) => {
           {...sharedCarouselProps}
           className="flex-1"
           getEmblaApi={setEmbla}
+          withControls={images.length > 1}
         >
           {mainImageSlides}
         </Carousel>
       </div>
-      <div className="flex w-full overflow-hidden">
-        <Carousel
-          {...sharedCarouselProps}
-          className="w-full"
-          getEmblaApi={setEmblaThumbs}
-          dragFree
-          slideSize="10%"
-          slideGap={0}
-        >
-          {thumbnails}
-        </Carousel>
-      </div>
+      {Boolean(images.length > 1) && (
+        <div className="flex w-full overflow-hidden">
+          <Carousel
+            {...sharedCarouselProps}
+            className="w-full"
+            getEmblaApi={setEmblaThumbs}
+            dragFree
+            slideSize="10%"
+            slideGap={0}
+          >
+            {thumbnails}
+          </Carousel>
+        </div>
+      )}
     </div>
   )
 }

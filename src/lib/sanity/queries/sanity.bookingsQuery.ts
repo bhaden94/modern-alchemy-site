@@ -9,7 +9,16 @@ export async function getBookings(client: SanityClient): Promise<Booking[]> {
   return await client.fetch(bookingsQuery, {}, { cache: 'no-store' })
 }
 
-export const bookingsByArtistIdQuery = groq`*[_type == "booking" && artist._ref == $artistId] | order(_createdAt asc)`
+export const bookingsByArtistIdQuery = groq`*[_type == "booking" && artist._ref == $artistId]{
+  ...,
+  referenceImages[]{
+    ...,
+    _type == "image" => {
+      ...,
+      asset->
+    }
+  }
+} | order(_createdAt asc)`
 export async function getBookingsByArtistId(
   client: SanityClient,
   id: string,

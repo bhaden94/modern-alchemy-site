@@ -40,7 +40,7 @@ export interface Post extends BaseSanitySchema<'post'> {
 
 export interface Booking extends BaseSanitySchema<'booking'> {
   name: string
-  phone_number: string
+  phoneNumber: string
   email: string
   // characters: string
   description: string
@@ -48,7 +48,7 @@ export interface Booking extends BaseSanitySchema<'booking'> {
   style: string
   // prior_tattoo: string
   // preffered_day: string
-  referenceImages: ImageAsset[]
+  referenceImages: { asset: ImageAsset }[]
   artist: any
 }
 
