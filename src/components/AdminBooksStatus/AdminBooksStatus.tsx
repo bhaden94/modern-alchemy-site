@@ -14,11 +14,10 @@ import {
 } from '~/utils/booksStatusUtils'
 
 interface IAdminBooksStatus {
-  artistId: string
   booksStatus: BooksStatus
 }
 
-const AdminBooksStatus = ({ artistId, booksStatus }: IAdminBooksStatus) => {
+const AdminBooksStatus = ({ booksStatus }: IAdminBooksStatus) => {
   const { register, handleSubmit, formState, setValue } =
     useForm<TBooksStatusSchema>({ resolver: zodResolver(booksStatusSchema) })
 
@@ -44,14 +43,15 @@ const AdminBooksStatus = ({ artistId, booksStatus }: IAdminBooksStatus) => {
       body: JSON.stringify({
         booksOpen: data.booksOpen,
         booksOpenAt: data.booksOpenAt,
-        artistId: artistId,
+        artistId: booksStatus._id,
       }),
     })
     // TODO: handle errors
 
     if (response.ok) {
-      setBooksOpen(data.booksOpen || false)
-      setBooksOpenAt(data.booksOpenAt || null)
+      const res = await response.json()
+      setBooksOpen(res.booksOpen || false)
+      setBooksOpenAt(res.booksOpenAt ? new Date(res.booksOpenAt) : null)
     }
 
     setIsSubmitting(false)

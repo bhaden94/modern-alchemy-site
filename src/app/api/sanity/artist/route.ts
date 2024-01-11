@@ -10,17 +10,29 @@ export async function PATCH(request: NextRequest) {
   const body = await request.json()
   const { booksOpen, booksOpenAt, artistId } = body
 
+  console.log(
+    `Patch artist with Id: ${artistId}`,
+    `BooksOpen: ${booksOpen}`,
+    `BooksOpenAt: ${booksOpenAt}`,
+  )
+
   if (!artistId) {
     return NextResponse.json({ status: 'fields missing from body' })
   }
 
-  const response = await client
+  const patchOperation = await client
     .patch(artistId)
     .set({ booksOpen: booksOpen, booksOpenAt: booksOpenAt })
     .commit()
-    .then((updatedDocument) => {
-      return NextResponse.json(updatedDocument)
-    })
 
-  return NextResponse.json(response)
+  console.log(
+    `Patch operation completed for ArtistId ${artistId}`,
+    `BooksOpen: ${patchOperation.booksOpen}`,
+    `BooksOpenAt: ${patchOperation.booksOpenAt}`,
+  )
+
+  return NextResponse.json({
+    booksOpen: patchOperation.booksOpen,
+    booksOpenAt: patchOperation.booksOpenAt,
+  })
 }

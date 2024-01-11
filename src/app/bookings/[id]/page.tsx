@@ -23,7 +23,6 @@ const BookingsPage = async ({ params }: { params: { id: string } }) => {
         </div>
         <div className="order-1 md:order-2 md:col-span-2">
           <AdminBooksStatus
-            artistId={artist._id}
             booksStatus={{
               booksOpen: artist.booksOpen,
               booksOpenAt: artist.booksOpenAt,
