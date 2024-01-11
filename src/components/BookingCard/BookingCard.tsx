@@ -1,12 +1,22 @@
 'use client'
 
-import { Box, Button, Card, Grid, SimpleGrid, Text } from '@mantine/core'
+import {
+  Box,
+  Button,
+  Card,
+  Grid,
+  SimpleGrid,
+  Text,
+  Textarea,
+  TextInput,
+} from '@mantine/core'
 import { useState } from 'react'
 
 import { Booking } from '~/types/SanitySchemaTypes'
 import { formatDate, formatPhoneNumber } from '~/utils'
 
 import PortfolioCarousel from '../PortfolioCarousel/PortfolioCarousel'
+import InputCopyButton from './InputCopyButton'
 
 interface IBookingCardProps {
   booking: Booking
@@ -45,20 +55,64 @@ export default function BookingCard({ booking }: IBookingCardProps) {
           <Box />
         )}
         <Grid gutter="md">
-          <Grid.Col>
-            <Text>Submitted on:&nbsp;{formatDate(booking._createdAt)}</Text>
-            <Text>Name:&nbsp;{booking.name}</Text>
-            <Text>Email:&nbsp;{booking.email}</Text>
-            <Text>
-              Phone number:&nbsp;{formatPhoneNumber(booking.phoneNumber)}
-            </Text>
+          <Grid.Col span={{ base: 12, lg: 6 }}>
+            <TextInput
+              label={<Text span>Submitted on</Text>}
+              value={formatDate(booking._createdAt)}
+              variant="filled"
+              readOnly
+            />
+            <TextInput
+              label={<Text span>Location</Text>}
+              value={booking.location}
+              variant="filled"
+              readOnly
+            />
+            <TextInput
+              label={<Text span>Style</Text>}
+              value={booking.style}
+              variant="filled"
+              readOnly
+            />
+          </Grid.Col>
+          <Grid.Col span={{ base: 12, lg: 6 }}>
+            <TextInput
+              label={<Text span>Phone Number</Text>}
+              value={formatPhoneNumber(booking.phoneNumber) || ''}
+              variant="filled"
+              readOnly
+              leftSectionPointerEvents="auto"
+              leftSection={<InputCopyButton value={booking.phoneNumber} />}
+            />
+            <TextInput
+              label={<Text span>Name</Text>}
+              value={booking.name}
+              variant="filled"
+              readOnly
+              leftSectionPointerEvents="auto"
+              leftSection={<InputCopyButton value={booking.name} />}
+            />
+            <TextInput
+              label={<Text span>Email</Text>}
+              value={booking.email}
+              variant="filled"
+              readOnly
+              leftSectionPointerEvents="auto"
+              leftSection={<InputCopyButton value={booking.email} />}
+            />
           </Grid.Col>
           <Grid.Col>
-            <Text>Location:&nbsp;{booking.location}</Text>
-            <Text>Style:&nbsp;{booking.style}</Text>
-          </Grid.Col>
-          <Grid.Col>
-            <Text>Description:&nbsp;{booking.description}</Text>
+            <Textarea
+              label={<Text span>Description</Text>}
+              value={booking.description}
+              variant="filled"
+              readOnly
+              autosize
+              minRows={2}
+              maxRows={8}
+              leftSectionPointerEvents="auto"
+              leftSection={<InputCopyButton value={booking.description} />}
+            />
           </Grid.Col>
         </Grid>
       </SimpleGrid>
