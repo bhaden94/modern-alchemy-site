@@ -10,7 +10,7 @@ import { getClient } from '../sanity/sanity.client'
 export const REDIRECT_URL = 'redirectUrl'
 export const AUTHORIZED_ROLE = 'authorizedUser'
 
-const getArtist = async (token: JWT): Promise<Artist | null> => {
+const getArtist = async (token: JWT): Promise<Partial<Artist> | null> => {
   if (!token?.email) return null
 
   const authClient = getClient(undefined)
@@ -39,7 +39,6 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async jwt({ token }) {
-      // const isAuthorized = await checkIfAuthorized(token)
       const artist = await getArtist(token)
 
       token.role = artist?.role

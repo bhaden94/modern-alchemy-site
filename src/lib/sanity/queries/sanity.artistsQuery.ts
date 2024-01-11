@@ -19,31 +19,13 @@ export async function getArtists(client: SanityClient): Promise<Artist[]> {
   return await client.fetch(artistsQuery)
 }
 
-const artistsEmailQuery = groq`*[_type == "artist" && email == $email][0]{
-  ...,
-  headshot{
-    ...,
-    _type == "image" => {
-      ...,
-      asset->
-    }
-  }
-}`
+const artistsEmailQuery = groq`*[_type == "artist" && email == $email][0]{name, role, _id}`
 export async function getArtistByEmail(
   client: SanityClient,
   email: string,
-): Promise<Artist> {
+): Promise<Partial<Artist>> {
   const emailParam = { email: email }
   return await client.fetch(artistsEmailQuery, emailParam)
-}
-
-const artistsIdByNameQuery = groq`*[_type == "artist" && name == $name][0]{_id}`
-export async function getArtistIdByName(
-  client: SanityClient,
-  name: string,
-): Promise<{ _id: string }> {
-  const nameParam = { name: name }
-  return await client.fetch(artistsIdByNameQuery, nameParam)
 }
 
 const artistsIdQuery = groq`*[_type == "artist" && _id == $id][0]{
@@ -68,7 +50,7 @@ export async function getArtistById(
   id: string,
 ): Promise<Artist> {
   const idParam = { id: id }
-  return await client.fetch(artistsIdQuery, idParam)
+  return await client.fetch(artistsIdQuery, idParam, { cache: 'no-store' })
 }
 
 export interface BooksStatus {
