@@ -16,7 +16,7 @@ const artistsQuery = groq`*[_type == "artist"]{
   }
 }`
 export async function getArtists(client: SanityClient): Promise<Artist[]> {
-  return await client.fetch(artistsQuery)
+  return await client.fetch(artistsQuery, { cache: 'no-store' })
 }
 
 const artistsEmailQuery = groq`*[_type == "artist" && email == $email][0]{name, role, _id}`
