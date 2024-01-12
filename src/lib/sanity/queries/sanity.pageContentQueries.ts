@@ -9,11 +9,15 @@ import {
   RootPageContent,
 } from '~/types/SanitySchemaTypes'
 
+const revalidateRequests = 3600 // about every hour
+
 const rootPageContentQuery = groq`*[_type == "rootPageContent"][0]`
 export async function getRootPageContent(
   client: SanityClient,
 ): Promise<RootPageContent> {
-  return await client.fetch(rootPageContentQuery)
+  return await client.fetch(rootPageContentQuery, {
+    next: { revalidate: revalidateRequests },
+  })
 }
 
 // answer is the bloc content field, which is inside of the faqs array
@@ -33,7 +37,9 @@ const faqPageContentQuery = groq`*[_type == "faqPageContent"][0]{
 export async function getFaqPageContent(
   client: SanityClient,
 ): Promise<FaqPageContent> {
-  return await client.fetch(faqPageContentQuery)
+  return await client.fetch(faqPageContentQuery, {
+    next: { revalidate: revalidateRequests },
+  })
 }
 
 // information is the block content field
@@ -51,14 +57,18 @@ const aftercareInfoPageContentQuery = groq`*[_type == "aftercareInfoPageContent"
 export async function getAftercareInfoPageContent(
   client: SanityClient,
 ): Promise<AftercareInfoPageContent> {
-  return await client.fetch(aftercareInfoPageContentQuery)
+  return await client.fetch(aftercareInfoPageContentQuery, {
+    next: { revalidate: revalidateRequests },
+  })
 }
 
 const artistsPageContentQuery = groq`*[_type == "artistsPageContent"][0]`
 export async function getArtistsPageContent(
   client: SanityClient,
 ): Promise<ArtistsPageContent> {
-  return await client.fetch(artistsPageContentQuery)
+  return await client.fetch(artistsPageContentQuery, {
+    next: { revalidate: revalidateRequests },
+  })
 }
 
 const bookingInfoPageContentQuery = groq`*[_type == "bookingInfoPageContent"][0]{
@@ -74,5 +84,7 @@ const bookingInfoPageContentQuery = groq`*[_type == "bookingInfoPageContent"][0]
 export async function getBookingInfoPageContent(
   client: SanityClient,
 ): Promise<BookingInfoPageContent> {
-  return await client.fetch(bookingInfoPageContentQuery)
+  return await client.fetch(bookingInfoPageContentQuery, {
+    next: { revalidate: revalidateRequests },
+  })
 }
