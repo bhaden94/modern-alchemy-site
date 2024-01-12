@@ -70,7 +70,9 @@ export default function BookingCard({ booking }: IBookingCardProps) {
             />
             <TextInput
               label={<Text span>Style</Text>}
-              value={booking.style}
+              value={
+                booking.style === 'black_and_grey' ? 'Black & Grey' : 'Color'
+              }
               variant="filled"
               readOnly
             />

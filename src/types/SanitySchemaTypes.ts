@@ -45,7 +45,7 @@ export interface Booking extends BaseSanitySchema<'booking'> {
   // characters: string
   description: string
   location: string
-  style: string
+  style: 'color' | 'black_and_grey'
   // prior_tattoo: string
   // preffered_day: string
   referenceImages: { asset: ImageAsset }[]
