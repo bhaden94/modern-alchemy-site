@@ -13,10 +13,15 @@ export default async function RootPage() {
 
   return (
     <>
-      <Hero title={content.pageTitle} description={content.heroDescription} />
-      <PageContainer>
+      <Hero
+        title={content.pageTitle}
+        description={content.heroDescription}
+        buttonText={content.heroButtonText}
+        buttonLink={content.heroButtonLink}
+      />
+      {/* <PageContainer>
         <Home content={content.homeContent} />
-      </PageContainer>
+      </PageContainer> */}
     </>
   )
 }

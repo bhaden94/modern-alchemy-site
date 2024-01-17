@@ -10,9 +10,11 @@ import classes from './Hero.module.css'
 interface IHero {
   title: string
   description?: string
+  buttonText?: string
+  buttonLink?: string
 }
 
-const Hero = ({ title, description }: IHero) => {
+const Hero = ({ title, description, buttonText, buttonLink }: IHero) => {
   return (
     <div className={classes.hero}>
       <Overlay
@@ -41,14 +43,14 @@ const Hero = ({ title, description }: IHero) => {
           </Text>
         ) : undefined}
 
-        <Link href={NavigationPages.Artists}>
+        <Link href={buttonLink || NavigationPages.Artists}>
           <Button
             variant="gradient"
             size="xl"
             radius="xl"
             className={classes.control}
           >
-            View Our Artists
+            {buttonText || 'View our artists'}
           </Button>
         </Link>
       </Container>

@@ -7,6 +7,7 @@ import {
   Input,
   Loader,
   mergeMantineTheme,
+  Text,
 } from '@mantine/core'
 import { Open_Sans, Raleway } from 'next/font/google'
 
@@ -22,16 +23,47 @@ const raleway = Raleway({
 })
 
 const themeOverride = createTheme({
-  primaryColor: 'violet',
+  primaryColor: 'academia',
+  colors: {
+    dark: [
+      '#efeddc',
+      '#B8B8B8',
+      '#828282',
+      '#696969',
+      '#424242',
+      '#3B3B3B',
+      '#1F1F1F',
+      '#141414',
+      '#1F1F1F',
+      '#141414',
+    ],
+    academia: [
+      '#f3f7f3',
+      '#e5ebe5',
+      '#c8d6c8',
+      '#a7c0a7',
+      '#8cae8b',
+      '#7aa27a',
+      '#709d70',
+      '#5e895e',
+      '#537952',
+      '#446944',
+    ],
+  },
   defaultGradient: {
-    from: 'violet.6',
-    to: 'violet.9',
+    from: 'academia.6',
+    to: 'academia.9',
     deg: 45,
   },
   fontFamily: raleway.style.fontFamily,
   headings: { fontFamily: openSans.style.fontFamily },
   defaultRadius: 'xs',
   components: {
+    Text: Text.extend({
+      defaultProps: {
+        c: 'dark.0',
+      },
+    }),
     Button: Button.extend({
       defaultProps: {
         tt: 'uppercase',

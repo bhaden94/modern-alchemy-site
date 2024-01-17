@@ -16,6 +16,16 @@ export default defineType({
       title: 'Hero Description',
     }),
     defineField({
+      name: 'heroButtonText',
+      type: 'string',
+      title: 'Hero Button Text',
+    }),
+    defineField({
+      name: 'heroButtonLink',
+      type: 'string',
+      title: 'Hero Button Link',
+    }),
+    defineField({
       name: 'homeContent',
       type: 'string',
       title: 'Home Content',

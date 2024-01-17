@@ -76,6 +76,8 @@ export interface RootPageContent
   extends BaseSanitySchema<'rootPageContent'>,
     BasePageContent {
   heroDescription?: string
+  heroButtonText?: string
+  heroButtonLink?: string
   homeContent?: string
 }
 
