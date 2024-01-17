@@ -6,8 +6,10 @@ import { getClient } from '~/lib/sanity/sanity.client'
 
 const ArtistsShowcasePage = async () => {
   const client = getClient(undefined)
-  const artists = await getArtists(client)
-  const content = await getArtistsPageContent(client)
+  const artistsData = getArtists(client)
+  const contentData = getArtistsPageContent(client)
+  
+  const [artists, content] = await Promise.all([artistsData, contentData])
 
   if (!content) return undefined
 
