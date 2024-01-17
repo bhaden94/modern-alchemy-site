@@ -23,13 +23,15 @@ const ArtistCard = ({ artist, showPortfolioLink }: IArtistCard) => {
           src={artist.headshot?.asset.url || '/user.svg'}
           alt="Artist headshot"
           width={300}
-          height={250}
+          height={300}
           placeholder={generateNextImagePlaceholder(300, 250)}
         />
       </Card.Section>
 
       <Group py={6}>
-        <Text size="xl">{artist.name}</Text>
+        <Text size="xl" fw={700}>
+          {artist.name}
+        </Text>
       </Group>
 
       {artist.styles?.length > 0 ? <Text>Styles</Text> : undefined}

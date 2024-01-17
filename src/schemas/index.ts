@@ -9,6 +9,7 @@ import bookingInfoPageContent from './bookingInfoPageContent'
 import faqPageContent from './faqPageContent'
 import featureFlags from './feature-flags'
 import post from './post'
+import rootLayoutContent from './rootLayoutContent'
 import rootPageContent from './rootPageContent'
 
 // TODO: figure out how to generate types to use in code
@@ -23,6 +24,7 @@ export const schemaTypes = {
   aftercareInfoPageContent,
   artistsPageContent,
   bookingInfoPageContent,
+  rootLayoutContent,
 }
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -36,5 +38,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     aftercareInfoPageContent,
     artistsPageContent,
     bookingInfoPageContent,
+    rootLayoutContent,
   ],
 }

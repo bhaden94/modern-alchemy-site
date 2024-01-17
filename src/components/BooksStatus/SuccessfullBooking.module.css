@@ -1,7 +1,6 @@
 .root {
   padding-top: rem(25px);
   padding-bottom: rem(120px);
-  /* background-color: var(--mantine-color-blue-filled); */
 }
 
 .label {
@@ -10,7 +9,6 @@
   font-size: rem(220px);
   line-height: 1;
   margin-bottom: calc(var(--mantine-spacing-xl) * 1.5);
-  color: var(--mantine-primary-color-filled);
 
   @media (max-width: $mantine-breakpoint-md) {
     font-size: rem(120px);

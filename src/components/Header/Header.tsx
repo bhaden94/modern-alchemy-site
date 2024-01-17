@@ -2,9 +2,10 @@
 
 import { Burger, Container, Drawer, Group, List } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import { IconFlask2 } from '@tabler/icons-react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
+import { ImageAsset } from 'sanity'
 
 import { NavigationPages, NavLinks } from '~/utils/navigation'
 
@@ -18,7 +19,7 @@ const chooseActiveHeader = (pathname: string | null, link: string): boolean => {
   return false
 }
 
-const Header = () => {
+const Header = ({ logo }: { logo: ImageAsset }) => {
   const router = useRouter()
   const pathname = usePathname()
   const [opened, { toggle, close }] = useDisclosure(false)
@@ -42,8 +43,8 @@ const Header = () => {
   return (
     <header className={classes.header}>
       <Container size="md" className={classes.inner}>
-        <Link href={NavigationPages.Home}>
-          <IconFlask2 size={36} />
+        <Link href={NavigationPages.Home} className="flex">
+          <Image src={logo.url} alt="Business logo" width={100} height={40} />
         </Link>
         <Group gap={5} visibleFrom="xs">
           {items}

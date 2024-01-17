@@ -102,3 +102,12 @@ export interface BookingInfoPageContent
     BasePageContent {
   information: TypedObject | TypedObject[]
 }
+
+export interface RootLayoutContent
+  extends BaseSanitySchema<'rootLayoutContent'> {
+  businessLogo: { asset: ImageAsset }
+  copywriteText: string
+  businessLogoCaption?: string
+  intagramLink?: string
+  facebookLink?: string
+}

@@ -24,6 +24,7 @@ const raleway = Raleway({
 
 const themeOverride = createTheme({
   primaryColor: 'academia',
+  white: '#efeddc',
   colors: {
     dark: [
       '#efeddc',
@@ -48,6 +49,18 @@ const themeOverride = createTheme({
       '#5e895e',
       '#537952',
       '#446944',
+    ],
+    wood: [
+      '#faf2f0',
+      '#ede2e0',
+      '#ddc2ba',
+      '#cfa093',
+      '#c38370',
+      '#bc705a',
+      '#b9664f',
+      '#a35640',
+      '#391c14',
+      '#391c14',
     ],
   },
   defaultGradient: {

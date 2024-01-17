@@ -6,6 +6,7 @@ import {
   ArtistsPageContent,
   BookingInfoPageContent,
   FaqPageContent,
+  RootLayoutContent,
   RootPageContent,
 } from '~/types/SanitySchemaTypes'
 
@@ -85,6 +86,24 @@ export async function getBookingInfoPageContent(
   client: SanityClient,
 ): Promise<BookingInfoPageContent> {
   return await client.fetch(bookingInfoPageContentQuery, {
+    next: { revalidate: revalidateRequests },
+  })
+}
+
+const rootLayoutContentQuery = groq`*[_type == "rootLayoutContent"][0]{
+  ...,
+  businessLogo{
+    ...,
+    _type == "image" => {
+      ...,
+      asset->
+    }
+  }
+}`
+export async function getRootLayoutContent(
+  client: SanityClient,
+): Promise<RootLayoutContent> {
+  return await client.fetch(rootLayoutContentQuery, {
     next: { revalidate: revalidateRequests },
   })
 }

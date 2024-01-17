@@ -9,23 +9,34 @@ import { ColorSchemeScript } from '@mantine/core'
 import Footer from '~/components/Footer/Footer'
 import Header from '~/components/Header/Header'
 import Providers from '~/components/Providers'
+import { getRootLayoutContent } from '~/lib/sanity/queries/sanity.pageContentQueries'
+import { getClient } from '~/lib/sanity/sanity.client'
 import { colorScheme } from '~/utils/theme'
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const client = getClient(undefined)
+  const content = await getRootLayoutContent(client)
+
   return (
     <html lang="en">
       <head>
         <ColorSchemeScript defaultColorScheme={colorScheme} />
       </head>
-      <body>
+      <body className="flex min-h-screen flex-col">
         <Providers>
-          <Header />
-          {children}
-          <Footer />
+          <Header logo={content.businessLogo.asset} />
+          <div className="flex-1">{children}</div>
+          <Footer
+            logo={content.businessLogo.asset}
+            copywriteText={content.copywriteText}
+            logoCaption={content.businessLogoCaption}
+            instagram={content.intagramLink}
+            facebook={content.facebookLink}
+          />
         </Providers>
       </body>
     </html>

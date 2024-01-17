@@ -13,6 +13,7 @@ import {
 import { TextInput } from '@mantine/core'
 import { Textarea } from '@mantine/core'
 import { FileRejection, FileWithPath } from '@mantine/dropzone'
+import { useWindowScroll } from '@mantine/hooks'
 import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
@@ -46,6 +47,7 @@ interface ITattooForm {
 // TODO: implement reCAPTCHA for form submission
 // TODO: implement Nodemailer to send email confirming form submission
 const TattooForm = ({ artistId }: ITattooForm) => {
+  const [_, scrollTo] = useWindowScroll()
   const [isUploadingImages, setIsUploadingImages] = useState<boolean>(false)
   const [isSubmittingForm, setIsSubmittingForm] = useState<boolean>(false)
   const [formSubmittedSuccessfully, setFormSubmittedSuccessfully] =
@@ -98,6 +100,7 @@ const TattooForm = ({ artistId }: ITattooForm) => {
       reset()
       setImageFiles([])
       setFormSubmittedSuccessfully(true)
+      scrollTo({ y: 0 })
     }
   }
 
