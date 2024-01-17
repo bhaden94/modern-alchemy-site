@@ -16,7 +16,7 @@ const artistsQuery = groq`*[_type == "artist"]{
   }
 }`
 export async function getArtists(client: SanityClient): Promise<Artist[]> {
-  return await client.fetch(artistsQuery, { next: { cache: 'no-store' } })
+  return await client.fetch(artistsQuery, {}, { cache: 'no-store' })
 }
 
 const artistsEmailQuery = groq`*[_type == "artist" && email == $email][0]{name, role, _id}`
@@ -25,7 +25,9 @@ export async function getArtistByEmail(
   email: string,
 ): Promise<Partial<Artist>> {
   const emailParam = { email: email }
-  return await client.fetch(artistsEmailQuery, emailParam)
+  return await client.fetch(artistsEmailQuery, emailParam, {
+    cache: 'no-cache',
+  })
 }
 
 const artistsIdQuery = groq`*[_type == "artist" && _id == $id][0]{
@@ -50,9 +52,8 @@ export async function getArtistById(
   id: string,
 ): Promise<Artist> {
   const idParam = { id: id }
-  return await client.fetch(artistsIdQuery, {
-    ...idParam,
-    next: { cache: 'no-store' },
+  return await client.fetch(artistsIdQuery, idParam, {
+    cache: 'no-cache',
   })
 }
 
