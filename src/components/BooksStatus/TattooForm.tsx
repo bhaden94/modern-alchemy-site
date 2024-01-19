@@ -57,7 +57,6 @@ interface ITattooForm {
   artistId: string
 }
 
-// TODO: move to mantine form (maybe)
 // TODO: split into components
 // TODO: implement reCAPTCHA for form submission
 // TODO: implement Nodemailer to send email confirming form submission
