@@ -8,7 +8,7 @@ const ArtistsShowcasePage = async () => {
   const client = getClient(undefined)
   const artistsData = getArtists(client)
   const contentData = getArtistsPageContent(client)
-  
+
   const [artists, content] = await Promise.all([artistsData, contentData])
 
   if (!content) return undefined

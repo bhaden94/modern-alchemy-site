@@ -5,6 +5,7 @@ const phoneRegex = new RegExp(
   /^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/,
 )
 
+const MIN_FILES = 2
 export const MAX_FILES = 5
 export const MAX_FILE_SIZE = 10485760 // 10MB
 export const ACCEPTED_IMAGE_TYPES = [
@@ -27,51 +28,53 @@ export const styleOptions: ComboboxItem[] = [
   },
 ]
 
-// export const priorTattooOptions: ComboboxItem[] = [
-//   {
-//     value: 'new_tattoo',
-//     label: 'Yes - I want a new tattoo',
-//   },
-//   {
-//     value: 'ongoing_project',
-//     label: 'Yes - this is an ongoing project',
-//   },
-//   {
-//     value: 'no',
-//     label: 'No',
-//   },
-// ]
+export const priorTattooOptions: ComboboxItem[] = [
+  {
+    value: 'no',
+    label: 'No',
+  },
+  {
+    value: 'new_tattoo',
+    label: 'Yes - I want a new tattoo',
+  },
+  {
+    value: 'ongoing_project',
+    label: 'Yes - this is an ongoing project',
+  },
+]
 
-// export const preferredDayOptions: ComboboxItem[] = [
-//   {
-//     value: 'monday',
-//     label: 'Monday',
-//   },
-//   {
-//     value: 'tuesday',
-//     label: 'Tuesday',
-//   },
-//   {
-//     value: 'wednesday',
-//     label: 'Wednesday',
-//   },
-//   {
-//     value: 'thursday',
-//     label: 'Thursday',
-//   },
-//   {
-//     value: 'friday',
-//     label: 'Friday',
-//   },
-// ]
+export const preferredDayOptions: ComboboxItem[] = [
+  {
+    value: 'monday',
+    label: 'Monday',
+  },
+  {
+    value: 'tuesday',
+    label: 'Tuesday',
+  },
+  {
+    value: 'wednesday',
+    label: 'Wednesday',
+  },
+  {
+    value: 'thursday',
+    label: 'Thursday',
+  },
+  {
+    value: 'friday',
+    label: 'Friday',
+  },
+]
 
 const nameError = 'Please enter your full name'
 const phoneNumberRegexError = 'Invalid phone number'
 const phoneNumberError = 'Please enter your phone number'
 const emailError = 'Invalid email address'
-// const charactersError = 'Please enter the list of characters you would like'
+const charactersError = 'Please enter the list of characters you would like'
 const descriptionError = 'Please describe your idea'
-const locationError = 'Please enter where on your body you would like the art'
+const locationError =
+  'Please enter where on your body you would like the tattoo'
+const preferredDayError = 'Please select at least 1 preferred day'
 
 export const bookingSchema = z.object({
   name: z.string({ required_error: nameError }).min(1, nameError),
@@ -80,21 +83,28 @@ export const bookingSchema = z.object({
     .min(1, phoneNumberError)
     .regex(phoneRegex, phoneNumberRegexError),
   email: z.string().email({ message: emailError }),
-  // characters: z.string().array().min(1, charactersError),
-  description: z.string({ required_error: descriptionError }).min(1),
+  characters: z
+    .string({ required_error: charactersError })
+    .min(1, charactersError),
+  description: z
+    .string({ required_error: descriptionError })
+    .min(1, descriptionError),
   location: z
     .string({
       required_error: locationError,
     })
     .min(1, locationError),
   style: z.string(),
-  // priorTattoo: z.string(),
-  // preferredDay: z.string(),
+  priorTattoo: z.string(),
+  preferredDays: z
+    .string({ required_error: preferredDayError })
+    .array()
+    .min(1, preferredDayError),
   referenceImages: z.custom<File[]>().superRefine((files, ctx) => {
-    if (!files || files.length === 0) {
+    if (!files || files.length < MIN_FILES) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: 'At least 1 image must be provided',
+        message: `At least ${MIN_FILES} images must be provided. One reference and one of the body area.`,
       })
       return false
     }
@@ -111,7 +121,7 @@ export const bookingSchema = z.object({
       if (!ACCEPTED_IMAGE_TYPES.includes(files[i].type)) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: 'File must be a valid image type',
+          message: `File must be a valid image type.`,
         })
         return false
       }
@@ -138,8 +148,11 @@ export enum BookingField {
   Name = 'name',
   PhoneNumber = 'phoneNumber',
   Email = 'email',
+  Characters = 'characters',
   Description = 'description',
   Location = 'location',
   Style = 'style',
+  PriorTattoo = 'priorTattoo',
+  PreferredDays = 'preferredDays',
   ReferenceImages = 'referenceImages',
 }

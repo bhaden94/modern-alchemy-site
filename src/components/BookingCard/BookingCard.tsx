@@ -5,6 +5,8 @@ import {
   Button,
   Card,
   Grid,
+  Group,
+  Popover,
   SimpleGrid,
   Text,
   Textarea,
@@ -14,12 +16,33 @@ import { useState } from 'react'
 
 import { Booking } from '~/types/SanitySchemaTypes'
 import { formatDate, formatPhoneNumber } from '~/utils'
+import {
+  preferredDayOptions,
+  priorTattooOptions,
+} from '~/utils/bookingFormUtils'
 
 import PortfolioCarousel from '../PortfolioCarousel/PortfolioCarousel'
+import DeleteBooking from './DeleteBooking'
 import InputCopyButton from './InputCopyButton'
 
 interface IBookingCardProps {
   booking: Booking
+}
+
+const joinPrefferedDayLabels = (days: string[]): string => {
+  if (days.length === 5) {
+    return 'Any weekday'
+  }
+
+  const labels: string[] = []
+
+  preferredDayOptions.forEach((option) => {
+    if (days.includes(option.value)) {
+      labels.push(option.label)
+    }
+  })
+
+  return labels.join(', ')
 }
 
 export default function BookingCard({ booking }: IBookingCardProps) {
@@ -55,18 +78,24 @@ export default function BookingCard({ booking }: IBookingCardProps) {
           <Box />
         )}
         <Grid gutter="md">
-          <Grid.Col span={{ base: 12, lg: 6 }}>
+          <Grid.Col span={{ base: 12, xl: 6 }}>
             <TextInput
               label={<Text span>Submitted on</Text>}
               value={formatDate(booking._createdAt)}
               variant="filled"
               readOnly
+              leftSectionPointerEvents="auto"
+              leftSection={
+                <InputCopyButton value={formatDate(booking._createdAt)} />
+              }
             />
             <TextInput
               label={<Text span>Location</Text>}
               value={booking.location}
               variant="filled"
               readOnly
+              leftSectionPointerEvents="auto"
+              leftSection={<InputCopyButton value={booking.location} />}
             />
             <TextInput
               label={<Text span>Style</Text>}
@@ -75,9 +104,39 @@ export default function BookingCard({ booking }: IBookingCardProps) {
               }
               variant="filled"
               readOnly
+              leftSectionPointerEvents="auto"
+              leftSection={
+                <InputCopyButton
+                  value={
+                    booking.style === 'black_and_grey'
+                      ? 'Black & Grey'
+                      : 'Color'
+                  }
+                />
+              }
+            />
+            <TextInput
+              label={<Text span>Prior Tattoo</Text>}
+              value={
+                priorTattooOptions.find(
+                  (option) => option.value === booking.priorTattoo,
+                )?.label
+              }
+              variant="filled"
+              readOnly
+              leftSectionPointerEvents="auto"
+              leftSection={
+                <InputCopyButton
+                  value={
+                    priorTattooOptions.find(
+                      (option) => option.value === booking.priorTattoo,
+                    )?.label || 'No'
+                  }
+                />
+              }
             />
           </Grid.Col>
-          <Grid.Col span={{ base: 12, lg: 6 }}>
+          <Grid.Col span={{ base: 12, xl: 6 }}>
             <TextInput
               label={<Text span>Phone Number</Text>}
               value={formatPhoneNumber(booking.phoneNumber) || ''}
@@ -104,6 +163,26 @@ export default function BookingCard({ booking }: IBookingCardProps) {
             />
           </Grid.Col>
           <Grid.Col>
+            <TextInput
+              label={<Text span>Preferred Days</Text>}
+              value={joinPrefferedDayLabels(booking.preferredDays)}
+              variant="filled"
+              readOnly
+              leftSectionPointerEvents="auto"
+              leftSection={
+                <InputCopyButton
+                  value={joinPrefferedDayLabels(booking.preferredDays)}
+                />
+              }
+            />
+            <TextInput
+              label={<Text span>Characters</Text>}
+              value={booking.characters}
+              variant="filled"
+              readOnly
+              leftSectionPointerEvents="auto"
+              leftSection={<InputCopyButton value={booking.characters} />}
+            />
             <Textarea
               label={<Text span>Description</Text>}
               value={booking.description}
@@ -118,16 +197,10 @@ export default function BookingCard({ booking }: IBookingCardProps) {
           </Grid.Col>
         </Grid>
       </SimpleGrid>
-      <Button
-        onClick={() => deleteBookingById()}
-        loading={isDeleting}
-        variant="outline"
-        color="red"
-        mt={16}
-        className="self-center"
-      >
-        Delete Booking
-      </Button>
+      <DeleteBooking
+        isDeleting={isDeleting}
+        deleteBookingById={deleteBookingById}
+      />
     </Card>
   )
 }

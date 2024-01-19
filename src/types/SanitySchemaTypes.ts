@@ -42,12 +42,12 @@ export interface Booking extends BaseSanitySchema<'booking'> {
   name: string
   phoneNumber: string
   email: string
-  // characters: string
+  characters: string
   description: string
   location: string
   style: 'color' | 'black_and_grey'
-  // prior_tattoo: string
-  // preffered_day: string
+  priorTattoo: string
+  preferredDays: string[]
   referenceImages: { asset: ImageAsset }[]
   artist: any
 }

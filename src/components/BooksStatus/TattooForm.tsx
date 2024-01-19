@@ -4,11 +4,17 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Box,
   Button,
+  Checkbox,
+  CheckboxGroupProps,
   Container,
+  Group,
   Loader,
   LoadingOverlay,
   NativeSelect,
+  NativeSelectProps,
   Text,
+  TextareaProps,
+  TextInputProps,
 } from '@mantine/core'
 import { TextInput } from '@mantine/core'
 import { Textarea } from '@mantine/core'
@@ -20,6 +26,8 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import {
   BookingField,
   bookingSchema,
+  preferredDayOptions,
+  priorTattooOptions,
   styleOptions,
   TBookingSchema,
 } from '~/utils/bookingFormUtils'
@@ -28,6 +36,13 @@ import ImageDropzone from '../ImageDropzone/ImageDropzone'
 import ImageErrors from '../ImageDropzone/ImageErrors'
 import ImageThumbnails from '../ImageDropzone/ImageThumbnails'
 import SuccessfullBooking from './SuccessfullBooking'
+
+const inputSharedProps: Partial<
+  TextInputProps & NativeSelectProps & CheckboxGroupProps & TextareaProps
+> = {
+  className: 'w-full',
+  withAsterisk: true,
+}
 
 const CustomLoader = ({ label }: { label: string }) => {
   return (
@@ -52,6 +67,8 @@ const TattooForm = ({ artistId }: ITattooForm) => {
   const [isSubmittingForm, setIsSubmittingForm] = useState<boolean>(false)
   const [formSubmittedSuccessfully, setFormSubmittedSuccessfully] =
     useState<boolean>(false)
+
+  const [preferredDays, setPreferredDays] = useState<string[]>([])
   const [imageFiles, setImageFiles] = useState<FileWithPath[]>([])
   const [imageUploadRejections, setImageUploadRejections] = useState<
     FileRejection[]
@@ -63,6 +80,7 @@ const TattooForm = ({ artistId }: ITattooForm) => {
 
   useEffect(() => {
     register(BookingField.ReferenceImages)
+    register(BookingField.PreferredDays)
   }, [register])
 
   const onSubmit: SubmitHandler<TBookingSchema> = async (data) => {
@@ -99,9 +117,16 @@ const TattooForm = ({ artistId }: ITattooForm) => {
     if (imageUploadResponse.ok && response.ok) {
       reset()
       setImageFiles([])
+      setPreferredDays([])
       setFormSubmittedSuccessfully(true)
       scrollTo({ y: 0 })
     }
+  }
+
+  const onPreferredDaysChange = (days: string[]) => {
+    clearErrors(BookingField.PreferredDays)
+    setPreferredDays(days)
+    setValue(BookingField.PreferredDays, days)
   }
 
   const onImageReject = (rejections: FileRejection[]) => {
@@ -127,7 +152,7 @@ const TattooForm = ({ artistId }: ITattooForm) => {
       {formSubmittedSuccessfully ? (
         <SuccessfullBooking />
       ) : (
-        <Container size="sm" py="lg">
+        <Container size="sm" py="lg" px={0}>
           <Box pos="relative">
             <LoadingOverlay
               visible={isSubmitting}
@@ -147,8 +172,7 @@ const TattooForm = ({ artistId }: ITattooForm) => {
             >
               {/* Name */}
               <TextInput
-                className="w-full"
-                withAsterisk
+                {...inputSharedProps}
                 label={<Text span>First and Last Name</Text>}
                 placeholder="Enter your name"
                 id={BookingField.Name}
@@ -159,8 +183,7 @@ const TattooForm = ({ artistId }: ITattooForm) => {
 
               {/* Phone Number */}
               <TextInput
-                className="w-full"
-                withAsterisk
+                {...inputSharedProps}
                 label={<Text span>Phone Number</Text>}
                 placeholder="Enter your phone number"
                 type="tel"
@@ -172,8 +195,7 @@ const TattooForm = ({ artistId }: ITattooForm) => {
 
               {/* Email */}
               <TextInput
-                className="w-full"
-                withAsterisk
+                {...inputSharedProps}
                 label={<Text span>Email</Text>}
                 placeholder="Enter your email"
                 type="email"
@@ -183,10 +205,20 @@ const TattooForm = ({ artistId }: ITattooForm) => {
                 {...register(BookingField.Email)}
               />
 
+              {/* Characters */}
+              <TextInput
+                {...inputSharedProps}
+                label={<Text span>Characters</Text>}
+                placeholder="Enter the list of characters you want"
+                id={BookingField.Characters}
+                error={formState.errors.characters?.message}
+                disabled={isSubmitting}
+                {...register(BookingField.Characters)}
+              />
+
               {/* Location */}
               <TextInput
-                className="w-full"
-                withAsterisk
+                {...inputSharedProps}
                 label={<Text span>Body Location</Text>}
                 placeholder="Enter the location on your body"
                 id={BookingField.Location}
@@ -197,8 +229,7 @@ const TattooForm = ({ artistId }: ITattooForm) => {
 
               {/* Style */}
               <NativeSelect
-                className="w-full"
-                withAsterisk
+                {...inputSharedProps}
                 label={<Text span>Tattoo Style</Text>}
                 id={BookingField.Style}
                 defaultValue="color"
@@ -208,10 +239,43 @@ const TattooForm = ({ artistId }: ITattooForm) => {
                 {...register(BookingField.Style)}
               />
 
+              {/* Prior Tattoo */}
+              <NativeSelect
+                {...inputSharedProps}
+                label={
+                  <Text span>Have you been tattooed by Larry before?</Text>
+                }
+                id={BookingField.PriorTattoo}
+                defaultValue="no"
+                data={priorTattooOptions}
+                error={formState.errors.priorTattoo?.message}
+                disabled={isSubmitting}
+                {...register(BookingField.PriorTattoo)}
+              />
+
+              {/* Preferred Days */}
+              <Checkbox.Group
+                {...inputSharedProps}
+                value={preferredDays}
+                onChange={onPreferredDaysChange}
+                label={<Text span>Preferred days of appointment</Text>}
+                error={formState.errors.preferredDays?.message}
+              >
+                <Group my="xs">
+                  {preferredDayOptions.map((option) => (
+                    <Checkbox
+                      key={option.value}
+                      value={option.value}
+                      label={option.label}
+                      error={!!formState.errors.preferredDays?.message}
+                    />
+                  ))}
+                </Group>
+              </Checkbox.Group>
+
               {/* Description */}
               <Textarea
-                className="w-full"
-                withAsterisk
+                {...inputSharedProps}
                 label={<Text span>Tattoo Idea</Text>}
                 placeholder="Describe your tattoo idea"
                 id={BookingField.Description}

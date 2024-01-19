@@ -1,4 +1,4 @@
-import { Alert, List } from '@mantine/core'
+import { Alert, List, Text } from '@mantine/core'
 import { FileRejection } from '@mantine/dropzone'
 import { IconExclamationCircle } from '@tabler/icons-react'
 
@@ -21,10 +21,12 @@ const ImageErrors = ({
       icon={<IconExclamationCircle />}
       onClose={() => console.log('close alert')}
     >
-      <List>
+      <List icon="•">
         {imageUploadRejections.length > 0 ? (
           imageUploadRejections[0].errors.map((error, i) => (
-            <List.Item key={`${error.code}-${i}`}>{error.message}</List.Item>
+            <List.Item className="break-all" key={`${error.code}-${i}`}>
+              {error.message}
+            </List.Item>
           ))
         ) : (
           <List.Item key="image-upload-error">{formError}</List.Item>

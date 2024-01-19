@@ -18,8 +18,7 @@ const Hero = ({ title, description, buttonText, buttonLink }: IHero) => {
   return (
     <div className={classes.hero}>
       <Overlay
-        gradient="radial-gradient(circle, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.65) 40%)"
-        opacity={1}
+        gradient="linear-gradient(to bottom, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.5) 100%)"
         zIndex={1}
       />
       <Image

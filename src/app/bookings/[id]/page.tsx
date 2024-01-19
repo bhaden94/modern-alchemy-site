@@ -17,8 +17,8 @@ const BookingsPage = async ({ params }: { params: { id: string } }) => {
   return (
     <PageContainer>
       <PageTitle title={`${artist.name} Booking Requests`} />
-      <div className="grid grid-cols-1 md:grid-cols-6 gap-8">
-        <div className="order-2 md:order-1 md:col-span-4">
+      <div className="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-7 xl:grid-cols-8 gap-8">
+        <div className="order-2 md:order-1 md:col-span-4 lg:col-span-5 xl:col-span-6">
           <Bookings bookings={bookings} artistId={artist._id} />
         </div>
         <div className="order-1 md:order-2 md:col-span-2">
