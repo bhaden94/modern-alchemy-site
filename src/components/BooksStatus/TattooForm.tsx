@@ -19,7 +19,6 @@ import {
 import { TextInput } from '@mantine/core'
 import { Textarea } from '@mantine/core'
 import { FileRejection, FileWithPath } from '@mantine/dropzone'
-import { useWindowScroll } from '@mantine/hooks'
 import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
@@ -42,6 +41,7 @@ const inputSharedProps: Partial<
 > = {
   className: 'w-full',
   withAsterisk: true,
+  size: 'md',
 }
 
 const CustomLoader = ({ label }: { label: string }) => {
@@ -62,7 +62,6 @@ interface ITattooForm {
 // TODO: implement reCAPTCHA for form submission
 // TODO: implement Nodemailer to send email confirming form submission
 const TattooForm = ({ artistId }: ITattooForm) => {
-  const [_, scrollTo] = useWindowScroll()
   const [isUploadingImages, setIsUploadingImages] = useState<boolean>(false)
   const [isSubmittingForm, setIsSubmittingForm] = useState<boolean>(false)
   const [formSubmittedSuccessfully, setFormSubmittedSuccessfully] =
@@ -119,7 +118,11 @@ const TattooForm = ({ artistId }: ITattooForm) => {
       setImageFiles([])
       setPreferredDays([])
       setFormSubmittedSuccessfully(true)
-      scrollTo({ y: 0 })
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth',
+      })
     }
   }
 
@@ -285,20 +288,26 @@ const TattooForm = ({ artistId }: ITattooForm) => {
               />
 
               {/* Images */}
-              <ImageDropzone
-                onImageDrop={(files) => onImageDrop(files)}
-                onImageReject={(rejections) => onImageReject(rejections)}
-                disabled={isSubmitting}
-                dropzoneProps={{ className: 'w-full' }}
-              />
-              <ImageThumbnails
-                imageFiles={imageFiles}
-                onImageRemove={(name) => onImageRemove(name)}
-              />
-              <ImageErrors
-                imageUploadRejections={imageUploadRejections}
-                formError={formState.errors.referenceImages?.message}
-              />
+              <Box className="w-full">
+                <Text span>Reference Images</Text>
+                <Text span c="var(--mantine-color-error)">
+                  &nbsp;*
+                </Text>
+                <ImageDropzone
+                  onImageDrop={(files) => onImageDrop(files)}
+                  onImageReject={(rejections) => onImageReject(rejections)}
+                  disabled={isSubmitting}
+                  dropzoneProps={{ className: 'w-full' }}
+                />
+                <ImageThumbnails
+                  imageFiles={imageFiles}
+                  onImageRemove={(name) => onImageRemove(name)}
+                />
+                <ImageErrors
+                  imageUploadRejections={imageUploadRejections}
+                  formError={formState.errors.referenceImages?.message}
+                />
+              </Box>
 
               {/* Submit button */}
               <Button
