@@ -4,7 +4,7 @@ import { Button } from '@mantine/core'
 import { IconArrowLeft } from '@tabler/icons-react'
 import Link from 'next/link'
 
-import { Artist } from '~/types/SanitySchemaTypes'
+import { Artist } from '~/schemas/models/artist'
 import { NavigationPages } from '~/utils/navigation'
 
 import ArtistCard from '../Artists/ArtistCard'

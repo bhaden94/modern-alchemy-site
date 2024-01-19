@@ -1,4 +1,11 @@
-import { defineArrayMember, defineType } from 'sanity'
+import { defineArrayMember, defineType, ImageAsset } from 'sanity'
+
+export interface BlockContentImage {
+  _type: 'image'
+  _key: string
+  altText: string
+  asset: ImageAsset
+}
 
 /**
  * This is the schema definition for the rich text fields used for

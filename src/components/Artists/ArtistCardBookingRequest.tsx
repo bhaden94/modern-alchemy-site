@@ -10,7 +10,7 @@ import {
   listenForArtistsBookStatusChanges,
 } from '~/lib/sanity/queries/sanity.artistsQuery'
 import { getClient } from '~/lib/sanity/sanity.client'
-import { Artist } from '~/types/SanitySchemaTypes'
+import { Artist } from '~/schemas/models/artist'
 import { NavigationPages } from '~/utils/navigation'
 
 import BooksOpenAt from '../BooksStatus/BooksOpenAt'

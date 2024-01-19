@@ -7,12 +7,12 @@ import {
   listenForFeatureFlagChanges,
 } from '~/lib/sanity/queries/sanity.featuresQuery'
 import { getClient } from '~/lib/sanity/sanity.client'
+import { FeatureFlag } from '~/schemas/models/feature-flags'
 import { Feature } from '~/types/FeatureEnum'
 import {
   FeatureFlagsContextValue,
   FeatureType,
 } from '~/types/FeatureFlagContextValue'
-import { FeatureFlag } from '~/types/SanitySchemaTypes'
 
 type FeatureProviderProps = {
   children: React.ReactNode

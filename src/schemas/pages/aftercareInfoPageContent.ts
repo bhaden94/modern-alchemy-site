@@ -1,4 +1,12 @@
-import { defineField, defineType } from 'sanity'
+import { defineField, defineType, TypedObject } from 'sanity'
+
+import { BasePageContent, BaseSanitySchema } from '..'
+
+export interface AftercareInfoPageContent
+  extends BaseSanitySchema<'aftercareInfoPageContent'>,
+    BasePageContent {
+  information: TypedObject | TypedObject[]
+}
 
 export default defineType({
   name: 'aftercareInfoPageContent',

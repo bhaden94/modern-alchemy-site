@@ -1,4 +1,20 @@
-import { defineField, defineType } from 'sanity'
+import {
+  defineField,
+  defineType,
+  ImageAsset,
+  PortableTextBlock,
+  Slug,
+} from 'sanity'
+
+import { BaseSanitySchema } from '..'
+
+export interface Post extends BaseSanitySchema<'post'> {
+  title?: string
+  slug: Slug
+  excerpt?: string
+  mainImage?: ImageAsset
+  body: PortableTextBlock[]
+}
 
 export default defineType({
   name: 'post',

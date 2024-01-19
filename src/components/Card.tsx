@@ -1,7 +1,7 @@
 import Image from 'next/image'
 
 import { urlForImage } from '~/lib/sanity/sanity.image'
-import { Post } from '~/types/SanitySchemaTypes'
+import { Post } from '~/schemas/models/post'
 import { formatDate } from '~/utils'
 
 export default function Card({ post }: { post: Post }) {

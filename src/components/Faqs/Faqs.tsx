@@ -3,7 +3,7 @@
 import { Accordion, Container } from '@mantine/core'
 import { PortableText } from '@portabletext/react'
 
-import { FaqPageContent } from '~/types/SanitySchemaTypes'
+import { FaqPageContent } from '~/schemas/pages/faqPageContent'
 
 import PageTitle from '../PageTitle/PageTitle'
 import { PortableTextComponents } from '../PortableTextComponents'

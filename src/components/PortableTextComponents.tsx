@@ -2,7 +2,7 @@ import { Image } from '@mantine/core'
 import { PortableTextReactComponents } from '@portabletext/react'
 import Link from 'next/link'
 
-import { BlockContentImage } from '~/types/SanitySchemaTypes'
+import { BlockContentImage } from '~/schemas/models/blockContent'
 
 export const PortableTextComponents: Partial<PortableTextReactComponents> = {
   marks: {

@@ -3,7 +3,7 @@
 import { Button, Group, Popover, Text } from '@mantine/core'
 import { useState } from 'react'
 
-import booking from '~/schemas/booking'
+import booking from '~/schemas/models/booking'
 
 interface IDeleteBooking {
   isDeleting: boolean

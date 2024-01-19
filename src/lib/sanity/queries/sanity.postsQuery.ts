@@ -1,7 +1,7 @@
 import { groq } from 'next-sanity'
 import { SanityClient } from 'sanity'
 
-import { Post } from '~/types/SanitySchemaTypes'
+import { Post } from '~/schemas/models/post'
 
 export const postsQuery = groq`*[_type == "post" && defined(slug.current)] | order(_createdAt desc)`
 export async function getPosts(client: SanityClient): Promise<Post[]> {

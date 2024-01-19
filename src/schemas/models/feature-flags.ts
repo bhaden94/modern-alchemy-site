@@ -1,5 +1,14 @@
 import { defineField, defineType } from 'sanity'
 
+import { BaseSanitySchema } from '..'
+
+export interface FeatureFlag extends BaseSanitySchema<'featureFlag'> {
+  title: string
+  key: string
+  description?: string
+  status: boolean
+}
+
 export default defineType({
   title: 'Feature Flag',
   name: 'featureFlag',

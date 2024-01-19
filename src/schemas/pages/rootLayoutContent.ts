@@ -1,4 +1,15 @@
-import { defineField, defineType } from 'sanity'
+import { defineField, defineType, ImageAsset } from 'sanity'
+
+import { BaseSanitySchema } from '..'
+
+export interface RootLayoutContent
+  extends BaseSanitySchema<'rootLayoutContent'> {
+  businessLogo: { asset: ImageAsset }
+  copywriteText: string
+  businessLogoCaption?: string
+  intagramLink?: string
+  facebookLink?: string
+}
 
 export default defineType({
   name: 'rootLayoutContent',

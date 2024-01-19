@@ -1,5 +1,6 @@
 import ArtistList from '~/components/Artists/ArtistList'
-import { Artist, ArtistsPageContent } from '~/types/SanitySchemaTypes'
+import { Artist } from '~/schemas/models/artist'
+import { ArtistsPageContent } from '~/schemas/pages/artistsPageContent'
 
 import PageTitle from '../PageTitle/PageTitle'
 

@@ -1,14 +1,12 @@
 import { groq } from 'next-sanity'
 import { SanityClient } from 'sanity'
 
-import {
-  AftercareInfoPageContent,
-  ArtistsPageContent,
-  BookingInfoPageContent,
-  FaqPageContent,
-  RootLayoutContent,
-  RootPageContent,
-} from '~/types/SanitySchemaTypes'
+import { AftercareInfoPageContent } from '~/schemas/pages/aftercareInfoPageContent'
+import { ArtistsPageContent } from '~/schemas/pages/artistsPageContent'
+import { BookingInfoPageContent } from '~/schemas/pages/bookingInfoPageContent'
+import { FaqPageContent } from '~/schemas/pages/faqPageContent'
+import { RootLayoutContent } from '~/schemas/pages/rootLayoutContent'
+import { RootPageContent } from '~/schemas/pages/rootPageContent'
 
 const rootPageContentQuery = groq`*[_type == "rootPageContent"][0]`
 export async function getRootPageContent(

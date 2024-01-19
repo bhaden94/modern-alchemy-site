@@ -1,5 +1,11 @@
 import { defineField, defineType } from 'sanity'
 
+import { BasePageContent, BaseSanitySchema } from '..'
+
+export interface ArtistsPageContent
+  extends BaseSanitySchema<'artistsPageContent'>,
+    BasePageContent {}
+
 export default defineType({
   name: 'artistsPageContent',
   type: 'document',

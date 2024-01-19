@@ -14,7 +14,7 @@ import {
 } from '@mantine/core'
 import { useState } from 'react'
 
-import { Booking } from '~/types/SanitySchemaTypes'
+import { Booking } from '~/schemas/models/booking'
 import { formatDate, formatPhoneNumber } from '~/utils'
 import {
   preferredDayOptions,

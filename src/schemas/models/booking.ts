@@ -1,4 +1,20 @@
-import { defineArrayMember, defineField, defineType } from 'sanity'
+import { defineArrayMember, defineField, defineType, ImageAsset } from 'sanity'
+
+import { BaseSanitySchema } from '..'
+
+export interface Booking extends BaseSanitySchema<'booking'> {
+  name: string
+  phoneNumber: string
+  email: string
+  characters: string
+  description: string
+  location: string
+  style: 'color' | 'black_and_grey'
+  priorTattoo: string
+  preferredDays: string[]
+  referenceImages: { asset: ImageAsset }[]
+  artist: any
+}
 
 export default defineType({
   name: 'booking',

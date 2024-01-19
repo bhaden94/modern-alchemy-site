@@ -1,4 +1,17 @@
-import { defineArrayMember, defineField, defineType } from 'sanity'
+import { defineArrayMember, defineField, defineType, TypedObject } from 'sanity'
+
+import { BasePageContent, BaseSanitySchema } from '..'
+
+interface Faq {
+  question: string
+  answer: TypedObject | TypedObject[]
+}
+
+export interface FaqPageContent
+  extends BaseSanitySchema<'faqPageContent'>,
+    BasePageContent {
+  faqs: Faq[]
+}
 
 export default defineType({
   name: 'faqPageContent',

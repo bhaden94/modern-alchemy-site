@@ -1,16 +1,16 @@
 import { SchemaTypeDefinition } from 'sanity'
 
-import aftercareInfoPageContent from './aftercareInfoPageContent'
-import artist from './artist'
-import artistsPageContent from './artistsPageContent'
-import blockContent from './blockContent'
-import booking from './booking'
-import bookingInfoPageContent from './bookingInfoPageContent'
-import faqPageContent from './faqPageContent'
-import featureFlags from './feature-flags'
-import post from './post'
-import rootLayoutContent from './rootLayoutContent'
-import rootPageContent from './rootPageContent'
+import artist from './models/artist'
+import blockContent from './models/blockContent'
+import booking from './models/booking'
+import featureFlags from './models/feature-flags'
+import post from './models/post'
+import aftercareInfoPageContent from './pages/aftercareInfoPageContent'
+import artistsPageContent from './pages/artistsPageContent'
+import bookingInfoPageContent from './pages/bookingInfoPageContent'
+import faqPageContent from './pages/faqPageContent'
+import rootLayoutContent from './pages/rootLayoutContent'
+import rootPageContent from './pages/rootPageContent'
 
 // TODO: figure out how to generate types to use in code
 export const schemaTypes = {
@@ -40,4 +40,14 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     bookingInfoPageContent,
     rootLayoutContent,
   ],
+}
+
+export type BaseSanitySchema<T extends string> = {
+  _type: T
+  _id: string
+  _createdAt: string
+}
+
+export type BasePageContent = {
+  pageTitle: string
 }

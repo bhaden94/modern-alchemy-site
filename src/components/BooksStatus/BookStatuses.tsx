@@ -1,4 +1,4 @@
-import { Artist } from '~/types/SanitySchemaTypes'
+import { Artist } from '~/schemas/models/artist'
 
 import ArtistBooksStatus from './ArtistBooksStatus'
 

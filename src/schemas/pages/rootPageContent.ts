@@ -1,5 +1,16 @@
 import { defineField, defineType } from 'sanity'
 
+import { BasePageContent, BaseSanitySchema } from '..'
+
+export interface RootPageContent
+  extends BaseSanitySchema<'rootPageContent'>,
+    BasePageContent {
+  heroDescription?: string
+  heroButtonText?: string
+  heroButtonLink?: string
+  homeContent?: string
+}
+
 export default defineType({
   name: 'rootPageContent',
   type: 'document',

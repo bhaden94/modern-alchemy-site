@@ -1,6 +1,6 @@
 'use client'
 
-import { Artist } from '~/types/SanitySchemaTypes'
+import { Artist } from '~/schemas/models/artist'
 
 import ArtistCard from './ArtistCard'
 

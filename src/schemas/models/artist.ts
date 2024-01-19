@@ -1,4 +1,23 @@
-import { defineArrayMember, defineField, defineType } from 'sanity'
+import { defineArrayMember, defineField, defineType, ImageAsset } from 'sanity'
+
+import { BaseSanitySchema } from '..'
+
+export enum Role {
+  OWNER = 'owner',
+  EMPLOYEE = 'employee',
+}
+
+export interface Artist extends BaseSanitySchema<'artist'> {
+  email: string
+  name: string
+  instagram: string
+  booksOpen: boolean
+  booksOpenAt: Date
+  headshot: { asset: ImageAsset }
+  styles: string[]
+  portfolioImages: { asset: ImageAsset }[]
+  role: Role
+}
 
 export default defineType({
   name: 'artist',

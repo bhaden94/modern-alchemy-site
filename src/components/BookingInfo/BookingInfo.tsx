@@ -3,7 +3,8 @@
 import { Text } from '@mantine/core'
 import { PortableText } from '@portabletext/react'
 
-import { Artist, BookingInfoPageContent } from '~/types/SanitySchemaTypes'
+import { Artist } from '~/schemas/models/artist'
+import { BookingInfoPageContent } from '~/schemas/pages/bookingInfoPageContent'
 
 import BookStatuses from '../BooksStatus/BookStatuses'
 import PageTitle from '../PageTitle/PageTitle'

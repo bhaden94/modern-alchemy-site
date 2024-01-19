@@ -4,7 +4,7 @@ import { Badge, Button, Card, Group, Text } from '@mantine/core'
 import Image from 'next/image'
 import Link from 'next/link'
 
-import { Artist } from '~/types/SanitySchemaTypes'
+import { Artist } from '~/schemas/models/artist'
 import { generateNextImagePlaceholder } from '~/utils'
 import { NavigationPages } from '~/utils/navigation'
 
