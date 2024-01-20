@@ -5,6 +5,7 @@ import '@mantine/carousel/styles.css'
 import '@mantine/dates/styles.css'
 
 import { ColorSchemeScript } from '@mantine/core'
+import { Metadata } from 'next'
 
 import Footer from '~/components/Footer/Footer'
 import Header from '~/components/Header/Header'
@@ -15,7 +16,6 @@ import {
 } from '~/lib/sanity/queries/sanity.pageContentQueries'
 import { getClient } from '~/lib/sanity/sanity.client'
 import { colorScheme } from '~/utils/theme'
-import { Metadata } from 'next'
 
 export async function generateMetadata(): Promise<Metadata> {
   const client = getClient(undefined)

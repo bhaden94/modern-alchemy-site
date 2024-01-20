@@ -1,9 +1,8 @@
-import { Button, Container, Group,Text, Title } from '@mantine/core'
+import { Button, Container, Group, Text, Title } from '@mantine/core'
 import Link from 'next/link'
 
-import { NavigationPages } from '~/utils/navigation'
-
 import classes from '~/components/PageInProgress/PageInProgress.module.css'
+import { NavigationPages } from '~/utils/navigation'
 
 const NotFound = () => {
   return (

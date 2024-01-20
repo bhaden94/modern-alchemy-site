@@ -9,9 +9,9 @@ import aftercareInfoPageContent from './pages/aftercareInfoPageContent'
 import artistsPageContent from './pages/artistsPageContent'
 import bookingInfoPageContent from './pages/bookingInfoPageContent'
 import faqPageContent from './pages/faqPageContent'
+import layoutMetadataContent from './pages/layoutMetadataContent'
 import rootLayoutContent from './pages/rootLayoutContent'
 import rootPageContent from './pages/rootPageContent'
-import layoutMetadataContent from './pages/layoutMetadataContent'
 
 // TODO: figure out how to generate types to use in code
 export const schemaTypes = {
