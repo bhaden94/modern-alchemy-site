@@ -1,21 +1,22 @@
 'use client'
 
+import { Button } from '@mantine/core'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { signIn } from 'next-auth/react'
+import { Suspense } from 'react'
 
 import PageContainer from '~/components/PageContainer'
 import { REDIRECT_URL } from '~/lib/next-auth/auth.utils'
 import { NavigationPages } from '~/utils/navigation'
 
-// TODO: fix error - Entire page /unauthorized deopted into client-side rendering. https://nextjs.org/docs/messages/deopted-into-client-rendering /unauthorized
-export default function UnauthorizedPage() {
+const Unauthorized = () => {
   const searchParams = useSearchParams()
 
   return (
-    <PageContainer>
+    <>
       <p>You are not authorized to view this page.</p>
-      <button
+      <Button
         onClick={() =>
           signIn(undefined, {
             callbackUrl: searchParams?.get(REDIRECT_URL) || undefined,
@@ -23,8 +24,18 @@ export default function UnauthorizedPage() {
         }
       >
         Sign with a different account
-      </button>
+      </Button>
       <Link href={NavigationPages.Home}>Home</Link>
+    </>
+  )
+}
+
+export default function UnauthorizedPage() {
+  return (
+    <PageContainer>
+      <Suspense>
+        <Unauthorized />
+      </Suspense>
     </PageContainer>
   )
 }
