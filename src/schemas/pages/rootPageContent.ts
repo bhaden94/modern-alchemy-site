@@ -14,12 +14,17 @@ export interface RootPageContent
 export default defineType({
   name: 'rootPageContent',
   type: 'document',
-  title: 'Root Page Text',
+  title: 'Root Page Content',
   fields: [
     defineField({
       name: 'pageTitle',
       type: 'string',
       title: 'Page Title',
+    }),
+    defineField({
+      name: 'isActive',
+      type: 'boolean',
+      title: 'Page Active Status',
     }),
     defineField({
       name: 'heroDescription',

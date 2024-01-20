@@ -11,12 +11,17 @@ export interface BookingInfoPageContent
 export default defineType({
   name: 'bookingInfoPageContent',
   type: 'document',
-  title: 'Booking Info Page Text',
+  title: 'Booking Info Page Content',
   fields: [
     defineField({
       name: 'pageTitle',
       type: 'string',
       title: 'Page Title',
+    }),
+    defineField({
+      name: 'isActive',
+      type: 'boolean',
+      title: 'Page Active Status',
     }),
     defineField({
       name: 'information',

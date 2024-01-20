@@ -1,5 +1,6 @@
 import BookingInfo from '~/components/BookingInfo/BookingInfo'
 import PageContainer from '~/components/PageContainer'
+import PageInProgress from '~/components/PageInProgress/PageInProgress'
 import { getArtists } from '~/lib/sanity/queries/sanity.artistsQuery'
 import { getBookingInfoPageContent } from '~/lib/sanity/queries/sanity.pageContentQueries'
 import { getClient } from '~/lib/sanity/sanity.client'
@@ -10,6 +11,10 @@ const BookingInfoPage = async () => {
   const artists = await getArtists(client)
 
   if (!content) return undefined
+
+  if (!content.isActive) {
+    return <PageInProgress />
+  }
 
   return (
     <PageContainer>

@@ -11,12 +11,17 @@ export interface AftercareInfoPageContent
 export default defineType({
   name: 'aftercareInfoPageContent',
   type: 'document',
-  title: 'Aftercare Info Page Text',
+  title: 'Aftercare Info Page Content',
   fields: [
     defineField({
       name: 'pageTitle',
       type: 'string',
       title: 'Page Title',
+    }),
+    defineField({
+      name: 'isActive',
+      type: 'boolean',
+      title: 'Page Active Status',
     }),
     defineField({
       name: 'information',

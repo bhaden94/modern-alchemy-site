@@ -17,9 +17,9 @@ interface NavigationLink {
 export const NavLinks: NavigationLink[] = [
   { link: NavigationPages.Home, label: 'Home' },
   { link: NavigationPages.Artists, label: 'Artists' },
-  { link: NavigationPages.BookingInfo, label: 'Booking Info' },
-  { link: NavigationPages.Faqs, label: 'FAQs' },
-  { link: NavigationPages.AftercareInfo, label: 'Aftercare Info' },
+  // { link: NavigationPages.BookingInfo, label: 'Booking Info' },
+  // { link: NavigationPages.Faqs, label: 'FAQs' },
+  // { link: NavigationPages.AftercareInfo, label: 'Aftercare Info' },
 ]
 
 export const ExtraNavLinks: NavigationLink[] = [

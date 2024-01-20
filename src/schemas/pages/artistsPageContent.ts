@@ -9,12 +9,17 @@ export interface ArtistsPageContent
 export default defineType({
   name: 'artistsPageContent',
   type: 'document',
-  title: 'Artists Page Text',
+  title: 'Artists Page Content',
   fields: [
     defineField({
       name: 'pageTitle',
       type: 'string',
       title: 'Page Title',
+    }),
+    defineField({
+      name: 'isActive',
+      type: 'boolean',
+      title: 'Page Active Status',
     }),
   ],
 })

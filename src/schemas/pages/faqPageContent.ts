@@ -16,12 +16,17 @@ export interface FaqPageContent
 export default defineType({
   name: 'faqPageContent',
   type: 'document',
-  title: 'FAQ Page Text',
+  title: 'FAQ Page Content',
   fields: [
     defineField({
       name: 'pageTitle',
       type: 'string',
       title: 'Page Title',
+    }),
+    defineField({
+      name: 'isActive',
+      type: 'boolean',
+      title: 'Page Active Status',
     }),
     defineField({
       name: 'faqs',
