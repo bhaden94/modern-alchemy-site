@@ -62,8 +62,9 @@ const ShowWhenBooksOpen = ({
   return (
     <Link
       href={`${NavigationPages.BookingRequest}/${encodeURIComponent(artistId)}`}
+      passHref
     >
-      <Text>{artistName}:&nbsp;Click to book now</Text>
+      <Text component="a">{artistName}:&nbsp;Click to book now</Text>
     </Link>
   )
 }

@@ -45,13 +45,15 @@ const ArtistCard = ({ artist, showPortfolioLink }: IArtistCard) => {
 
       {showPortfolioLink ? (
         <Group justify="center" mt="auto" pb={6} pt={18}>
-          <Link
+          <Button
+            component={Link}
             href={`${NavigationPages.Artists}/${encodeURIComponent(
               artist._id,
             )}`}
+            radius="sm"
           >
-            <Button radius="sm">View Portfolio</Button>
-          </Link>
+            View Portfolio
+          </Button>
         </Group>
       ) : (
         <ArtistCardBookingRequest artist={artist} />

@@ -19,12 +19,10 @@ const ArtistPortfolio = ({ artist }: IBookingInfo) => {
   return (
     <>
       <PageTitle title={`${artist.name} Portfolio`} />
-      <Link href={NavigationPages.Artists}>
-        <Button variant="outline">
-          <IconArrowLeft />
-          Back to artists
-        </Button>
-      </Link>
+      <Button component={Link} href={NavigationPages.Artists} variant="outline">
+        <IconArrowLeft />
+        Back to artists
+      </Button>
       <div className="grid grid-cols-1 md:grid-cols-5 gap-8 my-8">
         <div className="md:col-span-2 justify-self-center">
           <ArtistCard artist={artist} />

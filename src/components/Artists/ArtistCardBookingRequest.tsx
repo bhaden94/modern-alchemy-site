@@ -31,13 +31,15 @@ const ShowWhenBooksClosed = ({ booksOpenAt }: { booksOpenAt: DateValue }) => {
 const ShowWhenBooksOpen = ({ artistId }: { artistId: string }) => {
   return (
     <Group justify="center" mt="auto" pb={6} pt={18}>
-      <Link
+      <Button
+        component={Link}
         href={`${NavigationPages.BookingRequest}/${encodeURIComponent(
           artistId,
         )}`}
+        radius="sm"
       >
-        <Button radius="sm">submit booking request</Button>
-      </Link>
+        submit booking request
+      </Button>
     </Group>
   )
 }

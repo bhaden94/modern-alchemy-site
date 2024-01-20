@@ -42,16 +42,16 @@ const Hero = ({ title, description, buttonText, buttonLink }: IHero) => {
           </Text>
         ) : undefined}
 
-        <Link href={buttonLink || NavigationPages.Artists}>
-          <Button
-            variant="gradient"
-            size="xl"
-            radius="xl"
-            className={classes.control}
-          >
-            {buttonText || 'View our artists'}
-          </Button>
-        </Link>
+        <Button
+          component={Link}
+          href={buttonLink || NavigationPages.Artists}
+          variant="gradient"
+          size="xl"
+          radius="xl"
+          className={classes.control}
+        >
+          {buttonText || 'View our artists'}
+        </Button>
       </Container>
     </div>
   )

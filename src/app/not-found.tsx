@@ -16,9 +16,9 @@ const NotFound = () => {
       <Group justify="center">
         <Button
           component={Link}
+          href={NavigationPages.Home}
           variant="subtle"
           size="md"
-          href={NavigationPages.Home}
         >
           Take me back to home page
         </Button>
