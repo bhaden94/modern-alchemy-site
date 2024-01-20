@@ -9,9 +9,25 @@ import { ColorSchemeScript } from '@mantine/core'
 import Footer from '~/components/Footer/Footer'
 import Header from '~/components/Header/Header'
 import Providers from '~/components/Providers'
-import { getRootLayoutContent } from '~/lib/sanity/queries/sanity.pageContentQueries'
+import {
+  getLayoutMetadata,
+  getRootLayoutContent,
+} from '~/lib/sanity/queries/sanity.pageContentQueries'
 import { getClient } from '~/lib/sanity/sanity.client'
 import { colorScheme } from '~/utils/theme'
+import { Metadata } from 'next'
+
+export async function generateMetadata(): Promise<Metadata> {
+  const client = getClient(undefined)
+  const metadata = await getLayoutMetadata(client)
+
+  if (!metadata) return {}
+
+  return {
+    title: metadata.businessName,
+    description: metadata.description,
+  }
+}
 
 export default async function RootLayout({
   children,

@@ -11,6 +11,7 @@ import bookingInfoPageContent from './pages/bookingInfoPageContent'
 import faqPageContent from './pages/faqPageContent'
 import rootLayoutContent from './pages/rootLayoutContent'
 import rootPageContent from './pages/rootPageContent'
+import layoutMetadataContent from './pages/layoutMetadataContent'
 
 // TODO: figure out how to generate types to use in code
 export const schemaTypes = {
@@ -25,6 +26,7 @@ export const schemaTypes = {
   artistsPageContent,
   bookingInfoPageContent,
   rootLayoutContent,
+  layoutMetadataContent,
 }
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -39,6 +41,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     artistsPageContent,
     bookingInfoPageContent,
     rootLayoutContent,
+    layoutMetadataContent,
   ],
 }
 

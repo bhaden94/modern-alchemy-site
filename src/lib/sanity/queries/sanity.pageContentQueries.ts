@@ -5,6 +5,7 @@ import { AftercareInfoPageContent } from '~/schemas/pages/aftercareInfoPageConte
 import { ArtistsPageContent } from '~/schemas/pages/artistsPageContent'
 import { BookingInfoPageContent } from '~/schemas/pages/bookingInfoPageContent'
 import { FaqPageContent } from '~/schemas/pages/faqPageContent'
+import { LayoutMetadataContent } from '~/schemas/pages/layoutMetadataContent'
 import { RootLayoutContent } from '~/schemas/pages/rootLayoutContent'
 import { RootPageContent } from '~/schemas/pages/rootPageContent'
 
@@ -121,6 +122,19 @@ export async function getRootLayoutContent(
 ): Promise<RootLayoutContent> {
   return await client.fetch(
     rootLayoutContentQuery,
+    {},
+    {
+      cache: 'no-cache',
+    },
+  )
+}
+
+const layoutMetadataQuery = groq`*[_type == "layoutMetadataContent"][0]`
+export async function getLayoutMetadata(
+  client: SanityClient,
+): Promise<LayoutMetadataContent> {
+  return await client.fetch(
+    layoutMetadataQuery,
     {},
     {
       cache: 'no-cache',
