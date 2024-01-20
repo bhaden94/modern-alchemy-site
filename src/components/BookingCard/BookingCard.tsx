@@ -200,6 +200,7 @@ export default function BookingCard({ booking }: IBookingCardProps) {
       <DeleteBooking
         isDeleting={isDeleting}
         deleteBookingById={deleteBookingById}
+        bookingName={booking.name}
       />
     </Card>
   )

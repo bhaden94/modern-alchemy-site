@@ -3,14 +3,17 @@
 import { Button, Group, Popover, Text } from '@mantine/core'
 import { useState } from 'react'
 
-import booking from '~/schemas/models/booking'
-
 interface IDeleteBooking {
   isDeleting: boolean
   deleteBookingById: () => void
+  bookingName: string
 }
 
-const DeleteBooking = ({ isDeleting, deleteBookingById }: IDeleteBooking) => {
+const DeleteBooking = ({
+  isDeleting,
+  deleteBookingById,
+  bookingName,
+}: IDeleteBooking) => {
   const [popoverOpened, setPopoverOpened] = useState(false)
 
   const deleteConfirmed = () => {
@@ -40,7 +43,7 @@ const DeleteBooking = ({ isDeleting, deleteBookingById }: IDeleteBooking) => {
       </Popover.Target>
       <Popover.Dropdown className="flex flex-col">
         <Text>
-          Are you sure you want to delete the booking for {booking.name}?
+          Are you sure you want to delete the booking for {bookingName}?
         </Text>
         <Group justify="center">
           <Button
