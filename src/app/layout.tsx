@@ -5,6 +5,7 @@ import '@mantine/carousel/styles.css'
 import '@mantine/dates/styles.css'
 
 import { ColorSchemeScript } from '@mantine/core'
+import { Analytics } from '@vercel/analytics/react'
 import { Metadata } from 'next'
 
 import Footer from '~/components/Footer/Footer'
@@ -54,6 +55,7 @@ export default async function RootLayout({
             facebook={content.facebookLink}
           />
         </Providers>
+        <Analytics />
       </body>
     </html>
   )

@@ -27,6 +27,7 @@
     "@sanity/vision": "3.20.0",
     "@tabler/icons-react": "^2.44.0",
     "@tailwindcss/typography": "0.5.10",
+    "@vercel/analytics": "^1.1.2",
     "dayjs": "^1.11.10",
     "embla-carousel-react": "^7.1.0",
     "framer-motion": "^10.16.16",
