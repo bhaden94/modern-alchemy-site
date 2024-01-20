@@ -1,3 +1,5 @@
+import { notFound } from 'next/navigation'
+
 import BookStatuses from '~/components/BooksStatus/BookStatuses'
 import PageContainer from '~/components/PageContainer'
 import PageTitle from '~/components/PageTitle/PageTitle'
@@ -23,7 +25,7 @@ const ArtistBookingRequestPage = async ({
   const client = getClient(undefined)
   const artist = await getArtistById(client, decodeURI(params.id))
 
-  if (!artist) return <PageContainer>404</PageContainer>
+  if (!artist) return notFound()
 
   return (
     <PageContainer>

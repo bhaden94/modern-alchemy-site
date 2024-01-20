@@ -1,3 +1,5 @@
+import { notFound } from 'next/navigation'
+
 import ArtistPortfolio from '~/components/ArtistPortfolio/ArtistPortfolio'
 import PageContainer from '~/components/PageContainer'
 import {
@@ -16,7 +18,7 @@ const ArtistPortfolioPage = async ({ params }: { params: { id: string } }) => {
   const client = getClient(undefined)
   const artist = await getArtistById(client, decodeURI(params.id))
 
-  if (!artist) return <div>404</div>
+  if (!artist) return notFound()
 
   return (
     <PageContainer>

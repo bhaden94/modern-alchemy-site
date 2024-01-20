@@ -1,3 +1,5 @@
+import { notFound } from 'next/navigation'
+
 import AftercareInfo from '~/components/AftercareInfo/AftercareInfo'
 import PageContainer from '~/components/PageContainer'
 import PageInProgress from '~/components/PageInProgress/PageInProgress'
@@ -8,7 +10,7 @@ const AftercareInfoPage = async () => {
   const client = getClient(undefined)
   const content = await getAftercareInfoPageContent(client)
 
-  if (!content) return undefined
+  if (!content) return notFound()
 
   if (!content.isActive) {
     return <PageInProgress />

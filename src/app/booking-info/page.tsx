@@ -1,3 +1,5 @@
+import { notFound } from 'next/navigation'
+
 import BookingInfo from '~/components/BookingInfo/BookingInfo'
 import PageContainer from '~/components/PageContainer'
 import PageInProgress from '~/components/PageInProgress/PageInProgress'
@@ -10,7 +12,7 @@ const BookingInfoPage = async () => {
   const content = await getBookingInfoPageContent(client)
   const artists = await getArtists(client)
 
-  if (!content) return undefined
+  if (!content) return notFound()
 
   if (!content.isActive) {
     return <PageInProgress />

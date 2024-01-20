@@ -1,3 +1,5 @@
+import { notFound } from 'next/navigation'
+
 import Artists from '~/components/Artists/Artists'
 import PageContainer from '~/components/PageContainer'
 import PageInProgress from '~/components/PageInProgress/PageInProgress'
@@ -12,7 +14,7 @@ const ArtistsShowcasePage = async () => {
 
   const [artists, content] = await Promise.all([artistsData, contentData])
 
-  if (!content) return undefined
+  if (!content) return notFound()
 
   if (!content.isActive) {
     return <PageInProgress />
