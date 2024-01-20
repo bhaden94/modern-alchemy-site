@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 import { NavigationPages } from '~/utils/navigation'
 
-import classes from '../components/PageInProgress/PageInProgress.module.css'
+import classes from '~/components/PageInProgress/PageInProgress.module.css'
 
 const NotFound = () => {
   return (
