@@ -1,8 +1,10 @@
+import { PortableText } from '@portabletext/react'
 import { notFound } from 'next/navigation'
 
 import BookStatuses from '~/components/BooksStatus/BookStatuses'
 import PageContainer from '~/components/PageContainer'
 import PageTitle from '~/components/PageTitle/PageTitle'
+import { PortableTextComponents } from '~/components/PortableTextComponents'
 import {
   getArtistById,
   getArtists,
@@ -15,8 +17,6 @@ export const generateStaticParams = async () => {
   return artists.map((artist) => ({ id: artist._id }))
 }
 
-// TODO: Add artist form submission instructions to schema and on this page
-// This way each artist can have their own instructions for the information they are looking for
 const ArtistBookingRequestPage = async ({
   params,
 }: {
@@ -30,6 +30,10 @@ const ArtistBookingRequestPage = async ({
   return (
     <PageContainer>
       <PageTitle title={`Booking with ${artist.name}`} />
+      <PortableText
+        value={artist.bookingInstructions}
+        components={PortableTextComponents}
+      />
       <BookStatuses artists={[artist]} showForm />
     </PageContainer>
   )

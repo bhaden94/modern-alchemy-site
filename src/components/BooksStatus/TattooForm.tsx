@@ -284,6 +284,9 @@ const TattooForm = ({ artistId }: ITattooForm) => {
                 error={formState.errors.description?.message}
                 disabled={isSubmitting}
                 {...register(BookingField.Description)}
+                autosize
+                minRows={3}
+                maxRows={8}
               />
 
               {/* Images */}

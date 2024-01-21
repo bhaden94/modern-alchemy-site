@@ -1,4 +1,10 @@
-import { defineArrayMember, defineField, defineType, ImageAsset } from 'sanity'
+import {
+  defineArrayMember,
+  defineField,
+  defineType,
+  ImageAsset,
+  TypedObject,
+} from 'sanity'
 
 import { BaseSanitySchema } from '..'
 
@@ -13,6 +19,7 @@ export interface Artist extends BaseSanitySchema<'artist'> {
   instagram: string
   booksOpen: boolean
   booksOpenAt: Date
+  bookingInstructions: TypedObject | TypedObject[]
   headshot: { asset: ImageAsset }
   styles: string[]
   portfolioImages: { asset: ImageAsset }[]
@@ -49,6 +56,11 @@ export default defineType({
       name: 'booksOpenAt',
       type: 'datetime',
       title: 'Books Open At',
+    }),
+    defineField({
+      name: 'bookingInstructions',
+      title: 'Booking Instructions',
+      type: 'blockContent',
     }),
     defineField({
       name: 'headshot',
