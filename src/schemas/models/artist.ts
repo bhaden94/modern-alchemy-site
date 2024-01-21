@@ -16,7 +16,7 @@ export enum Role {
 export interface Artist extends BaseSanitySchema<'artist'> {
   email: string
   name: string
-  instagram: string
+  socials: { label: string; link: string }[]
   booksOpen: boolean
   booksOpenAt: Date
   bookingInstructions: TypedObject | TypedObject[]
@@ -42,9 +42,28 @@ export default defineType({
       title: 'Name',
     }),
     defineField({
-      name: 'instagram',
-      type: 'string',
-      title: 'Instagram',
+      name: 'socials',
+      type: 'array',
+      title: 'Social Links',
+      of: [
+        defineArrayMember({
+          title: 'Social Link',
+          type: 'object',
+          name: 'socialLink',
+          fields: [
+            {
+              name: 'label',
+              type: 'string',
+              title: 'Lable',
+            },
+            {
+              name: 'link',
+              type: 'string',
+              title: 'Link',
+            },
+          ],
+        }),
+      ],
     }),
     defineField({
       name: 'booksOpen',

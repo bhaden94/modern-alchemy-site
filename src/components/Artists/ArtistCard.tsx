@@ -1,6 +1,6 @@
 'use client'
 
-import { Badge, Button, Card, Group, Text } from '@mantine/core'
+import { Anchor, Badge, Button, Card, Group, Text } from '@mantine/core'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -32,6 +32,22 @@ const ArtistCard = ({ artist, showPortfolioLink }: IArtistCard) => {
         <Text size="xl" fw={700}>
           {artist.name}
         </Text>
+      </Group>
+
+      {artist.socials?.length > 0 ? <Text>Socials</Text> : undefined}
+      <Group py={6}>
+        {artist.socials?.map((social) => (
+          <Anchor
+            component={Link}
+            key={social.label}
+            href={social.link}
+            underline="hover"
+            target="_blank"
+            c="primary"
+          >
+            {social.label}
+          </Anchor>
+        ))}
       </Group>
 
       {artist.styles?.length > 0 ? <Text>Styles</Text> : undefined}
