@@ -25,7 +25,7 @@ const Header = ({ logo }: { logo: ImageAsset }) => {
   const [opened, { toggle, close }] = useDisclosure(false)
 
   const items = NavLinks.map(({ link, label }) => (
-    <a
+    <Link
       key={label}
       href={link}
       className={classes.link}
@@ -37,14 +37,14 @@ const Header = ({ logo }: { logo: ImageAsset }) => {
       }}
     >
       {label}
-    </a>
+    </Link>
   ))
 
   return (
     <header className={classes.header}>
       <Container size="md" className={classes.inner}>
         <Link href={NavigationPages.Home} className="flex">
-          <Image src={logo.url} alt="Business logo" width={100} height={40} />
+          <Image src={logo.url} alt="Business logo" width={220} height={84} />
         </Link>
         <Group gap={5} visibleFrom="xs">
           {items}
@@ -59,8 +59,13 @@ const Header = ({ logo }: { logo: ImageAsset }) => {
             ))}
           </List>
         </Drawer>
-
-        <Burger opened={opened} onClick={toggle} hiddenFrom="xs" size="sm" />
+        <Burger
+          opened={opened}
+          onClick={toggle}
+          className={classes.burger}
+          hiddenFrom="xs"
+          size="md"
+        />
       </Container>
     </header>
   )
