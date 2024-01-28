@@ -10,16 +10,27 @@ export async function PUT(request: NextRequest) {
   const body = await request.json()
 
   try {
+    console.log(`Start booking request create for ${body.name}: ${body.email}`)
+
     // Submit the form data to Sanity CMS
     const response = await client.create({
       _type: 'booking',
       ...body,
     })
 
-    return NextResponse.json({ status: 'okay' })
+    console.log('Booking created with data: ', response)
+
+    return NextResponse.json({ status: 'Success' })
   } catch (error) {
-    // TODO: handle errors
-    return NextResponse.json({ status: 'notOkay' })
+    console.error(`There was an error creating the booking for ${body.name}`)
+
+    return new NextResponse(
+      `There was an error creating the booking for ${body.name}`,
+      {
+        status: 500,
+        statusText: JSON.stringify(error),
+      },
+    )
   }
 }
 

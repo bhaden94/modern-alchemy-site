@@ -27,23 +27,35 @@ export async function PUT(
   const data = Object.fromEntries(await request.formData())
   const imagesArray = Array.from(Object.values(data))
 
-  // Upload images to Sanity and get their references
-  const imageReferences: ImageReference[] = await Promise.all(
-    imagesArray.map(async (image: FormDataEntryValue) => {
-      const imageData = await client.assets.upload('image', image as File)
-      return {
-        _key: imageData._id,
-        _type: 'image',
-        asset: {
-          _ref: imageData._id,
-          _type: 'reference',
-        },
-      }
-    }),
-  )
-  // TODO: handle errors
+  try {
+    console.log(`Start image upload for ${imagesArray.length} images.`)
 
-  return NextResponse.json({ imageReferences: imageReferences })
+    // Upload images to Sanity and get their references
+    const imageReferences: ImageReference[] = await Promise.all(
+      imagesArray.map(async (image: FormDataEntryValue) => {
+        const imageData = await client.assets.upload('image', image as File)
+        return {
+          _key: imageData._id,
+          _type: 'image',
+          asset: {
+            _ref: imageData._id,
+            _type: 'reference',
+          },
+        }
+      }),
+    )
+
+    console.log('Image references created: ', imageReferences)
+
+    return NextResponse.json({ imageReferences: imageReferences })
+  } catch (error) {
+    console.error('There was an error uploading images')
+
+    return new NextResponse(`There was an error uploading images`, {
+      status: 500,
+      statusText: JSON.stringify(error),
+    })
+  }
 }
 
 // TODO: Check request is coming from authenticated user

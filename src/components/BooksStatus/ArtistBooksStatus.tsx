@@ -1,9 +1,7 @@
 'use client'
 
-import { Loader, Text } from '@mantine/core'
+import { Text } from '@mantine/core'
 import { DateValue } from '@mantine/dates'
-import dynamic from 'next/dynamic'
-import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
 import {
@@ -11,25 +9,14 @@ import {
   listenForArtistsBookStatusChanges,
 } from '~/lib/sanity/queries/sanity.artistsQuery'
 import { getClient } from '~/lib/sanity/sanity.client'
-import { NavigationPages } from '~/utils/navigation'
 
 import BooksOpenAt from './BooksOpenAt'
+import ShowBooksOpen from './ShowBooksOpen'
 
 interface IBooksStatus {
   booksStatus: BooksStatus
   showForm?: boolean
 }
-
-const TattooForm = dynamic(
-  () => import('~/components/BooksStatus/TattooForm'),
-  {
-    loading: () => (
-      <div className="flex flex-col items-center">
-        <Loader />
-      </div>
-    ),
-  },
-)
 
 const ShowWhenBooksClosed = ({
   name,
@@ -43,29 +30,6 @@ const ShowWhenBooksClosed = ({
       <Text span>{name}:&nbsp;</Text>
       <BooksOpenAt date={booksOpenAt} />
     </div>
-  )
-}
-
-const ShowWhenBooksOpen = ({
-  showForm,
-  artistId,
-  artistName,
-}: {
-  showForm: boolean
-  artistId: string
-  artistName: string
-}) => {
-  if (showForm) {
-    return <TattooForm artistId={artistId} />
-  }
-
-  return (
-    <Link
-      href={`${NavigationPages.BookingRequest}/${encodeURIComponent(artistId)}`}
-      passHref
-    >
-      <Text component="a">{artistName}:&nbsp;Click to book now</Text>
-    </Link>
   )
 }
 
@@ -97,7 +61,7 @@ const ArtistBooksStatus = (props: IBooksStatus) => {
   return (
     <>
       {artistBooksStatus.booksOpen ? (
-        <ShowWhenBooksOpen
+        <ShowBooksOpen
           showForm={!!showForm}
           artistId={artistBooksStatus._id}
           artistName={artistBooksStatus.name}

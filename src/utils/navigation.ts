@@ -5,6 +5,8 @@ export enum NavigationPages {
   Faqs = '/faq',
   AftercareInfo = '/aftercare-info',
   BookingRequest = '/booking-request',
+  BookingRequestSuccess = '/booking-request/success',
+  BookingRequestFailure = '/booking-request/failure',
   EmployeePortal = '/bookings',
   Studio = '/studio',
 }
