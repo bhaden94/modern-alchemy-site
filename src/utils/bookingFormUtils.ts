@@ -76,6 +76,15 @@ const locationError =
   'Please enter where on your body you would like the tattoo'
 const preferredDayError = 'Please select at least 1 preferred day'
 
+/*
+Places to update for form changes:
+  - TattooForm component
+  - bookingFormUtils schema (this file)
+  - bookingFormUtil BookingField enum (this file)
+  - booking sanity model schema
+  - booking sanity model interface
+*/
+
 export const bookingSchema = z.object({
   name: z.string({ required_error: nameError }).min(1, nameError),
   phoneNumber: z
@@ -144,15 +153,15 @@ export const bookingSchema = z.object({
 // extracting the type
 export type TBookingSchema = z.infer<typeof bookingSchema>
 
-export enum BookingField {
-  Name = 'name',
-  PhoneNumber = 'phoneNumber',
-  Email = 'email',
-  Characters = 'characters',
-  Description = 'description',
-  Location = 'location',
-  Style = 'style',
-  PriorTattoo = 'priorTattoo',
-  PreferredDays = 'preferredDays',
-  ReferenceImages = 'referenceImages',
-}
+export const BookingField = {
+  Name: 'name',
+  PhoneNumber: 'phoneNumber',
+  Email: 'email',
+  Characters: 'characters',
+  Description: 'description',
+  Location: 'location',
+  Style: 'style',
+  PriorTattoo: 'priorTattoo',
+  PreferredDays: 'preferredDays',
+  ReferenceImages: 'referenceImages',
+} as const

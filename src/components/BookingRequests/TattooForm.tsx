@@ -58,6 +58,15 @@ interface ITattooForm {
   onFailure: (message?: string) => void
 }
 
+/*
+Places to update for form changes:
+  - TattooForm component (this file)
+  - bookingFormUtils schema
+  - bookingFormUtil BookingField enum
+  - booking sanity model schema
+  - booking sanity model interface
+*/
+
 // TODO: split into components
 // TODO: implement reCAPTCHA for form submission
 // TODO: implement Nodemailer to send email confirming form submission
@@ -156,8 +165,8 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
       <Box pos="relative">
         <LoadingOverlay
           visible={isSubmitting}
-          zIndex={1000}
-          overlayProps={{ radius: 'sm', blur: 2 }}
+          zIndex={150}
+          overlayProps={{ radius: 'sm', blur: 3, color: '#1F1F1F' }}
           loaderProps={{
             children: isUploadingImages ? (
               <CustomLoader label={'Uploading images'} />

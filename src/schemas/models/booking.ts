@@ -2,6 +2,15 @@ import { defineArrayMember, defineField, defineType, ImageAsset } from 'sanity'
 
 import { BaseSanitySchema } from '..'
 
+/*
+Places to update for form changes:
+  - TattooForm component
+  - bookingFormUtils schema
+  - bookingFormUtil BookingField enum
+  - booking sanity model schema (this file)
+  - booking sanity model interface (this file)
+*/
+
 export interface Booking extends BaseSanitySchema<'booking'> {
   name: string
   phoneNumber: string
