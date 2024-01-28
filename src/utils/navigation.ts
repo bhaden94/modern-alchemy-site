@@ -19,7 +19,7 @@ export const NavLinks: NavigationLink[] = [
   { link: NavigationPages.Artists, label: 'Artists' },
   // { link: NavigationPages.BookingInfo, label: 'Booking Info' },
   // { link: NavigationPages.Faqs, label: 'FAQs' },
-  // { link: NavigationPages.AftercareInfo, label: 'Aftercare Info' },
+  { link: NavigationPages.AftercareInfo, label: 'Aftercare Info' },
 ]
 
 export const ExtraNavLinks: NavigationLink[] = [
