@@ -1,9 +1,12 @@
 'use client'
 
-import { Loader, Text } from '@mantine/core'
+import { Alert, Dialog, Loader, Text } from '@mantine/core'
+import { useDisclosure } from '@mantine/hooks'
+import { IconInfoCircle } from '@tabler/icons-react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 import { NavigationPages } from '~/utils/navigation'
 
@@ -18,6 +21,11 @@ const TattooForm = dynamic(
   },
 )
 
+const icon = <IconInfoCircle />
+const generalFailureMessage = 'Something went wrong. Please try to re-submit.'
+const excessiveFailureMessage =
+  'Looks like the site is having trouble. Please reach out to the artist directly for further assistance.'
+
 const ShowBooksOpen = ({
   showForm,
   artistId,
@@ -28,8 +36,12 @@ const ShowBooksOpen = ({
   artistName: string
 }) => {
   const router = useRouter()
+  const [failuresCount, setFailuresCount] = useState(0)
+  const [failureMessage, setFailureMessage] = useState(generalFailureMessage)
+  const [opened, { open, close }] = useDisclosure(false)
 
   const onSuccess = () => {
+    close()
     router.push(
       `${NavigationPages.BookingRequestSuccess}?name=${encodeURIComponent(
         artistName,
@@ -37,29 +49,50 @@ const ShowBooksOpen = ({
     )
   }
 
-  const onFailure = () => {
-    // Instead of redirecting, maybe we just show an alert so the client can attempt to submit again
-    // After 2 retries we could show a dialog about reaching out to the artist for failures.
-    console.error('There was an error submitting the request')
-  }
+  const onFailure = (message?: string) => {
+    if (message) {
+      setFailureMessage(message)
+    }
 
-  if (showForm) {
-    return (
-      <TattooForm
-        artistId={artistId}
-        onSuccess={onSuccess}
-        onFailure={onFailure}
-      />
+    setFailureMessage(
+      failuresCount < 2 ? generalFailureMessage : excessiveFailureMessage,
     )
+    setFailuresCount(failuresCount + 1)
+    open()
   }
 
   return (
-    <Link
-      href={`${NavigationPages.BookingRequest}/${encodeURIComponent(artistId)}`}
-      passHref
-    >
-      <Text component="a">{artistName}:&nbsp;Click to book now</Text>
-    </Link>
+    <>
+      {showForm ? (
+        <TattooForm
+          artistId={artistId}
+          onSuccess={onSuccess}
+          onFailure={onFailure}
+        />
+      ) : (
+        <Text
+          component={Link}
+          href={`${NavigationPages.BookingRequest}/${encodeURIComponent(
+            artistId,
+          )}`}
+        >
+          {artistName}:&nbsp;Click to book now
+        </Text>
+      )}
+
+      <Dialog opened={opened} onClose={close} p={0}>
+        <Alert
+          icon={icon}
+          variant="filled"
+          color="red.9"
+          title="Bummer!"
+          withCloseButton
+          onClose={close}
+        >
+          {failureMessage}
+        </Alert>
+      </Dialog>
+    </>
   )
 }
 

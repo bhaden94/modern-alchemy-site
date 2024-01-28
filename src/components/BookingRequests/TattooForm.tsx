@@ -55,7 +55,7 @@ const CustomLoader = ({ label }: { label: string }) => {
 interface ITattooForm {
   artistId: string
   onSuccess: () => void
-  onFailure: () => void
+  onFailure: (message?: string) => void
 }
 
 // TODO: split into components
@@ -93,8 +93,15 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
       method: 'PUT',
       body: formData,
     })
-    // TODO: handle errors
-    const { imageReferences } = await imageUploadResponse.json()
+
+    let imageReferences: any = []
+    if (imageUploadResponse.ok) {
+      const imageJson = await imageUploadResponse.json()
+      imageReferences = imageJson.imageReferences
+    } else {
+      onFailure('There was a problem uploading images.')
+    }
+
     setIsUploadingImages(false)
     setIsSubmittingForm(true)
 
@@ -107,11 +114,10 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
         [BookingField.ReferenceImages]: imageReferences,
       }),
     })
-    // TODO: handle errors
 
     setIsSubmittingForm(false)
 
-    if (imageUploadResponse.ok && response.ok) {
+    if (response.ok) {
       reset()
       setImageFiles([])
       setPreferredDays([])

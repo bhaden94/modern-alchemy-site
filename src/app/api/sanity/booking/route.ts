@@ -4,7 +4,6 @@ import { getClient } from '~/lib/sanity/sanity.client'
 
 const token = process.env.SANITY_API_WRITE_TOKEN
 
-// TODO: improve responses for both routes
 export async function PUT(request: NextRequest) {
   const client = getClient(token)
   const body = await request.json()

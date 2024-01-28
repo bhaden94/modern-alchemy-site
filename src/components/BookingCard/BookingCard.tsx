@@ -1,12 +1,10 @@
 'use client'
 
 import {
+  Alert,
   Box,
-  Button,
   Card,
   Grid,
-  Group,
-  Popover,
   SimpleGrid,
   Text,
   Textarea,
@@ -75,7 +73,10 @@ export default function BookingCard({ booking }: IBookingCardProps) {
             <PortfolioCarousel images={booking.referenceImages} />
           </Box>
         ) : (
-          <Box />
+          <Alert title="Image Upload Issue" color="red.9">
+            There was an issue with images uploading for this booking request.
+            You may want to follow up with the requester.
+          </Alert>
         )}
         <Grid gutter="md">
           <Grid.Col span={{ base: 12, xl: 6 }}>
