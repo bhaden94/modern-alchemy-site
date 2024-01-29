@@ -1,13 +1,15 @@
 import { ComboboxItem } from '@mantine/core'
 import z from 'zod'
 
+import { formatPhoneNumber } from '.'
+
 const phoneRegex = new RegExp(
   /^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/,
 )
 
 const MIN_FILES = 2
 export const MAX_FILES = 5
-export const MAX_FILE_SIZE = 10485760 // 10MB
+export const MAX_FILE_SIZE = 15728640 // 15MB
 export const ACCEPTED_IMAGE_TYPES = [
   'image/png',
   'image/gif',
@@ -80,7 +82,7 @@ const preferredDayError = 'Please select at least 1 preferred day'
 Places to update for form changes:
   - TattooForm component
   - bookingFormUtils schema (this file)
-  - bookingFormUtil BookingField enum (this file)
+  - bookingFormUtil BookingField object (this file)
   - booking sanity model schema
   - booking sanity model interface
 */
@@ -150,18 +152,82 @@ export const bookingSchema = z.object({
   }),
 })
 
+const joinPrefferedDayLabels = (days: string[]): string => {
+  if (days.length === 5) {
+    return 'Any weekday'
+  }
+
+  const labels: string[] = []
+
+  preferredDayOptions.forEach((option) => {
+    if (days.includes(option.value)) {
+      labels.push(option.label)
+    }
+  })
+
+  return labels.join(', ')
+}
+
 // extracting the type
 export type TBookingSchema = z.infer<typeof bookingSchema>
 
 export const BookingField = {
-  Name: 'name',
-  PhoneNumber: 'phoneNumber',
-  Email: 'email',
-  Characters: 'characters',
-  Description: 'description',
-  Location: 'location',
-  Style: 'style',
-  PriorTattoo: 'priorTattoo',
-  PreferredDays: 'preferredDays',
-  ReferenceImages: 'referenceImages',
+  Name: {
+    id: 'name',
+    label: 'First and Last Name',
+    placeholder: 'Enter your full name',
+    getValue: (name: string) => name,
+  },
+  PhoneNumber: {
+    id: 'phoneNumber',
+    label: 'Phone Number',
+    placeholder: 'Enter your phone number',
+    getValue: (number: string) => formatPhoneNumber(number) || '',
+  },
+  Email: {
+    id: 'email',
+    label: 'Email',
+    placeholder: 'Enter your email',
+    getValue: (email: string) => email,
+  },
+  Characters: {
+    id: 'characters',
+    label: 'Characters or Subject',
+    placeholder: 'Example: Vegeta from DBZ',
+    getValue: (characters: string) => characters,
+  },
+  Location: {
+    id: 'location',
+    label: 'Location of Tattoo',
+    placeholder: 'Example: left inner forearm',
+    getValue: (location: string) => location,
+  },
+  Style: {
+    id: 'style',
+    label: 'Tattoo Style',
+    getValue: (style: string) =>
+      style === 'black_and_grey' ? 'Black & Grey' : 'Color',
+  },
+  PriorTattoo: {
+    id: 'priorTattoo',
+    label: 'Have you been tattoed by Larry before?',
+    getValue: (item: string) =>
+      priorTattooOptions.find((option) => option.value === item)?.label || 'No',
+  },
+  PreferredDays: {
+    id: 'preferredDays',
+    label: 'Preferred days of Appointment',
+    getValue: (days: string[]) => joinPrefferedDayLabels(days),
+  },
+  Description: {
+    id: 'description',
+    label: 'Description of your tattoo idea',
+    placeholder: 'Character portrait, action pose, bust or waist up.',
+    getValue: (description: string) => description,
+  },
+  ReferenceImages: {
+    id: 'referenceImages',
+    label: 'Reference Images',
+    getValue: () => '',
+  },
 } as const

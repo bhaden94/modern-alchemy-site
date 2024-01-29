@@ -13,34 +13,21 @@ import {
 import { useState } from 'react'
 
 import { Booking } from '~/schemas/models/booking'
-import { formatDate, formatPhoneNumber } from '~/utils'
-import {
-  preferredDayOptions,
-  priorTattooOptions,
-} from '~/utils/bookingFormUtils'
+import { formatDate } from '~/utils'
+import { BookingField } from '~/utils/bookingFormUtils'
 
 import PortfolioCarousel from '../PortfolioCarousel/PortfolioCarousel'
 import DeleteBooking from './DeleteBooking'
 import InputCopyButton from './InputCopyButton'
 
-interface IBookingCardProps {
-  booking: Booking
+interface BookingFieldProperty {
+  id: keyof Booking
+  label: string
+  getValue: (value: string) => string
 }
 
-const joinPrefferedDayLabels = (days: string[]): string => {
-  if (days.length === 5) {
-    return 'Any weekday'
-  }
-
-  const labels: string[] = []
-
-  preferredDayOptions.forEach((option) => {
-    if (days.includes(option.value)) {
-      labels.push(option.label)
-    }
-  })
-
-  return labels.join(', ')
+interface IBookingCardProps {
+  booking: Booking
 }
 
 export default function BookingCard({ booking }: IBookingCardProps) {
@@ -65,6 +52,55 @@ export default function BookingCard({ booking }: IBookingCardProps) {
     }
   }
 
+  const renderInput = (field: BookingFieldProperty) => {
+    return (
+      <TextInput
+        key={field.label}
+        label={<Text span>{field.label}</Text>}
+        value={field.getValue(booking[field.id])}
+        variant="filled"
+        readOnly
+        leftSectionPointerEvents="auto"
+        leftSection={
+          <InputCopyButton value={field.getValue(booking.location)} />
+        }
+      />
+    )
+  }
+
+  const renderComponent = (field: BookingFieldProperty) => {
+    switch (field.id) {
+      case BookingField.Description.id:
+        return (
+          <Textarea
+            key={field.label}
+            label={<Text span>{BookingField.Description.label}</Text>}
+            value={BookingField.Description.getValue(booking.description)}
+            variant="filled"
+            readOnly
+            autosize
+            minRows={2}
+            maxRows={8}
+            leftSectionPointerEvents="auto"
+            leftSection={
+              <InputCopyButton
+                value={BookingField.Description.getValue(booking.description)}
+              />
+            }
+          />
+        )
+      case BookingField.ReferenceImages.id:
+        return null
+      default:
+        return renderInput(field)
+    }
+  }
+
+  const BookingFieldsDisplay = () =>
+    Object.values(BookingField).map((field) =>
+      renderComponent(field as BookingFieldProperty),
+    )
+
   return (
     <Card withBorder radius="md" my={16}>
       <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
@@ -79,7 +115,7 @@ export default function BookingCard({ booking }: IBookingCardProps) {
           </Alert>
         )}
         <Grid gutter="md">
-          <Grid.Col span={{ base: 12, xl: 6 }}>
+          <Grid.Col>
             <TextInput
               label={<Text span>Submitted on</Text>}
               value={formatDate(booking._createdAt)}
@@ -90,111 +126,7 @@ export default function BookingCard({ booking }: IBookingCardProps) {
                 <InputCopyButton value={formatDate(booking._createdAt)} />
               }
             />
-            <TextInput
-              label={<Text span>Location</Text>}
-              value={booking.location}
-              variant="filled"
-              readOnly
-              leftSectionPointerEvents="auto"
-              leftSection={<InputCopyButton value={booking.location} />}
-            />
-            <TextInput
-              label={<Text span>Style</Text>}
-              value={
-                booking.style === 'black_and_grey' ? 'Black & Grey' : 'Color'
-              }
-              variant="filled"
-              readOnly
-              leftSectionPointerEvents="auto"
-              leftSection={
-                <InputCopyButton
-                  value={
-                    booking.style === 'black_and_grey'
-                      ? 'Black & Grey'
-                      : 'Color'
-                  }
-                />
-              }
-            />
-            <TextInput
-              label={<Text span>Prior Tattoo</Text>}
-              value={
-                priorTattooOptions.find(
-                  (option) => option.value === booking.priorTattoo,
-                )?.label
-              }
-              variant="filled"
-              readOnly
-              leftSectionPointerEvents="auto"
-              leftSection={
-                <InputCopyButton
-                  value={
-                    priorTattooOptions.find(
-                      (option) => option.value === booking.priorTattoo,
-                    )?.label || 'No'
-                  }
-                />
-              }
-            />
-          </Grid.Col>
-          <Grid.Col span={{ base: 12, xl: 6 }}>
-            <TextInput
-              label={<Text span>Phone Number</Text>}
-              value={formatPhoneNumber(booking.phoneNumber) || ''}
-              variant="filled"
-              readOnly
-              leftSectionPointerEvents="auto"
-              leftSection={<InputCopyButton value={booking.phoneNumber} />}
-            />
-            <TextInput
-              label={<Text span>Name</Text>}
-              value={booking.name}
-              variant="filled"
-              readOnly
-              leftSectionPointerEvents="auto"
-              leftSection={<InputCopyButton value={booking.name} />}
-            />
-            <TextInput
-              label={<Text span>Email</Text>}
-              value={booking.email}
-              variant="filled"
-              readOnly
-              leftSectionPointerEvents="auto"
-              leftSection={<InputCopyButton value={booking.email} />}
-            />
-          </Grid.Col>
-          <Grid.Col>
-            <TextInput
-              label={<Text span>Preferred Days</Text>}
-              value={joinPrefferedDayLabels(booking.preferredDays)}
-              variant="filled"
-              readOnly
-              leftSectionPointerEvents="auto"
-              leftSection={
-                <InputCopyButton
-                  value={joinPrefferedDayLabels(booking.preferredDays)}
-                />
-              }
-            />
-            <TextInput
-              label={<Text span>Characters</Text>}
-              value={booking.characters}
-              variant="filled"
-              readOnly
-              leftSectionPointerEvents="auto"
-              leftSection={<InputCopyButton value={booking.characters} />}
-            />
-            <Textarea
-              label={<Text span>Description</Text>}
-              value={booking.description}
-              variant="filled"
-              readOnly
-              autosize
-              minRows={2}
-              maxRows={8}
-              leftSectionPointerEvents="auto"
-              leftSection={<InputCopyButton value={booking.description} />}
-            />
+            <BookingFieldsDisplay />
           </Grid.Col>
         </Grid>
       </SimpleGrid>
