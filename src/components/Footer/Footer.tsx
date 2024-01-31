@@ -40,7 +40,7 @@ const Footer = (props: IFooter) => {
     <footer className={classes.footer}>
       <Container className="flex flex-col items-center sm:justify-between sm:flex-row">
         <div className="flex flex-col items-center sm:max-w-[200px] sm:items-start">
-          <Image src={logo.url} alt="Business logo" width={120} height={46} />
+          <Image src={logo?.url} alt="Business logo" width={120} height={46} />
           <Text size="xs" className="mt-1 text-center sm:text-left">
             {logoCaption || ''}
           </Text>
@@ -55,7 +55,7 @@ const Footer = (props: IFooter) => {
       >
         <Text size="sm" ta="center">
           ©&nbsp;
-          {copywriteText.replace(
+          {copywriteText?.replace(
             '{currentYear}',
             new Date().getFullYear().toString(),
           )}

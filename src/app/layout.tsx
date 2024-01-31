@@ -45,14 +45,14 @@ export default async function RootLayout({
       </head>
       <body className="flex min-h-screen flex-col">
         <Providers>
-          <Header logo={content.businessLogo.asset} />
+          <Header logo={content?.businessLogo.asset} />
           <div className="flex-1">{children}</div>
           <Footer
-            logo={content.businessLogo.asset}
-            copywriteText={content.copywriteText}
-            logoCaption={content.businessLogoCaption}
-            instagram={content.intagramLink}
-            facebook={content.facebookLink}
+            logo={content?.businessLogo.asset}
+            copywriteText={content?.copywriteText}
+            logoCaption={content?.businessLogoCaption}
+            instagram={content?.intagramLink}
+            facebook={content?.facebookLink}
           />
         </Providers>
         <Analytics />

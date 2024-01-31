@@ -15,6 +15,9 @@ export interface Booking extends BaseSanitySchema<'booking'> {
   name: string
   phoneNumber: string
   email: string
+  instagramName?: string
+  travelingFrom: string
+  age: number
   characters: string
   description: string
   location: string
@@ -44,6 +47,21 @@ export default defineType({
       name: 'email',
       type: 'string',
       title: 'Email',
+    }),
+    defineField({
+      name: 'instagramName',
+      type: 'string',
+      title: 'Instagram Name',
+    }),
+    defineField({
+      name: 'travelingFrom',
+      type: 'string',
+      title: 'Traveling From',
+    }),
+    defineField({
+      name: 'age',
+      type: 'number',
+      title: 'Age',
     }),
     defineField({
       name: 'characters',

@@ -44,7 +44,7 @@ const Header = ({ logo }: { logo: ImageAsset }) => {
     <header className={classes.header}>
       <Container size="md" className={classes.inner}>
         <Link href={NavigationPages.Home} className="flex">
-          <Image src={logo.url} alt="Business logo" width={220} height={84} />
+          <Image src={logo?.url} alt="Business logo" width={220} height={84} />
         </Link>
         <Group gap={5} visibleFrom="xs">
           {items}
