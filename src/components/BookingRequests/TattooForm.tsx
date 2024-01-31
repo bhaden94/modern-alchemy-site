@@ -182,82 +182,117 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
           {/* Name */}
           <TextInput
             {...inputSharedProps}
+            {...register(BookingField.Name.id)}
+            id={BookingField.Name.id}
             label={<Text span>{BookingField.Name.label}</Text>}
             placeholder={BookingField.Name.placeholder}
-            id={BookingField.Name.id}
             error={formState.errors.name?.message}
             disabled={isSubmitting}
-            {...register(BookingField.Name.id)}
           />
 
           {/* Phone Number */}
           <TextInput
             {...inputSharedProps}
+            {...register(BookingField.PhoneNumber.id)}
+            id={BookingField.PhoneNumber.id}
             label={<Text span>{BookingField.PhoneNumber.label}</Text>}
             placeholder={BookingField.Name.placeholder}
-            type="tel"
-            id={BookingField.PhoneNumber.id}
             error={formState.errors.phoneNumber?.message}
             disabled={isSubmitting}
-            {...register(BookingField.PhoneNumber.id)}
+            type="tel"
           />
 
           {/* Email */}
           <TextInput
             {...inputSharedProps}
+            {...register(BookingField.Email.id)}
+            id={BookingField.Email.id}
             label={<Text span>{BookingField.Email.label}</Text>}
             placeholder={BookingField.Email.placeholder}
-            type="email"
-            id={BookingField.Email.id}
             error={formState.errors.email?.message}
             disabled={isSubmitting}
-            {...register(BookingField.Email.id)}
+            type="email"
+          />
+
+          {/* Instagram Name */}
+          <TextInput
+            {...inputSharedProps}
+            {...register(BookingField.InstagramName.id)}
+            id={BookingField.InstagramName.id}
+            label={<Text span>{BookingField.InstagramName.label}</Text>}
+            placeholder={BookingField.InstagramName.placeholder}
+            error={formState.errors.instagramName?.message}
+            disabled={isSubmitting}
+            withAsterisk={false}
+          />
+
+          {/* Traveling From */}
+          <TextInput
+            {...inputSharedProps}
+            {...register(BookingField.TravelingFrom.id)}
+            id={BookingField.TravelingFrom.id}
+            label={<Text span>{BookingField.TravelingFrom.label}</Text>}
+            placeholder={BookingField.TravelingFrom.placeholder}
+            error={formState.errors.travelingFrom?.message}
+            disabled={isSubmitting}
+          />
+
+          {/* Age */}
+          <TextInput
+            {...inputSharedProps}
+            {...register(BookingField.Age.id)}
+            id={BookingField.Age.id}
+            label={<Text span>{BookingField.Age.label}</Text>}
+            placeholder={BookingField.Age.placeholder}
+            error={formState.errors.age?.message}
+            disabled={isSubmitting}
+            type="number"
           />
 
           {/* Characters */}
           <TextInput
             {...inputSharedProps}
+            {...register(BookingField.Characters.id)}
+            id={BookingField.Characters.id}
             label={<Text span>{BookingField.Characters.label}</Text>}
             placeholder={BookingField.Characters.placeholder}
-            id={BookingField.Characters.id}
             error={formState.errors.characters?.message}
             disabled={isSubmitting}
-            {...register(BookingField.Characters.id)}
           />
 
           {/* Location */}
           <TextInput
             {...inputSharedProps}
+            {...register(BookingField.Location.id)}
+            id={BookingField.Location.id}
             label={<Text span>{BookingField.Location.label}</Text>}
             placeholder={BookingField.Location.placeholder}
-            id={BookingField.Location.id}
             error={formState.errors.location?.message}
             disabled={isSubmitting}
-            {...register(BookingField.Location.id)}
           />
 
           {/* Style */}
           <NativeSelect
             {...inputSharedProps}
-            label={<Text span>{BookingField.Style.label}</Text>}
+            {...register(BookingField.Style.id)}
             id={BookingField.Style.id}
-            defaultValue="color"
-            data={styleOptions}
+            label={<Text span>{BookingField.Style.label}</Text>}
             error={formState.errors.style?.message}
             disabled={isSubmitting}
-            {...register(BookingField.Style.id)}
+            data={styleOptions}
+            defaultValue={styleOptions[0].value}
           />
 
           {/* Prior Tattoo */}
           <NativeSelect
             {...inputSharedProps}
-            label={<Text span>{BookingField.PriorTattoo.label}</Text>}
+            {...register(BookingField.PriorTattoo.id)}
             id={BookingField.PriorTattoo.id}
-            defaultValue="no"
-            data={priorTattooOptions}
+            label={<Text span>{BookingField.PriorTattoo.label}</Text>}
             error={formState.errors.priorTattoo?.message}
             disabled={isSubmitting}
-            {...register(BookingField.PriorTattoo.id)}
+            data={priorTattooOptions}
+            defaultValue={priorTattooOptions[0].value}
           />
 
           {/* Preferred Days */}
@@ -283,12 +318,12 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
           {/* Description */}
           <Textarea
             {...inputSharedProps}
+            {...register(BookingField.Description.id)}
+            id={BookingField.Description.id}
             label={<Text span>{BookingField.Description.label}</Text>}
             placeholder={BookingField.Description.placeholder}
-            id={BookingField.Description.id}
             error={formState.errors.description?.message}
             disabled={isSubmitting}
-            {...register(BookingField.Description.id)}
             autosize
             minRows={3}
             maxRows={8}

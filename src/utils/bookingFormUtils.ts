@@ -3,6 +3,22 @@ import z from 'zod'
 
 import { formatPhoneNumber } from '.'
 
+const joinPrefferedDayLabels = (days: string[]): string => {
+  if (days.length === 5) {
+    return 'Any weekday'
+  }
+
+  const labels: string[] = []
+
+  preferredDayOptions.forEach((option) => {
+    if (days.includes(option.value)) {
+      labels.push(option.label)
+    }
+  })
+
+  return labels.join(', ')
+}
+
 const phoneRegex = new RegExp(
   /^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/,
 )
@@ -72,6 +88,9 @@ const nameError = 'Please enter your full name'
 const phoneNumberRegexError = 'Invalid phone number'
 const phoneNumberError = 'Please enter your phone number'
 const emailError = 'Invalid email address'
+const travelingFromError = 'Please enter where you are coming from'
+const minAgeError = 'You must be at least 18 to get a tattoo'
+const maxAgeError = 'Congrats on being the oldest person in history!'
 const charactersError = 'Please enter the list of characters you would like'
 const descriptionError = 'Please describe your idea'
 const locationError =
@@ -94,6 +113,11 @@ export const bookingSchema = z.object({
     .min(1, phoneNumberError)
     .regex(phoneRegex, phoneNumberRegexError),
   email: z.string().email({ message: emailError }),
+  instagramName: z.string().optional(),
+  travelingFrom: z
+    .string({ required_error: travelingFromError })
+    .min(1, travelingFromError),
+  age: z.coerce.number().int().gte(18, minAgeError).lte(117, maxAgeError),
   characters: z
     .string({ required_error: charactersError })
     .min(1, charactersError),
@@ -152,22 +176,6 @@ export const bookingSchema = z.object({
   }),
 })
 
-const joinPrefferedDayLabels = (days: string[]): string => {
-  if (days.length === 5) {
-    return 'Any weekday'
-  }
-
-  const labels: string[] = []
-
-  preferredDayOptions.forEach((option) => {
-    if (days.includes(option.value)) {
-      labels.push(option.label)
-    }
-  })
-
-  return labels.join(', ')
-}
-
 // extracting the type
 export type TBookingSchema = z.infer<typeof bookingSchema>
 
@@ -189,6 +197,24 @@ export const BookingField = {
     label: 'Email',
     placeholder: 'Enter your email',
     getValue: (email: string) => email,
+  },
+  InstagramName: {
+    id: 'instagramName',
+    label: 'Instagram Name',
+    placeholder: 'Enter your Instagram if you would like',
+    getValue: (name: string) => name,
+  },
+  TravelingFrom: {
+    id: 'travelingFrom',
+    label: 'Where are you traveling from?',
+    placeholder: 'Enter the city and state',
+    getValue: (destination: string) => destination,
+  },
+  Age: {
+    id: 'age',
+    label: 'Age',
+    placeholder: 'Example: 18',
+    getValue: (age: string) => age,
   },
   Characters: {
     id: 'characters',
