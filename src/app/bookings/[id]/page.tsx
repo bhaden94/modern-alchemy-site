@@ -1,16 +1,16 @@
+import { redirect } from 'next/navigation'
 import { signOut } from 'next-auth/react'
 
 import AdminBooksStatus from '~/components/AdminBooksStatus/AdminBooksStatus'
 import PageContainer from '~/components/PageContainer'
 import PageTitle from '~/components/PageTitle/PageTitle'
+import { REDIRECT_URL } from '~/lib/next-auth/auth.utils'
 import { getArtistById } from '~/lib/sanity/queries/sanity.artistsQuery'
 import { getBookingsByArtistId } from '~/lib/sanity/queries/sanity.bookingsQuery'
 import { getClient } from '~/lib/sanity/sanity.client'
+import { NavigationPages } from '~/utils/navigation'
 
 import Bookings from '../bookings'
-import { NavigationPages } from '~/utils/navigation'
-import { redirect } from 'next/navigation'
-import { REDIRECT_URL } from '~/lib/next-auth/auth.utils'
 
 // TODO: generalize into an admin dashboard that shows artists requests for bookings
 // TODO: come up with what the admin can do on this dashboard

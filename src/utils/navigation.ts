@@ -9,6 +9,7 @@ export enum NavigationPages {
   BookingRequestFailure = '/booking-request/failure',
   EmployeePortal = '/bookings',
   Studio = '/studio',
+  Unauthorized = '/unauthorized',
 }
 
 interface NavigationLink {
