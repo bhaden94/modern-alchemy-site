@@ -17,9 +17,8 @@ const ImageErrors = ({
     <Alert
       variant="light"
       color="red"
-      title="Alert title"
+      title="Image Errors"
       icon={<IconExclamationCircle />}
-      onClose={() => console.log('close alert')}
     >
       <List icon="•">
         {imageUploadRejections.length > 0 ? (
