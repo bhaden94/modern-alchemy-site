@@ -17,6 +17,7 @@ interface IAdminBooksStatus {
   booksStatus: BooksStatus
 }
 
+// TODO: move to mantine form
 const AdminBooksStatus = ({ booksStatus }: IAdminBooksStatus) => {
   const { register, handleSubmit, formState, setValue } =
     useForm<TBooksStatusSchema>({ resolver: zodResolver(booksStatusSchema) })
