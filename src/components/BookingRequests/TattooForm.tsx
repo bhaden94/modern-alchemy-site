@@ -19,6 +19,7 @@ import { TextInput } from '@mantine/core'
 import { Textarea } from '@mantine/core'
 import { FileRejection, FileWithPath } from '@mantine/dropzone'
 import { useForm } from '@mantine/form'
+import imageCompression from 'browser-image-compression'
 import { zodResolver } from 'mantine-form-zod-resolver'
 import { useState } from 'react'
 
@@ -73,6 +74,7 @@ Places to update for form changes:
 // TODO: implement reCAPTCHA for form submission
 // TODO: implement Nodemailer to send email confirming form submission
 const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
+  const [isCompressingImages, setIsCompressingImages] = useState<boolean>(false)
   const [isUploadingImages, setIsUploadingImages] = useState<boolean>(false)
   const [isSubmittingForm, setIsSubmittingForm] = useState<boolean>(false)
 
@@ -147,12 +149,37 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
     setImageUploadRejections(rejections)
   }
 
-  const onImageDrop = (files: FileWithPath[]) => {
+  const onImageDrop = async (files: FileWithPath[]) => {
     form.clearFieldError(BookingField.ReferenceImages.id)
     setImageUploadRejections([])
+    setImageFiles([])
 
-    setImageFiles(files)
-    form.setValues({ [BookingField.ReferenceImages.id]: files })
+    files.forEach((imageFile) => {
+      console.log(`originalFile size ${imageFile.size / 1024 / 1024} MB`)
+    })
+
+    const options = {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 1920,
+      useWebWorker: true,
+    }
+    try {
+      setIsCompressingImages(true)
+      const filesPromises = files.map((file) => imageCompression(file, options))
+      const compressedImages = await Promise.all(filesPromises)
+
+      compressedImages.forEach((imageFile) => {
+        console.log(`compressedFile size ${imageFile.size / 1024 / 1024} MB`)
+      })
+      // TODO: raise error if all images uploaded are above 4.25 MB after compression
+
+      setImageFiles(compressedImages)
+      form.setValues({ [BookingField.ReferenceImages.id]: compressedImages })
+    } catch (error) {
+      console.error(error)
+    }
+
+    setIsCompressingImages(false)
   }
 
   const onImageRemove = (name: string) => {
@@ -167,7 +194,6 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
         <LoadingOverlay
           visible={isSubmitting}
           zIndex={150}
-          overlayProps={{ radius: 'sm', blur: 3, color: '#1F1F1F' }}
           loaderProps={{
             children: isUploadingImages ? (
               <CustomLoader label={'Uploading images'} />
@@ -340,6 +366,10 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
               disabled={isSubmitting}
               dropzoneProps={{
                 className: 'w-full',
+                loading: isCompressingImages,
+                loaderProps: {
+                  children: <CustomLoader label={'Compressing images'} />,
+                },
               }}
             />
             <ImageThumbnails
@@ -361,6 +391,7 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
             size="lg"
             variant="filled"
             type="submit"
+            disabled={isCompressingImages}
             loading={isSubmitting}
           >
             Send Request

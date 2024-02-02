@@ -6,6 +6,7 @@ import {
   DEFAULT_THEME,
   Input,
   Loader,
+  LoadingOverlay,
   mergeMantineTheme,
   Text,
 } from '@mantine/core'
@@ -95,6 +96,15 @@ const themeOverride = createTheme({
     Input: Input.extend({
       defaultProps: {
         size: 'xl',
+      },
+    }),
+    LoadingOverlay: LoadingOverlay.extend({
+      defaultProps: {
+        overlayProps: {
+          radius: 'sm',
+          blur: 3,
+          color: '#1F1F1F',
+        },
       },
     }),
   },

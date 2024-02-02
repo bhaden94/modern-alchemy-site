@@ -28,14 +28,7 @@ export const MAX_AGE = 117
 const MIN_FILES = 2
 export const MAX_FILES = 5
 export const MAX_FILE_SIZE = 15728640 // 15MB
-export const ACCEPTED_IMAGE_TYPES = [
-  'image/png',
-  'image/gif',
-  'image/jpeg',
-  'image/svg+xml',
-  'image/webp',
-  'image/avif',
-]
+export const ACCEPTED_IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/webp']
 
 export const styleOptions: ComboboxItem[] = [
   {

@@ -6,13 +6,16 @@ import {
   DropzoneProps,
   FileRejection,
   FileWithPath,
-  IMAGE_MIME_TYPE,
 } from '@mantine/dropzone'
 import { IconPhoto, IconUpload, IconX } from '@tabler/icons-react'
 import { useRef } from 'react'
 
 import { formatBytes } from '~/utils'
-import { MAX_FILE_SIZE, MAX_FILES } from '~/utils/bookingFormUtils'
+import {
+  ACCEPTED_IMAGE_TYPES,
+  MAX_FILE_SIZE,
+  MAX_FILES,
+} from '~/utils/bookingFormUtils'
 
 interface ImageDropzoneProps {
   onImageDrop: (files: FileWithPath[]) => void
@@ -35,7 +38,7 @@ const ImageDropzone = ({
         openRef={openRef}
         onDrop={(files) => onImageDrop(files)}
         onReject={(rejections) => onImageReject(rejections)}
-        accept={IMAGE_MIME_TYPE}
+        accept={ACCEPTED_IMAGE_TYPES}
         aria-label="Image dropzone"
         maxSize={MAX_FILE_SIZE}
         maxFiles={MAX_FILES}

@@ -29,6 +29,7 @@
     "@tailwindcss/typography": "0.5.10",
     "@types/react-dom": "^18.2.18",
     "@vercel/analytics": "^1.1.2",
+    "browser-image-compression": "^2.0.2",
     "dayjs": "^1.11.10",
     "embla-carousel-react": "^7.1.0",
     "framer-motion": "^10.16.16",
