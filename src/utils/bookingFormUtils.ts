@@ -27,7 +27,7 @@ export const MIN_AGE = 18
 export const MAX_AGE = 117
 const MIN_FILES = 2
 export const MAX_FILES = 5
-export const MAX_FILE_SIZE = 15728640 // 15MB
+export const MAX_FILES_SIZE = 4456448 // 4.25MB
 export const ACCEPTED_IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/webp']
 
 export const styleOptions: ComboboxItem[] = [
@@ -161,14 +161,14 @@ export const bookingSchema = z.object({
       }
     }
 
-    for (let i = 0; i < files.length; i++) {
-      if (files[i].size > MAX_FILE_SIZE) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: 'Each file must be less than 10MB',
-        })
-        return false
-      }
+    let filesSize = 0
+    files.forEach((file) => (filesSize += file.size))
+    if (filesSize > MAX_FILES_SIZE) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Total image size exceeds limit.',
+      })
+      return false
     }
 
     return true

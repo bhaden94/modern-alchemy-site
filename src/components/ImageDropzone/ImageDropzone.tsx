@@ -10,12 +10,7 @@ import {
 import { IconPhoto, IconUpload, IconX } from '@tabler/icons-react'
 import { useRef } from 'react'
 
-import { formatBytes } from '~/utils'
-import {
-  ACCEPTED_IMAGE_TYPES,
-  MAX_FILE_SIZE,
-  MAX_FILES,
-} from '~/utils/bookingFormUtils'
+import { ACCEPTED_IMAGE_TYPES, MAX_FILES } from '~/utils/bookingFormUtils'
 
 interface ImageDropzoneProps {
   onImageDrop: (files: FileWithPath[]) => void
@@ -40,7 +35,6 @@ const ImageDropzone = ({
         onReject={(rejections) => onImageReject(rejections)}
         accept={ACCEPTED_IMAGE_TYPES}
         aria-label="Image dropzone"
-        maxSize={MAX_FILE_SIZE}
         maxFiles={MAX_FILES}
         disabled={disabled}
         {...dropzoneProps}
@@ -82,8 +76,7 @@ const ImageDropzone = ({
           <Text size="xl">
             <Dropzone.Accept>Drop images here</Dropzone.Accept>
             <Dropzone.Reject>
-              There is a max of {MAX_FILES} image files allowed up to{' '}
-              {formatBytes(MAX_FILE_SIZE)} in size
+              There is a max of {MAX_FILES} image files allowed.
             </Dropzone.Reject>
             <Dropzone.Idle>Drag&apos;n&apos;drop images here</Dropzone.Idle>
           </Text>

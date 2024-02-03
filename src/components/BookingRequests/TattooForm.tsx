@@ -92,7 +92,7 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
   const formHasErrors = Object.keys(form.errors).length > 0
   const isSubmitting = isUploadingImages || isSubmittingForm
 
-  const onMantineFormSubmit = async (data: TBookingSchema) => {
+  const onFormSubmit = async (data: TBookingSchema) => {
     setIsUploadingImages(true)
     const formData = new FormData()
     const images: File[] = data.referenceImages
@@ -110,6 +110,14 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
     if (imageUploadResponse.ok) {
       const imageJson = await imageUploadResponse.json()
       imageReferences = imageJson.imageReferences
+    } else if (imageUploadResponse.status === 413) {
+      // If we get to this point and our request body hits the vercel limit of 4.5MB
+      // then we should fail and let the user fix the images
+      onFailure(
+        'Total image size exceeds limit. Please decrease their size by either removing some or compressing.',
+      )
+      setIsUploadingImages(false)
+      return
     } else {
       onFailure('There was a problem uploading images.')
     }
@@ -150,33 +158,27 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
   }
 
   const onImageDrop = async (files: FileWithPath[]) => {
+    setIsCompressingImages(true)
     form.clearFieldError(BookingField.ReferenceImages.id)
     setImageUploadRejections([])
     setImageFiles([])
 
-    files.forEach((imageFile) => {
-      console.log(`originalFile size ${imageFile.size / 1024 / 1024} MB`)
-    })
-
-    const options = {
-      maxSizeMB: 1,
-      maxWidthOrHeight: 1920,
-      useWebWorker: true,
-    }
     try {
-      setIsCompressingImages(true)
-      const filesPromises = files.map((file) => imageCompression(file, options))
+      const filesPromises = files.map((file) =>
+        imageCompression(file, {
+          maxSizeMB: 1,
+          maxWidthOrHeight: 1920,
+          useWebWorker: true,
+        }),
+      )
       const compressedImages = await Promise.all(filesPromises)
-
-      compressedImages.forEach((imageFile) => {
-        console.log(`compressedFile size ${imageFile.size / 1024 / 1024} MB`)
-      })
-      // TODO: raise error if all images uploaded are above 4.25 MB after compression
 
       setImageFiles(compressedImages)
       form.setValues({ [BookingField.ReferenceImages.id]: compressedImages })
     } catch (error) {
-      console.error(error)
+      onFailure(
+        'There was a problem compressing the images. Please try again. If the issue persists, please try different images.',
+      )
     }
 
     setIsCompressingImages(false)
@@ -203,7 +205,7 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
           }}
         />
         <form
-          onSubmit={form.onSubmit(onMantineFormSubmit)}
+          onSubmit={form.onSubmit(onFormSubmit)}
           className="flex flex-col justify-center items-center gap-4"
         >
           {/* Name */}
