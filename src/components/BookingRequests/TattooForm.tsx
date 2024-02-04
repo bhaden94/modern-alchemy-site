@@ -215,7 +215,6 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
             id={BookingField.Name.id}
             label={<Text span>{BookingField.Name.label}</Text>}
             placeholder={BookingField.Name.placeholder}
-            error={form.errors[BookingField.Name.id]}
             disabled={isSubmitting}
           />
 
@@ -226,7 +225,6 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
             id={BookingField.PhoneNumber.id}
             label={<Text span>{BookingField.PhoneNumber.label}</Text>}
             placeholder={BookingField.Name.placeholder}
-            error={form.errors[BookingField.PhoneNumber.id]}
             disabled={isSubmitting}
             type="tel"
           />
@@ -238,7 +236,6 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
             id={BookingField.Email.id}
             label={<Text span>{BookingField.Email.label}</Text>}
             placeholder={BookingField.Email.placeholder}
-            error={form.errors[BookingField.Email.id]}
             disabled={isSubmitting}
             type="email"
           />
@@ -250,7 +247,6 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
             id={BookingField.InstagramName.id}
             label={<Text span>{BookingField.InstagramName.label}</Text>}
             placeholder={BookingField.InstagramName.placeholder}
-            error={form.errors[BookingField.InstagramName.id]}
             disabled={isSubmitting}
             withAsterisk={false}
           />
@@ -262,7 +258,6 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
             id={BookingField.TravelingFrom.id}
             label={<Text span>{BookingField.TravelingFrom.label}</Text>}
             placeholder={BookingField.TravelingFrom.placeholder}
-            error={form.errors[BookingField.TravelingFrom.id]}
             disabled={isSubmitting}
           />
 
@@ -273,7 +268,6 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
             id={BookingField.Age.id}
             label={<Text span>{BookingField.Age.label}</Text>}
             placeholder={BookingField.Age.placeholder}
-            error={form.errors[BookingField.Age.id]}
             disabled={isSubmitting}
             type="number"
           />
@@ -285,7 +279,6 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
             id={BookingField.Characters.id}
             label={<Text span>{BookingField.Characters.label}</Text>}
             placeholder={BookingField.Characters.placeholder}
-            error={form.errors[BookingField.Characters.id]}
             disabled={isSubmitting}
           />
 
@@ -296,7 +289,6 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
             id={BookingField.Location.id}
             label={<Text span>{BookingField.Location.label}</Text>}
             placeholder={BookingField.Location.placeholder}
-            error={form.errors[BookingField.Location.id]}
             disabled={isSubmitting}
           />
 
@@ -306,7 +298,6 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
             {...form.getInputProps(BookingField.Style.id)}
             id={BookingField.Style.id}
             label={<Text span>{BookingField.Style.label}</Text>}
-            error={form.errors[BookingField.Style.id]}
             disabled={isSubmitting}
             data={styleOptions}
           />
@@ -317,7 +308,6 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
             {...form.getInputProps(BookingField.PriorTattoo.id)}
             id={BookingField.PriorTattoo.id}
             label={<Text span>{BookingField.PriorTattoo.label}</Text>}
-            error={form.errors[BookingField.PriorTattoo.id]}
             disabled={isSubmitting}
             data={priorTattooOptions}
           />
@@ -349,7 +339,6 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
             id={BookingField.Description.id}
             label={<Text span>{BookingField.Description.label}</Text>}
             placeholder={BookingField.Description.placeholder}
-            error={form.errors[BookingField.Description.id]}
             disabled={isSubmitting}
             autosize
             minRows={3}

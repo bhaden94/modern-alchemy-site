@@ -1,10 +1,10 @@
 'use client'
 
-import { zodResolver } from '@hookform/resolvers/zod'
 import { Accordion, Button, Group, Radio } from '@mantine/core'
 import { DateTimePicker, DateValue } from '@mantine/dates'
-import { useEffect, useState } from 'react'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { useForm } from '@mantine/form'
+import { zodResolver } from 'mantine-form-zod-resolver'
+import { useState } from 'react'
 
 import { BooksStatus } from '~/lib/sanity/queries/sanity.artistsQuery'
 import {
@@ -17,26 +17,21 @@ interface IAdminBooksStatus {
   booksStatus: BooksStatus
 }
 
-// TODO: move to mantine form
 const AdminBooksStatus = ({ booksStatus }: IAdminBooksStatus) => {
-  const { register, handleSubmit, formState, setValue } =
-    useForm<TBooksStatusSchema>({ resolver: zodResolver(booksStatusSchema) })
-
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const [booksOpen, setBooksOpen] = useState<boolean>(booksStatus.booksOpen)
-  const [booksOpenAt, setBooksOpenAt] = useState<DateValue>(null)
 
-  useEffect(() => {
-    register(BooksStatusField.BooksOpen)
-    register(BooksStatusField.BooksOpenAt)
-    setValue(BooksStatusField.BooksOpen, booksStatus.booksOpen)
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  const form = useForm<TBooksStatusSchema>({
+    initialValues: {
+      [BooksStatusField.BooksOpen.id]: booksStatus.booksOpen,
+      [BooksStatusField.BooksOpenAt.id]: booksStatus.booksOpenAt
+        ? new Date(booksStatus.booksOpenAt)
+        : undefined,
+    },
+    validate: zodResolver(booksStatusSchema),
+  })
 
-  useEffect(() => {
-    setBooksOpenAt(new Date(booksStatus.booksOpenAt!))
-  }, [booksStatus])
-
-  const onSubmit: SubmitHandler<TBooksStatusSchema> = async (data) => {
+  const onMantineSubmit = async (data: TBooksStatusSchema) => {
     setIsSubmitting(true)
 
     const response = await fetch('/api/sanity/artist', {
@@ -47,12 +42,11 @@ const AdminBooksStatus = ({ booksStatus }: IAdminBooksStatus) => {
         artistId: booksStatus._id,
       }),
     })
-    // TODO: handle errors
 
     if (response.ok) {
-      const res = await response.json()
-      setBooksOpen(res.booksOpen || false)
-      setBooksOpenAt(res.booksOpenAt ? new Date(res.booksOpenAt) : null)
+      form.resetDirty()
+    } else {
+      console.error('There was an error')
     }
 
     setIsSubmitting(false)
@@ -60,13 +54,12 @@ const AdminBooksStatus = ({ booksStatus }: IAdminBooksStatus) => {
 
   const onBooksOpenChange = (value: string) => {
     const booksOpen = value === 'open'
-    setValue(BooksStatusField.BooksOpen, booksOpen)
+    form.setValues({ [BooksStatusField.BooksOpen.id]: booksOpen })
     setBooksOpen(booksOpen)
   }
 
   const onBooksOpenAtChange = (date: DateValue) => {
-    setValue(BooksStatusField.BooksOpenAt, date || undefined)
-    setBooksOpenAt(date)
+    form.setValues({ [BooksStatusField.BooksOpenAt.id]: date || undefined })
   }
 
   return (
@@ -75,15 +68,15 @@ const AdminBooksStatus = ({ booksStatus }: IAdminBooksStatus) => {
         <Accordion.Control>Update Books Status</Accordion.Control>
         <Accordion.Panel>
           <form
-            onSubmit={handleSubmit(onSubmit)}
+            onSubmit={form.onSubmit(onMantineSubmit)}
             className="flex flex-col justify-center gap-4"
           >
             <Radio.Group
               value={booksOpen ? 'open' : 'closed'}
-              name="booksOpen"
-              label="Books Open"
               onChange={onBooksOpenChange}
-              error={formState.errors.booksOpen?.message}
+              id={BooksStatusField.BooksOpen.id}
+              label={BooksStatusField.BooksOpen.label}
+              error={form.errors[BooksStatusField.BooksOpen.id]}
             >
               <Group mt="xs">
                 <Radio value="open" label="Open" />
@@ -91,15 +84,20 @@ const AdminBooksStatus = ({ booksStatus }: IAdminBooksStatus) => {
               </Group>
             </Radio.Group>
             <DateTimePicker
-              name="booksOpenAt"
-              value={booksOpenAt}
-              valueFormat="DD MMM YYYY hh:mm A"
+              {...form.getInputProps(BooksStatusField.BooksOpenAt.id)}
               onChange={onBooksOpenAtChange}
-              label="Books open at"
-              placeholder="When will your books open again?"
-              error={formState.errors.booksOpenAt?.message}
+              id={BooksStatusField.BooksOpenAt.id}
+              label={BooksStatusField.BooksOpenAt.label}
+              placeholder={BooksStatusField.BooksOpenAt.placeholder}
+              valueFormat="DD MMM YYYY hh:mm A"
+              clearable
             />
-            <Button variant="filled" type="submit" loading={isSubmitting}>
+            <Button
+              variant="filled"
+              type="submit"
+              loading={isSubmitting}
+              disabled={!form.isDirty()}
+            >
               Update Books
             </Button>
           </form>
