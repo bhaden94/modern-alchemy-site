@@ -35,8 +35,8 @@ const iframeOptions = {
 // This may help: https://github.com/sanity-io/template-nextjs-personal-website/blob/main/sanity.config.ts
 export default defineConfig({
   basePath: '/studio',
-  name: 'nextjs-bookings',
-  title: 'Bookings',
+  name: 'modern-alchemy-site',
+  title: 'Modern Alchemy Site Studio',
   projectId,
   dataset,
   //edit schemas in './src/schemas'
