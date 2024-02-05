@@ -1,7 +1,5 @@
 'use client'
 
-import { Button } from '@mantine/core'
-import { signOut } from 'next-auth/react'
 import { useCallback, useEffect, useState } from 'react'
 
 import BookingCard from '~/components/BookingCard/BookingCard'
@@ -11,7 +9,8 @@ import {
 } from '~/lib/sanity/queries/sanity.bookingsQuery'
 import { getClient } from '~/lib/sanity/sanity.client'
 import { Booking } from '~/schemas/models/booking'
-import { NavigationPages } from '~/utils/navigation'
+
+import CommandBar from './CommandBar'
 
 interface IBookings {
   bookings: Booking[]
@@ -20,7 +19,7 @@ interface IBookings {
 
 // TODO: simple pagination
 // This is because it could cause wierd things to happen if we have pagination for bookings
-export default function Bookings({ bookings, artistId }: IBookings) {
+export default function AdminBookings({ bookings, artistId }: IBookings) {
   const client = getClient(undefined)
   const [bookingsList, setBookingsList] = useState<Booking[]>(bookings)
   const [refreshDisabled, setRefreshDisabled] = useState(true)
@@ -52,16 +51,10 @@ export default function Bookings({ bookings, artistId }: IBookings) {
   return (
     <section>
       <div className="my-2">
-        <Button disabled={refreshDisabled} onClick={refreshList}>
-          Refresh list
-        </Button>
-        <Button
-          className="float-right"
-          variant="outline"
-          onClick={() => signOut({ callbackUrl: NavigationPages.Home })}
-        >
-          Sign Out
-        </Button>
+        <CommandBar
+          refreshDisabled={refreshDisabled}
+          refreshList={refreshList}
+        />
       </div>
       {bookingsList?.length ? (
         <>

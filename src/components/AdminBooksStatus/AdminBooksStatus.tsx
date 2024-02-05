@@ -1,8 +1,10 @@
 'use client'
 
-import { Accordion, Button, Group, Radio } from '@mantine/core'
+import { Accordion, Alert, Button, Dialog, Group, Radio } from '@mantine/core'
 import { DateTimePicker, DateValue } from '@mantine/dates'
 import { useForm } from '@mantine/form'
+import { useDisclosure } from '@mantine/hooks'
+import { IconInfoCircle } from '@tabler/icons-react'
 import { zodResolver } from 'mantine-form-zod-resolver'
 import { useState } from 'react'
 
@@ -17,7 +19,10 @@ interface IAdminBooksStatus {
   booksStatus: BooksStatus
 }
 
+const icon = <IconInfoCircle />
+
 const AdminBooksStatus = ({ booksStatus }: IAdminBooksStatus) => {
+  const [opened, { open, close }] = useDisclosure(false)
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const [booksOpen, setBooksOpen] = useState<boolean>(booksStatus.booksOpen)
 
@@ -46,7 +51,7 @@ const AdminBooksStatus = ({ booksStatus }: IAdminBooksStatus) => {
     if (response.ok) {
       form.resetDirty()
     } else {
-      console.error('There was an error')
+      open()
     }
 
     setIsSubmitting(false)
@@ -63,47 +68,61 @@ const AdminBooksStatus = ({ booksStatus }: IAdminBooksStatus) => {
   }
 
   return (
-    <Accordion variant="separated">
-      <Accordion.Item value="books-status-form">
-        <Accordion.Control>Update Books Status</Accordion.Control>
-        <Accordion.Panel>
-          <form
-            onSubmit={form.onSubmit(onMantineSubmit)}
-            className="flex flex-col justify-center gap-4"
-          >
-            <Radio.Group
-              value={booksOpen ? 'open' : 'closed'}
-              onChange={onBooksOpenChange}
-              id={BooksStatusField.BooksOpen.id}
-              label={BooksStatusField.BooksOpen.label}
-              error={form.errors[BooksStatusField.BooksOpen.id]}
+    <>
+      <Accordion variant="separated">
+        <Accordion.Item value="books-status-form">
+          <Accordion.Control>Update Books Status</Accordion.Control>
+          <Accordion.Panel>
+            <form
+              onSubmit={form.onSubmit(onMantineSubmit)}
+              className="flex flex-col justify-center gap-4"
             >
-              <Group mt="xs">
-                <Radio value="open" label="Open" />
-                <Radio value="closed" label="Closed" />
-              </Group>
-            </Radio.Group>
-            <DateTimePicker
-              {...form.getInputProps(BooksStatusField.BooksOpenAt.id)}
-              onChange={onBooksOpenAtChange}
-              id={BooksStatusField.BooksOpenAt.id}
-              label={BooksStatusField.BooksOpenAt.label}
-              placeholder={BooksStatusField.BooksOpenAt.placeholder}
-              valueFormat="DD MMM YYYY hh:mm A"
-              clearable
-            />
-            <Button
-              variant="filled"
-              type="submit"
-              loading={isSubmitting}
-              disabled={!form.isDirty()}
-            >
-              Update Books
-            </Button>
-          </form>
-        </Accordion.Panel>
-      </Accordion.Item>
-    </Accordion>
+              <Radio.Group
+                value={booksOpen ? 'open' : 'closed'}
+                onChange={onBooksOpenChange}
+                id={BooksStatusField.BooksOpen.id}
+                label={BooksStatusField.BooksOpen.label}
+                error={form.errors[BooksStatusField.BooksOpen.id]}
+              >
+                <Group mt="xs">
+                  <Radio value="open" label="Open" />
+                  <Radio value="closed" label="Closed" />
+                </Group>
+              </Radio.Group>
+              <DateTimePicker
+                {...form.getInputProps(BooksStatusField.BooksOpenAt.id)}
+                onChange={onBooksOpenAtChange}
+                id={BooksStatusField.BooksOpenAt.id}
+                label={BooksStatusField.BooksOpenAt.label}
+                placeholder={BooksStatusField.BooksOpenAt.placeholder}
+                valueFormat="DD MMM YYYY hh:mm A"
+                clearable
+              />
+              <Button
+                variant="filled"
+                type="submit"
+                loading={isSubmitting}
+                disabled={!form.isDirty()}
+              >
+                Update Books
+              </Button>
+            </form>
+          </Accordion.Panel>
+        </Accordion.Item>
+      </Accordion>
+      <Dialog opened={opened} onClose={close} p={0}>
+        <Alert
+          icon={icon}
+          variant="filled"
+          color="red.9"
+          title="Bummer!"
+          withCloseButton
+          onClose={close}
+        >
+          There was an issue updating your books.
+        </Alert>
+      </Dialog>
+    </>
   )
 }
 
