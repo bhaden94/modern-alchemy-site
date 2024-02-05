@@ -1,3 +1,4 @@
+import { IconUsers } from '@tabler/icons-react'
 import {
   defineArrayMember,
   defineField,
@@ -30,6 +31,7 @@ export default defineType({
   name: 'artist',
   type: 'document',
   title: 'Artist',
+  icon: IconUsers,
   fields: [
     defineField({
       name: 'email',

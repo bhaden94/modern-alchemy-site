@@ -1,3 +1,4 @@
+import { IconLayout } from '@tabler/icons-react'
 import { defineField, defineType, ImageAsset } from 'sanity'
 
 import { BaseSanitySchema } from '..'
@@ -15,6 +16,7 @@ export default defineType({
   name: 'rootLayoutContent',
   type: 'document',
   title: 'Root Layout Content',
+  icon: IconLayout,
   fields: [
     defineField({
       name: 'businessLogo',

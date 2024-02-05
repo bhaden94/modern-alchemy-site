@@ -1,3 +1,4 @@
+import { IconScript } from '@tabler/icons-react'
 import { defineField, defineType } from 'sanity'
 
 import { BasePageContent, BaseSanitySchema } from '..'
@@ -15,6 +16,7 @@ export default defineType({
   name: 'rootPageContent',
   type: 'document',
   title: 'Root Page Content',
+  icon: IconScript,
   fields: [
     defineField({
       name: 'pageTitle',

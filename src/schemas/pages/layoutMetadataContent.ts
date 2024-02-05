@@ -1,3 +1,4 @@
+import { IconFileCode } from '@tabler/icons-react'
 import { defineField, defineType } from 'sanity'
 
 import { BaseSanitySchema } from '..'
@@ -12,6 +13,7 @@ export default defineType({
   name: 'layoutMetadataContent',
   type: 'document',
   title: 'Layout Metadata',
+  icon: IconFileCode,
   fields: [
     defineField({
       name: 'businessName',
