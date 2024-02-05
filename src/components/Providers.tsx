@@ -2,7 +2,6 @@
 
 import { MantineProvider } from '@mantine/core'
 
-import { FeatureProvider } from '~/context/FeatureFlagsContext'
 import { colorScheme, theme } from '~/utils/theme'
 
 // TODO: choose where we want live previews and how to set them up without exposing sanity tokens to the client
@@ -11,7 +10,7 @@ import { colorScheme, theme } from '~/utils/theme'
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <MantineProvider theme={theme} defaultColorScheme={colorScheme}>
-      <FeatureProvider>{children}</FeatureProvider>
+      {children}
     </MantineProvider>
   )
 }

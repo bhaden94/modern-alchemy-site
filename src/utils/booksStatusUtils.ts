@@ -10,7 +10,14 @@ export const booksStatusSchema = z.object({
 // extracting the type
 export type TBooksStatusSchema = z.infer<typeof booksStatusSchema>
 
-export enum BooksStatusField {
-  BooksOpen = 'booksOpen',
-  BooksOpenAt = 'booksOpenAt',
-}
+export const BooksStatusField = {
+  BooksOpen: {
+    id: 'booksOpen',
+    label: 'Books Open',
+  },
+  BooksOpenAt: {
+    id: 'booksOpenAt',
+    label: 'Books Open At',
+    placeholder: 'When will your books open again?',
+  },
+} as const

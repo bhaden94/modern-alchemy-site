@@ -1,6 +1,5 @@
 'use client'
 
-import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Box,
   Button,
@@ -19,12 +18,15 @@ import {
 import { TextInput } from '@mantine/core'
 import { Textarea } from '@mantine/core'
 import { FileRejection, FileWithPath } from '@mantine/dropzone'
-import { useEffect, useState } from 'react'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { useForm } from '@mantine/form'
+import imageCompression from 'browser-image-compression'
+import { zodResolver } from 'mantine-form-zod-resolver'
+import { useState } from 'react'
 
 import {
   BookingField,
   bookingSchema,
+  getBookingFormInitialValues,
   preferredDayOptions,
   priorTattooOptions,
   styleOptions,
@@ -34,6 +36,7 @@ import {
 import ImageDropzone from '../ImageDropzone/ImageDropzone'
 import ImageErrors from '../ImageDropzone/ImageErrors'
 import ImageThumbnails from '../ImageDropzone/ImageThumbnails'
+import FormErrorAlert from './FormErrorAlert'
 
 const inputSharedProps: Partial<
   TextInputProps & NativeSelectProps & CheckboxGroupProps & TextareaProps
@@ -71,6 +74,7 @@ Places to update for form changes:
 // TODO: implement reCAPTCHA for form submission
 // TODO: implement Nodemailer to send email confirming form submission
 const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
+  const [isCompressingImages, setIsCompressingImages] = useState<boolean>(false)
   const [isUploadingImages, setIsUploadingImages] = useState<boolean>(false)
   const [isSubmittingForm, setIsSubmittingForm] = useState<boolean>(false)
 
@@ -79,17 +83,16 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
   const [imageUploadRejections, setImageUploadRejections] = useState<
     FileRejection[]
   >([])
-  const { register, handleSubmit, formState, setValue, reset, clearErrors } =
-    useForm<TBookingSchema>({ resolver: zodResolver(bookingSchema) })
 
+  const form = useForm<TBookingSchema>({
+    initialValues: getBookingFormInitialValues(),
+    validate: zodResolver(bookingSchema),
+  })
+
+  const formHasErrors = Object.keys(form.errors).length > 0
   const isSubmitting = isUploadingImages || isSubmittingForm
 
-  useEffect(() => {
-    register(BookingField.ReferenceImages.id)
-    register(BookingField.PreferredDays.id)
-  }, [register])
-
-  const onSubmit: SubmitHandler<TBookingSchema> = async (data) => {
+  const onFormSubmit = async (data: TBookingSchema) => {
     setIsUploadingImages(true)
     const formData = new FormData()
     const images: File[] = data.referenceImages
@@ -107,6 +110,14 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
     if (imageUploadResponse.ok) {
       const imageJson = await imageUploadResponse.json()
       imageReferences = imageJson.imageReferences
+    } else if (imageUploadResponse.status === 413) {
+      // If we get to this point and our request body hits the vercel limit of 4.5MB
+      // then we should fail and let the user fix the images
+      onFailure(
+        'Total image size exceeds limit. Please decrease their size by either removing some or compressing.',
+      )
+      setIsUploadingImages(false)
+      return
     } else {
       onFailure('There was a problem uploading images.')
     }
@@ -127,7 +138,7 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
     setIsSubmittingForm(false)
 
     if (response.ok) {
-      reset()
+      form.reset()
       setImageFiles([])
       setPreferredDays([])
       onSuccess()
@@ -137,27 +148,46 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
   }
 
   const onPreferredDaysChange = (days: string[]) => {
-    clearErrors(BookingField.PreferredDays.id)
+    form.clearFieldError(BookingField.PreferredDays.id)
     setPreferredDays(days)
-    setValue(BookingField.PreferredDays.id, days)
+    form.setValues({ [BookingField.PreferredDays.id]: days })
   }
 
   const onImageReject = (rejections: FileRejection[]) => {
     setImageUploadRejections(rejections)
   }
 
-  const onImageDrop = (files: FileWithPath[]) => {
-    clearErrors(BookingField.ReferenceImages.id)
+  const onImageDrop = async (files: FileWithPath[]) => {
+    setIsCompressingImages(true)
+    form.clearFieldError(BookingField.ReferenceImages.id)
     setImageUploadRejections([])
+    setImageFiles([])
 
-    setImageFiles(files)
-    setValue(BookingField.ReferenceImages.id, files)
+    try {
+      const filesPromises = files.map((file) =>
+        imageCompression(file, {
+          maxSizeMB: 1,
+          maxWidthOrHeight: 1920,
+          useWebWorker: true,
+        }),
+      )
+      const compressedImages = await Promise.all(filesPromises)
+
+      setImageFiles(compressedImages)
+      form.setValues({ [BookingField.ReferenceImages.id]: compressedImages })
+    } catch (error) {
+      onFailure(
+        'There was a problem compressing the images. Please try again. If the issue persists, please try different images.',
+      )
+    }
+
+    setIsCompressingImages(false)
   }
 
   const onImageRemove = (name: string) => {
     const filteredFiles = imageFiles.filter((image) => image.name !== name)
     setImageFiles(filteredFiles)
-    setValue(BookingField.ReferenceImages.id, filteredFiles)
+    form.setValues({ [BookingField.ReferenceImages.id]: filteredFiles })
   }
 
   return (
@@ -166,7 +196,6 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
         <LoadingOverlay
           visible={isSubmitting}
           zIndex={150}
-          overlayProps={{ radius: 'sm', blur: 3, color: '#1F1F1F' }}
           loaderProps={{
             children: isUploadingImages ? (
               <CustomLoader label={'Uploading images'} />
@@ -176,28 +205,26 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
           }}
         />
         <form
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={form.onSubmit(onFormSubmit)}
           className="flex flex-col justify-center items-center gap-4"
         >
           {/* Name */}
           <TextInput
             {...inputSharedProps}
-            {...register(BookingField.Name.id)}
+            {...form.getInputProps(BookingField.Name.id)}
             id={BookingField.Name.id}
             label={<Text span>{BookingField.Name.label}</Text>}
             placeholder={BookingField.Name.placeholder}
-            error={formState.errors.name?.message}
             disabled={isSubmitting}
           />
 
           {/* Phone Number */}
           <TextInput
             {...inputSharedProps}
-            {...register(BookingField.PhoneNumber.id)}
+            {...form.getInputProps(BookingField.PhoneNumber.id)}
             id={BookingField.PhoneNumber.id}
             label={<Text span>{BookingField.PhoneNumber.label}</Text>}
             placeholder={BookingField.Name.placeholder}
-            error={formState.errors.phoneNumber?.message}
             disabled={isSubmitting}
             type="tel"
           />
@@ -205,11 +232,10 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
           {/* Email */}
           <TextInput
             {...inputSharedProps}
-            {...register(BookingField.Email.id)}
+            {...form.getInputProps(BookingField.Email.id)}
             id={BookingField.Email.id}
             label={<Text span>{BookingField.Email.label}</Text>}
             placeholder={BookingField.Email.placeholder}
-            error={formState.errors.email?.message}
             disabled={isSubmitting}
             type="email"
           />
@@ -217,11 +243,10 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
           {/* Instagram Name */}
           <TextInput
             {...inputSharedProps}
-            {...register(BookingField.InstagramName.id)}
+            {...form.getInputProps(BookingField.InstagramName.id)}
             id={BookingField.InstagramName.id}
             label={<Text span>{BookingField.InstagramName.label}</Text>}
             placeholder={BookingField.InstagramName.placeholder}
-            error={formState.errors.instagramName?.message}
             disabled={isSubmitting}
             withAsterisk={false}
           />
@@ -229,22 +254,20 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
           {/* Traveling From */}
           <TextInput
             {...inputSharedProps}
-            {...register(BookingField.TravelingFrom.id)}
+            {...form.getInputProps(BookingField.TravelingFrom.id)}
             id={BookingField.TravelingFrom.id}
             label={<Text span>{BookingField.TravelingFrom.label}</Text>}
             placeholder={BookingField.TravelingFrom.placeholder}
-            error={formState.errors.travelingFrom?.message}
             disabled={isSubmitting}
           />
 
           {/* Age */}
           <TextInput
             {...inputSharedProps}
-            {...register(BookingField.Age.id)}
+            {...form.getInputProps(BookingField.Age.id)}
             id={BookingField.Age.id}
             label={<Text span>{BookingField.Age.label}</Text>}
             placeholder={BookingField.Age.placeholder}
-            error={formState.errors.age?.message}
             disabled={isSubmitting}
             type="number"
           />
@@ -252,47 +275,41 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
           {/* Characters */}
           <TextInput
             {...inputSharedProps}
-            {...register(BookingField.Characters.id)}
+            {...form.getInputProps(BookingField.Characters.id)}
             id={BookingField.Characters.id}
             label={<Text span>{BookingField.Characters.label}</Text>}
             placeholder={BookingField.Characters.placeholder}
-            error={formState.errors.characters?.message}
             disabled={isSubmitting}
           />
 
           {/* Location */}
           <TextInput
             {...inputSharedProps}
-            {...register(BookingField.Location.id)}
+            {...form.getInputProps(BookingField.Location.id)}
             id={BookingField.Location.id}
             label={<Text span>{BookingField.Location.label}</Text>}
             placeholder={BookingField.Location.placeholder}
-            error={formState.errors.location?.message}
             disabled={isSubmitting}
           />
 
           {/* Style */}
           <NativeSelect
             {...inputSharedProps}
-            {...register(BookingField.Style.id)}
+            {...form.getInputProps(BookingField.Style.id)}
             id={BookingField.Style.id}
             label={<Text span>{BookingField.Style.label}</Text>}
-            error={formState.errors.style?.message}
             disabled={isSubmitting}
             data={styleOptions}
-            defaultValue={styleOptions[0].value}
           />
 
           {/* Prior Tattoo */}
           <NativeSelect
             {...inputSharedProps}
-            {...register(BookingField.PriorTattoo.id)}
+            {...form.getInputProps(BookingField.PriorTattoo.id)}
             id={BookingField.PriorTattoo.id}
             label={<Text span>{BookingField.PriorTattoo.label}</Text>}
-            error={formState.errors.priorTattoo?.message}
             disabled={isSubmitting}
             data={priorTattooOptions}
-            defaultValue={priorTattooOptions[0].value}
           />
 
           {/* Preferred Days */}
@@ -301,7 +318,7 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
             value={preferredDays}
             onChange={onPreferredDaysChange}
             label={<Text span>{BookingField.PreferredDays.label}</Text>}
-            error={formState.errors.preferredDays?.message}
+            error={form.errors[BookingField.PreferredDays.id]}
           >
             <Group my="xs">
               {preferredDayOptions.map((option) => (
@@ -309,7 +326,7 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
                   key={option.value}
                   value={option.value}
                   label={option.label}
-                  error={!!formState.errors.preferredDays?.message}
+                  error={!!form.errors[BookingField.PreferredDays.id]}
                 />
               ))}
             </Group>
@@ -318,11 +335,10 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
           {/* Description */}
           <Textarea
             {...inputSharedProps}
-            {...register(BookingField.Description.id)}
+            {...form.getInputProps(BookingField.Description.id)}
             id={BookingField.Description.id}
             label={<Text span>{BookingField.Description.label}</Text>}
             placeholder={BookingField.Description.placeholder}
-            error={formState.errors.description?.message}
             disabled={isSubmitting}
             autosize
             minRows={3}
@@ -339,7 +355,13 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
               onImageDrop={(files) => onImageDrop(files)}
               onImageReject={(rejections) => onImageReject(rejections)}
               disabled={isSubmitting}
-              dropzoneProps={{ className: 'w-full' }}
+              dropzoneProps={{
+                className: 'w-full',
+                loading: isCompressingImages,
+                loaderProps: {
+                  children: <CustomLoader label={'Compressing images'} />,
+                },
+              }}
             />
             <ImageThumbnails
               imageFiles={imageFiles}
@@ -347,15 +369,20 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
             />
             <ImageErrors
               imageUploadRejections={imageUploadRejections}
-              formError={formState.errors.referenceImages?.message}
+              formError={form.errors[
+                BookingField.ReferenceImages.id
+              ]?.toString()}
             />
           </Box>
+
+          {formHasErrors ? <FormErrorAlert /> : undefined}
 
           {/* Submit button */}
           <Button
             size="lg"
             variant="filled"
             type="submit"
+            disabled={isCompressingImages}
             loading={isSubmitting}
           >
             Send Request

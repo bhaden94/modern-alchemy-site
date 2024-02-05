@@ -23,17 +23,12 @@ const phoneRegex = new RegExp(
   /^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/,
 )
 
+export const MIN_AGE = 18
+export const MAX_AGE = 117
 const MIN_FILES = 2
 export const MAX_FILES = 5
-export const MAX_FILE_SIZE = 15728640 // 15MB
-export const ACCEPTED_IMAGE_TYPES = [
-  'image/png',
-  'image/gif',
-  'image/jpeg',
-  'image/svg+xml',
-  'image/webp',
-  'image/avif',
-]
+export const MAX_FILES_SIZE = 4456448 // 4.25MB
+export const ACCEPTED_IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/webp']
 
 export const styleOptions: ComboboxItem[] = [
   {
@@ -117,7 +112,11 @@ export const bookingSchema = z.object({
   travelingFrom: z
     .string({ required_error: travelingFromError })
     .min(1, travelingFromError),
-  age: z.coerce.number().int().gte(18, minAgeError).lte(117, maxAgeError),
+  age: z.coerce
+    .number()
+    .int()
+    .gte(MIN_AGE, minAgeError)
+    .lte(MAX_AGE, maxAgeError),
   characters: z
     .string({ required_error: charactersError })
     .min(1, charactersError),
@@ -162,14 +161,14 @@ export const bookingSchema = z.object({
       }
     }
 
-    for (let i = 0; i < files.length; i++) {
-      if (files[i].size > MAX_FILE_SIZE) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: 'Each file must be less than 10MB',
-        })
-        return false
-      }
+    let filesSize = 0
+    files.forEach((file) => (filesSize += file.size))
+    if (filesSize > MAX_FILES_SIZE) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Total image size exceeds limit.',
+      })
+      return false
     }
 
     return true
@@ -184,76 +183,99 @@ export const BookingField = {
     id: 'name',
     label: 'First and Last Name',
     placeholder: 'Enter your full name',
+    initialValue: '',
     getValue: (name: string) => name,
   },
   PhoneNumber: {
     id: 'phoneNumber',
     label: 'Phone Number',
     placeholder: 'Enter your phone number',
+    initialValue: '',
     getValue: (number: string) => formatPhoneNumber(number) || '',
   },
   Email: {
     id: 'email',
     label: 'Email',
     placeholder: 'Enter your email',
+    initialValue: '',
     getValue: (email: string) => email,
   },
   InstagramName: {
     id: 'instagramName',
     label: 'Instagram Name',
     placeholder: 'Enter your Instagram if you would like',
+    initialValue: '',
     getValue: (name: string) => name,
   },
   TravelingFrom: {
     id: 'travelingFrom',
     label: 'Where are you traveling from?',
     placeholder: 'Enter the city and state',
+    initialValue: '',
     getValue: (destination: string) => destination,
   },
   Age: {
     id: 'age',
     label: 'Age',
     placeholder: 'Example: 18',
+    initialValue: MIN_AGE,
     getValue: (age: string) => age,
   },
   Characters: {
     id: 'characters',
     label: 'Characters or Subject',
     placeholder: 'Example: Vegeta from DBZ',
+    initialValue: '',
     getValue: (characters: string) => characters,
   },
   Location: {
     id: 'location',
     label: 'Location of Tattoo',
     placeholder: 'Example: left inner forearm',
+    initialValue: '',
     getValue: (location: string) => location,
   },
   Style: {
     id: 'style',
     label: 'Tattoo Style',
+    initialValue: styleOptions[0].value,
     getValue: (style: string) =>
       style === 'black_and_grey' ? 'Black & Grey' : 'Color',
   },
   PriorTattoo: {
     id: 'priorTattoo',
     label: 'Have you been tattoed by Larry before?',
+    initialValue: priorTattooOptions[0].value,
     getValue: (item: string) =>
       priorTattooOptions.find((option) => option.value === item)?.label || 'No',
   },
   PreferredDays: {
     id: 'preferredDays',
     label: 'Preferred days of Appointment',
+    initialValue: [],
     getValue: (days: string[]) => joinPrefferedDayLabels(days),
   },
   Description: {
     id: 'description',
     label: 'Description of your tattoo idea',
     placeholder: 'Character portrait, action pose, bust or waist up.',
+    initialValue: '',
     getValue: (description: string) => description,
   },
   ReferenceImages: {
     id: 'referenceImages',
     label: 'Reference Images',
+    initialValue: [],
     getValue: () => '',
   },
 } as const
+
+export const getBookingFormInitialValues = () => {
+  const bookingFormInitialValues: any = {}
+
+  Object.values(BookingField).forEach((field) => {
+    bookingFormInitialValues[field.id] = field.initialValue
+  })
+
+  return bookingFormInitialValues
+}

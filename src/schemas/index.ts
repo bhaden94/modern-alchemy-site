@@ -3,8 +3,6 @@ import { SchemaTypeDefinition } from 'sanity'
 import artist from './models/artist'
 import blockContent from './models/blockContent'
 import booking from './models/booking'
-import featureFlags from './models/feature-flags'
-import post from './models/post'
 import aftercareInfoPageContent from './pages/aftercareInfoPageContent'
 import artistsPageContent from './pages/artistsPageContent'
 import bookingInfoPageContent from './pages/bookingInfoPageContent'
@@ -15,11 +13,9 @@ import rootPageContent from './pages/rootPageContent'
 
 // TODO: figure out how to generate types to use in code
 export const schemaTypes = {
-  post,
   blockContent,
   booking,
   artist,
-  featureFlags,
   rootPageContent,
   faqPageContent,
   aftercareInfoPageContent,
@@ -30,18 +26,20 @@ export const schemaTypes = {
 }
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
-    post,
-    blockContent,
-    booking,
-    artist,
-    featureFlags,
-    rootPageContent,
-    faqPageContent,
-    aftercareInfoPageContent,
-    artistsPageContent,
-    bookingInfoPageContent,
-    rootLayoutContent,
+    // Layout/Metadata
     layoutMetadataContent,
+    rootLayoutContent,
+    // Pages
+    rootPageContent,
+    artistsPageContent,
+    aftercareInfoPageContent,
+    faqPageContent,
+    bookingInfoPageContent,
+    // Models
+    artist,
+    booking,
+    // Objects
+    blockContent,
   ],
 }
 

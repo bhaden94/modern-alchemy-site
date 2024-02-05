@@ -1,10 +1,12 @@
 'use client'
 
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Accordion, Button, Group, Radio } from '@mantine/core'
+import { Accordion, Alert, Button, Dialog, Group, Radio } from '@mantine/core'
 import { DateTimePicker, DateValue } from '@mantine/dates'
-import { useEffect, useState } from 'react'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { useForm } from '@mantine/form'
+import { useDisclosure } from '@mantine/hooks'
+import { IconInfoCircle } from '@tabler/icons-react'
+import { zodResolver } from 'mantine-form-zod-resolver'
+import { useState } from 'react'
 
 import { BooksStatus } from '~/lib/sanity/queries/sanity.artistsQuery'
 import {
@@ -17,25 +19,24 @@ interface IAdminBooksStatus {
   booksStatus: BooksStatus
 }
 
-const AdminBooksStatus = ({ booksStatus }: IAdminBooksStatus) => {
-  const { register, handleSubmit, formState, setValue } =
-    useForm<TBooksStatusSchema>({ resolver: zodResolver(booksStatusSchema) })
+const icon = <IconInfoCircle />
 
+const AdminBooksStatus = ({ booksStatus }: IAdminBooksStatus) => {
+  const [opened, { open, close }] = useDisclosure(false)
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const [booksOpen, setBooksOpen] = useState<boolean>(booksStatus.booksOpen)
-  const [booksOpenAt, setBooksOpenAt] = useState<DateValue>(null)
 
-  useEffect(() => {
-    register(BooksStatusField.BooksOpen)
-    register(BooksStatusField.BooksOpenAt)
-    setValue(BooksStatusField.BooksOpen, booksStatus.booksOpen)
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  const form = useForm<TBooksStatusSchema>({
+    initialValues: {
+      [BooksStatusField.BooksOpen.id]: booksStatus.booksOpen,
+      [BooksStatusField.BooksOpenAt.id]: booksStatus.booksOpenAt
+        ? new Date(booksStatus.booksOpenAt)
+        : undefined,
+    },
+    validate: zodResolver(booksStatusSchema),
+  })
 
-  useEffect(() => {
-    setBooksOpenAt(new Date(booksStatus.booksOpenAt!))
-  }, [booksStatus])
-
-  const onSubmit: SubmitHandler<TBooksStatusSchema> = async (data) => {
+  const onMantineSubmit = async (data: TBooksStatusSchema) => {
     setIsSubmitting(true)
 
     const response = await fetch('/api/sanity/artist', {
@@ -46,12 +47,11 @@ const AdminBooksStatus = ({ booksStatus }: IAdminBooksStatus) => {
         artistId: booksStatus._id,
       }),
     })
-    // TODO: handle errors
 
     if (response.ok) {
-      const res = await response.json()
-      setBooksOpen(res.booksOpen || false)
-      setBooksOpenAt(res.booksOpenAt ? new Date(res.booksOpenAt) : null)
+      form.resetDirty()
+    } else {
+      open()
     }
 
     setIsSubmitting(false)
@@ -59,52 +59,70 @@ const AdminBooksStatus = ({ booksStatus }: IAdminBooksStatus) => {
 
   const onBooksOpenChange = (value: string) => {
     const booksOpen = value === 'open'
-    setValue(BooksStatusField.BooksOpen, booksOpen)
+    form.setValues({ [BooksStatusField.BooksOpen.id]: booksOpen })
     setBooksOpen(booksOpen)
   }
 
   const onBooksOpenAtChange = (date: DateValue) => {
-    setValue(BooksStatusField.BooksOpenAt, date || undefined)
-    setBooksOpenAt(date)
+    form.setValues({ [BooksStatusField.BooksOpenAt.id]: date || undefined })
   }
 
   return (
-    <Accordion variant="separated">
-      <Accordion.Item value="books-status-form">
-        <Accordion.Control>Update Books Status</Accordion.Control>
-        <Accordion.Panel>
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col justify-center gap-4"
-          >
-            <Radio.Group
-              value={booksOpen ? 'open' : 'closed'}
-              name="booksOpen"
-              label="Books Open"
-              onChange={onBooksOpenChange}
-              error={formState.errors.booksOpen?.message}
+    <>
+      <Accordion variant="separated">
+        <Accordion.Item value="books-status-form">
+          <Accordion.Control>Update Books Status</Accordion.Control>
+          <Accordion.Panel>
+            <form
+              onSubmit={form.onSubmit(onMantineSubmit)}
+              className="flex flex-col justify-center gap-4"
             >
-              <Group mt="xs">
-                <Radio value="open" label="Open" />
-                <Radio value="closed" label="Closed" />
-              </Group>
-            </Radio.Group>
-            <DateTimePicker
-              name="booksOpenAt"
-              value={booksOpenAt}
-              valueFormat="DD MMM YYYY hh:mm A"
-              onChange={onBooksOpenAtChange}
-              label="Books open at"
-              placeholder="When will your books open again?"
-              error={formState.errors.booksOpenAt?.message}
-            />
-            <Button variant="filled" type="submit" loading={isSubmitting}>
-              Update Books
-            </Button>
-          </form>
-        </Accordion.Panel>
-      </Accordion.Item>
-    </Accordion>
+              <Radio.Group
+                value={booksOpen ? 'open' : 'closed'}
+                onChange={onBooksOpenChange}
+                id={BooksStatusField.BooksOpen.id}
+                label={BooksStatusField.BooksOpen.label}
+                error={form.errors[BooksStatusField.BooksOpen.id]}
+              >
+                <Group mt="xs">
+                  <Radio value="open" label="Open" />
+                  <Radio value="closed" label="Closed" />
+                </Group>
+              </Radio.Group>
+              <DateTimePicker
+                {...form.getInputProps(BooksStatusField.BooksOpenAt.id)}
+                onChange={onBooksOpenAtChange}
+                id={BooksStatusField.BooksOpenAt.id}
+                label={BooksStatusField.BooksOpenAt.label}
+                placeholder={BooksStatusField.BooksOpenAt.placeholder}
+                valueFormat="DD MMM YYYY hh:mm A"
+                clearable
+              />
+              <Button
+                variant="filled"
+                type="submit"
+                loading={isSubmitting}
+                disabled={!form.isDirty()}
+              >
+                Update Books
+              </Button>
+            </form>
+          </Accordion.Panel>
+        </Accordion.Item>
+      </Accordion>
+      <Dialog opened={opened} onClose={close} p={0}>
+        <Alert
+          icon={icon}
+          variant="filled"
+          color="red.9"
+          title="Bummer!"
+          withCloseButton
+          onClose={close}
+        >
+          There was an issue updating your books.
+        </Alert>
+      </Dialog>
+    </>
   )
 }
 

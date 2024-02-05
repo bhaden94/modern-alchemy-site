@@ -22,7 +22,7 @@ export async function PATCH(request: NextRequest) {
 
   const patchOperation = await client
     .patch(artistId)
-    .set({ booksOpen: booksOpen, booksOpenAt: booksOpenAt })
+    .set({ booksOpen: booksOpen, booksOpenAt: booksOpenAt ?? null })
     .commit()
 
   console.log(

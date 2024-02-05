@@ -22,7 +22,7 @@ interface IArtistCardBookingRequest {
 const ShowWhenBooksClosed = ({ booksOpenAt }: { booksOpenAt: DateValue }) => {
   return (
     <Group justify="center" mt="auto" pb={6} pt={18} gap={0}>
-      <Text>Books closed and will open on</Text>
+      <Text>Books closed and will open on&nbsp;</Text>
       <BooksOpenAt date={booksOpenAt} />
     </Group>
   )

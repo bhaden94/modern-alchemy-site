@@ -1,3 +1,4 @@
+import { IconBook } from '@tabler/icons-react'
 import { defineArrayMember, defineField, defineType, ImageAsset } from 'sanity'
 
 import { BaseSanitySchema } from '..'
@@ -32,6 +33,7 @@ export default defineType({
   name: 'booking',
   type: 'document',
   title: 'Booking',
+  icon: IconBook,
   fields: [
     defineField({
       name: 'name',
