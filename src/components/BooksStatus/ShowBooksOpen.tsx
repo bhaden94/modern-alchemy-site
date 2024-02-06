@@ -50,13 +50,12 @@ const ShowBooksOpen = ({
   }
 
   const onFailure = (message?: string) => {
-    if (message) {
-      setFailureMessage(message)
-    }
+    message
+      ? setFailureMessage(message)
+      : setFailureMessage(
+          failuresCount < 2 ? generalFailureMessage : excessiveFailureMessage,
+        )
 
-    setFailureMessage(
-      failuresCount < 2 ? generalFailureMessage : excessiveFailureMessage,
-    )
     setFailuresCount(failuresCount + 1)
     open()
   }
