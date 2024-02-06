@@ -11,7 +11,7 @@ export async function PATCH(request: NextRequest) {
 
   console.log(
     `Patch artist with Id: ${artistId}`,
-    `BooksOpen: ${booksOpen}`,
+    `BooksOpen: ${booksOpen === 'OPEN'}`,
     `BooksOpenAt: ${booksOpenAt}`,
   )
 
@@ -21,7 +21,7 @@ export async function PATCH(request: NextRequest) {
 
   const patchOperation = await client
     .patch(artistId)
-    .set({ booksOpen: booksOpen, booksOpenAt: booksOpenAt ?? null })
+    .set({ booksOpen: booksOpen === 'OPEN', booksOpenAt: booksOpenAt ?? null })
     .commit()
 
   console.log(
