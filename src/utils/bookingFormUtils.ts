@@ -265,6 +265,8 @@ export const BookingField = {
   ReferenceImages: {
     id: 'referenceImages',
     label: 'Reference Images',
+    description:
+      'Please add a clear photo of where you would like you tattoo placed. Make sure its a photo of you and not a photo from the internet.',
     initialValue: [],
     getValue: () => '',
   },

@@ -351,6 +351,7 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
             <Text span c="var(--mantine-color-error)">
               &nbsp;*
             </Text>
+            <Text c="dimmed">{BookingField.ReferenceImages.description}</Text>
             <ImageDropzone
               onImageDrop={(files) => onImageDrop(files)}
               onImageReject={(rejections) => onImageReject(rejections)}
