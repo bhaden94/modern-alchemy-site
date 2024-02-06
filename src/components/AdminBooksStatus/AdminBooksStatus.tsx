@@ -10,6 +10,7 @@ import { useState } from 'react'
 
 import { BooksStatus } from '~/lib/sanity/queries/sanity.artistsQuery'
 import {
+  BOOKS_OPEN,
   BooksStatusField,
   booksStatusSchema,
   TBooksStatusSchema,
@@ -24,11 +25,12 @@ const icon = <IconInfoCircle />
 const AdminBooksStatus = ({ booksStatus }: IAdminBooksStatus) => {
   const [opened, { open, close }] = useDisclosure(false)
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
-  const [booksOpen, setBooksOpen] = useState<boolean>(booksStatus.booksOpen)
 
   const form = useForm<TBooksStatusSchema>({
     initialValues: {
-      [BooksStatusField.BooksOpen.id]: booksStatus.booksOpen,
+      [BooksStatusField.BooksOpen.id]: booksStatus.booksOpen
+        ? 'OPEN'
+        : 'CLOSED',
       [BooksStatusField.BooksOpenAt.id]: booksStatus.booksOpenAt
         ? new Date(booksStatus.booksOpenAt)
         : undefined,
@@ -57,12 +59,6 @@ const AdminBooksStatus = ({ booksStatus }: IAdminBooksStatus) => {
     setIsSubmitting(false)
   }
 
-  const onBooksOpenChange = (value: string) => {
-    const booksOpen = value === 'open'
-    form.setValues({ [BooksStatusField.BooksOpen.id]: booksOpen })
-    setBooksOpen(booksOpen)
-  }
-
   const onBooksOpenAtChange = (date: DateValue) => {
     form.setValues({ [BooksStatusField.BooksOpenAt.id]: date || undefined })
   }
@@ -78,15 +74,15 @@ const AdminBooksStatus = ({ booksStatus }: IAdminBooksStatus) => {
               className="flex flex-col justify-center gap-4"
             >
               <Radio.Group
-                value={booksOpen ? 'open' : 'closed'}
-                onChange={onBooksOpenChange}
+                {...form.getInputProps(BooksStatusField.BooksOpen.id)}
                 id={BooksStatusField.BooksOpen.id}
                 label={BooksStatusField.BooksOpen.label}
                 error={form.errors[BooksStatusField.BooksOpen.id]}
               >
                 <Group mt="xs">
-                  <Radio value="open" label="Open" />
-                  <Radio value="closed" label="Closed" />
+                  {BOOKS_OPEN.map((option) => (
+                    <Radio key={option} value={option} label={option} />
+                  ))}
                 </Group>
               </Radio.Group>
               <DateTimePicker
