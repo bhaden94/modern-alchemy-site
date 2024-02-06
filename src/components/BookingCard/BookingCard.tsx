@@ -34,7 +34,6 @@ export default function BookingCard({ booking }: IBookingCardProps) {
   const [isDeleting, setIsDeleting] = useState<boolean>(false)
 
   const deleteBookingById = async () => {
-    // TODO: Add confirmation for delete
     setIsDeleting(true)
     const response = await fetch('/api/sanity/booking', {
       method: 'DELETE',

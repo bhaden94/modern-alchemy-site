@@ -71,9 +71,6 @@ Places to update for form changes:
   - booking sanity model interface
 */
 
-// TODO: split into components
-// TODO: implement reCAPTCHA for form submission
-// TODO: implement Nodemailer to send email confirming form submission
 const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
   // Body placement images state
   const [
