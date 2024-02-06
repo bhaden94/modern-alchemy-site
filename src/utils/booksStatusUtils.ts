@@ -1,9 +1,10 @@
 import z from 'zod'
 
+export const BOOKS_OPEN = ['OPEN', 'CLOSED'] as const
+export const zBooksOpenType = z.enum(BOOKS_OPEN)
+
 export const booksStatusSchema = z.object({
-  booksOpen: z.boolean({
-    required_error: 'Please select whether your books are open or closed',
-  }),
+  booksOpen: zBooksOpenType,
   booksOpenAt: z.date().optional(),
 })
 
