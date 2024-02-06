@@ -21,12 +21,13 @@ import { FileRejection, FileWithPath } from '@mantine/dropzone'
 import { useForm } from '@mantine/form'
 import imageCompression from 'browser-image-compression'
 import { zodResolver } from 'mantine-form-zod-resolver'
-import { useState } from 'react'
+import { SetStateAction, useState } from 'react'
 
 import {
   BookingField,
   bookingSchema,
   getBookingFormInitialValues,
+  ImagesBookingField,
   preferredDayOptions,
   priorTattooOptions,
   styleOptions,
@@ -74,28 +75,61 @@ Places to update for form changes:
 // TODO: implement reCAPTCHA for form submission
 // TODO: implement Nodemailer to send email confirming form submission
 const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
-  const [isCompressingImages, setIsCompressingImages] = useState<boolean>(false)
+  // Body placement images state
+  const [
+    isCompressingBodyPlacementImages,
+    setIsCompressingBodyPlacementImages,
+  ] = useState<boolean>(false)
+  const [bodyPlacementImageFiles, setBodyPlacementImageFiles] = useState<
+    FileWithPath[]
+  >([])
+  const [
+    bodyPlacementImageUploadRejections,
+    setBodyPlacementImageUploadRejections,
+  ] = useState<FileRejection[]>([])
+
+  // Reference images state
+  const [isCompressingReferenceImages, setIsCompressingReferenceImages] =
+    useState<boolean>(false)
+  const [referenceImageFiles, setReferenceImageFiles] = useState<
+    FileWithPath[]
+  >([])
+  const [referenceImageUploadRejections, setReferenceImageUploadRejections] =
+    useState<FileRejection[]>([])
+
+  // Form boolean states
   const [isUploadingImages, setIsUploadingImages] = useState<boolean>(false)
   const [isSubmittingForm, setIsSubmittingForm] = useState<boolean>(false)
+  const isSubmitting = isUploadingImages || isSubmittingForm
+  const isCompressingImages =
+    isCompressingReferenceImages || isCompressingReferenceImages
 
+  // Preffered days state
   const [preferredDays, setPreferredDays] = useState<string[]>([])
-  const [imageFiles, setImageFiles] = useState<FileWithPath[]>([])
-  const [imageUploadRejections, setImageUploadRejections] = useState<
-    FileRejection[]
-  >([])
 
+  // Form variables
   const form = useForm<TBookingSchema>({
     initialValues: getBookingFormInitialValues(),
     validate: zodResolver(bookingSchema),
   })
-
   const formHasErrors = Object.keys(form.errors).length > 0
-  const isSubmitting = isUploadingImages || isSubmittingForm
 
+  const onSuccessfullBooking = () => {
+    form.reset()
+    setBodyPlacementImageFiles([])
+    setReferenceImageFiles([])
+    setPreferredDays([])
+    onSuccess()
+  }
+
+  // Form methods
   const onFormSubmit = async (data: TBookingSchema) => {
     setIsUploadingImages(true)
     const formData = new FormData()
-    const images: File[] = data.referenceImages
+    const images: File[] = [
+      ...data.referenceImages,
+      ...data.bodyPlacementImages,
+    ]
     Array.from(images).forEach((file, i) => {
       formData.append(`image-${i}`, file)
     })
@@ -138,10 +172,7 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
     setIsSubmittingForm(false)
 
     if (response.ok) {
-      form.reset()
-      setImageFiles([])
-      setPreferredDays([])
-      onSuccess()
+      onSuccessfullBooking()
     } else {
       onFailure()
     }
@@ -153,15 +184,26 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
     form.setValues({ [BookingField.PreferredDays.id]: days })
   }
 
-  const onImageReject = (rejections: FileRejection[]) => {
-    setImageUploadRejections(rejections)
+  const onImageReject = (
+    rejections: FileRejection[],
+    imageUploadSetter: (value: SetStateAction<FileRejection[]>) => void,
+  ) => {
+    imageUploadSetter(rejections)
   }
 
-  const onImageDrop = async (files: FileWithPath[]) => {
-    setIsCompressingImages(true)
-    form.clearFieldError(BookingField.ReferenceImages.id)
-    setImageUploadRejections([])
-    setImageFiles([])
+  const onImageDrop = async (
+    files: FileWithPath[],
+    formId: string,
+    setters: {
+      compressSetter: (value: SetStateAction<boolean>) => void
+      imageRejectionSetter: (value: SetStateAction<FileRejection[]>) => void
+      imageFilesSetter: (value: SetStateAction<FileWithPath[]>) => void
+    },
+  ) => {
+    setters.compressSetter(true)
+    form.clearFieldError(formId)
+    setters.imageRejectionSetter([])
+    setters.imageFilesSetter([])
 
     try {
       const filesPromises = files.map((file) =>
@@ -173,21 +215,26 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
       )
       const compressedImages = await Promise.all(filesPromises)
 
-      setImageFiles(compressedImages)
-      form.setValues({ [BookingField.ReferenceImages.id]: compressedImages })
+      setters.imageFilesSetter(compressedImages)
+      form.setValues({ [formId]: compressedImages })
     } catch (error) {
       onFailure(
         'There was a problem compressing the images. Please try again. If the issue persists, please try different images.',
       )
     }
 
-    setIsCompressingImages(false)
+    setters.compressSetter(false)
   }
 
-  const onImageRemove = (name: string) => {
-    const filteredFiles = imageFiles.filter((image) => image.name !== name)
-    setImageFiles(filteredFiles)
-    form.setValues({ [BookingField.ReferenceImages.id]: filteredFiles })
+  const onImageRemove = (
+    nameToRemove: string,
+    formId: string,
+    images: FileWithPath[],
+    imagesSetter: (value: SetStateAction<FileWithPath[]>) => void,
+  ) => {
+    const filteredFiles = images.filter((image) => image.name !== nameToRemove)
+    imagesSetter(filteredFiles)
+    form.setValues({ [formId]: filteredFiles })
   }
 
   return (
@@ -345,33 +392,98 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
             maxRows={8}
           />
 
-          {/* Images */}
+          {/* Body Placement Images */}
           <Box className="w-full">
-            <Text span>{BookingField.ReferenceImages.label}</Text>
+            <Text span>{ImagesBookingField.BodyPlacementImages.label}</Text>
             <Text span c="var(--mantine-color-error)">
               &nbsp;*
             </Text>
-            <Text c="dimmed">{BookingField.ReferenceImages.description}</Text>
+            <Text c="dimmed">
+              {ImagesBookingField.BodyPlacementImages.description}
+            </Text>
             <ImageDropzone
-              onImageDrop={(files) => onImageDrop(files)}
-              onImageReject={(rejections) => onImageReject(rejections)}
+              onImageDrop={(files) =>
+                onImageDrop(files, ImagesBookingField.BodyPlacementImages.id, {
+                  compressSetter: setIsCompressingBodyPlacementImages,
+                  imageFilesSetter: setBodyPlacementImageFiles,
+                  imageRejectionSetter: setBodyPlacementImageUploadRejections,
+                })
+              }
+              onImageReject={(rejections) =>
+                onImageReject(rejections, setBodyPlacementImageUploadRejections)
+              }
               disabled={isSubmitting}
               dropzoneProps={{
                 className: 'w-full',
-                loading: isCompressingImages,
+                loading: isCompressingBodyPlacementImages,
                 loaderProps: {
                   children: <CustomLoader label={'Compressing images'} />,
                 },
               }}
             />
             <ImageThumbnails
-              imageFiles={imageFiles}
-              onImageRemove={(name) => onImageRemove(name)}
+              imageFiles={bodyPlacementImageFiles}
+              onImageRemove={(name) =>
+                onImageRemove(
+                  name,
+                  ImagesBookingField.BodyPlacementImages.id,
+                  bodyPlacementImageFiles,
+                  setBodyPlacementImageFiles,
+                )
+              }
             />
             <ImageErrors
-              imageUploadRejections={imageUploadRejections}
+              imageUploadRejections={bodyPlacementImageUploadRejections}
               formError={form.errors[
-                BookingField.ReferenceImages.id
+                ImagesBookingField.BodyPlacementImages.id
+              ]?.toString()}
+            />
+          </Box>
+
+          {/* Reference Images */}
+          <Box className="w-full">
+            <Text span>{ImagesBookingField.ReferenceImages.label}</Text>
+            <Text span c="var(--mantine-color-error)">
+              &nbsp;*
+            </Text>
+            <Text c="dimmed">
+              {ImagesBookingField.ReferenceImages.description}
+            </Text>
+            <ImageDropzone
+              onImageDrop={(files) =>
+                onImageDrop(files, ImagesBookingField.ReferenceImages.id, {
+                  compressSetter: setIsCompressingReferenceImages,
+                  imageFilesSetter: setReferenceImageFiles,
+                  imageRejectionSetter: setReferenceImageUploadRejections,
+                })
+              }
+              onImageReject={(rejections) =>
+                onImageReject(rejections, setReferenceImageUploadRejections)
+              }
+              disabled={isSubmitting}
+              dropzoneProps={{
+                className: 'w-full',
+                loading: isCompressingReferenceImages,
+                loaderProps: {
+                  children: <CustomLoader label={'Compressing images'} />,
+                },
+              }}
+            />
+            <ImageThumbnails
+              imageFiles={referenceImageFiles}
+              onImageRemove={(name) =>
+                onImageRemove(
+                  name,
+                  ImagesBookingField.ReferenceImages.id,
+                  referenceImageFiles,
+                  setReferenceImageFiles,
+                )
+              }
+            />
+            <ImageErrors
+              imageUploadRejections={referenceImageUploadRejections}
+              formError={form.errors[
+                ImagesBookingField.ReferenceImages.id
               ]?.toString()}
             />
           </Box>

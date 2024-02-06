@@ -25,7 +25,7 @@ const phoneRegex = new RegExp(
 
 export const MIN_AGE = 18
 export const MAX_AGE = 117
-const MIN_FILES = 2
+const MIN_FILES = 1
 export const MAX_FILES = 5
 export const MAX_FILES_SIZE = 4456448 // 4.25MB
 export const ACCEPTED_IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/webp']
@@ -101,6 +101,46 @@ Places to update for form changes:
   - booking sanity model interface
 */
 
+const imagesRefinement = (files: File[], ctx: z.RefinementCtx): boolean => {
+  if (!files || files.length < MIN_FILES) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: `At least ${MIN_FILES} image(s) must be provided.`,
+    })
+    return false
+  }
+
+  if (files.length > MAX_FILES) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'A maximum of 5 images can be uploaded',
+    })
+    return false
+  }
+
+  for (let i = 0; i < files.length; i++) {
+    if (!ACCEPTED_IMAGE_TYPES.includes(files[i].type)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `File must be a valid image type.`,
+      })
+      return false
+    }
+  }
+
+  let filesSize = 0
+  files.forEach((file) => (filesSize += file.size))
+  if (filesSize > MAX_FILES_SIZE) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'Total image size exceeds limit.',
+    })
+    return false
+  }
+
+  return true
+}
+
 export const bookingSchema = z.object({
   name: z.string({ required_error: nameError }).min(1, nameError),
   phoneNumber: z
@@ -134,50 +174,37 @@ export const bookingSchema = z.object({
     .string({ required_error: preferredDayError })
     .array()
     .min(1, preferredDayError),
-  referenceImages: z.custom<File[]>().superRefine((files, ctx) => {
-    if (!files || files.length < MIN_FILES) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: `At least ${MIN_FILES} images must be provided. One reference and one of the body area.`,
-      })
-      return false
-    }
-
-    if (files.length > MAX_FILES) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'A maximum of 5 images can be uploaded',
-      })
-      return false
-    }
-
-    for (let i = 0; i < files.length; i++) {
-      if (!ACCEPTED_IMAGE_TYPES.includes(files[i].type)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: `File must be a valid image type.`,
-        })
-        return false
-      }
-    }
-
-    let filesSize = 0
-    files.forEach((file) => (filesSize += file.size))
-    if (filesSize > MAX_FILES_SIZE) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'Total image size exceeds limit.',
-      })
-      return false
-    }
-
-    return true
-  }),
+  bodyPlacementImages: z.custom<File[]>().superRefine(imagesRefinement),
+  referenceImages: z.custom<File[]>().superRefine(imagesRefinement),
 })
 
 // extracting the type
 export type TBookingSchema = z.infer<typeof bookingSchema>
 
+// This object is used just for the booking form
+// There are 2 image upload fields that get combined
+// into a single array of referenceImages for the booking
+export const ImagesBookingField = {
+  BodyPlacementImages: {
+    id: 'bodyPlacementImages',
+    label:
+      'Please add a clear photo of where you would like your tattoo placed',
+    description:
+      'Make sure its a photo of you and not a photo from the internet.',
+    initialValue: [],
+  },
+  ReferenceImages: {
+    id: 'referenceImages',
+    label: 'Please add reference photos for your tattoo design',
+    description: '',
+    initialValue: [],
+  },
+} as const
+
+// This object controls what appears on the artists bookings page.
+// Each top level property will get turned into a field.
+// It is also partially used in the form submissions,
+// but is not directly tied to the form schema above.
 export const BookingField = {
   Name: {
     id: 'name',
