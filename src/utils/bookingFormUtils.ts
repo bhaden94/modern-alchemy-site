@@ -101,6 +101,7 @@ Places to update for form changes:
   - booking sanity model interface
 */
 
+// Custom checks for images in booking form
 const imagesRefinement = (files: File[], ctx: z.RefinementCtx): boolean => {
   if (!files || files.length < MIN_FILES) {
     ctx.addIssue({
@@ -141,6 +142,7 @@ const imagesRefinement = (files: File[], ctx: z.RefinementCtx): boolean => {
   return true
 }
 
+// Booking form schema
 export const bookingSchema = z.object({
   name: z.string({ required_error: nameError }).min(1, nameError),
   phoneNumber: z
@@ -292,19 +294,21 @@ export const BookingField = {
   ReferenceImages: {
     id: 'referenceImages',
     label: 'Reference Images',
-    description:
-      'Please add a clear photo of where you would like you tattoo placed. Make sure its a photo of you and not a photo from the internet.',
     initialValue: [],
     getValue: () => '',
   },
 } as const
 
-export const getBookingFormInitialValues = () => {
+export const getBookingFormInitialValues = (): TBookingSchema => {
   const bookingFormInitialValues: any = {}
 
   Object.values(BookingField).forEach((field) => {
     bookingFormInitialValues[field.id] = field.initialValue
   })
 
-  return bookingFormInitialValues
+  Object.values(ImagesBookingField).forEach((field) => {
+    bookingFormInitialValues[field.id] = field.initialValue
+  })
+
+  return bookingFormInitialValues as TBookingSchema
 }
