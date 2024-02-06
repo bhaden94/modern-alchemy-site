@@ -17,7 +17,7 @@ interface IBookings {
   artistId: string
 }
 
-// TODO: simple pagination
+// Possibly needs simple pagination
 // This is because it could cause wierd things to happen if we have pagination for bookings
 export default function AdminBookings({ bookings, artistId }: IBookings) {
   const client = getClient(undefined)

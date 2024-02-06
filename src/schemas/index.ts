@@ -11,7 +11,6 @@ import layoutMetadataContent from './pages/layoutMetadataContent'
 import rootLayoutContent from './pages/rootLayoutContent'
 import rootPageContent from './pages/rootPageContent'
 
-// TODO: figure out how to generate types to use in code
 export const schemaTypes = {
   blockContent,
   booking,

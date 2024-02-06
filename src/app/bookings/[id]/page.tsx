@@ -10,8 +10,6 @@ import { getBookingsByArtistId } from '~/lib/sanity/queries/sanity.bookingsQuery
 import { getClient } from '~/lib/sanity/sanity.client'
 import { NavigationPages } from '~/utils/navigation'
 
-// TODO: generalize into an admin dashboard that shows artists requests for bookings
-// TODO: come up with what the admin can do on this dashboard
 const BookingsPage = async ({ params }: { params: { id: string } }) => {
   const client = getClient(undefined)
   const artist = await getArtistById(client, decodeURI(params.id))

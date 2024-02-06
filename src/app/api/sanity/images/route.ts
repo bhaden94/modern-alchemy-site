@@ -58,7 +58,6 @@ export async function PUT(
   }
 }
 
-// TODO: Check request is coming from authenticated user
 export async function DELETE(request: NextRequest) {
   const client = getClient(token)
   const body: { imageReferences: ImageReference[] } = await request.json()
