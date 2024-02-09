@@ -1,6 +1,12 @@
 import groq from 'groq'
 import { NextRequest, NextResponse } from 'next/server'
+import { getServerSession } from 'next-auth'
 
+import {
+  authOptions,
+  logAuthorizedRequest,
+  notAuthorizedResponse,
+} from '~/lib/next-auth/auth.utils'
 import { getClient } from '~/lib/sanity/sanity.client'
 
 const token = process.env.SANITY_API_WRITE_TOKEN
@@ -59,6 +65,10 @@ export async function PUT(
 }
 
 export async function DELETE(request: NextRequest) {
+  const session = await getServerSession(authOptions)
+  if (!session) return notAuthorizedResponse(request)
+  logAuthorizedRequest(session, request)
+
   const client = getClient(token)
   const body: { imageReferences: ImageReference[] } = await request.json()
 
