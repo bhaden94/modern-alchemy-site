@@ -1,4 +1,5 @@
-import { NextAuthOptions } from 'next-auth'
+import { NextRequest, NextResponse } from 'next/server'
+import { NextAuthOptions, Session } from 'next-auth'
 import { JWT } from 'next-auth/jwt'
 import GoogleProvider from 'next-auth/providers/google'
 
@@ -48,4 +49,25 @@ export const authOptions: NextAuthOptions = {
       return token
     },
   },
+}
+
+export const notAuthorizedResponse = (request: NextRequest): NextResponse => {
+  console.warn(
+    `An unauthorized request was received on route ${request.nextUrl}.`,
+  )
+  console.warn('Request headers: ', request.headers)
+  console.warn('Request IP:', request.ip)
+  return new NextResponse(`Unauthorized`, {
+    status: 401,
+    statusText: JSON.stringify('You are not authorized to make this request.'),
+  })
+}
+
+export const logAuthorizedRequest = (
+  session: Session,
+  request: NextRequest,
+) => {
+  console.log(
+    `${session.user?.name} - ${session.user?.email} requested a ${request.method} operation on ${request.nextUrl}.`,
+  )
 }
