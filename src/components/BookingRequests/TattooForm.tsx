@@ -99,7 +99,7 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
   const [isSubmittingForm, setIsSubmittingForm] = useState<boolean>(false)
   const isSubmitting = isUploadingImages || isSubmittingForm
   const isCompressingImages =
-    isCompressingReferenceImages || isCompressingReferenceImages
+    isCompressingBodyPlacementImages || isCompressingReferenceImages
 
   // Preffered days state
   const [preferredDays, setPreferredDays] = useState<string[]>([])
