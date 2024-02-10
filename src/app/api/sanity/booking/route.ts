@@ -13,10 +13,10 @@ const token = process.env.SANITY_API_WRITE_TOKEN
 export async function PUT(request: NextRequest) {
   const client = getClient(token)
   const body = await request.json()
+  delete body.bodyPlacementImages // remove extra field
 
   try {
     console.log(`Start booking request create for ${body.name}: ${body.email}`)
-
     // Submit the form data to Sanity CMS
     const response = await client.create({
       _type: 'booking',

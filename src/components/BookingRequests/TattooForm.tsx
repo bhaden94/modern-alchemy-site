@@ -9,8 +9,12 @@ import {
   Group,
   Loader,
   LoadingOverlay,
-  NativeSelect,
   NativeSelectProps,
+  NumberInput,
+  NumberInputProps,
+  Radio,
+  RadioGroupProps,
+  Stack,
   Text,
   TextareaProps,
   TextInputProps,
@@ -39,13 +43,27 @@ import ImageErrors from '../ImageDropzone/ImageErrors'
 import ImageThumbnails from '../ImageDropzone/ImageThumbnails'
 import FormErrorAlert from './FormErrorAlert'
 
-const inputSharedProps: Partial<
-  TextInputProps & NativeSelectProps & CheckboxGroupProps & TextareaProps
-> = {
+const inputSharedProps = (
+  id: string,
+  label: string,
+  placeholder: string,
+  isDisabled: boolean,
+): Partial<
+  TextInputProps &
+    NumberInputProps &
+    NativeSelectProps &
+    RadioGroupProps &
+    CheckboxGroupProps &
+    TextareaProps
+> => ({
   className: 'w-full',
   withAsterisk: true,
   size: 'md',
-}
+  id: id,
+  label: <Text span>{label}</Text>,
+  placeholder: placeholder,
+  disabled: isDisabled,
+})
 
 const CustomLoader = ({ label }: { label: string }) => {
   return (
@@ -101,9 +119,6 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
   const isCompressingImages =
     isCompressingBodyPlacementImages || isCompressingReferenceImages
 
-  // Preffered days state
-  const [preferredDays, setPreferredDays] = useState<string[]>([])
-
   // Form variables
   const form = useForm<TBookingSchema>({
     initialValues: getBookingFormInitialValues(),
@@ -115,7 +130,6 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
     form.reset()
     setBodyPlacementImageFiles([])
     setReferenceImageFiles([])
-    setPreferredDays([])
     onSuccess()
   }
 
@@ -150,6 +164,8 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
       setIsUploadingImages(false)
       return
     } else {
+      // Some other error happened
+      // and we shouldn't stop the form submission
       onFailure('There was a problem uploading images.')
     }
 
@@ -173,12 +189,6 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
     } else {
       onFailure()
     }
-  }
-
-  const onPreferredDaysChange = (days: string[]) => {
-    form.clearFieldError(BookingField.PreferredDays.id)
-    setPreferredDays(days)
-    form.setValues({ [BookingField.PreferredDays.id]: days })
   }
 
   const onImageReject = (
@@ -254,115 +264,149 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
         >
           {/* Name */}
           <TextInput
-            {...inputSharedProps}
+            {...inputSharedProps(
+              BookingField.Name.id,
+              BookingField.Name.label,
+              BookingField.Name.placeholder,
+              isSubmitting,
+            )}
             {...form.getInputProps(BookingField.Name.id)}
-            id={BookingField.Name.id}
-            label={<Text span>{BookingField.Name.label}</Text>}
-            placeholder={BookingField.Name.placeholder}
-            disabled={isSubmitting}
           />
 
           {/* Phone Number */}
           <TextInput
-            {...inputSharedProps}
+            {...inputSharedProps(
+              BookingField.PhoneNumber.id,
+              BookingField.PhoneNumber.label,
+              BookingField.PhoneNumber.placeholder,
+              isSubmitting,
+            )}
             {...form.getInputProps(BookingField.PhoneNumber.id)}
-            id={BookingField.PhoneNumber.id}
-            label={<Text span>{BookingField.PhoneNumber.label}</Text>}
-            placeholder={BookingField.Name.placeholder}
-            disabled={isSubmitting}
             type="tel"
           />
 
           {/* Email */}
           <TextInput
-            {...inputSharedProps}
+            {...inputSharedProps(
+              BookingField.Email.id,
+              BookingField.Email.label,
+              BookingField.Email.placeholder,
+              isSubmitting,
+            )}
             {...form.getInputProps(BookingField.Email.id)}
-            id={BookingField.Email.id}
-            label={<Text span>{BookingField.Email.label}</Text>}
-            placeholder={BookingField.Email.placeholder}
-            disabled={isSubmitting}
             type="email"
           />
 
           {/* Instagram Name */}
           <TextInput
-            {...inputSharedProps}
+            {...inputSharedProps(
+              BookingField.InstagramName.id,
+              BookingField.InstagramName.label,
+              BookingField.InstagramName.placeholder,
+              isSubmitting,
+            )}
             {...form.getInputProps(BookingField.InstagramName.id)}
-            id={BookingField.InstagramName.id}
-            label={<Text span>{BookingField.InstagramName.label}</Text>}
-            placeholder={BookingField.InstagramName.placeholder}
-            disabled={isSubmitting}
             withAsterisk={false}
           />
 
           {/* Traveling From */}
           <TextInput
-            {...inputSharedProps}
+            {...inputSharedProps(
+              BookingField.TravelingFrom.id,
+              BookingField.TravelingFrom.label,
+              BookingField.TravelingFrom.placeholder,
+              isSubmitting,
+            )}
             {...form.getInputProps(BookingField.TravelingFrom.id)}
-            id={BookingField.TravelingFrom.id}
-            label={<Text span>{BookingField.TravelingFrom.label}</Text>}
-            placeholder={BookingField.TravelingFrom.placeholder}
-            disabled={isSubmitting}
           />
 
           {/* Age */}
-          <TextInput
-            {...inputSharedProps}
+          <NumberInput
+            {...inputSharedProps(
+              BookingField.Age.id,
+              BookingField.Age.label,
+              BookingField.Age.placeholder,
+              isSubmitting,
+            )}
             {...form.getInputProps(BookingField.Age.id)}
-            id={BookingField.Age.id}
-            label={<Text span>{BookingField.Age.label}</Text>}
-            placeholder={BookingField.Age.placeholder}
-            disabled={isSubmitting}
-            type="number"
+            hideControls
           />
 
           {/* Characters */}
           <TextInput
-            {...inputSharedProps}
+            {...inputSharedProps(
+              BookingField.Characters.id,
+              BookingField.Characters.label,
+              BookingField.Characters.placeholder,
+              isSubmitting,
+            )}
             {...form.getInputProps(BookingField.Characters.id)}
-            id={BookingField.Characters.id}
-            label={<Text span>{BookingField.Characters.label}</Text>}
-            placeholder={BookingField.Characters.placeholder}
-            disabled={isSubmitting}
           />
 
           {/* Location */}
           <TextInput
-            {...inputSharedProps}
+            {...inputSharedProps(
+              BookingField.Location.id,
+              BookingField.Location.label,
+              BookingField.Location.placeholder,
+              isSubmitting,
+            )}
             {...form.getInputProps(BookingField.Location.id)}
-            id={BookingField.Location.id}
-            label={<Text span>{BookingField.Location.label}</Text>}
-            placeholder={BookingField.Location.placeholder}
-            disabled={isSubmitting}
           />
 
           {/* Style */}
-          <NativeSelect
-            {...inputSharedProps}
+          <Radio.Group
+            {...inputSharedProps(
+              BookingField.Style.id,
+              BookingField.Style.label,
+              '',
+              isSubmitting,
+            )}
             {...form.getInputProps(BookingField.Style.id)}
-            id={BookingField.Style.id}
-            label={<Text span>{BookingField.Style.label}</Text>}
-            disabled={isSubmitting}
-            data={styleOptions}
-          />
+          >
+            <Group mt="xs">
+              {styleOptions.map(({ value, label }) => (
+                <Radio
+                  key={value}
+                  value={value}
+                  label={label}
+                  disabled={isSubmitting}
+                />
+              ))}
+            </Group>
+          </Radio.Group>
 
           {/* Prior Tattoo */}
-          <NativeSelect
-            {...inputSharedProps}
+          <Radio.Group
+            {...inputSharedProps(
+              BookingField.PriorTattoo.id,
+              BookingField.PriorTattoo.label,
+              '',
+              isSubmitting,
+            )}
             {...form.getInputProps(BookingField.PriorTattoo.id)}
-            id={BookingField.PriorTattoo.id}
-            label={<Text span>{BookingField.PriorTattoo.label}</Text>}
-            disabled={isSubmitting}
-            data={priorTattooOptions}
-          />
+          >
+            <Stack mt="xs" gap="xs">
+              {priorTattooOptions.map(({ value, label }) => (
+                <Radio
+                  key={value}
+                  value={value}
+                  label={label}
+                  disabled={isSubmitting}
+                />
+              ))}
+            </Stack>
+          </Radio.Group>
 
           {/* Preferred Days */}
           <Checkbox.Group
-            {...inputSharedProps}
-            value={preferredDays}
-            onChange={onPreferredDaysChange}
-            label={<Text span>{BookingField.PreferredDays.label}</Text>}
-            error={form.errors[BookingField.PreferredDays.id]}
+            {...inputSharedProps(
+              BookingField.PreferredDays.id,
+              BookingField.PreferredDays.label,
+              '',
+              isSubmitting,
+            )}
+            {...form.getInputProps(BookingField.PreferredDays.id)}
           >
             <Group my="xs">
               {preferredDayOptions.map((option) => (
@@ -378,12 +422,13 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
 
           {/* Description */}
           <Textarea
-            {...inputSharedProps}
+            {...inputSharedProps(
+              BookingField.Description.id,
+              BookingField.Description.label,
+              BookingField.Description.placeholder,
+              isSubmitting,
+            )}
             {...form.getInputProps(BookingField.Description.id)}
-            id={BookingField.Description.id}
-            label={<Text span>{BookingField.Description.label}</Text>}
-            placeholder={BookingField.Description.placeholder}
-            disabled={isSubmitting}
             autosize
             minRows={3}
             maxRows={8}

@@ -30,28 +30,32 @@ export const MAX_FILES = 5
 export const MAX_FILES_SIZE = 4456448 // 4.25MB
 export const ACCEPTED_IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/webp']
 
-export const styleOptions: ComboboxItem[] = [
+export const TATTO_STYLE = ['color', 'black_and_grey'] as const
+export const zTattooStyle = z.enum(TATTO_STYLE)
+export const styleOptions: { value: string; label: string }[] = [
   {
-    value: 'color',
+    value: zTattooStyle.Values.color,
     label: 'Color',
   },
   {
-    value: 'black_and_grey',
-    label: 'Black and Grey',
+    value: zTattooStyle.Values.black_and_grey,
+    label: 'Black & Grey',
   },
 ]
 
-export const priorTattooOptions: ComboboxItem[] = [
+export const PRIOR_TATTOO = ['no', 'new_tattoo', 'ongoing_project'] as const
+export const zPriorTattoo = z.enum(PRIOR_TATTOO)
+export const priorTattooOptions: { value: string; label: string }[] = [
   {
-    value: 'no',
+    value: zPriorTattoo.Values.no,
     label: 'No',
   },
   {
-    value: 'new_tattoo',
+    value: zPriorTattoo.Values.new_tattoo,
     label: 'Yes - I want a new tattoo',
   },
   {
-    value: 'ongoing_project',
+    value: zPriorTattoo.Values.ongoing_project,
     label: 'Yes - this is an ongoing project',
   },
 ]
@@ -170,8 +174,8 @@ export const bookingSchema = z.object({
       required_error: locationError,
     })
     .min(1, locationError),
-  style: z.string(),
-  priorTattoo: z.string(),
+  style: zTattooStyle,
+  priorTattoo: zPriorTattoo,
   preferredDays: z
     .string({ required_error: preferredDayError })
     .array()
@@ -269,7 +273,7 @@ export const BookingField = {
     label: 'Tattoo Style',
     initialValue: styleOptions[0].value,
     getValue: (style: string) =>
-      style === 'black_and_grey' ? 'Black & Grey' : 'Color',
+      styleOptions.find((option) => option.value === style)?.label || 'No',
   },
   PriorTattoo: {
     id: 'priorTattoo',
