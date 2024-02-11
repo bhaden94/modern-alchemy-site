@@ -46,22 +46,18 @@ const PortfolioCarousel = ({ images }: { images: { asset: ImageAsset }[] }) => {
   }, [embla, onSelect])
 
   const mainImageSlides = images?.map((image) => (
-    <Carousel.Slide key={image.asset.originalFilename}>
+    <Carousel.Slide key={image.asset._id}>
       <PortfolioCarouselImage image={image.asset} />
     </Carousel.Slide>
   ))
 
   const thumbnails = images?.map((image, i) => (
-    <Carousel.Slide
-      key={image.asset.originalFilename}
-      className="flex justify-center"
-    >
+    <Carousel.Slide key={image.asset._id} className="flex justify-center">
       <PortfolioCarouselThumbnail
         image={image.asset}
         selected={i === thumbIndex}
         index={i}
         onClick={scrollTo}
-        key={image.asset.originalFilename}
       />
     </Carousel.Slide>
   ))
