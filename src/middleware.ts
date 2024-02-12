@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { withAuth } from 'next-auth/middleware'
 
 import { REDIRECT_URL } from './lib/next-auth/auth.utils'
+import { NavigationPages } from './utils/navigation'
 
 export default withAuth(
   function middleware(req) {
@@ -20,11 +21,12 @@ export default withAuth(
       req.nextUrl.pathname === config.matcher[0] &&
       req.nextauth.token?.artistId
     ) {
+      // route to settings page by default
       return NextResponse.redirect(
         new URL(
           `${req.nextUrl.pathname}/${encodeURIComponent(
             req.nextauth.token?.artistId,
-          )}`,
+          )}${NavigationPages.EmployeePortalSettings}`,
           req.url,
         ),
       )
@@ -39,5 +41,8 @@ export default withAuth(
 )
 
 export const config = {
-  matcher: ['/bookings', '/bookings/:id'],
+  matcher: [
+    '/employee-portal',
+    '/employee-portal/:id*',
+  ],
 }

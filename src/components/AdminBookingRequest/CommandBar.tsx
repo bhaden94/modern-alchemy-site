@@ -16,13 +16,6 @@ const CommandBar = ({ refreshDisabled, refreshList }: ICommandBar) => {
       <Button disabled={refreshDisabled} onClick={refreshList}>
         Refresh list
       </Button>
-      <Button
-        className="float-right"
-        variant="outline"
-        onClick={() => signOut({ callbackUrl: NavigationPages.Home })}
-      >
-        Sign Out
-      </Button>
     </>
   )
 }
