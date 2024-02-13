@@ -2,8 +2,9 @@
 
 import { Text } from '@mantine/core'
 import { DateValue } from '@mantine/dates'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
+import { useArtist } from '~/hooks/useArtist'
 import {
   BooksStatus,
   listenForArtistsBookStatusChanges,
@@ -14,7 +15,6 @@ import BooksOpenAt from './BooksOpenAt'
 import ShowBooksOpen from './ShowBooksOpen'
 
 interface IBooksStatus {
-  booksStatus: BooksStatus
   showForm?: boolean
 }
 
@@ -34,22 +34,19 @@ const ShowWhenBooksClosed = ({
 }
 
 const ArtistBooksStatus = (props: IBooksStatus) => {
-  const { booksStatus, showForm } = props
-
-  const [artistBooksStatus, setArtistBooksStatus] =
-    useState<BooksStatus>(booksStatus)
+  const { showForm } = props
+  const { artist, updateArtist } = useArtist()
 
   useEffect(() => {
     const client = getClient(undefined)
     const subscription = listenForArtistsBookStatusChanges(
       client,
-      booksStatus._id,
+      artist._id,
     ).subscribe((update) => {
-      setArtistBooksStatus({
+      updateArtist({
+        ...artist,
         booksOpen: update?.result?.booksOpen,
         booksOpenAt: update?.result?.booksOpenAt,
-        name: update?.result?.name,
-        _id: update?.result?._id,
       })
     })
 
@@ -60,16 +57,12 @@ const ArtistBooksStatus = (props: IBooksStatus) => {
 
   return (
     <>
-      {artistBooksStatus.booksOpen ? (
-        <ShowBooksOpen
-          showForm={!!showForm}
-          artistId={artistBooksStatus._id}
-          artistName={artistBooksStatus.name}
-        />
+      {artist.booksOpen ? (
+        <ShowBooksOpen showForm={!!showForm} />
       ) : (
         <ShowWhenBooksClosed
-          name={artistBooksStatus.name}
-          booksOpenAt={artistBooksStatus.booksOpenAt}
+          name={artist.name}
+          booksOpenAt={artist.booksOpenAt}
         />
       )}
     </>

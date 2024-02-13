@@ -41,8 +41,5 @@ export default withAuth(
 )
 
 export const config = {
-  matcher: [
-    '/employee-portal',
-    '/employee-portal/:id*',
-  ],
+  matcher: ['/employee-portal', '/employee-portal/:id*'],
 }

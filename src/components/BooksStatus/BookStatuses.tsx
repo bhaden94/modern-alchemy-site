@@ -1,3 +1,6 @@
+'use client'
+
+import { ArtistProvider } from '~/hooks/useArtist'
 import { Artist } from '~/schemas/models/artist'
 
 import ArtistBooksStatus from './ArtistBooksStatus'
@@ -11,16 +14,9 @@ const BookStatuses = ({ artists, showForm }: IBookStatuses) => {
   return (
     <>
       {artists?.map((artist) => (
-        <ArtistBooksStatus
-          key={artist._id}
-          showForm={showForm}
-          booksStatus={{
-            booksOpen: artist.booksOpen,
-            booksOpenAt: artist.booksOpenAt,
-            name: artist.name,
-            _id: artist._id,
-          }}
-        />
+        <ArtistProvider key={artist._id} artist={artist}>
+          <ArtistBooksStatus showForm={showForm} />
+        </ArtistProvider>
       ))}
     </>
   )

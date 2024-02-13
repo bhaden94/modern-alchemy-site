@@ -61,7 +61,7 @@ export default function BookingCard({ booking }: IBookingCardProps) {
         readOnly
         leftSectionPointerEvents="auto"
         leftSection={
-          <InputCopyButton value={field.getValue(booking.location)} />
+          <InputCopyButton value={field.getValue(booking[field.id])} />
         }
       />
     )

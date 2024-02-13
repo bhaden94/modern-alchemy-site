@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import { getServerSession } from 'next-auth'
 
-import { authOptions,REDIRECT_URL } from '~/lib/next-auth/auth.utils'
+import { authOptions, REDIRECT_URL } from '~/lib/next-auth/auth.utils'
 import { NavigationPages } from '~/utils/navigation'
 
 import SideNav from '../../../components/SideNav/SideNav'
