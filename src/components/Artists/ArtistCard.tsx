@@ -34,7 +34,9 @@ const ArtistCard = ({ artist, showPortfolioLink }: IArtistCard) => {
         </Text>
       </Group>
 
-      {artist.socials?.length > 0 ? <Text>Socials</Text> : undefined}
+      {artist.socials && artist.socials.length > 0 ? (
+        <Text>Socials</Text>
+      ) : undefined}
       <Group py={6}>
         {artist.socials?.map((social) => (
           <Anchor
@@ -50,7 +52,9 @@ const ArtistCard = ({ artist, showPortfolioLink }: IArtistCard) => {
         ))}
       </Group>
 
-      {artist.styles?.length > 0 ? <Text>Styles</Text> : undefined}
+      {artist.styles && artist.styles.length > 0 ? (
+        <Text>Styles</Text>
+      ) : undefined}
       <Group py={6}>
         {artist.styles?.map((style) => (
           <Badge variant="light" key={style}>

@@ -59,7 +59,7 @@ export async function getArtistById(
 
 export interface BooksStatus {
   booksOpen: boolean
-  booksOpenAt: DateValue
+  booksOpenAt: DateValue | null
   name: string
   _id: string
 }

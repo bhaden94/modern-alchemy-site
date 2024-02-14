@@ -17,14 +17,15 @@ export enum Role {
 export interface Artist extends BaseSanitySchema<'artist'> {
   email: string
   name: string
-  socials: { label: string; link: string }[]
+  socials?: { label: string; link: string }[]
   booksOpen: boolean
-  booksOpenAt: Date
-  bookingInstructions: TypedObject | TypedObject[]
-  headshot: { asset: ImageAsset }
-  styles: string[]
-  portfolioImages: { asset: ImageAsset }[]
+  booksOpenAt: Date | null
+  bookingInstructions?: TypedObject | TypedObject[]
+  headshot?: { asset: ImageAsset }
+  styles?: string[]
+  portfolioImages?: { asset: ImageAsset }[]
   role: Role
+  shouldEmailBookings: boolean
 }
 
 export default defineType({
@@ -42,6 +43,13 @@ export default defineType({
       name: 'name',
       type: 'string',
       title: 'Name',
+    }),
+    defineField({
+      name: 'shouldEmailBookings',
+      type: 'boolean',
+      title: 'Email Bookings',
+      description:
+        'If enabled, artist will get all bookings sent to their email.',
     }),
     defineField({
       name: 'socials',

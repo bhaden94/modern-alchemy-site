@@ -28,7 +28,7 @@ const ArtistPortfolio = ({ artist }: IBookingInfo) => {
           <ArtistCard artist={artist} />
         </div>
         <div className="md:col-span-3">
-          {artist.portfolioImages?.length > 0 ? (
+          {artist.portfolioImages && artist.portfolioImages.length > 0 ? (
             <PortfolioCarousel images={artist.portfolioImages} />
           ) : (
             'Portfolio in progress...'

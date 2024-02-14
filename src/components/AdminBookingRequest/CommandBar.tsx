@@ -1,9 +1,6 @@
 'use client'
 
 import { Button } from '@mantine/core'
-import { signOut } from 'next-auth/react'
-
-import { NavigationPages } from '~/utils/navigation'
 
 interface ICommandBar {
   refreshDisabled: boolean

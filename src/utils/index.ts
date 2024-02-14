@@ -1,3 +1,13 @@
+export const convertBlobToBase64 = (blob: File) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onerror = reject
+    reader.onload = () => {
+      resolve(reader.result)
+    }
+    reader.readAsDataURL(blob)
+  })
+
 export function formatPhoneNumber(number: string) {
   //Filter only numbers from the input
   let cleaned = ('' + number).replace(/\D/g, '')

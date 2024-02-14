@@ -8,6 +8,8 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
+import { useArtist } from '~/hooks/useArtist'
+import { Artist } from '~/schemas/models/artist'
 import { NavigationPages } from '~/utils/navigation'
 
 const TattooForm = dynamic(
@@ -26,25 +28,19 @@ const generalFailureMessage = 'Something went wrong. Please try to re-submit.'
 const excessiveFailureMessage =
   'Looks like the site is having trouble. Please reach out to the artist directly for further assistance.'
 
-const ShowBooksOpen = ({
-  showForm,
-  artistId,
-  artistName,
-}: {
-  showForm: boolean
-  artistId: string
-  artistName: string
-}) => {
+const ShowBooksOpen = ({ showForm }: { showForm: boolean }) => {
   const router = useRouter()
+  const { artist } = useArtist()
+  const [opened, { open, close }] = useDisclosure(false)
+
   const [failuresCount, setFailuresCount] = useState(0)
   const [failureMessage, setFailureMessage] = useState(generalFailureMessage)
-  const [opened, { open, close }] = useDisclosure(false)
 
   const onSuccess = () => {
     close()
     router.push(
       `${NavigationPages.BookingRequestSuccess}?name=${encodeURIComponent(
-        artistName,
+        artist.name,
       )}`,
     )
   }
@@ -63,19 +59,15 @@ const ShowBooksOpen = ({
   return (
     <>
       {showForm ? (
-        <TattooForm
-          artistId={artistId}
-          onSuccess={onSuccess}
-          onFailure={onFailure}
-        />
+        <TattooForm onSuccess={onSuccess} onFailure={onFailure} />
       ) : (
         <Text
           component={Link}
           href={`${NavigationPages.BookingRequest}/${encodeURIComponent(
-            artistId,
+            artist._id,
           )}`}
         >
-          {artistName}:&nbsp;Click to book now
+          {artist.name}:&nbsp;Click to book now
         </Text>
       )}
 
