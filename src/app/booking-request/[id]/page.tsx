@@ -30,12 +30,6 @@ const ArtistBookingRequestPage = async ({
   return (
     <PageContainer>
       <PageTitle title={`Booking with ${artist.name}`} />
-      {artist.bookingInstructions ? (
-        <PortableText
-          value={artist.bookingInstructions}
-          components={PortableTextComponents}
-        />
-      ) : undefined}
       <BookStatuses artists={[artist]} showForm />
     </PageContainer>
   )

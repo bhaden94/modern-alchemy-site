@@ -2,6 +2,7 @@
 
 import { Alert, Dialog, Loader, Text } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
+import { PortableText } from '@portabletext/react'
 import { IconInfoCircle } from '@tabler/icons-react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
@@ -9,8 +10,9 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 import { useArtist } from '~/hooks/useArtist'
-import { Artist } from '~/schemas/models/artist'
 import { NavigationPages } from '~/utils/navigation'
+
+import { PortableTextComponents } from '../PortableTextComponents'
 
 const TattooForm = dynamic(
   () => import('~/components/BookingRequests/TattooForm'),
@@ -59,7 +61,15 @@ const ShowBooksOpen = ({ showForm }: { showForm: boolean }) => {
   return (
     <>
       {showForm ? (
-        <TattooForm onSuccess={onSuccess} onFailure={onFailure} />
+        <>
+          {artist.bookingInstructions ? (
+            <PortableText
+              value={artist.bookingInstructions}
+              components={PortableTextComponents}
+            />
+          ) : undefined}
+          <TattooForm onSuccess={onSuccess} onFailure={onFailure} />
+        </>
       ) : (
         <Text
           component={Link}
