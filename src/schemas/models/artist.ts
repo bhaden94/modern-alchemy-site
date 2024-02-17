@@ -21,6 +21,7 @@ export interface Artist extends BaseSanitySchema<'artist'> {
   booksOpen: boolean
   booksOpenAt: Date | null
   bookingInstructions?: TypedObject | TypedObject[]
+  booksClosedMessage?: TypedObject | TypedObject[]
   headshot?: { asset: ImageAsset }
   styles?: string[]
   portfolioImages?: { asset: ImageAsset }[]
@@ -89,6 +90,11 @@ export default defineType({
     defineField({
       name: 'bookingInstructions',
       title: 'Booking Instructions',
+      type: 'blockContent',
+    }),
+    defineField({
+      name: 'booksClosedMessage',
+      title: 'Booking Closed Message',
       type: 'blockContent',
     }),
     defineField({

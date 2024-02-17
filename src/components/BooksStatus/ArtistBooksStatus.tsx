@@ -1,36 +1,16 @@
 'use client'
 
-import { Text } from '@mantine/core'
-import { DateValue } from '@mantine/dates'
 import { useEffect } from 'react'
 
 import { useArtist } from '~/hooks/useArtist'
-import {
-  BooksStatus,
-  listenForArtistsBookStatusChanges,
-} from '~/lib/sanity/queries/sanity.artistsQuery'
+import { listenForArtistsBookStatusChanges } from '~/lib/sanity/queries/sanity.artistsQuery'
 import { getClient } from '~/lib/sanity/sanity.client'
 
-import BooksOpenAt from './BooksOpenAt'
+import ShowBooksClosed from './ShowBooksClosed'
 import ShowBooksOpen from './ShowBooksOpen'
 
 interface IBooksStatus {
   showForm?: boolean
-}
-
-const ShowWhenBooksClosed = ({
-  name,
-  booksOpenAt,
-}: {
-  name: string
-  booksOpenAt: DateValue
-}) => {
-  return (
-    <div>
-      <Text span>{name}:&nbsp;</Text>
-      <BooksOpenAt date={booksOpenAt} />
-    </div>
-  )
 }
 
 const ArtistBooksStatus = (props: IBooksStatus) => {
@@ -60,10 +40,7 @@ const ArtistBooksStatus = (props: IBooksStatus) => {
       {artist.booksOpen ? (
         <ShowBooksOpen showForm={!!showForm} />
       ) : (
-        <ShowWhenBooksClosed
-          name={artist.name}
-          booksOpenAt={artist.booksOpenAt}
-        />
+        <ShowBooksClosed />
       )}
     </>
   )

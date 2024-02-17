@@ -17,11 +17,15 @@ export async function PUT(request: NextRequest) {
     if (field.id !== BookingField.ReferenceImages.id) {
       // ignore TS error here since we know types are a match
       // @ts-ignore
-      return `${field.label}: ${field.getValue(body[field.id])}`
+      const bodyVal: string & string[] = body[field.id]
+      return `
+${field.label}:
+- ${field.getValue(bodyVal)}
+      `
     }
   })
 
-  const emailText = emailTextArray.join('\n\n')
+  const emailText = emailTextArray.join('\n')
 
   console.log(
     `Sending email to artist email ${body.artistEmail} with text: `,

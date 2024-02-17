@@ -8,8 +8,6 @@ import { Artist } from '~/schemas/models/artist'
 import { generateNextImagePlaceholder } from '~/utils'
 import { NavigationPages } from '~/utils/navigation'
 
-import ArtistCardBookingRequest from './ArtistCardBookingRequest'
-
 interface IArtistCard {
   artist: Artist
   showPortfolioLink?: boolean
@@ -63,8 +61,8 @@ const ArtistCard = ({ artist, showPortfolioLink }: IArtistCard) => {
         ))}
       </Group>
 
-      {showPortfolioLink ? (
-        <Group justify="center" mt="auto" pb={6} pt={18}>
+      <Group justify="center" mt="auto" pb={6} pt={18}>
+        {showPortfolioLink ? (
           <Button
             component={Link}
             href={`${NavigationPages.Artists}/${encodeURIComponent(
@@ -74,10 +72,18 @@ const ArtistCard = ({ artist, showPortfolioLink }: IArtistCard) => {
           >
             View Portfolio
           </Button>
-        </Group>
-      ) : (
-        <ArtistCardBookingRequest artist={artist} />
-      )}
+        ) : (
+          <Button
+            component={Link}
+            href={`${NavigationPages.BookingRequest}/${encodeURIComponent(
+              artist._id,
+            )}`}
+            radius="sm"
+          >
+            submit booking request
+          </Button>
+        )}
+      </Group>
     </Card>
   )
 }
