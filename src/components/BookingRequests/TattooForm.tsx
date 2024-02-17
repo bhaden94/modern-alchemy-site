@@ -27,6 +27,8 @@ import imageCompression from 'browser-image-compression'
 import { zodResolver } from 'mantine-form-zod-resolver'
 import { SetStateAction, useState } from 'react'
 
+import { useArtist } from '~/hooks/useArtist'
+import { convertBlobToBase64 } from '~/utils'
 import {
   BookingField,
   bookingSchema,
@@ -75,7 +77,6 @@ const CustomLoader = ({ label }: { label: string }) => {
 }
 
 interface ITattooForm {
-  artistId: string
   onSuccess: () => void
   onFailure: (message?: string) => void
 }
@@ -84,12 +85,14 @@ interface ITattooForm {
 Places to update for form changes:
   - TattooForm component (this file)
   - bookingFormUtils schema
-  - bookingFormUtil BookingField enum
+  - bookingFormUtil BookingField object
   - booking sanity model schema
   - booking sanity model interface
 */
 
-const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
+const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
+  const { artist } = useArtist()
+
   // Body placement images state
   const [
     isCompressingBodyPlacementImages,
@@ -133,9 +136,31 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
     onSuccess()
   }
 
+  const sendArtistBookingEmail = async (
+    images: File[],
+    emailTextData: TBookingSchema,
+  ) => {
+    const base64Images = await Promise.all(
+      images.map(async (image) => {
+        const base64 = await convertBlobToBase64(image as File)
+        console.log(base64)
+        return base64
+      }),
+    )
+    fetch('/api/mail', {
+      method: 'PUT',
+      body: JSON.stringify({
+        ...emailTextData,
+        artistEmail: artist.email,
+        base64Images: base64Images,
+      }),
+    })
+  }
+
   // Form methods
   const onFormSubmit = async (data: TBookingSchema) => {
     setIsUploadingImages(true)
+
     const formData = new FormData()
     const images: File[] = [
       ...data.referenceImages,
@@ -177,10 +202,14 @@ const TattooForm = ({ artistId, onSuccess, onFailure }: ITattooForm) => {
       method: 'PUT',
       body: JSON.stringify({
         ...data,
-        artist: { _ref: artistId, _type: 'reference', _weak: true },
+        artist: { _ref: artist._id, _type: 'reference', _weak: true },
         [BookingField.ReferenceImages.id]: imageReferences,
       }),
     })
+
+    // send booking request email
+    // don't hold up the UI for this
+    if (artist.shouldEmailBookings) sendArtistBookingEmail(images, data)
 
     setIsSubmittingForm(false)
 

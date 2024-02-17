@@ -15,12 +15,14 @@ import { Open_Sans, Raleway } from 'next/font/google'
 const openSans = Open_Sans({
   subsets: ['latin'],
   weight: ['500', '700', '800'],
+  display: 'swap',
 })
 
 const raleway = Raleway({
   style: ['normal', 'italic'],
   subsets: ['latin'],
   weight: ['400', '700'],
+  display: 'swap',
 })
 
 const themeOverride = createTheme({

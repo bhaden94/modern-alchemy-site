@@ -1,3 +1,4 @@
+import { Box, Group } from '@mantine/core'
 import { redirect } from 'next/navigation'
 
 import AdminBooksStatus from '~/components/AdminBooksStatus/AdminBooksStatus'
@@ -23,14 +24,18 @@ const EmployeePortalPage = async ({ params }: { params: { id: string } }) => {
   return (
     <PageContainer>
       <PageTitle title={`${artist.name} Settings`} />
-      <AdminBooksStatus
-        booksStatus={{
-          booksOpen: artist.booksOpen,
-          booksOpenAt: artist.booksOpenAt,
-          name: artist.name,
-          _id: artist._id,
-        }}
-      />
+      <Group justify="space-around" gap={4}>
+        <Box>
+          <AdminBooksStatus
+            booksStatus={{
+              booksOpen: artist.booksOpen,
+              booksOpenAt: artist.booksOpenAt,
+              name: artist.name,
+              _id: artist._id,
+            }}
+          />
+        </Box>
+      </Group>
     </PageContainer>
   )
 }

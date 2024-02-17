@@ -1,6 +1,15 @@
 'use client'
 
-import { Accordion, Alert, Button, Dialog, Group, Radio } from '@mantine/core'
+import {
+  Accordion,
+  Alert,
+  Button,
+  Dialog,
+  Group,
+  Radio,
+  Text,
+  Title,
+} from '@mantine/core'
 import { DateTimePicker, DateValue } from '@mantine/dates'
 import { useForm } from '@mantine/form'
 import { useDisclosure } from '@mantine/hooks'
@@ -65,47 +74,45 @@ const AdminBooksStatus = ({ booksStatus }: IAdminBooksStatus) => {
 
   return (
     <>
-      <Accordion variant="separated">
-        <Accordion.Item value="books-status-form">
-          <Accordion.Control>Update Books Status</Accordion.Control>
-          <Accordion.Panel>
-            <form
-              onSubmit={form.onSubmit(onMantineSubmit)}
-              className="flex flex-col justify-center gap-4"
-            >
-              <Radio.Group
-                {...form.getInputProps(BooksStatusField.BooksOpen.id)}
-                id={BooksStatusField.BooksOpen.id}
-                label={BooksStatusField.BooksOpen.label}
-                error={form.errors[BooksStatusField.BooksOpen.id]}
-              >
-                <Group mt="xs">
-                  {BOOKS_OPEN.map((option) => (
-                    <Radio key={option} value={option} label={option} />
-                  ))}
-                </Group>
-              </Radio.Group>
-              <DateTimePicker
-                {...form.getInputProps(BooksStatusField.BooksOpenAt.id)}
-                onChange={onBooksOpenAtChange}
-                id={BooksStatusField.BooksOpenAt.id}
-                label={BooksStatusField.BooksOpenAt.label}
-                placeholder={BooksStatusField.BooksOpenAt.placeholder}
-                valueFormat="DD MMM YYYY hh:mm A"
-                clearable
-              />
-              <Button
-                variant="filled"
-                type="submit"
-                loading={isSubmitting}
-                disabled={!form.isDirty()}
-              >
-                Update Books
-              </Button>
-            </form>
-          </Accordion.Panel>
-        </Accordion.Item>
-      </Accordion>
+      <Title ta="center" mb="md" order={2}>
+        Update Books Status
+      </Title>
+
+      <form
+        onSubmit={form.onSubmit(onMantineSubmit)}
+        className="flex flex-col justify-center gap-4"
+      >
+        <Radio.Group
+          {...form.getInputProps(BooksStatusField.BooksOpen.id)}
+          id={BooksStatusField.BooksOpen.id}
+          label={BooksStatusField.BooksOpen.label}
+          error={form.errors[BooksStatusField.BooksOpen.id]}
+        >
+          <Group mt="xs">
+            {BOOKS_OPEN.map((option) => (
+              <Radio key={option} value={option} label={option} />
+            ))}
+          </Group>
+        </Radio.Group>
+        <DateTimePicker
+          {...form.getInputProps(BooksStatusField.BooksOpenAt.id)}
+          onChange={onBooksOpenAtChange}
+          id={BooksStatusField.BooksOpenAt.id}
+          label={BooksStatusField.BooksOpenAt.label}
+          placeholder={BooksStatusField.BooksOpenAt.placeholder}
+          valueFormat="DD MMM YYYY hh:mm A"
+          clearable
+        />
+        <Button
+          variant="filled"
+          type="submit"
+          loading={isSubmitting}
+          disabled={!form.isDirty()}
+        >
+          Update Books
+        </Button>
+      </form>
+
       <Dialog opened={opened} onClose={close} p={0}>
         <Alert
           icon={icon}
