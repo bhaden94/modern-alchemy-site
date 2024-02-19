@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState } from 'react'
 
-import { Artist, Role } from '~/schemas/models/artist'
+import { Artist } from '~/schemas/models/artist'
 
 type ArtistContextType = {
   artist: Artist
@@ -18,8 +18,8 @@ const ArtistContext = createContext<ArtistContextType>({
     name: '',
     booksOpen: false,
     booksOpenAt: null,
-    role: Role.EMPLOYEE,
     shouldEmailBookings: false,
+    isActive: false,
   },
   updateArtist: () => {},
 })

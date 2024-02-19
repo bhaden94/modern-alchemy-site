@@ -1,12 +1,15 @@
 import { NextResponse } from 'next/server'
 import { withAuth } from 'next-auth/middleware'
 
-import { REDIRECT_URL } from './lib/next-auth/auth.utils'
+import { AUTHORIZED_ROLE, REDIRECT_URL } from './lib/next-auth/auth.utils'
 import { NavigationPages } from './utils/navigation'
 
 export default withAuth(
   function middleware(req) {
-    if (!req.nextauth.token?.role) {
+    if (
+      !req.nextauth.token?.role ||
+      req.nextauth.token?.role !== AUTHORIZED_ROLE
+    ) {
       return NextResponse.redirect(
         new URL(
           `/unauthorized?${REDIRECT_URL}=${encodeURIComponent(

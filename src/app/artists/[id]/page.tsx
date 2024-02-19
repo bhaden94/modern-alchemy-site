@@ -18,7 +18,7 @@ const ArtistPortfolioPage = async ({ params }: { params: { id: string } }) => {
   const client = getClient(undefined)
   const artist = await getArtistById(client, decodeURI(params.id))
 
-  if (!artist) return notFound()
+  if (!artist || !artist.isActive) return notFound()
 
   return (
     <PageContainer>

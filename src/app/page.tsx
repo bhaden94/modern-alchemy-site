@@ -18,9 +18,6 @@ export default async function RootPage() {
         buttonText={content.heroButtonText}
         buttonLink={content.heroButtonLink}
       />
-      {/* <PageContainer>
-        <Home content={content.homeContent} />
-      </PageContainer> */}
     </>
   )
 }

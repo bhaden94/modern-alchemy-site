@@ -5,7 +5,7 @@ import { SanityClient } from 'sanity'
 
 import { Artist } from '~/schemas/models/artist'
 
-const artistsQuery = groq`*[_type == "artist"]{
+const artistsQuery = groq`*[_type == "artist" && isActive]{
   ...,
   headshot{
     ...,
@@ -19,7 +19,7 @@ export async function getArtists(client: SanityClient): Promise<Artist[]> {
   return await client.fetch(artistsQuery, {}, { cache: 'no-store' })
 }
 
-const artistsEmailQuery = groq`*[_type == "artist" && email == $email][0]{name, role, _id}`
+const artistsEmailQuery = groq`*[_type == "artist" && email == $email][0]{name, _id}`
 export async function getArtistByEmail(
   client: SanityClient,
   email: string,

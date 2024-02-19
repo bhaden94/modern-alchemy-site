@@ -58,6 +58,33 @@ const ShowBooksOpen = ({ showForm }: { showForm: boolean }) => {
     open()
   }
 
+  const BookingRequestLink = () => {
+    if (artist.externalBookingLink) {
+      return (
+        <Text
+          component={Link}
+          href={artist.externalBookingLink}
+          target="_blank"
+          display="block"
+        >
+          {artist.name}:&nbsp;Go to booking site
+        </Text>
+      )
+    }
+
+    return (
+      <Text
+        component={Link}
+        href={`${NavigationPages.BookingRequest}/${encodeURIComponent(
+          artist._id,
+        )}`}
+        display="block"
+      >
+        {artist.name}:&nbsp;Click to book now
+      </Text>
+    )
+  }
+
   return (
     <>
       {showForm ? (
@@ -71,14 +98,7 @@ const ShowBooksOpen = ({ showForm }: { showForm: boolean }) => {
           <TattooForm onSuccess={onSuccess} onFailure={onFailure} />
         </>
       ) : (
-        <Text
-          component={Link}
-          href={`${NavigationPages.BookingRequest}/${encodeURIComponent(
-            artist._id,
-          )}`}
-        >
-          {artist.name}:&nbsp;Click to book now
-        </Text>
+        <BookingRequestLink />
       )}
 
       <Dialog opened={opened} onClose={close} p={0}>

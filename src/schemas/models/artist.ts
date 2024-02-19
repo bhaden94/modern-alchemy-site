@@ -9,24 +9,20 @@ import {
 
 import { BaseSanitySchema } from '..'
 
-export enum Role {
-  OWNER = 'owner',
-  EMPLOYEE = 'employee',
-}
-
 export interface Artist extends BaseSanitySchema<'artist'> {
   email: string
   name: string
-  socials?: { label: string; link: string }[]
   booksOpen: boolean
   booksOpenAt: Date | null
+  shouldEmailBookings: boolean
+  isActive: boolean
+  externalBookingLink?: string
+  socials?: { label: string; link: string }[]
   bookingInstructions?: TypedObject | TypedObject[]
   booksClosedMessage?: TypedObject | TypedObject[]
+  portfolioImages?: { asset: ImageAsset }[]
   headshot?: { asset: ImageAsset }
   styles?: string[]
-  portfolioImages?: { asset: ImageAsset }[]
-  role: Role
-  shouldEmailBookings: boolean
 }
 
 export default defineType({
@@ -44,6 +40,11 @@ export default defineType({
       name: 'name',
       type: 'string',
       title: 'Name',
+    }),
+    defineField({
+      name: 'isActive',
+      type: 'boolean',
+      title: 'Is Active',
     }),
     defineField({
       name: 'shouldEmailBookings',
@@ -127,15 +128,9 @@ export default defineType({
       ],
     }),
     defineField({
-      name: 'role',
+      name: 'externalBookingLink',
       type: 'string',
-      title: 'Role',
-      options: {
-        list: [
-          { title: 'Owner', value: 'owner' },
-          { title: 'Employee', value: 'employee' },
-        ],
-      },
+      title: 'External Booking Link',
     }),
   ],
 })
