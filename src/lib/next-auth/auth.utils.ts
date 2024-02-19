@@ -9,7 +9,7 @@ import { getArtistByEmail } from '../sanity/queries/sanity.artistsQuery'
 import { getClient } from '../sanity/sanity.client'
 
 export const REDIRECT_URL = 'redirectUrl'
-export const AUTHORIZED_ROLE = 'authorizedUser'
+export const AUTHORIZED_ROLE = 'authorizedArtist'
 
 const getArtist = async (token: JWT): Promise<Partial<Artist> | null> => {
   if (!token?.email) return null
@@ -42,7 +42,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token }) {
       const artist = await getArtist(token)
 
-      token.role = artist?.role
+      token.role = AUTHORIZED_ROLE
       token.name = artist?.name
       token.artistId = artist?._id
 

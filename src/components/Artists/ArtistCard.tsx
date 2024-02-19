@@ -14,6 +14,45 @@ interface IArtistCard {
 }
 
 const ArtistCard = ({ artist, showPortfolioLink }: IArtistCard) => {
+  const CardButton = () => {
+    if (showPortfolioLink) {
+      return (
+        <Button
+          component={Link}
+          href={`${NavigationPages.Artists}/${encodeURIComponent(artist._id)}`}
+          radius="sm"
+        >
+          View Portfolio
+        </Button>
+      )
+    }
+
+    if (artist.externalBookingLink) {
+      return (
+        <Button
+          component={Link}
+          target="_blank"
+          href={artist.externalBookingLink}
+          radius="sm"
+        >
+          Go to booking site
+        </Button>
+      )
+    }
+
+    return (
+      <Button
+        component={Link}
+        href={`${NavigationPages.BookingRequest}/${encodeURIComponent(
+          artist._id,
+        )}`}
+        radius="sm"
+      >
+        submit booking request
+      </Button>
+    )
+  }
+
   return (
     <Card shadow="sm" key={artist.name} className="max-w-[300px]">
       <Card.Section mb={6}>
@@ -62,27 +101,7 @@ const ArtistCard = ({ artist, showPortfolioLink }: IArtistCard) => {
       </Group>
 
       <Group justify="center" mt="auto" pb={6} pt={18}>
-        {showPortfolioLink ? (
-          <Button
-            component={Link}
-            href={`${NavigationPages.Artists}/${encodeURIComponent(
-              artist._id,
-            )}`}
-            radius="sm"
-          >
-            View Portfolio
-          </Button>
-        ) : (
-          <Button
-            component={Link}
-            href={`${NavigationPages.BookingRequest}/${encodeURIComponent(
-              artist._id,
-            )}`}
-            radius="sm"
-          >
-            submit booking request
-          </Button>
-        )}
+        <CardButton />
       </Group>
     </Card>
   )

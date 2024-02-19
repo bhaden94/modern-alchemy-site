@@ -9,7 +9,6 @@ export interface RootPageContent
   heroDescription?: string
   heroButtonText?: string
   heroButtonLink?: string
-  homeContent?: string
 }
 
 export default defineType({
@@ -42,11 +41,6 @@ export default defineType({
       name: 'heroButtonLink',
       type: 'string',
       title: 'Hero Button Link',
-    }),
-    defineField({
-      name: 'homeContent',
-      type: 'string',
-      title: 'Home Content',
     }),
   ],
 })

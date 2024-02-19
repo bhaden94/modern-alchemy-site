@@ -1,10 +1,8 @@
-import { PortableText } from '@portabletext/react'
 import { notFound } from 'next/navigation'
 
 import BookStatuses from '~/components/BooksStatus/BookStatuses'
 import PageContainer from '~/components/PageContainer'
 import PageTitle from '~/components/PageTitle/PageTitle'
-import { PortableTextComponents } from '~/components/PortableTextComponents'
 import {
   getArtistById,
   getArtists,
@@ -25,7 +23,7 @@ const ArtistBookingRequestPage = async ({
   const client = getClient(undefined)
   const artist = await getArtistById(client, decodeURI(params.id))
 
-  if (!artist) return notFound()
+  if (!artist || !artist.isActive) return notFound()
 
   return (
     <PageContainer>
