@@ -2,7 +2,7 @@
 
 import { Artist } from '~/schemas/models/artist'
 
-import ArtistCard from './ArtistCard'
+import ArtistCard from '../../ArtistCard/ArtistCard'
 
 const ArtistList = ({ artists }: { artists: Artist[] }) => {
   return (

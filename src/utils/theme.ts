@@ -3,11 +3,14 @@
 import {
   Button,
   createTheme,
+  CSSVariablesResolver,
   DEFAULT_THEME,
+  Divider,
   Input,
   Loader,
   LoadingOverlay,
   mergeMantineTheme,
+  rem,
   Text,
 } from '@mantine/core'
 import { Open_Sans, Raleway } from 'next/font/google'
@@ -109,7 +112,26 @@ const themeOverride = createTheme({
         },
       },
     }),
+    Divider: Divider.extend({
+      defaultProps: {
+        color: 'wood.8',
+        size: 'xl',
+      },
+      styles: {
+        root: {
+          borderRadius: 25,
+        },
+      },
+    }),
   },
+})
+
+export const cssVariableResolver: CSSVariablesResolver = () => ({
+  variables: {
+    '--mantine-header-height': rem(94),
+  },
+  light: {},
+  dark: {},
 })
 
 export const theme = mergeMantineTheme(DEFAULT_THEME, themeOverride)

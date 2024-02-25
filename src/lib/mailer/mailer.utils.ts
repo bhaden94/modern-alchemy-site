@@ -2,6 +2,7 @@ import nodemailer from 'nodemailer'
 import Mail from 'nodemailer/lib/mailer'
 import SMTPTransport from 'nodemailer/lib/smtp-transport'
 
+// TODO: write code to refresh token when expired
 const createTransporter =
   (): nodemailer.Transporter<SMTPTransport.SentMessageInfo> => {
     const transporter = nodemailer.createTransport({

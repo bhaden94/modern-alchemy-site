@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 
+import About from '~/components/About/About'
 import Hero from '~/components/Hero/Hero'
 import { getRootPageContent } from '~/lib/sanity/queries/sanity.pageContentQueries'
 import { getClient } from '~/lib/sanity/sanity.client'
@@ -18,6 +19,7 @@ export default async function RootPage() {
         buttonText={content.heroButtonText}
         buttonLink={content.heroButtonLink}
       />
+      <About content={content.aboutContent} />
     </>
   )
 }

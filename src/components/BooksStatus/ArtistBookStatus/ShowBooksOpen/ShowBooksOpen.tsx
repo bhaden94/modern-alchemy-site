@@ -12,10 +12,13 @@ import { useState } from 'react'
 import { useArtist } from '~/hooks/useArtist'
 import { NavigationPages } from '~/utils/navigation'
 
-import { PortableTextComponents } from '../PortableTextComponents'
+import { PortableTextComponents } from '../../../PortableTextComponents'
 
 const TattooForm = dynamic(
-  () => import('~/components/BookingRequests/TattooForm'),
+  () =>
+    import(
+      '~/components/BooksStatus/ArtistBookStatus/ShowBooksOpen/TattooForm/TattooForm'
+    ),
   {
     loading: () => (
       <div className="flex flex-col items-center">

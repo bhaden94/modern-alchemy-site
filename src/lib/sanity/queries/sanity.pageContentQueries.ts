@@ -1,4 +1,4 @@
-import { groq } from 'next-sanity'
+import { groq, ResponseQueryOptions } from 'next-sanity'
 import { SanityClient } from 'sanity'
 
 import { AftercareInfoPageContent } from '~/schemas/pages/aftercareInfoPageContent'
@@ -9,17 +9,24 @@ import { LayoutMetadataContent } from '~/schemas/pages/layoutMetadataContent'
 import { RootLayoutContent } from '~/schemas/pages/rootLayoutContent'
 import { RootPageContent } from '~/schemas/pages/rootPageContent'
 
-const rootPageContentQuery = groq`*[_type == "rootPageContent"][0]`
+const CACHE_SETTING: ResponseQueryOptions = {
+  cache: 'no-cache',
+}
+
+const rootPageContentQuery = groq`*[_type == "rootPageContent"][0]{
+  ...,
+  aboutContent[]{
+    ...,
+    image{
+      ...,
+      asset->
+    }
+  }
+}`
 export async function getRootPageContent(
   client: SanityClient,
 ): Promise<RootPageContent> {
-  return await client.fetch(
-    rootPageContentQuery,
-    {},
-    {
-      cache: 'no-cache',
-    },
-  )
+  return await client.fetch(rootPageContentQuery, {}, CACHE_SETTING)
 }
 
 // answer is the bloc content field, which is inside of the faqs array
@@ -39,13 +46,7 @@ const faqPageContentQuery = groq`*[_type == "faqPageContent"][0]{
 export async function getFaqPageContent(
   client: SanityClient,
 ): Promise<FaqPageContent> {
-  return await client.fetch(
-    faqPageContentQuery,
-    {},
-    {
-      cache: 'no-cache',
-    },
-  )
+  return await client.fetch(faqPageContentQuery, {}, CACHE_SETTING)
 }
 
 // information is the block content field
@@ -63,26 +64,14 @@ const aftercareInfoPageContentQuery = groq`*[_type == "aftercareInfoPageContent"
 export async function getAftercareInfoPageContent(
   client: SanityClient,
 ): Promise<AftercareInfoPageContent> {
-  return await client.fetch(
-    aftercareInfoPageContentQuery,
-    {},
-    {
-      cache: 'no-cache',
-    },
-  )
+  return await client.fetch(aftercareInfoPageContentQuery, {}, CACHE_SETTING)
 }
 
 const artistsPageContentQuery = groq`*[_type == "artistsPageContent"][0]`
 export async function getArtistsPageContent(
   client: SanityClient,
 ): Promise<ArtistsPageContent> {
-  return await client.fetch(
-    artistsPageContentQuery,
-    {},
-    {
-      cache: 'no-cache',
-    },
-  )
+  return await client.fetch(artistsPageContentQuery, {}, CACHE_SETTING)
 }
 
 const bookingInfoPageContentQuery = groq`*[_type == "bookingInfoPageContent"][0]{
@@ -98,13 +87,7 @@ const bookingInfoPageContentQuery = groq`*[_type == "bookingInfoPageContent"][0]
 export async function getBookingInfoPageContent(
   client: SanityClient,
 ): Promise<BookingInfoPageContent> {
-  return await client.fetch(
-    bookingInfoPageContentQuery,
-    {},
-    {
-      cache: 'no-cache',
-    },
-  )
+  return await client.fetch(bookingInfoPageContentQuery, {}, CACHE_SETTING)
 }
 
 const rootLayoutContentQuery = groq`*[_type == "rootLayoutContent"][0]{
@@ -120,24 +103,12 @@ const rootLayoutContentQuery = groq`*[_type == "rootLayoutContent"][0]{
 export async function getRootLayoutContent(
   client: SanityClient,
 ): Promise<RootLayoutContent> {
-  return await client.fetch(
-    rootLayoutContentQuery,
-    {},
-    {
-      cache: 'no-cache',
-    },
-  )
+  return await client.fetch(rootLayoutContentQuery, {}, CACHE_SETTING)
 }
 
 const layoutMetadataQuery = groq`*[_type == "layoutMetadataContent"][0]`
 export async function getLayoutMetadata(
   client: SanityClient,
 ): Promise<LayoutMetadataContent> {
-  return await client.fetch(
-    layoutMetadataQuery,
-    {},
-    {
-      cache: 'no-cache',
-    },
-  )
+  return await client.fetch(layoutMetadataQuery, {}, CACHE_SETTING)
 }

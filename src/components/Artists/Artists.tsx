@@ -1,4 +1,4 @@
-import ArtistList from '~/components/Artists/ArtistList'
+import ArtistList from '~/components/Artists/ArtistList/ArtistList'
 import { Artist } from '~/schemas/models/artist'
 import { ArtistsPageContent } from '~/schemas/pages/artistsPageContent'
 

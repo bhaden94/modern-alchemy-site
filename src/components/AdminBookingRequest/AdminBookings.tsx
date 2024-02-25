@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react'
 
-import BookingCard from '~/components/BookingCard/BookingCard'
+import BookingCard from '~/components/AdminBookingRequest/BookingCard/BookingCard'
 import {
   getBookingsByArtistId,
   listenForBookingChanges,
@@ -10,7 +10,7 @@ import {
 import { getClient } from '~/lib/sanity/sanity.client'
 import { Booking } from '~/schemas/models/booking'
 
-import CommandBar from './CommandBar'
+import CommandBar from './CommandBar/CommandBar'
 
 interface IBookings {
   bookings: Booking[]

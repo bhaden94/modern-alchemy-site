@@ -1,12 +1,12 @@
 .header {
   position: relative;
-  height: rem(94px);
+  height: var(--mantine-header-height);
   background-color: var(--mantine-color-wood-filled);
   border-bottom: rem(1px) solid var(--mantine-color-wood-filled);
 }
 
 .inner {
-  height: rem(94px);
+  height: var(--mantine-header-height);
   display: flex;
   justify-content: space-between;
   align-items: center;

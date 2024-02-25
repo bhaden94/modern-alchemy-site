@@ -1,5 +1,5 @@
-import SuccessfullBooking from '~/components/BookingRequests/SuccessfullBooking'
 import PageContainer from '~/components/PageContainer'
+import SuccessfullBooking from '~/components/SuccessfullBooking/SuccessfullBooking'
 
 const SuccessBookingRequestPage = async ({
   searchParams,
