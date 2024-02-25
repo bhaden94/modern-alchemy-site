@@ -40,10 +40,10 @@ import {
   TBookingSchema,
 } from '~/utils/bookingFormUtils'
 
-import ImageDropzone from '../ImageDropzone/ImageDropzone'
-import ImageErrors from '../ImageDropzone/ImageErrors'
-import ImageThumbnails from '../ImageDropzone/ImageThumbnails'
-import FormErrorAlert from './FormErrorAlert'
+import ImageDropzone from '../../../../ImageDropzone/ImageDropzone'
+import ImageErrors from '../../../../ImageDropzone/ImageErrors'
+import ImageThumbnails from '../../../../ImageDropzone/ImageThumbnails'
+import FormErrorAlert from './FormErrorAlert/FormErrorAlert'
 
 const inputSharedProps = (
   id: string,

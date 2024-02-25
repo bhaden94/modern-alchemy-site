@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { Artist } from '~/schemas/models/artist'
 import { NavigationPages } from '~/utils/navigation'
 
-import ArtistCard from '../Artists/ArtistCard'
+import ArtistCard from '../ArtistCard/ArtistCard'
 import PageTitle from '../PageTitle/PageTitle'
 import PortfolioCarousel from '../PortfolioCarousel/PortfolioCarousel'
 

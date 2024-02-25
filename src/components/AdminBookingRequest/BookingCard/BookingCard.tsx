@@ -16,9 +16,9 @@ import { Booking } from '~/schemas/models/booking'
 import { formatDate } from '~/utils'
 import { BookingField } from '~/utils/bookingFormUtils'
 
-import PortfolioCarousel from '../PortfolioCarousel/PortfolioCarousel'
-import DeleteBooking from './DeleteBooking'
-import InputCopyButton from './InputCopyButton'
+import PortfolioCarousel from '../../PortfolioCarousel/PortfolioCarousel'
+import DeleteBooking from './DeleteBooking/DeleteBooking'
+import InputCopyButton from './InputCopyButton/InputCopyButton'
 
 interface BookingFieldProperty {
   id: keyof Booking

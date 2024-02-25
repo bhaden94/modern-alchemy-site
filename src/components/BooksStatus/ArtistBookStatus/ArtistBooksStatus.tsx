@@ -6,8 +6,8 @@ import { useArtist } from '~/hooks/useArtist'
 import { listenForArtistsBookStatusChanges } from '~/lib/sanity/queries/sanity.artistsQuery'
 import { getClient } from '~/lib/sanity/sanity.client'
 
-import ShowBooksClosed from './ShowBooksClosed'
-import ShowBooksOpen from './ShowBooksOpen'
+import ShowBooksClosed from './ShowBooksClosed/ShowBooksClosed'
+import ShowBooksOpen from './ShowBooksOpen/ShowBooksOpen'
 
 interface IBooksStatus {
   showForm?: boolean

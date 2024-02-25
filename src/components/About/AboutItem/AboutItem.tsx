@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Divider, Grid, rem,Stack, Title } from '@mantine/core'
+import { Box, Divider, Grid, rem, Stack, Title } from '@mantine/core'
 import { PortableText } from '@portabletext/react'
 import Image from 'next/image'
 

@@ -3,7 +3,7 @@
 import { ArtistProvider } from '~/hooks/useArtist'
 import { Artist } from '~/schemas/models/artist'
 
-import ArtistBooksStatus from './ArtistBooksStatus'
+import ArtistBooksStatus from './ArtistBookStatus/ArtistBooksStatus'
 
 interface IBookStatuses {
   artists: Artist[]

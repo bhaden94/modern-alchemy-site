@@ -1,4 +1,4 @@
-import { groq,ResponseQueryOptions } from 'next-sanity'
+import { groq, ResponseQueryOptions } from 'next-sanity'
 import { SanityClient } from 'sanity'
 
 import { AftercareInfoPageContent } from '~/schemas/pages/aftercareInfoPageContent'
