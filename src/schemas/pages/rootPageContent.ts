@@ -1,7 +1,19 @@
 import { IconScript } from '@tabler/icons-react'
-import { defineField, defineType } from 'sanity'
+import {
+  defineArrayMember,
+  defineField,
+  defineType,
+  ImageAsset,
+  TypedObject,
+} from 'sanity'
 
 import { BasePageContent, BaseSanitySchema } from '..'
+
+export interface AboutContent {
+  heading: string
+  text: TypedObject | TypedObject[]
+  image?: { asset: ImageAsset }
+}
 
 export interface RootPageContent
   extends BaseSanitySchema<'rootPageContent'>,
@@ -9,6 +21,7 @@ export interface RootPageContent
   heroDescription?: string
   heroButtonText?: string
   heroButtonLink?: string
+  aboutContent?: AboutContent[]
 }
 
 export default defineType({
@@ -41,6 +54,40 @@ export default defineType({
       name: 'heroButtonLink',
       type: 'string',
       title: 'Hero Button Link',
+    }),
+    defineField({
+      name: 'aboutContent',
+      type: 'array',
+      title: 'About Content',
+      of: [
+        defineArrayMember({
+          title: 'About Item',
+          type: 'object',
+          name: 'aboutItem',
+          fields: [
+            {
+              name: 'heading',
+              type: 'string',
+              title: 'Heading',
+            },
+            {
+              name: 'text',
+              type: 'blockContent',
+              title: 'Text',
+            },
+            // images uploaded here should be in the below format:
+            //  - aspect ration 4:3
+            //  - have pre-rounded corners
+            //  - be compressed
+            // Online tools can be used to do this.
+            {
+              name: 'image',
+              type: 'image',
+              title: 'Image',
+            },
+          ],
+        }),
+      ],
     }),
   ],
 })

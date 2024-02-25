@@ -4,6 +4,7 @@ import {
   Button,
   createTheme,
   DEFAULT_THEME,
+  Divider,
   Input,
   Loader,
   LoadingOverlay,
@@ -106,6 +107,17 @@ const themeOverride = createTheme({
           radius: 'sm',
           blur: 3,
           color: '#1F1F1F',
+        },
+      },
+    }),
+    Divider: Divider.extend({
+      defaultProps: {
+        color: 'wood.8',
+        size: 'xl',
+      },
+      styles: {
+        root: {
+          borderRadius: 25,
         },
       },
     }),
