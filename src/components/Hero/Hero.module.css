@@ -2,7 +2,15 @@
   position: relative;
   background-size: cover;
   background-position: center;
-  height: calc(100svh - rem(64px));
+  height: calc(100svh - var(--mantine-header-height));
+
+  @media (min-width: $mantine-breakpoint-xs) {
+    min-height: 415px;
+  }
+
+  @media (min-width: $mantine-breakpoint-sm) {
+    min-height: 515px;
+  }
 }
 
 .heroImage {
