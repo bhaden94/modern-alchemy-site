@@ -114,7 +114,7 @@ const themeOverride = createTheme({
     }),
     Divider: Divider.extend({
       defaultProps: {
-        color: 'wood.8',
+        color: 'wood.7',
         size: 'xl',
       },
       styles: {
