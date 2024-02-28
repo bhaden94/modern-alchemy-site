@@ -1,4 +1,8 @@
-import { createClient, SanityClient } from '@sanity/client'
+import {
+  createClient,
+  ResponseQueryOptions,
+  SanityClient,
+} from '@sanity/client'
 
 import { apiVersion, dataset, projectId, useCdn } from '~/lib/sanity/sanity.api'
 
@@ -40,4 +44,8 @@ export function getPreviewClient(preview?: { token: string }): SanityClient {
     })
   }
   return client
+}
+
+export const SANITY_CLIENT_CACHE_SETTING: ResponseQueryOptions = {
+  cache: 'no-cache',
 }
