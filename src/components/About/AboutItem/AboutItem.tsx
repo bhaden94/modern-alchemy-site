@@ -5,6 +5,7 @@ import { PortableText } from '@portabletext/react'
 import Image from 'next/image'
 
 import { AboutContent } from '~/schemas/pages/rootPageContent'
+import { generateNextImagePlaceholder } from '~/utils'
 
 import { PortableTextComponents } from '../../PortableTextComponents'
 
@@ -40,6 +41,11 @@ const AboutItem = ({ item, index }: { item: AboutContent; index: number }) => {
           objectPosition: 'center',
         }}
         alt="about section image"
+        placeholder={generateNextImagePlaceholder(
+          item.image.asset.metadata.dimensions.width,
+          item.image.asset.metadata.dimensions.height,
+          'sm',
+        )}
       />
     )
   }

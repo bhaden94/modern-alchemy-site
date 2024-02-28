@@ -28,7 +28,7 @@ const PortfolioCarouselThumbnail = ({
       onClick={() => onClick(index)}
       width={75}
       height={75}
-      placeholder={generateNextImagePlaceholder(75, 75)}
+      placeholder={generateNextImagePlaceholder(75, 75, 'xs')}
     />
   )
 }
