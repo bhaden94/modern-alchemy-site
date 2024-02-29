@@ -6,17 +6,6 @@
   border-top: rem(1px) solid var(--mantine-color-wood-filled);
 }
 
-.link {
-  display: block;
-  font-size: var(--mantine-font-size-sm);
-  padding-top: rem(3px);
-  padding-bottom: rem(3px);
-
-  &:hover {
-    text-decoration: underline;
-  }
-}
-
 .afterFooter {
   border-top: rem(1px) solid var(--mantine-color-dark-1);
 }

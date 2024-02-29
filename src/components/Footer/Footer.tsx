@@ -7,6 +7,8 @@ import { ImageAsset } from 'sanity'
 
 import { ExtraNavLinks, NavLinks } from '~/utils/navigation'
 
+import NavMenuDropdown from '../NavMenu/NavMenuDropdown'
+import NavMenuLink from '../NavMenu/NavMenuLink'
 import classes from './Footer.module.css'
 
 interface IFooter {
@@ -20,20 +22,16 @@ interface IFooter {
 const Footer = (props: IFooter) => {
   const { logo, copywriteText, logoCaption, instagram, facebook } = props
 
-  const navGroup = NavLinks.map(({ label, link }) => {
-    return (
-      <Text<'a'> key={label} className={classes.link} component="a" href={link}>
-        {label}
-      </Text>
+  const navGroup = NavLinks.map((navItem) => {
+    return 'links' in navItem ? (
+      <NavMenuDropdown key={navItem.label} navItem={navItem} />
+    ) : (
+      <NavMenuLink key={navItem.label} navItem={navItem} />
     )
   })
 
-  const extraNavGroup = ExtraNavLinks.map(({ label, link }) => {
-    return (
-      <Text<'a'> key={label} className={classes.link} component="a" href={link}>
-        {label}
-      </Text>
-    )
+  const extraNavGroup = ExtraNavLinks.map((navItem) => {
+    return <NavMenuLink key={navItem.label} navItem={navItem} />
   })
 
   return (
