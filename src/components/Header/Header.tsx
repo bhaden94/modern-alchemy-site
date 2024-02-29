@@ -4,41 +4,44 @@ import { Burger, Container, Drawer, Group, List } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import Image from 'next/image'
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { ImageAsset } from 'sanity'
 
 import { NavigationPages, NavLinks } from '~/utils/navigation'
 
+import NavMenuDropdown from '../NavMenu/NavMenuDropdown'
+import NavMenuLink from '../NavMenu/NavMenuLink'
 import classes from './Header.module.css'
-
-const chooseActiveHeader = (pathname: string | null, link: string): boolean => {
-  const path = pathname?.substring(1)
-  if (path === '' && link === '/') return true
-  // covers dynamic route like artists/name
-  if (link !== '/' && path?.startsWith(link.substring(1))) return true
-  return false
-}
 
 const Header = ({ logo }: { logo: ImageAsset }) => {
   const router = useRouter()
-  const pathname = usePathname()
   const [opened, { toggle, close }] = useDisclosure(false)
+  const onLinkClick = (
+    event: React.MouseEvent<HTMLAnchorElement>,
+    link: string,
+  ) => {
+    event.preventDefault()
+    router.push(link)
+    close()
+  }
 
-  const items = NavLinks.map(({ link, label }) => (
-    <Link
-      key={label}
-      href={link}
-      className={classes.link}
-      data-active={chooseActiveHeader(pathname, link) || undefined}
-      onClick={(event) => {
-        event.preventDefault()
-        router.push(link)
-        close()
-      }}
-    >
-      {label}
-    </Link>
-  ))
+  const items = NavLinks.map((navItem) => {
+    return 'links' in navItem ? (
+      <NavMenuDropdown
+        key={navItem.label}
+        navItem={navItem}
+        onLinkClick={onLinkClick}
+        isHeader
+      />
+    ) : (
+      <NavMenuLink
+        key={navItem.label}
+        navItem={navItem}
+        onLinkClick={onLinkClick}
+        isHeader
+      />
+    )
+  })
 
   return (
     <header className={classes.header}>

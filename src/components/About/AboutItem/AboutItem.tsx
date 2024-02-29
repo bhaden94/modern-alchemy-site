@@ -36,6 +36,7 @@ const AboutItem = ({ item, index }: { item: AboutContent; index: number }) => {
       <Image
         src={item.image.asset.url}
         fill={true}
+        sizes="100%"
         style={{
           objectFit: 'contain',
           objectPosition: 'center',

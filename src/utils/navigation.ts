@@ -13,17 +13,31 @@ export enum NavigationPages {
   Unauthorized = '/unauthorized',
 }
 
-interface NavigationLink {
-  link: NavigationPages
+interface BaseNavigationLink {
   label: string
 }
 
-export const NavLinks: NavigationLink[] = [
+export interface NavigationLink extends BaseNavigationLink {
+  link: NavigationPages
+}
+
+export interface NestedNavigationLink extends BaseNavigationLink {
+  links: NavigationLink[]
+}
+
+type NavigationLinkType = NavigationLink | NestedNavigationLink
+
+export const NavLinks: NavigationLinkType[] = [
   { link: NavigationPages.Home, label: 'Home' },
   { link: NavigationPages.Artists, label: 'Artists' },
-  // { link: NavigationPages.BookingInfo, label: 'Booking Info' },
-  // { link: NavigationPages.Faqs, label: 'FAQs' },
-  { link: NavigationPages.AftercareInfo, label: 'Aftercare Info' },
+  {
+    label: 'Information',
+    links: [
+      { link: NavigationPages.AftercareInfo, label: 'Aftercare Info' },
+      // { link: NavigationPages.BookingInfo, label: 'Booking Info' },
+      // { link: NavigationPages.Faqs, label: 'FAQs' },
+    ],
+  },
 ]
 
 export const ExtraNavLinks: NavigationLink[] = [

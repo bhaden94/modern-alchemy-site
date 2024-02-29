@@ -1,0 +1,57 @@
+.dropdown {
+  background-color: var(--mantine-color-wood-filled);
+  border-radius: var(--mantine-radius-default);
+  border: none;
+  padding: 0;
+
+  @media (max-width: $mantine-breakpoint-xs) {
+    background-color: var(--mantine-color-body);
+  }
+}
+
+.linkLabelParentHeader {
+  padding: rem(8px) rem(12px);
+  text-decoration: none;
+  color: var(--mantine-color-dark-0);
+}
+
+.linkLabelParentFooter {
+  text-decoration: none;
+  color: var(--mantine-color-dark-0);
+}
+
+.linkLabel {
+  margin-right: rem(5px);
+  display: block;
+  line-height: 1;
+  font-size: var(--mantine-font-size-md);
+  font-weight: 500;
+}
+
+.linkHeader {
+  display: block;
+  line-height: 1;
+  padding: rem(8px) rem(12px);
+  border-radius: var(--mantine-radius-default);
+  text-decoration: none;
+  color: var(--mantine-color-dark-0);
+  font-size: var(--mantine-font-size-md);
+  font-weight: 500;
+
+  @mixin hover {
+    background-color: var(--mantine-primary-color-filled-hover);
+  }
+}
+
+.linkFooter {
+  display: block;
+  font-size: var(--mantine-font-size-sm);
+  padding-top: rem(3px);
+  padding-bottom: rem(3px);
+  color: var(--mantine-color-dark-0);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
