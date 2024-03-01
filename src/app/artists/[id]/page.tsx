@@ -1,3 +1,4 @@
+import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import ArtistPortfolio from '~/components/ArtistPortfolio/ArtistPortfolio'
@@ -12,6 +13,22 @@ export const generateStaticParams = async () => {
   const client = getClient(undefined)
   const artists = await getArtists(client)
   return artists.map((artist) => ({ id: artist._id }))
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { id: string }
+}): Promise<Metadata> {
+  const client = getClient(undefined)
+  const artist = await getArtistById(client, decodeURI(params.id))
+
+  if (!artist) return {}
+
+  return {
+    title: `${artist.name} Portfolio`,
+    description: `Tattoo artist portfolio for ${artist.name}.`,
+  }
 }
 
 const ArtistPortfolioPage = async ({ params }: { params: { id: string } }) => {

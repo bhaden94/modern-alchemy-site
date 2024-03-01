@@ -25,7 +25,10 @@ export async function generateMetadata(): Promise<Metadata> {
   if (!metadata) return {}
 
   return {
-    title: metadata.businessName,
+    title: {
+      template: `%s | ${metadata.businessName}`,
+      default: metadata.businessName,
+    },
     description: metadata.description,
   }
 }
