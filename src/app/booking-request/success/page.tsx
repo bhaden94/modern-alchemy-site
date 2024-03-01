@@ -8,13 +8,19 @@ export async function generateMetadata({
 }: {
   searchParams: { name: string }
 }): Promise<Metadata> {
+  const title = `${decodeURIComponent(
+    searchParams.name,
+  )} Booking Request Success`
+  const description = `Successfull booking request page for ${decodeURIComponent(
+    searchParams.name,
+  )}.`
+
   return {
-    title: `${decodeURIComponent(searchParams.name)} Booking Request Success`,
-    description: `Successfull booking request page for ${decodeURIComponent(
-      searchParams.name,
-    )}.`,
+    title: title,
+    description: description,
     openGraph: {
-      title: `${decodeURIComponent(searchParams.name)} Booking Request Success`,
+      title: title,
+      description: description,
     },
   }
 }

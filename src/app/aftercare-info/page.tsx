@@ -7,13 +7,19 @@ import PageInProgress from '~/components/PageInProgress/PageInProgress'
 import { getAftercareInfoPageContent } from '~/lib/sanity/queries/sanity.pageContentQueries'
 import { getClient } from '~/lib/sanity/sanity.client'
 
-export const metadata: Metadata = {
-  title: 'Aftercare Information',
-  description:
-    "Learn essential tips and guidelines for tattoo aftercare with Modern Alchemy Tattoo Company's comprehensive guide. Discover the best practices to ensure the longevity and vibrant appearance of your new tattoo.",
-  openGraph: {
-    title: 'Aftercare Information',
-  },
+export async function generateMetadata(): Promise<Metadata> {
+  const client = getClient(undefined)
+  const content = await getAftercareInfoPageContent(client)
+  if (!content) return {}
+
+  return {
+    title: content.pageTitle,
+    description: content.metadataDescription,
+    openGraph: {
+      title: content.pageTitle,
+      description: content.metadataDescription,
+    },
+  }
 }
 
 const AftercareInfoPage = async () => {

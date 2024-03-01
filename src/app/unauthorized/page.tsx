@@ -10,6 +10,7 @@ export const metadata: Metadata = {
   description: 'Unauthorized request redirect page.',
   openGraph: {
     title: 'Unauthorized',
+    description: 'Unauthorized request redirect page.',
   },
 }
 

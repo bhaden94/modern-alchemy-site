@@ -25,11 +25,15 @@ export async function generateMetadata({
 
   if (!artist) return {}
 
+  const title = `${artist.name} Portfolio`
+  const description = `Tattoo artist portfolio for ${artist.name}.`
+
   return {
-    title: `${artist.name} Portfolio`,
-    description: `Tattoo artist portfolio for ${artist.name}.`,
+    title: title,
+    description: description,
     openGraph: {
-      title: `${artist.name} Portfolio`,
+      title: title,
+      description: description,
     },
   }
 }

@@ -23,5 +23,10 @@ export default defineType({
       type: 'boolean',
       title: 'Page Active Status',
     }),
+    defineField({
+      name: 'metadataDescription',
+      type: 'string',
+      title: 'Metadata Description',
+    }),
   ],
 })

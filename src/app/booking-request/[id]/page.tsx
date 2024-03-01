@@ -26,11 +26,15 @@ export async function generateMetadata({
 
   if (!artist) return {}
 
+  const title = `${artist.name} Booking Request`
+  const description = `Submit a tattoo appointment booking request to ${artist.name}.`
+
   return {
-    title: `${artist.name} Booking Request`,
-    description: `Submit a tattoo appointment booking request to ${artist.name}.`,
+    title: title,
+    description: description,
     openGraph: {
-      title: `${artist.name} Booking Request`,
+      title: title,
+      description: description,
     },
   }
 }

@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   description: 'Employee admin page.',
   openGraph: {
     title: 'Employee Portal',
+    description: 'Employee admin page.',
   },
 }
 
