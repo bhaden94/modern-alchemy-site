@@ -35,6 +35,7 @@ export async function generateMetadata({
     openGraph: {
       title: title,
       description: description,
+      images: artist.headshot?.asset.url,
     },
   }
 }
