@@ -60,9 +60,9 @@ export default async function RootLayout({
           <div className="flex-1">{children}</div>
           <Footer
             logo={content?.businessLogo.asset}
-            copywriteText={content?.copywriteText}
+            copyrightText={content?.copyrightText}
             logoCaption={content?.businessLogoCaption}
-            instagram={content?.intagramLink}
+            instagram={content?.instagramLink}
             facebook={content?.facebookLink}
           />
         </Providers>

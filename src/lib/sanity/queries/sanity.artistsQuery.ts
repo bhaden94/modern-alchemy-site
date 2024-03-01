@@ -86,11 +86,11 @@ export interface BooksStatus {
   _id: string
 }
 
-const artistsBooksstatusChangesById = groq`*[_type == "artist" && _id == $id][0]{booksOpen, booksOpenAt, name, _id}`
+const artistsBooksStatusChangesById = groq`*[_type == "artist" && _id == $id][0]{booksOpen, booksOpenAt, name, _id}`
 export function listenForArtistsBookStatusChanges(
   client: SanityClient,
   id: string,
 ): Observable<Record<string, any>> {
   const idParam = { id: id }
-  return client.listen(artistsBooksstatusChangesById, idParam)
+  return client.listen(artistsBooksStatusChangesById, idParam)
 }

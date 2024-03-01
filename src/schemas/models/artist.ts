@@ -66,7 +66,7 @@ export default defineType({
             {
               name: 'label',
               type: 'string',
-              title: 'Lable',
+              title: 'Label',
             },
             {
               name: 'link',

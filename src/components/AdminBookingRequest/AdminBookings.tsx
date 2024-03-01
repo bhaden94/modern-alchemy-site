@@ -18,7 +18,7 @@ interface IBookings {
 }
 
 // Possibly needs simple pagination
-// This is because it could cause wierd things to happen if we have pagination for bookings
+// This is because it could cause weird things to happen if we have pagination for bookings
 export default function AdminBookings({ bookings, artistId }: IBookings) {
   const client = getClient(undefined)
   const [bookingsList, setBookingsList] = useState<Booking[]>(bookings)

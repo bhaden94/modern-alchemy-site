@@ -1,12 +1,12 @@
 import { Container, Text } from '@mantine/core'
 
-import classes from './SuccessfullBooking.module.css'
+import classes from './SuccessfulBooking.module.css'
 
-interface ISuccessfullBooking {
+interface ISuccessfulBooking {
   artistName: string
 }
 
-const SuccessfullBooking = ({ artistName }: ISuccessfullBooking) => {
+const SuccessfulBooking = ({ artistName }: ISuccessfulBooking) => {
   return (
     <div className={classes.root}>
       <Container>
@@ -35,4 +35,4 @@ const SuccessfullBooking = ({ artistName }: ISuccessfullBooking) => {
   )
 }
 
-export default SuccessfullBooking
+export default SuccessfulBooking

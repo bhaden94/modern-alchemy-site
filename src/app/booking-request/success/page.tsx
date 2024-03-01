@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 
 import PageContainer from '~/components/PageContainer'
-import SuccessfullBooking from '~/components/SuccessfullBooking/SuccessfullBooking'
+import SuccessfulBooking from '~/components/SuccessfulBooking/SuccessfulBooking'
 
 export async function generateMetadata({
   searchParams,
@@ -11,7 +11,7 @@ export async function generateMetadata({
   const title = `${decodeURIComponent(
     searchParams.name,
   )} Booking Request Success`
-  const description = `Successfull booking request page for ${decodeURIComponent(
+  const description = `Successful booking request page for ${decodeURIComponent(
     searchParams.name,
   )}.`
 
@@ -32,7 +32,7 @@ const SuccessBookingRequestPage = async ({
 }) => {
   return (
     <PageContainer>
-      <SuccessfullBooking artistName={decodeURIComponent(searchParams.name)} />
+      <SuccessfulBooking artistName={decodeURIComponent(searchParams.name)} />
     </PageContainer>
   )
 }

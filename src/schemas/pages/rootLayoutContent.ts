@@ -6,9 +6,9 @@ import { BaseSanitySchema } from '..'
 export interface RootLayoutContent
   extends BaseSanitySchema<'rootLayoutContent'> {
   businessLogo: { asset: ImageAsset }
-  copywriteText: string
+  copyrightText: string
   businessLogoCaption?: string
-  intagramLink?: string
+  instagramLink?: string
   facebookLink?: string
 }
 
@@ -24,9 +24,9 @@ export default defineType({
       title: 'Business Logo',
     }),
     defineField({
-      name: 'copywriteText',
+      name: 'copyrightText',
       type: 'string',
-      title: 'Copywrite Text',
+      title: 'Copyright Text',
     }),
     defineField({
       name: 'businessLogoCaption',
@@ -34,14 +34,14 @@ export default defineType({
       title: 'Business Logo Caption',
     }),
     defineField({
-      name: 'intagramLink',
+      name: 'instagramLink',
       type: 'string',
       title: 'Instagram Link',
     }),
     defineField({
       name: 'facebookLink',
       type: 'string',
-      title: 'Fecebook Link',
+      title: 'Facebook Link',
     }),
   ],
 })
