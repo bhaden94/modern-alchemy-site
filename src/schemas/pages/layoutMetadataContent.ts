@@ -1,5 +1,5 @@
 import { IconFileCode } from '@tabler/icons-react'
-import { defineField, defineType,ImageAsset } from 'sanity'
+import { defineField, defineType, ImageAsset } from 'sanity'
 
 import { BaseSanitySchema } from '..'
 

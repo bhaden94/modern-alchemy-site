@@ -11,6 +11,9 @@ export const metadata: Metadata = {
   title: 'Aftercare Information',
   description:
     "Learn essential tips and guidelines for tattoo aftercare with Modern Alchemy Tattoo Company's comprehensive guide. Discover the best practices to ensure the longevity and vibrant appearance of your new tattoo.",
+  openGraph: {
+    title: 'Aftercare Information',
+  },
 }
 
 const AftercareInfoPage = async () => {

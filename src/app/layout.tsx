@@ -31,7 +31,10 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     description: metadata.description,
     openGraph: {
-      title: metadata.businessName,
+      title: {
+        template: `%s | ${metadata.businessName}`,
+        default: metadata.businessName,
+      },
       description: metadata.description,
       images: metadata.openGraphImage?.asset.url,
     },

@@ -13,6 +13,9 @@ export async function generateMetadata({
     description: `Successfull booking request page for ${decodeURIComponent(
       searchParams.name,
     )}.`,
+    openGraph: {
+      title: `${decodeURIComponent(searchParams.name)} Booking Request Success`,
+    },
   }
 }
 

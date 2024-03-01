@@ -10,6 +10,9 @@ import SideNav from '../../../components/SideNav/SideNav'
 export const metadata: Metadata = {
   title: 'Employee Portal',
   description: 'Employee admin page.',
+  openGraph: {
+    title: 'Employee Portal',
+  },
 }
 
 export default async function Layout({

@@ -28,6 +28,9 @@ export async function generateMetadata({
   return {
     title: `${artist.name} Portfolio`,
     description: `Tattoo artist portfolio for ${artist.name}.`,
+    openGraph: {
+      title: `${artist.name} Portfolio`,
+    },
   }
 }
 

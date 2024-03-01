@@ -29,6 +29,9 @@ export async function generateMetadata({
   return {
     title: `${artist.name} Booking Request`,
     description: `Submit a tattoo appointment booking request to ${artist.name}.`,
+    openGraph: {
+      title: `${artist.name} Booking Request`,
+    },
   }
 }
 

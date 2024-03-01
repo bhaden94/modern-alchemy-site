@@ -8,6 +8,9 @@ import Unauthorized from './Unauthorized'
 export const metadata: Metadata = {
   title: 'Unauthorized',
   description: 'Unauthorized request redirect page.',
+  openGraph: {
+    title: 'Unauthorized',
+  },
 }
 
 export default function UnauthorizedPage({

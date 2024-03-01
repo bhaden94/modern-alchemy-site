@@ -11,6 +11,9 @@ export const metadata: Metadata = {
   title: 'Frequently Asked Questions',
   description:
     'Find answers to common questions about tattoos at Modern Alchemy Tattoo Company. From the tattooing process to aftercare tips, our FAQ page addresses the most common inquiries.',
+  openGraph: {
+    title: 'Frequently Asked Questions',
+  },
 }
 
 const FaqPage = async () => {
