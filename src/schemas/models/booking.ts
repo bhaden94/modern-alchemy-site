@@ -114,7 +114,7 @@ export default defineType({
         defineArrayMember({
           name: 'day',
           type: 'string',
-          title: 'Preffered Day',
+          title: 'Preferred Day',
           options: {
             list: [
               { title: 'Monday', value: 'monday' },

@@ -51,4 +51,5 @@ export type BaseSanitySchema<T extends string> = {
 export type BasePageContent = {
   pageTitle: string
   isActive: boolean
+  metadataDescription?: string
 }

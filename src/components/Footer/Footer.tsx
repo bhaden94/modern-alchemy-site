@@ -13,14 +13,14 @@ import classes from './Footer.module.css'
 
 interface IFooter {
   logo: ImageAsset
-  copywriteText: string
+  copyrightText: string
   logoCaption?: string
   instagram?: string
   facebook?: string
 }
 
 const Footer = (props: IFooter) => {
-  const { logo, copywriteText, logoCaption, instagram, facebook } = props
+  const { logo, copyrightText, logoCaption, instagram, facebook } = props
 
   const navGroup = NavLinks.map((navItem) => {
     return 'links' in navItem ? (
@@ -53,7 +53,7 @@ const Footer = (props: IFooter) => {
       >
         <Text size="sm" ta="center">
           ©&nbsp;
-          {copywriteText?.replace(
+          {copyrightText?.replace(
             '{currentYear}',
             new Date().getFullYear().toString(),
           )}

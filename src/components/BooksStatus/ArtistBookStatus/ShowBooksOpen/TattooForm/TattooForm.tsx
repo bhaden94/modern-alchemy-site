@@ -129,7 +129,7 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
   })
   const formHasErrors = Object.keys(form.errors).length > 0
 
-  const onSuccessfullBooking = () => {
+  const onSuccessfulBooking = () => {
     form.reset()
     setBodyPlacementImageFiles([])
     setReferenceImageFiles([])
@@ -214,7 +214,7 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
     setIsSubmittingForm(false)
 
     if (response.ok) {
-      onSuccessfullBooking()
+      onSuccessfulBooking()
     } else {
       onFailure()
     }

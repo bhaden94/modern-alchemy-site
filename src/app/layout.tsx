@@ -25,8 +25,19 @@ export async function generateMetadata(): Promise<Metadata> {
   if (!metadata) return {}
 
   return {
-    title: metadata.businessName,
+    title: {
+      template: `%s | ${metadata.businessName}`,
+      default: metadata.businessName,
+    },
     description: metadata.description,
+    openGraph: {
+      title: {
+        template: `%s | ${metadata.businessName}`,
+        default: metadata.businessName,
+      },
+      description: metadata.description,
+      images: metadata.openGraphImage?.asset.url,
+    },
   }
 }
 
@@ -49,9 +60,9 @@ export default async function RootLayout({
           <div className="flex-1">{children}</div>
           <Footer
             logo={content?.businessLogo.asset}
-            copywriteText={content?.copywriteText}
+            copyrightText={content?.copyrightText}
             logoCaption={content?.businessLogoCaption}
-            instagram={content?.intagramLink}
+            instagram={content?.instagramLink}
             facebook={content?.facebookLink}
           />
         </Providers>

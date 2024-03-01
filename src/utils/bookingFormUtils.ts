@@ -3,7 +3,7 @@ import z from 'zod'
 
 import { formatPhoneNumber } from '.'
 
-const joinPrefferedDayLabels = (days: string[]): string => {
+const joinPreferredDayLabels = (days: string[]): string => {
   if (days.length === 5) {
     return 'Any weekday'
   }
@@ -30,8 +30,8 @@ export const MAX_FILES = 5
 export const MAX_FILES_SIZE = 4456448 // 4.25MB
 export const ACCEPTED_IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/webp']
 
-export const TATTO_STYLE = ['color', 'black_and_grey'] as const
-export const zTattooStyle = z.enum(TATTO_STYLE)
+export const TATTOO_STYLE = ['color', 'black_and_grey'] as const
+export const zTattooStyle = z.enum(TATTOO_STYLE)
 export const styleOptions: { value: string; label: string }[] = [
   {
     value: zTattooStyle.Values.color,
@@ -277,7 +277,7 @@ export const BookingField = {
   },
   PriorTattoo: {
     id: 'priorTattoo',
-    label: 'Have you been tattoed by Larry before?',
+    label: 'Have you been tattooed by Larry before?',
     initialValue: priorTattooOptions[0].value,
     getValue: (item: string) =>
       priorTattooOptions.find((option) => option.value === item)?.label || 'No',
@@ -286,7 +286,7 @@ export const BookingField = {
     id: 'preferredDays',
     label: 'Preferred days of Appointment',
     initialValue: [],
-    getValue: (days: string[]) => joinPrefferedDayLabels(days),
+    getValue: (days: string[]) => joinPreferredDayLabels(days),
   },
   Description: {
     id: 'description',

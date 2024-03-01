@@ -31,6 +31,11 @@ export default defineType({
       title: 'Page Active Status',
     }),
     defineField({
+      name: 'metadataDescription',
+      type: 'string',
+      title: 'Metadata Description',
+    }),
+    defineField({
       name: 'faqs',
       type: 'array',
       title: 'FAQs',

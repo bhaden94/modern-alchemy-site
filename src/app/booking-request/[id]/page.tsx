@@ -1,3 +1,4 @@
+import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import BookStatuses from '~/components/BooksStatus/BookStatuses'
@@ -13,6 +14,30 @@ export const generateStaticParams = async () => {
   const client = getClient(undefined)
   const artists = await getArtists(client)
   return artists.map((artist) => ({ id: artist._id }))
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { id: string }
+}): Promise<Metadata> {
+  const client = getClient(undefined)
+  const artist = await getArtistById(client, decodeURI(params.id))
+
+  if (!artist) return {}
+
+  const title = `${artist.name} Booking Request`
+  const description = `Submit a tattoo appointment booking request to ${artist.name}.`
+
+  return {
+    title: title,
+    description: description,
+    openGraph: {
+      title: title,
+      description: description,
+      images: artist.headshot?.asset.url,
+    },
+  }
 }
 
 const ArtistBookingRequestPage = async ({

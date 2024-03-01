@@ -128,7 +128,16 @@ export async function getRootLayoutContent(
   )
 }
 
-const layoutMetadataQuery = groq`*[_type == "layoutMetadataContent"][0]`
+const layoutMetadataQuery = groq`*[_type == "layoutMetadataContent"][0]{
+  ...,
+  openGraphImage{
+    ...,
+    _type == "image" => {
+      ...,
+      asset->
+    }
+  }
+}`
 export async function getLayoutMetadata(
   client: SanityClient,
 ): Promise<LayoutMetadataContent> {
