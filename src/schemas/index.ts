@@ -5,6 +5,7 @@ import blockContent from './models/blockContent'
 import booking from './models/booking'
 import aftercareInfoPageContent from './pages/aftercareInfoPageContent'
 import artistsPageContent from './pages/artistsPageContent'
+import basePageContent from './pages/basePageContent'
 import bookingInfoPageContent from './pages/bookingInfoPageContent'
 import faqPageContent from './pages/faqPageContent'
 import layoutMetadataContent from './pages/layoutMetadataContent'
@@ -15,6 +16,7 @@ export const schemaTypes = {
   blockContent,
   booking,
   artist,
+  basePageContent,
   rootPageContent,
   faqPageContent,
   aftercareInfoPageContent,
@@ -29,6 +31,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     layoutMetadataContent,
     rootLayoutContent,
     // Pages
+    basePageContent,
     rootPageContent,
     artistsPageContent,
     aftercareInfoPageContent,
@@ -46,10 +49,4 @@ export type BaseSanitySchema<T extends string> = {
   _type: T
   _id: string
   _createdAt: string
-}
-
-export type BasePageContent = {
-  pageTitle: string
-  isActive: boolean
-  metadataDescription?: string
 }

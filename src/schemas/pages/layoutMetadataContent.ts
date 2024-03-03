@@ -6,7 +6,7 @@ import { BaseSanitySchema } from '..'
 export interface LayoutMetadataContent
   extends BaseSanitySchema<'layoutMetadataContent'> {
   businessName: string
-  description: string
+  description?: string
   openGraphImage?: { asset: ImageAsset }
 }
 
@@ -20,6 +20,7 @@ export default defineType({
       name: 'businessName',
       type: 'string',
       title: 'Business Name',
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'description',

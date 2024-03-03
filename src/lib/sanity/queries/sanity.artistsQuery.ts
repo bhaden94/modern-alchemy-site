@@ -6,15 +6,12 @@ import { SanityClient } from 'sanity'
 import { Artist } from '~/schemas/models/artist'
 
 import { SANITY_CLIENT_CACHE_SETTING } from '../sanity.client'
+import { IMAGE_QUERY } from '../sanity.image'
 
 const artistsQuery = groq`*[_type == "artist"]{
   ...,
   headshot{
-    ...,
-    _type == "image" => {
-      ...,
-      asset->
-    }
+    ${IMAGE_QUERY}
   }
 }`
 export async function getArtists(client: SanityClient): Promise<Artist[]> {
@@ -24,11 +21,7 @@ export async function getArtists(client: SanityClient): Promise<Artist[]> {
 const activeArtistsQuery = groq`*[_type == "artist" && isActive]{
   ...,
   headshot{
-    ...,
-    _type == "image" => {
-      ...,
-      asset->
-    }
+    ${IMAGE_QUERY}
   }
 }`
 export async function getActiveArtists(
@@ -53,19 +46,17 @@ export async function getArtistByEmail(
 const artistsIdQuery = groq`*[_type == "artist" && _id == $id][0]{
   ...,
   headshot{
-    ...,
-    _type == "image" => {
-      ...,
-      asset->
-    }
+    ${IMAGE_QUERY}
   },
   portfolioImages[]{
-    ...,
-    _type == "image" => {
-      ...,
-      asset->
-    }
-  }
+    ${IMAGE_QUERY}
+  },
+  bookingInstructions[]{
+    ${IMAGE_QUERY}
+  },
+  booksClosedMessage[]{
+    ${IMAGE_QUERY}
+  },
 }`
 export async function getArtistById(
   client: SanityClient,
@@ -81,7 +72,7 @@ export async function getArtistById(
 
 export interface BooksStatus {
   booksOpen: boolean
-  booksOpenAt: DateValue | null
+  booksOpenAt?: DateValue | null
   name: string
   _id: string
 }

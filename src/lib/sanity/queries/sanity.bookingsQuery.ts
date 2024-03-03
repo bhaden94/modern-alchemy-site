@@ -4,6 +4,8 @@ import { SanityClient } from 'sanity'
 
 import { Booking } from '~/schemas/models/booking'
 
+import { IMAGE_QUERY } from '../sanity.image'
+
 export const bookingsQuery = groq`*[_type == "booking"] | order(_createdAt asc)`
 export async function getBookings(client: SanityClient): Promise<Booking[]> {
   return await client.fetch(bookingsQuery, {}, { cache: 'no-store' })
@@ -12,11 +14,7 @@ export async function getBookings(client: SanityClient): Promise<Booking[]> {
 export const bookingsByArtistIdQuery = groq`*[_type == "booking" && artist._ref == $artistId]{
   ...,
   referenceImages[]{
-    ...,
-    _type == "image" => {
-      ...,
-      asset->
-    }
+    ${IMAGE_QUERY}
   }
 } | order(_createdAt asc)`
 export async function getBookingsByArtistId(

@@ -1,4 +1,4 @@
-import { groq, ResponseQueryOptions } from 'next-sanity'
+import { groq } from 'next-sanity'
 import { SanityClient } from 'sanity'
 
 import { AftercareInfoPageContent } from '~/schemas/pages/aftercareInfoPageContent'
@@ -10,17 +10,27 @@ import { RootLayoutContent } from '~/schemas/pages/rootLayoutContent'
 import { RootPageContent } from '~/schemas/pages/rootPageContent'
 
 import { SANITY_CLIENT_CACHE_SETTING } from '../sanity.client'
+import { IMAGE_QUERY } from '../sanity.image'
 
-const rootPageContentQuery = groq`*[_type == "rootPageContent"][0]{
-  ...,
-  aboutContent[]{
+// Spread base page content before rest of content
+// This is so the _type field in basePageContent does not overwrite the documents
+const buildGroqPageQuery = (type: string, additionalQuery?: string): string => {
+  return groq`*[_type == "${type}"][0]{
+    ...basePageContent,
+    ...,
+    ${additionalQuery}
+  }`
+}
+
+const rootPageContentQuery = buildGroqPageQuery(
+  'rootPageContent',
+  `aboutContent[]{
     ...,
     image{
-      ...,
-      asset->
+      ${IMAGE_QUERY}
     }
-  }
-}`
+  }`,
+)
 export async function getRootPageContent(
   client: SanityClient,
 ): Promise<RootPageContent> {
@@ -31,20 +41,16 @@ export async function getRootPageContent(
   )
 }
 
-// answer is the bloc content field, which is inside of the faqs array
-const faqPageContentQuery = groq`*[_type == "faqPageContent"][0]{
-  ...,
-  faqs[]{
+// answer is the blockContent field, which is inside of the faqs array
+const faqPageContentQuery = buildGroqPageQuery(
+  'faqPageContent',
+  `faqs[]{
     ...,
     answer[]{
-      ...,
-      _type == "image" => {
-        ...,
-        asset->
-      }
+      ${IMAGE_QUERY}
     }
-  }
-}`
+  }`,
+)
 export async function getFaqPageContent(
   client: SanityClient,
 ): Promise<FaqPageContent> {
@@ -57,16 +63,12 @@ export async function getFaqPageContent(
 
 // information is the block content field
 // within that field, there can be images that we need to get the asset for
-const aftercareInfoPageContentQuery = groq`*[_type == "aftercareInfoPageContent"][0]{
-  ...,
-  information[]{
-    ...,
-    _type == "image" => {
-      ...,
-      asset->
-    }
-  }
-}`
+const aftercareInfoPageContentQuery = buildGroqPageQuery(
+  'aftercareInfoPageContent',
+  `information[]{
+    ${IMAGE_QUERY}
+  }`,
+)
 export async function getAftercareInfoPageContent(
   client: SanityClient,
 ): Promise<AftercareInfoPageContent> {
@@ -77,7 +79,7 @@ export async function getAftercareInfoPageContent(
   )
 }
 
-const artistsPageContentQuery = groq`*[_type == "artistsPageContent"][0]`
+const artistsPageContentQuery = buildGroqPageQuery('artistsPageContent')
 export async function getArtistsPageContent(
   client: SanityClient,
 ): Promise<ArtistsPageContent> {
@@ -88,16 +90,12 @@ export async function getArtistsPageContent(
   )
 }
 
-const bookingInfoPageContentQuery = groq`*[_type == "bookingInfoPageContent"][0]{
-  ...,
-  information[]{
-    ...,
-    _type == "image" => {
-      ...,
-      asset->
-    }
-  }
-}`
+const bookingInfoPageContentQuery = buildGroqPageQuery(
+  'bookingInfoPageContent',
+  `information[]{
+    ${IMAGE_QUERY}
+  }`,
+)
 export async function getBookingInfoPageContent(
   client: SanityClient,
 ): Promise<BookingInfoPageContent> {
@@ -111,11 +109,7 @@ export async function getBookingInfoPageContent(
 const rootLayoutContentQuery = groq`*[_type == "rootLayoutContent"][0]{
   ...,
   businessLogo{
-    ...,
-    _type == "image" => {
-      ...,
-      asset->
-    }
+    ${IMAGE_QUERY}
   }
 }`
 export async function getRootLayoutContent(
@@ -131,11 +125,7 @@ export async function getRootLayoutContent(
 const layoutMetadataQuery = groq`*[_type == "layoutMetadataContent"][0]{
   ...,
   openGraphImage{
-    ...,
-    _type == "image" => {
-      ...,
-      asset->
-    }
+    ${IMAGE_QUERY}
   }
 }`
 export async function getLayoutMetadata(
