@@ -8,7 +8,6 @@ import { Artist } from '~/schemas/models/artist'
 import { SANITY_CLIENT_CACHE_SETTING } from '../sanity.client'
 import { IMAGE_QUERY } from '../sanity.image'
 
-// TODO: add images query for bookingInstructions && booksClosedMessage
 const artistsQuery = groq`*[_type == "artist"]{
   ...,
   headshot{
