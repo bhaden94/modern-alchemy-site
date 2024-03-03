@@ -7,7 +7,8 @@ import {
   TypedObject,
 } from 'sanity'
 
-import { BasePageContent, BaseSanitySchema } from '..'
+import { BaseSanitySchema } from '..'
+import { BasePageContent } from './basePageContent'
 
 export interface AboutContent {
   heading: string
@@ -31,19 +32,9 @@ export default defineType({
   icon: IconScript,
   fields: [
     defineField({
-      name: 'pageTitle',
-      type: 'string',
-      title: 'Page Title',
-    }),
-    defineField({
-      name: 'isActive',
-      type: 'boolean',
-      title: 'Page Active Status',
-    }),
-    defineField({
-      name: 'metadataDescription',
-      type: 'string',
-      title: 'Metadata Description',
+      name: 'basePageContent',
+      type: 'basePageContent',
+      title: 'Base Page Content',
     }),
     defineField({
       name: 'heroDescription',
@@ -74,11 +65,13 @@ export default defineType({
               name: 'heading',
               type: 'string',
               title: 'Heading',
+              validation: (Rule) => Rule.required(),
             },
             {
               name: 'text',
               type: 'blockContent',
               title: 'Text',
+              validation: (Rule) => Rule.required(),
             },
             // images uploaded here should be in the below format:
             //  - aspect ration 4:3

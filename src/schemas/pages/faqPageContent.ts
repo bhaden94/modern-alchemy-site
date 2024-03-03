@@ -1,7 +1,8 @@
 import { IconScript } from '@tabler/icons-react'
 import { defineArrayMember, defineField, defineType, TypedObject } from 'sanity'
 
-import { BasePageContent, BaseSanitySchema } from '..'
+import { BaseSanitySchema } from '..'
+import { BasePageContent } from './basePageContent'
 
 interface Faq {
   question: string
@@ -11,7 +12,7 @@ interface Faq {
 export interface FaqPageContent
   extends BaseSanitySchema<'faqPageContent'>,
     BasePageContent {
-  faqs: Faq[]
+  faqs?: Faq[]
 }
 
 export default defineType({
@@ -21,19 +22,9 @@ export default defineType({
   icon: IconScript,
   fields: [
     defineField({
-      name: 'pageTitle',
-      type: 'string',
-      title: 'Page Title',
-    }),
-    defineField({
-      name: 'isActive',
-      type: 'boolean',
-      title: 'Page Active Status',
-    }),
-    defineField({
-      name: 'metadataDescription',
-      type: 'string',
-      title: 'Metadata Description',
+      name: 'basePageContent',
+      type: 'basePageContent',
+      title: 'Base Page Content',
     }),
     defineField({
       name: 'faqs',
@@ -49,11 +40,13 @@ export default defineType({
               name: 'question',
               type: 'string',
               title: 'Question',
+              validation: (Rule) => Rule.required(),
             }),
             defineField({
               name: 'answer',
               title: 'Answer',
               type: 'blockContent',
+              validation: (Rule) => Rule.required(),
             }),
           ],
         }),

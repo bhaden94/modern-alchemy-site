@@ -13,7 +13,7 @@ export interface Artist extends BaseSanitySchema<'artist'> {
   email: string
   name: string
   booksOpen: boolean
-  booksOpenAt: Date | null
+  booksOpenAt?: Date | null
   shouldEmailBookings: boolean
   isActive: boolean
   externalBookingLink?: string
@@ -35,16 +35,19 @@ export default defineType({
       name: 'email',
       type: 'string',
       title: 'Email',
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'name',
       type: 'string',
       title: 'Name',
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'isActive',
       type: 'boolean',
       title: 'Is Active',
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'shouldEmailBookings',
@@ -52,6 +55,7 @@ export default defineType({
       title: 'Email Bookings',
       description:
         'If enabled, artist will get all bookings sent to their email.',
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'socials',
@@ -82,6 +86,7 @@ export default defineType({
       type: 'boolean',
       description: 'Artists books status',
       title: 'Books Open',
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'booksOpenAt',

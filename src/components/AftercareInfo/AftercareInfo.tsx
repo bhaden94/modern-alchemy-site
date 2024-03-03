@@ -11,10 +11,12 @@ const AftercareInfo = (content: AftercareInfoPageContent) => {
   return (
     <>
       <PageTitle title={content.pageTitle} />
-      <PortableText
-        value={content.information}
-        components={PortableTextComponents}
-      />
+      {content.information && (
+        <PortableText
+          value={content.information}
+          components={PortableTextComponents}
+        />
+      )}
     </>
   )
 }

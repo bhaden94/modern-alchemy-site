@@ -21,10 +21,12 @@ const BookingInfo = ({ content, artists }: IBookingInfo) => {
       <PageTitle title={content.pageTitle} />
       <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
         <div className="md:col-span-3">
-          <PortableText
-            value={content.information}
-            components={PortableTextComponents}
-          />
+          {content.information && (
+            <PortableText
+              value={content.information}
+              components={PortableTextComponents}
+            />
+          )}
         </div>
         <div className="md:col-span-2">
           <Text size="xl" mb="sm">

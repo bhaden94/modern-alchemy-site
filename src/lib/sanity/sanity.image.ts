@@ -3,6 +3,13 @@ import type { Image } from 'sanity'
 
 import { dataset, projectId } from '~/lib/sanity/sanity.api'
 
+export const IMAGE_QUERY = `
+...,
+_type == "image" => {
+  ...,
+  asset->
+}`
+
 const imageBuilder = createImageUrlBuilder({
   projectId: projectId || '',
   dataset: dataset || '',

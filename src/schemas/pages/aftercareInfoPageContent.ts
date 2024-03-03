@@ -1,12 +1,13 @@
 import { IconScript } from '@tabler/icons-react'
 import { defineField, defineType, TypedObject } from 'sanity'
 
-import { BasePageContent, BaseSanitySchema } from '..'
+import { BaseSanitySchema } from '..'
+import { BasePageContent } from './basePageContent'
 
 export interface AftercareInfoPageContent
   extends BaseSanitySchema<'aftercareInfoPageContent'>,
     BasePageContent {
-  information: TypedObject | TypedObject[]
+  information?: TypedObject | TypedObject[]
 }
 
 export default defineType({
@@ -16,19 +17,9 @@ export default defineType({
   icon: IconScript,
   fields: [
     defineField({
-      name: 'pageTitle',
-      type: 'string',
-      title: 'Page Title',
-    }),
-    defineField({
-      name: 'isActive',
-      type: 'boolean',
-      title: 'Page Active Status',
-    }),
-    defineField({
-      name: 'metadataDescription',
-      type: 'string',
-      title: 'Metadata Description',
+      name: 'basePageContent',
+      type: 'basePageContent',
+      title: 'Base Page Content',
     }),
     defineField({
       name: 'information',

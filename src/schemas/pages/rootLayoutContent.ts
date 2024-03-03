@@ -22,11 +22,18 @@ export default defineType({
       name: 'businessLogo',
       type: 'image',
       title: 'Business Logo',
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'copyrightText',
       type: 'string',
       title: 'Copyright Text',
+      validation: (Rule) =>
+        Rule.required().custom((text) => {
+          return text?.includes('{currentYear}')
+            ? true
+            : 'The copyright should include the {currentYear} literal in it.'
+        }),
     }),
     defineField({
       name: 'businessLogoCaption',

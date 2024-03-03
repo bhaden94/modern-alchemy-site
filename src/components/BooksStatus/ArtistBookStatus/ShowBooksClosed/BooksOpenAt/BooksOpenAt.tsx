@@ -1,6 +1,6 @@
 import { Text } from '@mantine/core'
 
-const BooksOpenAt = ({ date }: { date: Date | null }) => {
+const BooksOpenAt = ({ date }: { date?: Date | null }) => {
   if (!date) return <Text span>TBD...</Text>
 
   const options = {

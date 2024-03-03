@@ -13,7 +13,7 @@ import classes from './Footer.module.css'
 
 interface IFooter {
   logo: ImageAsset
-  copyrightText: string
+  copyrightText?: string
   logoCaption?: string
   instagram?: string
   facebook?: string

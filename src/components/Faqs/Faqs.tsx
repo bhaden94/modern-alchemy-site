@@ -14,7 +14,7 @@ const Faqs = (content: FaqPageContent) => {
       <PageTitle title={content.pageTitle} />
 
       <Accordion variant="separated">
-        {content.faqs.map((faq) => (
+        {content.faqs?.map((faq) => (
           <Accordion.Item value={faq.question} key={faq.question}>
             <Accordion.Control>{faq.question}</Accordion.Control>
             <Accordion.Panel>
