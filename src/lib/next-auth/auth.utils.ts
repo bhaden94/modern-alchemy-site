@@ -42,7 +42,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token }) {
       const artist = await getArtist(token)
 
-      token.role = AUTHORIZED_ROLE
+      token.role = artist ? AUTHORIZED_ROLE : null
       token.name = artist?.name
       token.artistId = artist?._id
 
