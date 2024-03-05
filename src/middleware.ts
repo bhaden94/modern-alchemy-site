@@ -22,7 +22,8 @@ export default withAuth(
 
     if (
       req.nextUrl.pathname === config.matcher[0] &&
-      req.nextauth.token?.artistId
+      req.nextauth.token?.artistId &&
+      req.nextauth.token?.role === AUTHORIZED_ROLE
     ) {
       // route to settings page by default
       return NextResponse.redirect(
