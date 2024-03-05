@@ -10,7 +10,7 @@ import { PortableTextComponents } from '../PortableTextComponents'
 
 const Faqs = (content: FaqPageContent) => {
   return (
-    <Container size="sm">
+    <Container size="sm" px={0}>
       <PageTitle title={content.pageTitle} />
 
       <Accordion variant="separated">
