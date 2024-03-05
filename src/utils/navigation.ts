@@ -35,7 +35,7 @@ export const NavLinks: NavigationLinkType[] = [
     links: [
       { link: NavigationPages.AftercareInfo, label: 'Aftercare Info' },
       // { link: NavigationPages.BookingInfo, label: 'Booking Info' },
-      // { link: NavigationPages.Faqs, label: 'FAQs' },
+      { link: NavigationPages.Faqs, label: 'FAQs' },
     ],
   },
 ]
