@@ -79,12 +79,11 @@ const SideNav = ({ session, id }: { session: Session; id: string }) => {
         aria-label="Settings"
         size="xl"
         pos="fixed"
-        color="wood.7"
       >
         <IconArrowBadgeRight
           size={36}
           stroke={1.5}
-          color="var(--mantine-color-wood-2)"
+          color="var(--mantine-color-text)"
         />
       </ActionIcon>
     </>

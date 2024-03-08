@@ -1,8 +1,8 @@
 .header {
   position: relative;
   height: var(--mantine-header-height);
-  background-color: var(--mantine-color-wood-filled);
-  border-bottom: rem(1px) solid var(--mantine-color-wood-filled);
+  background-color: var(--header-footer-color);
+  border-bottom: rem(1px) solid var(--header-footer-color);
 }
 
 .inner {

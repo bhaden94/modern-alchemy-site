@@ -1,6 +1,7 @@
 'use client'
 
 import {
+  ActionIcon,
   Button,
   createTheme,
   CSSVariablesResolver,
@@ -24,10 +25,10 @@ const ebGaramond = EB_Garamond({
 
 const themeOverride = createTheme({
   primaryColor: 'academia',
-  white: '#efeddc',
+  white: '#dfcda9',
   colors: {
     dark: [
-      '#efeddc',
+      '#dfcda9',
       '#B8B8B8',
       '#828282',
       '#696969',
@@ -38,17 +39,31 @@ const themeOverride = createTheme({
       '#1F1F1F',
       '#141414',
     ],
+    // original academia
+    // keep until happy with colors
+    // academia: [
+    //   '#f3f7f3',
+    //   '#e5ebe5',
+    //   '#c8d6c8',
+    //   '#a7c0a7',
+    //   '#8cae8b',
+    //   '#7aa27a',
+    //   '#709d70',
+    //   '#5e895e',
+    //   '#537952',
+    //   '#446944',
+    // ],
     academia: [
-      '#f3f7f3',
-      '#e5ebe5',
-      '#c8d6c8',
-      '#a7c0a7',
-      '#8cae8b',
-      '#7aa27a',
-      '#709d70',
-      '#5e895e',
-      '#537952',
-      '#446944',
+      '#f4f6f4',
+      '#e8e9e8',
+      '#cdd1cd',
+      '#afb8af',
+      '#95a395',
+      '#859685',
+      '#7c907b',
+      '#393d32',
+      '#393d32',
+      '#26302a',
     ],
     wood: [
       '#faf2f0',
@@ -124,6 +139,8 @@ const themeOverride = createTheme({
 export const cssVariableResolver: CSSVariablesResolver = () => ({
   variables: {
     '--mantine-header-height': rem(94),
+    '--header-footer-color': 'var(--mantine-color-academia-filled)',
+    '--header-footer-hover': 'var(--mantine-color-academia-filled-hover)',
   },
   light: {},
   dark: {},

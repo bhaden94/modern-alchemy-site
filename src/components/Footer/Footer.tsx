@@ -71,7 +71,7 @@ const Footer = (props: IFooter) => {
               target="_blank"
               href={instagram}
               size="lg"
-              color="gray"
+              color="primary"
               variant="subtle"
             >
               <IconBrandInstagram
@@ -86,7 +86,7 @@ const Footer = (props: IFooter) => {
               target="_blank"
               href={facebook}
               size="lg"
-              color="gray"
+              color="primary"
               variant="subtle"
             >
               <IconBrandFacebook

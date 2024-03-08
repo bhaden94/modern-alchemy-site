@@ -1,5 +1,5 @@
 .dropdown {
-  background-color: var(--mantine-color-wood-filled);
+  background-color: var(--header-footer-color);
   border-radius: var(--mantine-radius-default);
   border: none;
   padding: 0;
@@ -37,7 +37,7 @@
   font-weight: 500;
 
   @mixin hover {
-    background-color: var(--mantine-primary-color-filled-hover);
+    background-color: var(--header-footer-hover);
   }
 }
 
