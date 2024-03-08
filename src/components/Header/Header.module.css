@@ -18,5 +18,5 @@
 
 .burger {
   position: absolute;
-  right: var(--space-4);
+  right: 20px;
 }

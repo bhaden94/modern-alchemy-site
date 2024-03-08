@@ -8,7 +8,6 @@ import classes from './PageInProgress.module.css'
 const PageInProgress = () => {
   return (
     <Container className={classes.root}>
-      <div className={classes.label}>Page under maintenance</div>
       <Title className={classes.title}>You have found a secret place.</Title>
       <Text c="dimmed" size="lg" ta="center" className={classes.description}>
         Unfortunately, this area is not ready yet. Please check back later.

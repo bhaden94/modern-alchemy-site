@@ -24,7 +24,6 @@
   margin-right: rem(5px);
   display: block;
   line-height: 1;
-  font-size: var(--mantine-font-size-md);
   font-weight: 500;
 }
 
@@ -35,7 +34,6 @@
   border-radius: var(--mantine-radius-default);
   text-decoration: none;
   color: var(--mantine-color-dark-0);
-  font-size: var(--mantine-font-size-md);
   font-weight: 500;
 
   @mixin hover {
@@ -45,7 +43,6 @@
 
 .linkFooter {
   display: block;
-  font-size: var(--mantine-font-size-sm);
   padding-top: rem(3px);
   padding-bottom: rem(3px);
   color: var(--mantine-color-dark-0);

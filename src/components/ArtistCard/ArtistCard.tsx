@@ -47,6 +47,7 @@ const ArtistCard = ({ artist, showPortfolioLink }: IArtistCard) => {
           artist._id,
         )}`}
         radius="sm"
+        fz="xs"
       >
         submit booking request
       </Button>
