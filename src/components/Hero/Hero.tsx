@@ -45,9 +45,19 @@ const Hero = ({ title, description, buttonText, buttonLink }: IHero) => {
         <Button
           component={Link}
           href={buttonLink || NavigationPages.Artists}
+          visibleFrom="xs"
           variant="gradient"
           size="xl"
-          radius="xl"
+          className={classes.control}
+        >
+          {buttonText || 'View our artists'}
+        </Button>
+        <Button
+          component={Link}
+          href={buttonLink || NavigationPages.Artists}
+          hiddenFrom="xs"
+          variant="gradient"
+          size="md"
           className={classes.control}
         >
           {buttonText || 'View our artists'}

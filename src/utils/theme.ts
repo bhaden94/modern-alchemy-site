@@ -13,18 +13,12 @@ import {
   rem,
   Text,
 } from '@mantine/core'
-import { Open_Sans, Raleway } from 'next/font/google'
+import { EB_Garamond } from 'next/font/google'
 
-const openSans = Open_Sans({
-  subsets: ['latin'],
-  weight: ['500', '700', '800'],
-  display: 'swap',
-})
-
-const raleway = Raleway({
+const ebGaramond = EB_Garamond({
   style: ['normal', 'italic'],
   subsets: ['latin'],
-  weight: ['400', '700'],
+  weight: ['400', '500', '700', '800'],
   display: 'swap',
 })
 
@@ -74,8 +68,9 @@ const themeOverride = createTheme({
     to: 'academia.9',
     deg: 45,
   },
-  fontFamily: raleway.style.fontFamily,
-  headings: { fontFamily: openSans.style.fontFamily },
+  fontFamily: ebGaramond.style.fontFamily,
+  headings: { fontFamily: ebGaramond.style.fontFamily, fontWeight: '800' },
+  scale: 1.1,
   defaultRadius: 'xs',
   components: {
     Text: Text.extend({
