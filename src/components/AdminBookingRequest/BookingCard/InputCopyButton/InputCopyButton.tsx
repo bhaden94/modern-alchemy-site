@@ -8,7 +8,7 @@ const InputCopyButton = ({ value }: { value: string }) => {
         <ActionIcon
           color={
             copied
-              ? 'var(--mantine-primary-color-filled)'
+              ? 'var(--mantine-primary-color-5)'
               : 'var(--mantine-color-text)'
           }
           variant="subtle"
