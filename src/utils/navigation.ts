@@ -11,6 +11,7 @@ export enum NavigationPages {
   EmployeePortalBookings = '/bookings',
   Studio = '/studio',
   Unauthorized = '/unauthorized',
+  PrivacyPolicy = '/privacy-policy',
 }
 
 interface BaseNavigationLink {
@@ -36,6 +37,7 @@ export const NavLinks: NavigationLinkType[] = [
       { link: NavigationPages.AftercareInfo, label: 'Aftercare Info' },
       // { link: NavigationPages.BookingInfo, label: 'Booking Info' },
       { link: NavigationPages.Faqs, label: 'FAQs' },
+      { link: NavigationPages.PrivacyPolicy, label: 'Privacy Policy' },
     ],
   },
 ]

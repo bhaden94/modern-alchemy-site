@@ -2,12 +2,14 @@
 
 import { PortableText } from '@portabletext/react'
 
-import { AftercareInfoPageContent } from '~/schemas/pages/aftercareInfoPageContent'
-
 import PageTitle from '../PageTitle/PageTitle'
 import { PortableTextComponents } from '../PortableTextComponents'
+import { BasePageContent } from '~/schemas/pages/basePageContent'
+import { TypedObject } from 'sanity'
 
-const AftercareInfo = (content: AftercareInfoPageContent) => {
+const GeneralPage = (
+  content: BasePageContent & { information?: TypedObject | TypedObject[] },
+) => {
   return (
     <>
       <PageTitle title={content.pageTitle} />
@@ -21,4 +23,4 @@ const AftercareInfo = (content: AftercareInfoPageContent) => {
   )
 }
 
-export default AftercareInfo
+export default GeneralPage
