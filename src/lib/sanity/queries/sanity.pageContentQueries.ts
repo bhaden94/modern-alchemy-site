@@ -11,6 +11,7 @@ import { RootPageContent } from '~/schemas/pages/rootPageContent'
 
 import { SANITY_CLIENT_CACHE_SETTING } from '../sanity.client'
 import { IMAGE_QUERY } from '../sanity.image'
+import { PrivacyPolicyPageContent } from '~/schemas/pages/privacyPolicyPageContent'
 
 // Spread base page content before rest of content
 // This is so the _type field in basePageContent does not overwrite the documents
@@ -74,6 +75,22 @@ export async function getAftercareInfoPageContent(
 ): Promise<AftercareInfoPageContent> {
   return await client.fetch(
     aftercareInfoPageContentQuery,
+    {},
+    SANITY_CLIENT_CACHE_SETTING,
+  )
+}
+
+const privacyPolicyPageContentQuery = buildGroqPageQuery(
+  'privacyPolicyPageContent',
+  `information[]{
+    ${IMAGE_QUERY}
+  }`,
+)
+export async function getPrivacyPolicyPageContent(
+  client: SanityClient,
+): Promise<PrivacyPolicyPageContent> {
+  return await client.fetch(
+    privacyPolicyPageContentQuery,
     {},
     SANITY_CLIENT_CACHE_SETTING,
   )

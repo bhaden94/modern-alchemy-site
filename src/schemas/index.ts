@@ -11,6 +11,7 @@ import faqPageContent from './pages/faqPageContent'
 import layoutMetadataContent from './pages/layoutMetadataContent'
 import rootLayoutContent from './pages/rootLayoutContent'
 import rootPageContent from './pages/rootPageContent'
+import privacyPolicyPageContent from './pages/privacyPolicyPageContent'
 
 export const schemaTypes = {
   blockContent,
@@ -19,6 +20,7 @@ export const schemaTypes = {
   basePageContent,
   rootPageContent,
   faqPageContent,
+  privacyPolicyPageContent,
   aftercareInfoPageContent,
   artistsPageContent,
   bookingInfoPageContent,
@@ -36,6 +38,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     artistsPageContent,
     aftercareInfoPageContent,
     faqPageContent,
+    privacyPolicyPageContent,
     bookingInfoPageContent,
     // Models
     artist,

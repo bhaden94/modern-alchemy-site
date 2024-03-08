@@ -1,6 +1,7 @@
 'use client'
 
 import {
+  Anchor,
   Box,
   Button,
   Checkbox,
@@ -44,6 +45,8 @@ import ImageDropzone from '../../../../ImageDropzone/ImageDropzone'
 import ImageErrors from '../../../../ImageDropzone/ImageErrors'
 import ImageThumbnails from '../../../../ImageDropzone/ImageThumbnails'
 import FormErrorAlert from './FormErrorAlert/FormErrorAlert'
+import Link from 'next/link'
+import { NavigationPages } from '~/utils/navigation'
 
 const inputSharedProps = (
   id: string,
@@ -75,6 +78,31 @@ const CustomLoader = ({ label }: { label: string }) => {
     </div>
   )
 }
+
+const formAgreements = [
+  {
+    label: (
+      <Text>
+        I accept the{' '}
+        <Anchor
+          component={Link}
+          href={NavigationPages.PrivacyPolicy}
+          underline="hover"
+          target="_blank"
+          c="primary"
+        >
+          privacy policy
+        </Anchor>
+        .
+      </Text>
+    ),
+    value: 'privacyPolicy',
+  },
+  // {
+  //   label: 'I accept the above disclaimer.',
+  //   value: 'disclaimer',
+  // },
+] as const
 
 interface ITattooForm {
   onSuccess: () => void
@@ -115,12 +143,19 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
   const [referenceImageUploadRejections, setReferenceImageUploadRejections] =
     useState<FileRejection[]>([])
 
+  // Form agreements checkboxes
+  const [formAgreementsAccepted, setFormAgreementsAccepted] = useState<
+    string[]
+  >([])
+
   // Form boolean states
   const [isUploadingImages, setIsUploadingImages] = useState<boolean>(false)
   const [isSubmittingForm, setIsSubmittingForm] = useState<boolean>(false)
   const isSubmitting = isUploadingImages || isSubmittingForm
   const isCompressingImages =
     isCompressingBodyPlacementImages || isCompressingReferenceImages
+  const allFormAgreementsAccepted =
+    formAgreementsAccepted.length !== formAgreements.length
 
   // Form variables
   const form = useForm<TBookingSchema>({
@@ -559,6 +594,29 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
             />
           </Box>
 
+          {/* Form Agreements */}
+          <Checkbox.Group
+            {...inputSharedProps(
+              'agreementsGroup',
+              'Terms and Conditions',
+              '',
+              isSubmitting,
+            )}
+            value={formAgreementsAccepted}
+            onChange={setFormAgreementsAccepted}
+          >
+            <Stack my="xs">
+              {formAgreements.map((agreement) => (
+                <Checkbox
+                  key={agreement.value}
+                  label={agreement.label}
+                  value={agreement.value}
+                  error={false}
+                />
+              ))}
+            </Stack>
+          </Checkbox.Group>
+
           {formHasErrors ? <FormErrorAlert /> : undefined}
 
           {/* Submit button */}
@@ -566,7 +624,7 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
             size="lg"
             variant="filled"
             type="submit"
-            disabled={isCompressingImages}
+            disabled={isCompressingImages || allFormAgreementsAccepted}
             loading={isSubmitting}
           >
             Send Request
