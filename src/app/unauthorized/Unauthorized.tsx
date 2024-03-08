@@ -21,7 +21,7 @@ const Unauthorized = ({ redirectUrl }: { redirectUrl: string }) => {
             })
           }
         >
-          Sign with a different account
+          Sign in again
         </Button>
         <Link href={NavigationPages.Home}>Home</Link>
       </Group>
