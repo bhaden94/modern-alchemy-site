@@ -35,7 +35,7 @@ export default defineType({
       name: 'email',
       type: 'string',
       title: 'Email',
-      validation: (Rule) => Rule.required(),
+      validation: (Rule) => Rule.required().lowercase(),
     }),
     defineField({
       name: 'name',

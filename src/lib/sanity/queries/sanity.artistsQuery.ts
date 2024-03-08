@@ -35,7 +35,7 @@ export async function getArtistByEmail(
   client: SanityClient,
   email: string,
 ): Promise<Partial<Artist>> {
-  const emailParam = { email: email }
+  const emailParam = { email: email.toLowerCase() }
   return await client.fetch(
     artistsEmailQuery,
     emailParam,
