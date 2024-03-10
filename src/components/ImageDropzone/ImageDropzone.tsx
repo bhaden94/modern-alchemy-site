@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, Group, rem, Text } from '@mantine/core'
+import { Button, Group, rem, Stack, Text } from '@mantine/core'
 import {
   Dropzone,
   DropzoneProps,
@@ -10,13 +10,17 @@ import {
 import { IconPhoto, IconUpload, IconX } from '@tabler/icons-react'
 import { useRef } from 'react'
 
-import { ACCEPTED_IMAGE_TYPES, MAX_FILES } from '~/utils/bookingFormUtils'
+import { ACCEPTED_IMAGE_TYPES } from '~/utils/bookingFormUtils'
+
+import classes from './ImageDropzone.module.css'
 
 interface ImageDropzoneProps {
   onImageDrop: (files: FileWithPath[]) => void
   onImageReject: (rejections: FileRejection[]) => void
   disabled?: boolean
   dropzoneProps?: Partial<DropzoneProps>
+  rejectionMessage?: string
+  uploadButtonText?: string
 }
 
 const ImageDropzone = ({
@@ -24,18 +28,20 @@ const ImageDropzone = ({
   onImageReject,
   disabled = false,
   dropzoneProps,
+  rejectionMessage = 'That is not supported.',
+  uploadButtonText = 'Attach files',
 }: ImageDropzoneProps) => {
   const openRef = useRef<() => void>(null)
 
   return (
     <>
       <Dropzone
+        className={classes.dropzone}
         openRef={openRef}
         onDrop={(files) => onImageDrop(files)}
         onReject={(rejections) => onImageReject(rejections)}
         accept={ACCEPTED_IMAGE_TYPES}
         aria-label="Image dropzone"
-        maxFiles={MAX_FILES}
         disabled={disabled}
         {...dropzoneProps}
       >
@@ -72,12 +78,10 @@ const ImageDropzone = ({
           </Dropzone.Idle>
         </Group>
 
-        <div className="flex flex-col justify-center items-center gap-3">
+        <Stack justify="center" align="center" gap={3}>
           <Text size="xl">
             <Dropzone.Accept>Drop images here</Dropzone.Accept>
-            <Dropzone.Reject>
-              There is a max of {MAX_FILES} image files allowed.
-            </Dropzone.Reject>
+            <Dropzone.Reject>{rejectionMessage}</Dropzone.Reject>
             <Dropzone.Idle>Drag&apos;n&apos;drop images here</Dropzone.Idle>
           </Text>
           <Text size="md" c="dimmed">
@@ -89,9 +93,9 @@ const ImageDropzone = ({
             onClick={() => openRef.current?.()}
             disabled={disabled}
           >
-            Attach files
+            {uploadButtonText}
           </Button>
-        </div>
+        </Stack>
       </Dropzone>
     </>
   )

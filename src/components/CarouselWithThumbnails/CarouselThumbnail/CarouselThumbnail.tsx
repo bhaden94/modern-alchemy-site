@@ -3,27 +3,26 @@ import { ImageAsset } from 'sanity'
 
 import { generateNextImagePlaceholder } from '~/utils'
 
-interface IPortfolioCarouselThumbnail {
+import classes from '../CarouselWithThumbnails.module.css'
+
+interface ICarouselThumbnail {
   image: ImageAsset
   selected: boolean
   index: number
   onClick: (index: number) => void
 }
 
-const PortfolioCarouselThumbnail = ({
+const CarouselThumbnail = ({
   image,
   selected,
   index,
   onClick,
-}: IPortfolioCarouselThumbnail) => {
+}: ICarouselThumbnail) => {
   return (
     <Image
-      className={`${
-        selected
-          ? 'border-[var(--mantine-primary-color-filled)] opacity-100'
-          : 'opacity-20'
-      } rounded-md border-solid cursor-pointer transition duration-300 ease-in-out`}
+      className={classes.thumbnailImage}
       src={image.url}
+      data-selected={selected}
       alt="Portfolio image thumbnail"
       onClick={() => onClick(index)}
       width={75}
@@ -33,4 +32,4 @@ const PortfolioCarouselThumbnail = ({
   )
 }
 
-export default PortfolioCarouselThumbnail
+export default CarouselThumbnail

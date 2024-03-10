@@ -16,8 +16,8 @@ import { Booking } from '~/schemas/models/booking'
 import { formatDate } from '~/utils'
 import { BookingField } from '~/utils/bookingFormUtils'
 
-import PortfolioCarousel from '../../PortfolioCarousel/PortfolioCarousel'
-import DeleteBooking from './DeleteBooking/DeleteBooking'
+import DeleteWithConfirmation from '../../DeleteWithConfirmation/DeleteWithConfirmation'
+import CarouselWithThumbnails from '../../CarouselWithThumbnails/CarouselWithThumbnails'
 import InputCopyButton from './InputCopyButton/InputCopyButton'
 
 interface BookingFieldProperty {
@@ -105,7 +105,7 @@ export default function BookingCard({ booking }: IBookingCardProps) {
       <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
         {Boolean(booking.referenceImages.length > 0) ? (
           <Box>
-            <PortfolioCarousel images={booking.referenceImages} />
+            <CarouselWithThumbnails images={booking.referenceImages} />
           </Box>
         ) : (
           <Alert title="Image Upload Issue" color="red.9">
@@ -129,10 +129,11 @@ export default function BookingCard({ booking }: IBookingCardProps) {
           </Grid.Col>
         </Grid>
       </SimpleGrid>
-      <DeleteBooking
+      <DeleteWithConfirmation
         isDeleting={isDeleting}
-        deleteBookingById={deleteBookingById}
-        bookingName={booking.name}
+        onDeleteConfirmed={deleteBookingById}
+        deleteButtonText="Delete Booking"
+        confirmationMessage={`Are you sure you want to delete the booking for ${booking.name}?`}
       />
     </Card>
   )

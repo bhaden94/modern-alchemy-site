@@ -5,15 +5,15 @@ import { ImageAsset } from 'sanity'
 
 import { generateNextImagePlaceholder } from '~/utils'
 
-interface IPortfolioCarouselImage {
+interface ICarouselImage {
   image: ImageAsset
 }
 
-const PortfolioCarouselImage = ({ image }: IPortfolioCarouselImage) => {
+const CarouselImage = ({ image }: ICarouselImage) => {
   return (
     <Image
       src={image.url}
-      alt="Portfolio image thumbnail"
+      alt="Portfolio image"
       fill
       sizes="100%"
       style={{
@@ -27,4 +27,4 @@ const PortfolioCarouselImage = ({ image }: IPortfolioCarouselImage) => {
   )
 }
 
-export default PortfolioCarouselImage
+export default CarouselImage

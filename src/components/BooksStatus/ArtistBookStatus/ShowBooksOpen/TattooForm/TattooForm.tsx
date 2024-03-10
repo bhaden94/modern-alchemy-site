@@ -26,6 +26,7 @@ import { FileRejection, FileWithPath } from '@mantine/dropzone'
 import { useForm } from '@mantine/form'
 import imageCompression from 'browser-image-compression'
 import { zodResolver } from 'mantine-form-zod-resolver'
+import Link from 'next/link'
 import { SetStateAction, useState } from 'react'
 
 import { useArtist } from '~/hooks/useArtist'
@@ -35,18 +36,18 @@ import {
   bookingSchema,
   getBookingFormInitialValues,
   ImagesBookingField,
+  MAX_FILES,
   preferredDayOptions,
   priorTattooOptions,
   styleOptions,
   TBookingSchema,
 } from '~/utils/bookingFormUtils'
+import { NavigationPages } from '~/utils/navigation'
 
 import ImageDropzone from '../../../../ImageDropzone/ImageDropzone'
 import ImageErrors from '../../../../ImageDropzone/ImageErrors'
 import ImageThumbnails from '../../../../ImageDropzone/ImageThumbnails'
 import FormErrorAlert from './FormErrorAlert/FormErrorAlert'
-import Link from 'next/link'
-import { NavigationPages } from '~/utils/navigation'
 
 const inputSharedProps = (
   id: string,
@@ -520,12 +521,13 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
               }
               disabled={isSubmitting}
               dropzoneProps={{
-                className: 'w-full',
                 loading: isCompressingBodyPlacementImages,
                 loaderProps: {
                   children: <CustomLoader label={'Compressing images'} />,
                 },
+                maxFiles: MAX_FILES,
               }}
+              rejectionMessage={`There is a max of ${MAX_FILES} image files allowed.`}
             />
             <ImageThumbnails
               imageFiles={bodyPlacementImageFiles}
@@ -568,12 +570,13 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
               }
               disabled={isSubmitting}
               dropzoneProps={{
-                className: 'w-full',
                 loading: isCompressingReferenceImages,
                 loaderProps: {
                   children: <CustomLoader label={'Compressing images'} />,
                 },
+                maxFiles: MAX_FILES,
               }}
+              rejectionMessage={`There is a max of ${MAX_FILES} image files allowed.`}
             />
             <ImageThumbnails
               imageFiles={referenceImageFiles}

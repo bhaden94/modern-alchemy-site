@@ -62,7 +62,7 @@ const ArtistCard = ({ artist, showPortfolioLink }: IArtistCard) => {
           alt="Artist headshot"
           width={300}
           height={300}
-          placeholder={generateNextImagePlaceholder(300, 250)}
+          placeholder={generateNextImagePlaceholder(300, 300)}
         />
       </Card.Section>
 

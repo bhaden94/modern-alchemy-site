@@ -1,12 +1,13 @@
 'use client'
 
 import { Carousel, CarouselProps, Embla } from '@mantine/carousel'
+import { Stack } from '@mantine/core'
 import { useCallback, useEffect, useState } from 'react'
 import { ImageAsset } from 'sanity'
 
-import classes from './PortfolioCarousel.module.css'
-import PortfolioCarouselImage from './PortfolioCarouselImage'
-import PortfolioCarouselThumbnail from './PortfolioCarouselThumbnail'
+import classes from './CarouselWithThumbnails.module.css'
+import CarouselImage from './CarouselImage/CarouselImage'
+import CarouselThumbnail from './CarouselThumbnail/CarouselThumbnail'
 
 const sharedCarouselProps: Partial<CarouselProps> = {
   controlsOffset: 'xs',
@@ -16,7 +17,11 @@ const sharedCarouselProps: Partial<CarouselProps> = {
   classNames: { controls: classes.controls },
 }
 
-const PortfolioCarousel = ({ images }: { images: { asset: ImageAsset }[] }) => {
+interface ICarouselWithThumbnails {
+  images: { asset: ImageAsset }[]
+}
+
+const CarouselWithThumbnails = ({ images }: ICarouselWithThumbnails) => {
   const [embla, setEmbla] = useState<Embla | null>(null)
   const [emblaThumbs, setEmblaThumbs] = useState<Embla | null>(null)
   const [thumbIndex, setThumbIndex] = useState<number>(0)
@@ -47,13 +52,13 @@ const PortfolioCarousel = ({ images }: { images: { asset: ImageAsset }[] }) => {
 
   const mainImageSlides = images?.map((image) => (
     <Carousel.Slide key={image.asset._id}>
-      <PortfolioCarouselImage image={image.asset} />
+      <CarouselImage image={image.asset} />
     </Carousel.Slide>
   ))
 
   const thumbnails = images?.map((image, i) => (
-    <Carousel.Slide key={image.asset._id} className="flex justify-center">
-      <PortfolioCarouselThumbnail
+    <Carousel.Slide key={image.asset._id}>
+      <CarouselThumbnail
         image={image.asset}
         selected={i === thumbIndex}
         index={i}
@@ -63,33 +68,28 @@ const PortfolioCarousel = ({ images }: { images: { asset: ImageAsset }[] }) => {
   ))
 
   return (
-    <div className="flex flex-wrap gap-2">
-      <div className="flex w-full h-[400px]">
+    <Stack gap={8} h="100%" mih={475}>
+      <Carousel
+        {...sharedCarouselProps}
+        classNames={{ root: classes.mainCarouselRoot }}
+        getEmblaApi={setEmbla}
+        withControls={images.length > 1}
+      >
+        {mainImageSlides}
+      </Carousel>
+      {Boolean(images.length > 1) && (
         <Carousel
           {...sharedCarouselProps}
-          className="flex-1"
-          getEmblaApi={setEmbla}
-          withControls={images.length > 1}
+          getEmblaApi={setEmblaThumbs}
+          dragFree
+          slideSize="10%"
+          slideGap={3}
         >
-          {mainImageSlides}
+          {thumbnails}
         </Carousel>
-      </div>
-      {Boolean(images.length > 1) && (
-        <div className="flex w-full overflow-hidden">
-          <Carousel
-            {...sharedCarouselProps}
-            className="w-full"
-            getEmblaApi={setEmblaThumbs}
-            dragFree
-            slideSize="10%"
-            slideGap={0}
-          >
-            {thumbnails}
-          </Carousel>
-        </div>
       )}
-    </div>
+    </Stack>
   )
 }
 
-export default PortfolioCarousel
+export default CarouselWithThumbnails
