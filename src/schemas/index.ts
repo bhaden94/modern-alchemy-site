@@ -9,9 +9,9 @@ import basePageContent from './pages/basePageContent'
 import bookingInfoPageContent from './pages/bookingInfoPageContent'
 import faqPageContent from './pages/faqPageContent'
 import layoutMetadataContent from './pages/layoutMetadataContent'
+import privacyPolicyPageContent from './pages/privacyPolicyPageContent'
 import rootLayoutContent from './pages/rootLayoutContent'
 import rootPageContent from './pages/rootPageContent'
-import privacyPolicyPageContent from './pages/privacyPolicyPageContent'
 
 export const schemaTypes = {
   blockContent,

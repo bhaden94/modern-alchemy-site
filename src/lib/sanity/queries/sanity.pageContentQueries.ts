@@ -6,12 +6,12 @@ import { ArtistsPageContent } from '~/schemas/pages/artistsPageContent'
 import { BookingInfoPageContent } from '~/schemas/pages/bookingInfoPageContent'
 import { FaqPageContent } from '~/schemas/pages/faqPageContent'
 import { LayoutMetadataContent } from '~/schemas/pages/layoutMetadataContent'
+import { PrivacyPolicyPageContent } from '~/schemas/pages/privacyPolicyPageContent'
 import { RootLayoutContent } from '~/schemas/pages/rootLayoutContent'
 import { RootPageContent } from '~/schemas/pages/rootPageContent'
 
 import { SANITY_CLIENT_CACHE_SETTING } from '../sanity.client'
 import { IMAGE_QUERY } from '../sanity.image'
-import { PrivacyPolicyPageContent } from '~/schemas/pages/privacyPolicyPageContent'
 
 // Spread base page content before rest of content
 // This is so the _type field in basePageContent does not overwrite the documents

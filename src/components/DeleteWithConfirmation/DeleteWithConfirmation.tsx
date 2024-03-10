@@ -3,22 +3,24 @@
 import { Button, Group, Popover, Text } from '@mantine/core'
 import { useState } from 'react'
 
-interface IDeleteBooking {
+interface IDeleteWithConfirmation {
   isDeleting: boolean
-  deleteBookingById: () => void
-  bookingName: string
+  onDeleteConfirmed: () => void
+  confirmationMessage?: string
+  deleteButtonText?: string
 }
 
-const DeleteBooking = ({
+const DeleteWithConfirmation = ({
   isDeleting,
-  deleteBookingById,
-  bookingName,
-}: IDeleteBooking) => {
+  onDeleteConfirmed,
+  confirmationMessage = 'Are you sure you want to delete this?',
+  deleteButtonText = 'Delete',
+}: IDeleteWithConfirmation) => {
   const [popoverOpened, setPopoverOpened] = useState(false)
 
   const deleteConfirmed = () => {
     setPopoverOpened((o) => !o)
-    deleteBookingById()
+    onDeleteConfirmed()
   }
 
   return (
@@ -38,13 +40,11 @@ const DeleteBooking = ({
           mt={16}
           className="self-center"
         >
-          Delete Booking
+          {deleteButtonText}
         </Button>
       </Popover.Target>
       <Popover.Dropdown className="flex flex-col">
-        <Text>
-          Are you sure you want to delete the booking for {bookingName}?
-        </Text>
+        <Text>{confirmationMessage}</Text>
         <Group justify="center">
           <Button
             onClick={() => deleteConfirmed()}
@@ -70,4 +70,4 @@ const DeleteBooking = ({
   )
 }
 
-export default DeleteBooking
+export default DeleteWithConfirmation

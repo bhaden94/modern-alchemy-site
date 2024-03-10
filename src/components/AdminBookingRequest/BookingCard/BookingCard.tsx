@@ -16,8 +16,8 @@ import { Booking } from '~/schemas/models/booking'
 import { formatDate } from '~/utils'
 import { BookingField } from '~/utils/bookingFormUtils'
 
+import DeleteWithConfirmation from '../../DeleteWithConfirmation/DeleteWithConfirmation'
 import PortfolioCarousel from '../../PortfolioCarousel/PortfolioCarousel'
-import DeleteBooking from './DeleteBooking/DeleteBooking'
 import InputCopyButton from './InputCopyButton/InputCopyButton'
 
 interface BookingFieldProperty {
@@ -129,10 +129,11 @@ export default function BookingCard({ booking }: IBookingCardProps) {
           </Grid.Col>
         </Grid>
       </SimpleGrid>
-      <DeleteBooking
+      <DeleteWithConfirmation
         isDeleting={isDeleting}
-        deleteBookingById={deleteBookingById}
-        bookingName={booking.name}
+        onDeleteConfirmed={deleteBookingById}
+        deleteButtonText="Delete Booking"
+        confirmationMessage={`Are you sure you want to delete the booking for ${booking.name}?`}
       />
     </Card>
   )
