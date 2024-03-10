@@ -1,7 +1,0 @@
-.controls {
-  display: flex;
-
-  @media (max-width: $mantine-breakpoint-sm) {
-    display: none;
-  }
-}

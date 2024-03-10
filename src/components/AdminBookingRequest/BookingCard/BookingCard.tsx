@@ -17,7 +17,7 @@ import { formatDate } from '~/utils'
 import { BookingField } from '~/utils/bookingFormUtils'
 
 import DeleteWithConfirmation from '../../DeleteWithConfirmation/DeleteWithConfirmation'
-import PortfolioCarousel from '../../PortfolioCarousel/PortfolioCarousel'
+import CarouselWithThumbnails from '../../CarouselWithThumbnails/CarouselWithThumbnails'
 import InputCopyButton from './InputCopyButton/InputCopyButton'
 
 interface BookingFieldProperty {
@@ -105,7 +105,7 @@ export default function BookingCard({ booking }: IBookingCardProps) {
       <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
         {Boolean(booking.referenceImages.length > 0) ? (
           <Box>
-            <PortfolioCarousel images={booking.referenceImages} />
+            <CarouselWithThumbnails images={booking.referenceImages} />
           </Box>
         ) : (
           <Alert title="Image Upload Issue" color="red.9">

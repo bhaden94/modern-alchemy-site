@@ -9,7 +9,7 @@ import { NavigationPages } from '~/utils/navigation'
 
 import ArtistCard from '../ArtistCard/ArtistCard'
 import PageTitle from '../PageTitle/PageTitle'
-import PortfolioCarousel from '../PortfolioCarousel/PortfolioCarousel'
+import CarouselWithThumbnails from '../CarouselWithThumbnails/CarouselWithThumbnails'
 
 interface IBookingInfo {
   artist: Artist
@@ -29,7 +29,7 @@ const ArtistPortfolio = ({ artist }: IBookingInfo) => {
         </div>
         <div className="md:col-span-3">
           {artist.portfolioImages && artist.portfolioImages.length > 0 ? (
-            <PortfolioCarousel images={artist.portfolioImages} />
+            <CarouselWithThumbnails images={artist.portfolioImages} />
           ) : (
             'Portfolio in progress...'
           )}
