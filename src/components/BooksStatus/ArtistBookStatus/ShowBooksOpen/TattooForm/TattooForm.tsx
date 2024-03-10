@@ -36,6 +36,7 @@ import {
   bookingSchema,
   getBookingFormInitialValues,
   ImagesBookingField,
+  MAX_FILES,
   preferredDayOptions,
   priorTattooOptions,
   styleOptions,
@@ -520,12 +521,13 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
               }
               disabled={isSubmitting}
               dropzoneProps={{
-                className: 'w-full',
                 loading: isCompressingBodyPlacementImages,
                 loaderProps: {
                   children: <CustomLoader label={'Compressing images'} />,
                 },
+                maxFiles: MAX_FILES,
               }}
+              rejectionMessage={`There is a max of ${MAX_FILES} image files allowed.`}
             />
             <ImageThumbnails
               imageFiles={bodyPlacementImageFiles}
@@ -568,12 +570,13 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
               }
               disabled={isSubmitting}
               dropzoneProps={{
-                className: 'w-full',
                 loading: isCompressingReferenceImages,
                 loaderProps: {
                   children: <CustomLoader label={'Compressing images'} />,
                 },
+                maxFiles: MAX_FILES,
               }}
+              rejectionMessage={`There is a max of ${MAX_FILES} image files allowed.`}
             />
             <ImageThumbnails
               imageFiles={referenceImageFiles}
