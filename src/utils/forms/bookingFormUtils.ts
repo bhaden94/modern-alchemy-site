@@ -1,7 +1,8 @@
 import { ComboboxItem } from '@mantine/core'
 import z from 'zod'
 
-import { formatPhoneNumber } from '.'
+import { formatPhoneNumber } from '..'
+import { ACCEPTED_IMAGE_TYPES, MAX_FILES_SIZE } from './FormConstants'
 
 const joinPreferredDayLabels = (days: string[]): string => {
   if (days.length === 5) {
@@ -27,8 +28,6 @@ export const MIN_AGE = 18
 export const MAX_AGE = 117
 const MIN_FILES = 1
 export const MAX_FILES = 5
-export const MAX_FILES_SIZE = 4456448 // 4.25MB
-export const ACCEPTED_IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/webp']
 
 export const TATTOO_STYLE = ['color', 'black_and_grey'] as const
 export const zTattooStyle = z.enum(TATTOO_STYLE)

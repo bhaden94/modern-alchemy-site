@@ -10,7 +10,7 @@ import {
 import { IconPhoto, IconUpload, IconX } from '@tabler/icons-react'
 import { useRef } from 'react'
 
-import { ACCEPTED_IMAGE_TYPES } from '~/utils/bookingFormUtils'
+import { ACCEPTED_IMAGE_TYPES } from '~/utils/forms/FormConstants'
 
 import classes from './ImageDropzone.module.css'
 

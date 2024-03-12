@@ -8,17 +8,9 @@ import {
   notAuthorizedResponse,
 } from '~/lib/next-auth/auth.utils'
 import { getClient } from '~/lib/sanity/sanity.client'
+import { ImageReference } from '~/utils/images/uploadImagesToSanity'
 
 const token = process.env.SANITY_API_WRITE_TOKEN
-
-type ImageReference = {
-  _key: string
-  _type: 'image'
-  asset: {
-    _ref: string
-    _type: 'reference'
-  }
-}
 
 interface ImagesPutResponseBody {
   imageReferences: ImageReference[]
@@ -70,14 +62,23 @@ export async function DELETE(request: NextRequest) {
   logAuthorizedRequest(session, request)
 
   const client = getClient(token)
-  const body: { imageReferences: ImageReference[] } = await request.json()
+  const body: { imageReferences?: ImageReference[]; imageIds?: string[] } =
+    await request.json()
 
-  if (!body.imageReferences) console.error('No image references')
+  if (!body.imageReferences && !body.imageIds) {
+    console.error('No image references or IDs were given.')
+    return NextResponse.json({
+      status: 500,
+      errorCode: 'MissingImages',
+    })
+  }
 
-  const imageIds: string[] = body.imageReferences.map((image) => image._key)
+  const imageIds: string[] | undefined = body.imageIds
+    ? body.imageIds
+    : body.imageReferences?.map((image) => image._key)
 
-  console.log(`Deleting ${imageIds.length} image assets...`)
-  console.table(body.imageReferences)
+  console.log(`Deleting ${imageIds?.length} image asset(s)...`)
+  console.table(body.imageIds || body.imageReferences)
 
   await client
     .delete({

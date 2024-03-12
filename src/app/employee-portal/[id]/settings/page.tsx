@@ -2,6 +2,7 @@ import { Box, Group } from '@mantine/core'
 import { redirect } from 'next/navigation'
 
 import AdminBooksStatus from '~/components/AdminBooksStatus/AdminBooksStatus'
+import AdminHeadshot from '~/components/AdminHeadshot/AdminHeadshot'
 import PageContainer from '~/components/PageContainer'
 import PageTitle from '~/components/PageTitle/PageTitle'
 import { REDIRECT_URL } from '~/lib/next-auth/auth.utils'
@@ -24,7 +25,7 @@ const EmployeePortalPage = async ({ params }: { params: { id: string } }) => {
   return (
     <PageContainer>
       <PageTitle title={`${artist.name} Settings`} />
-      <Group justify="space-around" gap={4}>
+      <Group justify="space-around" align="start" gap="lg">
         <Box>
           <AdminBooksStatus
             booksStatus={{
@@ -34,6 +35,9 @@ const EmployeePortalPage = async ({ params }: { params: { id: string } }) => {
               _id: artist._id,
             }}
           />
+        </Box>
+        <Box>
+          <AdminHeadshot artistId={artist._id} headshot={artist.headshot} />
         </Box>
       </Group>
     </PageContainer>

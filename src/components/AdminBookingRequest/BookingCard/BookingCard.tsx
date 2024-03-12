@@ -14,10 +14,10 @@ import { useState } from 'react'
 
 import { Booking } from '~/schemas/models/booking'
 import { formatDate } from '~/utils'
-import { BookingField } from '~/utils/bookingFormUtils'
+import { BookingField } from '~/utils/forms/bookingFormUtils'
 
-import DeleteWithConfirmation from '../../DeleteWithConfirmation/DeleteWithConfirmation'
 import CarouselWithThumbnails from '../../CarouselWithThumbnails/CarouselWithThumbnails'
+import DeleteWithConfirmation from '../../DeleteWithConfirmation/DeleteWithConfirmation'
 import InputCopyButton from './InputCopyButton/InputCopyButton'
 
 interface BookingFieldProperty {
