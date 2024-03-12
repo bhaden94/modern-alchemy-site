@@ -5,9 +5,9 @@ import { Stack } from '@mantine/core'
 import { useCallback, useEffect, useState } from 'react'
 import { ImageAsset } from 'sanity'
 
-import classes from './CarouselWithThumbnails.module.css'
 import CarouselImage from './CarouselImage/CarouselImage'
 import CarouselThumbnail from './CarouselThumbnail/CarouselThumbnail'
+import classes from './CarouselWithThumbnails.module.css'
 
 const sharedCarouselProps: Partial<CarouselProps> = {
   controlsOffset: 'xs',

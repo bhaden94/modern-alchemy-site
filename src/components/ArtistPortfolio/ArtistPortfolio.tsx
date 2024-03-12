@@ -8,8 +8,8 @@ import { Artist } from '~/schemas/models/artist'
 import { NavigationPages } from '~/utils/navigation'
 
 import ArtistCard from '../ArtistCard/ArtistCard'
-import PageTitle from '../PageTitle/PageTitle'
 import CarouselWithThumbnails from '../CarouselWithThumbnails/CarouselWithThumbnails'
+import PageTitle from '../PageTitle/PageTitle'
 
 interface IBookingInfo {
   artist: Artist

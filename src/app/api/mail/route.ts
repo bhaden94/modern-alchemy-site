@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import SMTPTransport from 'nodemailer/lib/smtp-transport'
 
 import { sendMail } from '~/lib/mailer/mailer.utils'
-import { BookingField, TBookingSchema } from '~/utils/bookingFormUtils'
+import { BookingField, TBookingSchema } from '~/utils/forms/bookingFormUtils'
 
 interface IAdditionalBodyFields {
   base64Images: string[]

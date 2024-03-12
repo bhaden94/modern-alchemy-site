@@ -41,7 +41,8 @@ import {
   priorTattooOptions,
   styleOptions,
   TBookingSchema,
-} from '~/utils/bookingFormUtils'
+} from '~/utils/forms/bookingFormUtils'
+import uploadImagesToSanity from '~/utils/images/uploadImagesToSanity'
 import { NavigationPages } from '~/utils/navigation'
 
 import ImageDropzone from '../../../../ImageDropzone/ImageDropzone'
@@ -179,7 +180,6 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
     const base64Images = await Promise.all(
       images.map(async (image) => {
         const base64 = await convertBlobToBase64(image as File)
-        console.log(base64)
         return base64
       }),
     )
@@ -197,37 +197,28 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
   const onFormSubmit = async (data: TBookingSchema) => {
     setIsUploadingImages(true)
 
-    const formData = new FormData()
     const images: File[] = [
       ...data.referenceImages,
       ...data.bodyPlacementImages,
     ]
-    Array.from(images).forEach((file, i) => {
-      formData.append(`image-${i}`, file)
+    const imageReferences = await uploadImagesToSanity(images, {
+      sizeLimit: () => {
+        // If we get to this point and our request body hits the vercel limit of 4.5MB
+        // then we should fail and let the user fix the images
+        onFailure(
+          'Total image size exceeds limit. Please decrease their size by either removing some or compressing.',
+        )
+        setIsUploadingImages(false)
+      },
+      error: () => {
+        // Some other error happened
+        // and we shouldn't stop the form submission
+        onFailure('There was a problem uploading images.')
+      },
     })
 
-    /* Upload images */
-    const imageUploadResponse = await fetch('/api/sanity/images', {
-      method: 'PUT',
-      body: formData,
-    })
-
-    let imageReferences: any = []
-    if (imageUploadResponse.ok) {
-      const imageJson = await imageUploadResponse.json()
-      imageReferences = imageJson.imageReferences
-    } else if (imageUploadResponse.status === 413) {
-      // If we get to this point and our request body hits the vercel limit of 4.5MB
-      // then we should fail and let the user fix the images
-      onFailure(
-        'Total image size exceeds limit. Please decrease their size by either removing some or compressing.',
-      )
-      setIsUploadingImages(false)
+    if (imageReferences === 'SizeLimitError') {
       return
-    } else {
-      // Some other error happened
-      // and we shouldn't stop the form submission
-      onFailure('There was a problem uploading images.')
     }
 
     setIsUploadingImages(false)
@@ -239,7 +230,8 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
       body: JSON.stringify({
         ...data,
         artist: { _ref: artist._id, _type: 'reference', _weak: true },
-        [BookingField.ReferenceImages.id]: imageReferences,
+        [BookingField.ReferenceImages.id]:
+          imageReferences === 'GeneralError' ? [] : imageReferences,
       }),
     })
 
