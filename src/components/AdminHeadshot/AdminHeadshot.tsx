@@ -16,40 +16,28 @@ import { IconInfoCircle } from '@tabler/icons-react'
 import imageCompression from 'browser-image-compression'
 import Image from 'next/image'
 import { useRef, useState } from 'react'
-import { ImageAsset } from 'sanity'
 
-import { urlForImage } from '~/lib/sanity/sanity.image'
+import { getImageFromRef } from '~/lib/sanity/sanity.image'
 import { generateNextImagePlaceholder } from '~/utils'
 import { ACCEPTED_IMAGE_TYPES } from '~/utils/forms/FormConstants'
-import uploadImagesToSanity from '~/utils/images/uploadImagesToSanity'
-
-// TODO: Show loading overlay on image when changing.
-// TODO: Show errors on page instead of just logging.
-
-type ImageReference = {
-  _key: string
-  _type: 'image'
-  asset: {
-    _ref: string
-    _type: 'reference'
-  }
-}
+import uploadImagesToSanity, {
+  ImageReference,
+} from '~/utils/images/uploadImagesToSanity'
 
 interface IAdminHeadshot {
   artistId: string
-  headshot?: { asset: ImageAsset }
+  headshotRef?: ImageReference
 }
 
 const icon = <IconInfoCircle />
 const generalFailureMessage = 'Something went wrong. Please try to re-submit.'
-const AdminHeadshot = ({ artistId, headshot }: IAdminHeadshot) => {
+const AdminHeadshot = ({ artistId, headshotRef }: IAdminHeadshot) => {
   const resetRef = useRef<() => void>(null)
-  const [imageRef, setImageRef] = useState<ImageReference | null>(null)
-  const imageRefUrl = imageRef
-    ? urlForImage(imageRef)?.size(300, 300).url()
-    : null
+  const [imageRef, setImageRef] = useState<ImageReference | null>(
+    headshotRef || null,
+  )
+  const headshotImage = imageRef ? getImageFromRef(imageRef) : null
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
-  const [hasUpdateHeadshot, setHasUpdatedHeadshot] = useState(false)
   const [opened, { open, close }] = useDisclosure(false)
 
   const onImageChange = async (file: File | null) => {
@@ -57,7 +45,7 @@ const AdminHeadshot = ({ artistId, headshot }: IAdminHeadshot) => {
 
     setIsSubmitting(true)
 
-    const previousHeadshotId = imageRef ? imageRef._key : headshot?.asset._id
+    const previousHeadshotId = headshotImage?._id
 
     let compressedFile: File | null = null
     try {
@@ -94,7 +82,6 @@ const AdminHeadshot = ({ artistId, headshot }: IAdminHeadshot) => {
 
     if (response.ok) {
       const resJson = await response.json()
-      setHasUpdatedHeadshot(true)
       setImageRef(resJson.headshot)
 
       if (previousHeadshotId) {
@@ -112,8 +99,7 @@ const AdminHeadshot = ({ artistId, headshot }: IAdminHeadshot) => {
   }
 
   const onImageDelete = async () => {
-    // Can't delete something that isn't there
-    if (!headshot && !imageRef) return
+    if (!imageRef) return
 
     setIsSubmitting(true)
 
@@ -133,24 +119,23 @@ const AdminHeadshot = ({ artistId, headshot }: IAdminHeadshot) => {
 
     // Delete what was the headshot
     let deleteRes: Response
-    if (!hasUpdateHeadshot) {
-      // delete original headshot prop
-      // this is not a reference, but is instead the asset itself
-      // delete image api route needs to handle just passing an id instead of refs
-      deleteRes = await fetch('/api/sanity/images', {
-        method: 'DELETE',
-        body: JSON.stringify({ imageIds: [headshot?.asset._id] }),
-      })
-    } else {
-      // delete imageRef
-      deleteRes = await fetch('/api/sanity/images', {
-        method: 'DELETE',
-        body: JSON.stringify({ imageReferences: [imageRef] }),
-      })
-    }
+    // if (!hasUpdateHeadshot) {
+    //   // delete original headshot prop
+    //   // this is not a reference, but is instead the asset itself
+    //   // delete image api route needs to handle just passing an id instead of refs
+    //   deleteRes = await fetch('/api/sanity/images', {
+    //     method: 'DELETE',
+    //     body: JSON.stringify({ imageIds: [headshot?.asset._id] }),
+    //   })
+    // } else {
+    // delete imageRef
+    deleteRes = await fetch('/api/sanity/images', {
+      method: 'DELETE',
+      body: JSON.stringify({ imageReferences: [imageRef] }),
+    })
+    // }
 
     if (deleteRes.ok) {
-      setHasUpdatedHeadshot(true)
       setImageRef(null)
       resetRef.current?.()
     } else {
@@ -168,10 +153,7 @@ const AdminHeadshot = ({ artistId, headshot }: IAdminHeadshot) => {
       <Box p={0} m={0} pos="relative">
         <LoadingOverlay visible={isSubmitting} />
         <Image
-          src={
-            (!hasUpdateHeadshot ? headshot?.asset.url : imageRefUrl) ||
-            '/user.svg'
-          }
+          src={headshotImage?.url || '/user.svg'}
           alt="Artist headshot"
           width={300}
           height={300}

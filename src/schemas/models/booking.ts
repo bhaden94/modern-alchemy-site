@@ -1,6 +1,8 @@
 import { IconBook } from '@tabler/icons-react'
 import { defineArrayMember, defineField, defineType, ImageAsset } from 'sanity'
 
+import { ImageReference } from '~/utils/images/uploadImagesToSanity'
+
 import { BaseSanitySchema } from '..'
 
 /*
@@ -25,7 +27,7 @@ export interface Booking extends BaseSanitySchema<'booking'> {
   style: 'color' | 'black_and_grey'
   priorTattoo: 'no' | 'new_tattoo' | 'ongoing_project'
   preferredDays: string[]
-  referenceImages: { asset: ImageAsset }[]
+  referenceImages: ImageReference[]
   artist: any
 }
 

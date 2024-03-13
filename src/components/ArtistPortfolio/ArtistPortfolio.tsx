@@ -29,7 +29,7 @@ const ArtistPortfolio = ({ artist }: IBookingInfo) => {
         </div>
         <div className="md:col-span-3">
           {artist.portfolioImages && artist.portfolioImages.length > 0 ? (
-            <CarouselWithThumbnails images={artist.portfolioImages} />
+            <CarouselWithThumbnails imageRefs={artist.portfolioImages} />
           ) : (
             'Portfolio in progress...'
           )}

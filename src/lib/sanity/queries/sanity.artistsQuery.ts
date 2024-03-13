@@ -6,24 +6,13 @@ import { SanityClient } from 'sanity'
 import { Artist } from '~/schemas/models/artist'
 
 import { SANITY_CLIENT_CACHE_SETTING } from '../sanity.client'
-import { IMAGE_QUERY } from '../sanity.image'
 
-const artistsQuery = groq`*[_type == "artist"]{
-  ...,
-  headshot{
-    ${IMAGE_QUERY}
-  }
-}`
+const artistsQuery = groq`*[_type == "artist"]`
 export async function getArtists(client: SanityClient): Promise<Artist[]> {
   return await client.fetch(artistsQuery, {}, SANITY_CLIENT_CACHE_SETTING)
 }
 
-const activeArtistsQuery = groq`*[_type == "artist" && isActive]{
-  ...,
-  headshot{
-    ${IMAGE_QUERY}
-  }
-}`
+const activeArtistsQuery = groq`*[_type == "artist" && isActive]`
 export async function getActiveArtists(
   client: SanityClient,
 ): Promise<Artist[]> {
@@ -43,21 +32,7 @@ export async function getArtistByEmail(
   )
 }
 
-const artistsIdQuery = groq`*[_type == "artist" && _id == $id][0]{
-  ...,
-  headshot{
-    ${IMAGE_QUERY}
-  },
-  portfolioImages[]{
-    ${IMAGE_QUERY}
-  },
-  bookingInstructions[]{
-    ${IMAGE_QUERY}
-  },
-  booksClosedMessage[]{
-    ${IMAGE_QUERY}
-  },
-}`
+const artistsIdQuery = groq`*[_type == "artist" && _id == $id][0]`
 export async function getArtistById(
   client: SanityClient,
   id: string,

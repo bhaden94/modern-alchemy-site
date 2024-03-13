@@ -10,7 +10,7 @@ import { PrivacyPolicyPageContent } from '~/schemas/pages/privacyPolicyPageConte
 import { RootLayoutContent } from '~/schemas/pages/rootLayoutContent'
 import { RootPageContent } from '~/schemas/pages/rootPageContent'
 
-import { getClient,SANITY_CLIENT_CACHE_SETTING } from '../sanity.client'
+import { getClient, SANITY_CLIENT_CACHE_SETTING } from '../sanity.client'
 
 type QueryReturnType = {
   rootPageContent: RootPageContent

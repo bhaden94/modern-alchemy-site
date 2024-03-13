@@ -31,7 +31,7 @@ export const urlForImage = (source: Image) => {
 }
 
 export const getImageFromRef = (
-  imageRef?: ImageReference | SanityImageSource,
+  imageRef?: ImageReference | SanityImageSource | null,
 ): SanityImageAsset | undefined => {
   return (
     imageRef &&

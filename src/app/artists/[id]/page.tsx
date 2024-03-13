@@ -8,6 +8,7 @@ import {
   getArtists,
 } from '~/lib/sanity/queries/sanity.artistsQuery'
 import { getClient } from '~/lib/sanity/sanity.client'
+import { getImageFromRef } from '~/lib/sanity/sanity.image'
 
 export const generateStaticParams = async () => {
   const client = getClient(undefined)
@@ -34,7 +35,7 @@ export async function generateMetadata({
     openGraph: {
       title: title,
       description: description,
-      images: artist.headshot?.asset.url,
+      images: getImageFromRef(artist.headshot)?.url,
     },
   }
 }

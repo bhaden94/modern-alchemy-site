@@ -4,6 +4,7 @@ import { Anchor, Badge, Button, Card, Group, Text } from '@mantine/core'
 import Image from 'next/image'
 import Link from 'next/link'
 
+import { getImageFromRef } from '~/lib/sanity/sanity.image'
 import { Artist } from '~/schemas/models/artist'
 import { generateNextImagePlaceholder } from '~/utils'
 import { NavigationPages } from '~/utils/navigation'
@@ -58,7 +59,7 @@ const ArtistCard = ({ artist, showPortfolioLink }: IArtistCard) => {
     <Card shadow="sm" key={artist.name} className="max-w-[300px]">
       <Card.Section mb={6}>
         <Image
-          src={artist.headshot?.asset.url || '/user.svg'}
+          src={getImageFromRef(artist.headshot)?.url || '/user.svg'}
           alt="Artist headshot"
           width={300}
           height={300}

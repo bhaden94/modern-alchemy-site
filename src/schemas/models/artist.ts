@@ -1,6 +1,8 @@
 import { IconUsers } from '@tabler/icons-react'
 import { defineArrayMember, defineField, defineType, ImageAsset } from 'sanity'
 
+import { ImageReference } from '~/utils/images/uploadImagesToSanity'
+
 import { BaseSanitySchema } from '..'
 import { BlockContent } from './blockContent'
 
@@ -15,8 +17,8 @@ export interface Artist extends BaseSanitySchema<'artist'> {
   socials?: { label: string; link: string }[]
   bookingInstructions?: BlockContent
   booksClosedMessage?: BlockContent
-  portfolioImages?: { asset: ImageAsset }[]
-  headshot?: { asset: ImageAsset }
+  portfolioImages?: ImageReference[]
+  headshot?: ImageReference
   styles?: string[]
 }
 

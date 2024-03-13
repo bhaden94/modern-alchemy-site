@@ -105,7 +105,7 @@ export default function BookingCard({ booking }: IBookingCardProps) {
       <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
         {Boolean(booking.referenceImages.length > 0) ? (
           <Box>
-            <CarouselWithThumbnails images={booking.referenceImages} />
+            <CarouselWithThumbnails imageRefs={booking.referenceImages} />
           </Box>
         ) : (
           <Alert title="Image Upload Issue" color="red.9">
