@@ -117,23 +117,11 @@ const AdminHeadshot = ({ artistId, headshotRef }: IAdminHeadshot) => {
       return
     }
 
-    // Delete what was the headshot
-    let deleteRes: Response
-    // if (!hasUpdateHeadshot) {
-    //   // delete original headshot prop
-    //   // this is not a reference, but is instead the asset itself
-    //   // delete image api route needs to handle just passing an id instead of refs
-    //   deleteRes = await fetch('/api/sanity/images', {
-    //     method: 'DELETE',
-    //     body: JSON.stringify({ imageIds: [headshot?.asset._id] }),
-    //   })
-    // } else {
-    // delete imageRef
-    deleteRes = await fetch('/api/sanity/images', {
+    // Delete previous headshot
+    const deleteRes = await fetch('/api/sanity/images', {
       method: 'DELETE',
       body: JSON.stringify({ imageReferences: [imageRef] }),
     })
-    // }
 
     if (deleteRes.ok) {
       setImageRef(null)
