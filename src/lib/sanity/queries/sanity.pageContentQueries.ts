@@ -10,86 +10,31 @@ import { PrivacyPolicyPageContent } from '~/schemas/pages/privacyPolicyPageConte
 import { RootLayoutContent } from '~/schemas/pages/rootLayoutContent'
 import { RootPageContent } from '~/schemas/pages/rootPageContent'
 
-import { SANITY_CLIENT_CACHE_SETTING } from '../sanity.client'
+import { getClient,SANITY_CLIENT_CACHE_SETTING } from '../sanity.client'
 
-// Spread base page content before rest of content
-// This is so the _type field in basePageContent does not overwrite the documents
-const buildGroqPageQuery = (type: string, additionalQuery?: string): string => {
-  return groq`*[_type == "${type}"][0]{
+type QueryReturnType = {
+  rootPageContent: RootPageContent
+  faqPageContent: FaqPageContent
+  aftercareInfoPageContent: AftercareInfoPageContent
+  privacyPolicyPageContent: PrivacyPolicyPageContent
+  artistsPageContent: ArtistsPageContent
+  bookingInfoPageContent: BookingInfoPageContent
+}
+
+export async function performPageContentQuery<T extends keyof QueryReturnType>(
+  param: T,
+  sanityClient?: SanityClient,
+  additionalQuery?: string,
+): Promise<QueryReturnType[T]> {
+  const client = sanityClient || getClient(undefined)
+  // Spread base page content before rest of content
+  // This is so the _type field in basePageContent does not overwrite the documents
+  const query = groq`*[_type == "${param}"][0]{
     ...basePageContent,
     ...,
     ${additionalQuery}
   }`
-}
-
-const rootPageContentQuery = buildGroqPageQuery('rootPageContent')
-export async function getRootPageContent(
-  client: SanityClient,
-): Promise<RootPageContent> {
-  return await client.fetch(
-    rootPageContentQuery,
-    {},
-    SANITY_CLIENT_CACHE_SETTING,
-  )
-}
-
-const faqPageContentQuery = buildGroqPageQuery('faqPageContent')
-export async function getFaqPageContent(
-  client: SanityClient,
-): Promise<FaqPageContent> {
-  return await client.fetch(
-    faqPageContentQuery,
-    {},
-    SANITY_CLIENT_CACHE_SETTING,
-  )
-}
-
-const aftercareInfoPageContentQuery = buildGroqPageQuery(
-  'aftercareInfoPageContent',
-)
-export async function getAftercareInfoPageContent(
-  client: SanityClient,
-): Promise<AftercareInfoPageContent> {
-  return await client.fetch(
-    aftercareInfoPageContentQuery,
-    {},
-    SANITY_CLIENT_CACHE_SETTING,
-  )
-}
-
-const privacyPolicyPageContentQuery = buildGroqPageQuery(
-  'privacyPolicyPageContent',
-)
-export async function getPrivacyPolicyPageContent(
-  client: SanityClient,
-): Promise<PrivacyPolicyPageContent> {
-  return await client.fetch(
-    privacyPolicyPageContentQuery,
-    {},
-    SANITY_CLIENT_CACHE_SETTING,
-  )
-}
-
-const artistsPageContentQuery = buildGroqPageQuery('artistsPageContent')
-export async function getArtistsPageContent(
-  client: SanityClient,
-): Promise<ArtistsPageContent> {
-  return await client.fetch(
-    artistsPageContentQuery,
-    {},
-    SANITY_CLIENT_CACHE_SETTING,
-  )
-}
-
-const bookingInfoPageContentQuery = buildGroqPageQuery('bookingInfoPageContent')
-export async function getBookingInfoPageContent(
-  client: SanityClient,
-): Promise<BookingInfoPageContent> {
-  return await client.fetch(
-    bookingInfoPageContentQuery,
-    {},
-    SANITY_CLIENT_CACHE_SETTING,
-  )
+  return await client.fetch(query, {}, SANITY_CLIENT_CACHE_SETTING)
 }
 
 const rootLayoutContentQuery = groq`*[_type == "rootLayoutContent"][0]`

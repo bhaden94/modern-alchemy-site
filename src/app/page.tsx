@@ -2,12 +2,10 @@ import { notFound } from 'next/navigation'
 
 import About from '~/components/About/About'
 import Hero from '~/components/Hero/Hero'
-import { getRootPageContent } from '~/lib/sanity/queries/sanity.pageContentQueries'
-import { getClient } from '~/lib/sanity/sanity.client'
+import { performPageContentQuery } from '~/lib/sanity/queries/sanity.pageContentQueries'
 
 export default async function RootPage() {
-  const client = getClient(undefined)
-  const content = await getRootPageContent(client)
+  const content = await performPageContentQuery('rootPageContent')
 
   if (!content) return notFound()
 

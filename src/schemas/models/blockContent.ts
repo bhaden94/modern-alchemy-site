@@ -1,4 +1,4 @@
-import { defineArrayMember, defineType,TypedObject } from 'sanity'
+import { defineArrayMember, defineType, TypedObject } from 'sanity'
 
 import { ImageReference } from '~/utils/images/uploadImagesToSanity'
 
