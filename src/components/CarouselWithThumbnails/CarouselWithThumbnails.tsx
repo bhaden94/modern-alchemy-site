@@ -3,7 +3,6 @@
 import { Carousel, CarouselProps, Embla } from '@mantine/carousel'
 import { Stack } from '@mantine/core'
 import { useCallback, useEffect, useState } from 'react'
-import { ImageAsset } from 'sanity'
 
 import { ImageReference } from '~/utils/images/uploadImagesToSanity'
 

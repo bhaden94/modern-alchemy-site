@@ -1,5 +1,5 @@
 import { IconBook } from '@tabler/icons-react'
-import { defineArrayMember, defineField, defineType, ImageAsset } from 'sanity'
+import { defineArrayMember, defineField, defineType } from 'sanity'
 
 import { ImageReference } from '~/utils/images/uploadImagesToSanity'
 
