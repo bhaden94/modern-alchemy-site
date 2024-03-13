@@ -5,12 +5,11 @@ import Artists from '~/components/Artists/Artists'
 import PageContainer from '~/components/PageContainer'
 import PageInProgress from '~/components/PageInProgress/PageInProgress'
 import { getActiveArtists } from '~/lib/sanity/queries/sanity.artistsQuery'
-import { getArtistsPageContent } from '~/lib/sanity/queries/sanity.pageContentQueries'
+import { performPageContentQuery } from '~/lib/sanity/queries/sanity.pageContentQueries'
 import { getClient } from '~/lib/sanity/sanity.client'
 
 export async function generateMetadata(): Promise<Metadata> {
-  const client = getClient(undefined)
-  const content = await getArtistsPageContent(client)
+  const content = await performPageContentQuery('artistsPageContent')
   if (!content) return {}
 
   return {
@@ -26,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
 const ArtistsShowcasePage = async () => {
   const client = getClient(undefined)
   const artistsData = getActiveArtists(client)
-  const contentData = getArtistsPageContent(client)
+  const contentData = performPageContentQuery('artistsPageContent', client)
 
   const [artists, content] = await Promise.all([artistsData, contentData])
 

@@ -5,15 +5,16 @@ import { useDisclosure } from '@mantine/hooks'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { ImageAsset } from 'sanity'
 
+import { getImageFromRef } from '~/lib/sanity/sanity.image'
+import { ImageReference } from '~/utils/images/uploadImagesToSanity'
 import { NavigationPages, NavLinks } from '~/utils/navigation'
 
 import NavMenuDropdown from '../NavMenu/NavMenuDropdown'
 import NavMenuLink from '../NavMenu/NavMenuLink'
 import classes from './Header.module.css'
 
-const Header = ({ logo }: { logo: ImageAsset }) => {
+const Header = ({ logo }: { logo: ImageReference }) => {
   const router = useRouter()
   const [opened, { toggle, close }] = useDisclosure(false)
   const onLinkClick = (
@@ -47,7 +48,12 @@ const Header = ({ logo }: { logo: ImageAsset }) => {
     <header className={classes.header}>
       <Container size="md" className={classes.inner}>
         <Link href={NavigationPages.Home} className="flex">
-          <Image src={logo?.url} alt="Business logo" width={220} height={84} />
+          <Image
+            src={getImageFromRef(logo)?.url || ''}
+            alt="Business logo"
+            width={220}
+            height={84}
+          />
         </Link>
         <Group gap={5} visibleFrom="xs">
           {items}

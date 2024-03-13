@@ -3,7 +3,8 @@
 import { Carousel, CarouselProps, Embla } from '@mantine/carousel'
 import { Stack } from '@mantine/core'
 import { useCallback, useEffect, useState } from 'react'
-import { ImageAsset } from 'sanity'
+
+import { ImageReference } from '~/utils/images/uploadImagesToSanity'
 
 import CarouselImage from './CarouselImage/CarouselImage'
 import CarouselThumbnail from './CarouselThumbnail/CarouselThumbnail'
@@ -18,10 +19,10 @@ const sharedCarouselProps: Partial<CarouselProps> = {
 }
 
 interface ICarouselWithThumbnails {
-  images: { asset: ImageAsset }[]
+  imageRefs: ImageReference[]
 }
 
-const CarouselWithThumbnails = ({ images }: ICarouselWithThumbnails) => {
+const CarouselWithThumbnails = ({ imageRefs }: ICarouselWithThumbnails) => {
   const [embla, setEmbla] = useState<Embla | null>(null)
   const [emblaThumbs, setEmblaThumbs] = useState<Embla | null>(null)
   const [thumbIndex, setThumbIndex] = useState<number>(0)
@@ -50,16 +51,16 @@ const CarouselWithThumbnails = ({ images }: ICarouselWithThumbnails) => {
     }
   }, [embla, onSelect])
 
-  const mainImageSlides = images?.map((image) => (
-    <Carousel.Slide key={image.asset._id}>
-      <CarouselImage image={image.asset} />
+  const mainImageSlides = imageRefs?.map((image) => (
+    <Carousel.Slide key={image._key}>
+      <CarouselImage imageRef={image} />
     </Carousel.Slide>
   ))
 
-  const thumbnails = images?.map((image, i) => (
-    <Carousel.Slide key={image.asset._id}>
+  const thumbnails = imageRefs?.map((image, i) => (
+    <Carousel.Slide key={image._key}>
       <CarouselThumbnail
-        image={image.asset}
+        imageRef={image}
         selected={i === thumbIndex}
         index={i}
         onClick={scrollTo}
@@ -73,11 +74,11 @@ const CarouselWithThumbnails = ({ images }: ICarouselWithThumbnails) => {
         {...sharedCarouselProps}
         classNames={{ root: classes.mainCarouselRoot }}
         getEmblaApi={setEmbla}
-        withControls={images.length > 1}
+        withControls={imageRefs.length > 1}
       >
         {mainImageSlides}
       </Carousel>
-      {Boolean(images.length > 1) && (
+      {Boolean(imageRefs.length > 1) && (
         <Carousel
           {...sharedCarouselProps}
           getEmblaApi={setEmblaThumbs}

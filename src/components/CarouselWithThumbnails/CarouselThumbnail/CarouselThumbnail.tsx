@@ -1,23 +1,27 @@
 import Image from 'next/image'
-import { ImageAsset } from 'sanity'
 
+import { getImageFromRef } from '~/lib/sanity/sanity.image'
 import { generateNextImagePlaceholder } from '~/utils'
+import { ImageReference } from '~/utils/images/uploadImagesToSanity'
 
 import classes from '../CarouselWithThumbnails.module.css'
 
 interface ICarouselThumbnail {
-  image: ImageAsset
+  imageRef: ImageReference
   selected: boolean
   index: number
   onClick: (index: number) => void
 }
 
 const CarouselThumbnail = ({
-  image,
+  imageRef,
   selected,
   index,
   onClick,
 }: ICarouselThumbnail) => {
+  const image = getImageFromRef(imageRef)
+  if (!image) return undefined
+
   return (
     <Image
       className={classes.thumbnailImage}

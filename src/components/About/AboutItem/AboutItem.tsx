@@ -4,6 +4,7 @@ import { Box, Divider, Grid, rem, Stack, Title } from '@mantine/core'
 import { PortableText } from '@portabletext/react'
 import Image from 'next/image'
 
+import { getImageFromRef } from '~/lib/sanity/sanity.image'
 import { AboutContent } from '~/schemas/pages/rootPageContent'
 import { generateNextImagePlaceholder } from '~/utils'
 
@@ -30,11 +31,12 @@ const AboutItem = ({ item, index }: { item: AboutContent; index: number }) => {
   }
 
   const AboutImage = () => {
-    if (!item.image) return undefined
+    const image = item.image && getImageFromRef(item.image)
+    if (!image) return undefined
 
     return (
       <Image
-        src={item.image.asset.url}
+        src={image.url}
         fill={true}
         sizes="100%"
         style={{
@@ -43,9 +45,9 @@ const AboutItem = ({ item, index }: { item: AboutContent; index: number }) => {
         }}
         alt="about section image"
         placeholder={generateNextImagePlaceholder(
-          item.image.asset.metadata.dimensions.width,
-          item.image.asset.metadata.dimensions.height,
-          'sm',
+          image.metadata.dimensions.width,
+          image.metadata.dimensions.height,
+          'xs',
         )}
       />
     )

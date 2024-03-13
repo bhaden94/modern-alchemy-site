@@ -37,7 +37,7 @@ const EmployeePortalPage = async ({ params }: { params: { id: string } }) => {
           />
         </Box>
         <Box>
-          <AdminHeadshot artistId={artist._id} headshot={artist.headshot} />
+          <AdminHeadshot artistId={artist._id} headshotRef={artist.headshot} />
         </Box>
       </Group>
     </PageContainer>

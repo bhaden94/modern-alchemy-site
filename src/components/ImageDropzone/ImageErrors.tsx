@@ -1,4 +1,4 @@
-import { Alert, List, Text } from '@mantine/core'
+import { Alert, List } from '@mantine/core'
 import { FileRejection } from '@mantine/dropzone'
 import { IconExclamationCircle } from '@tabler/icons-react'
 

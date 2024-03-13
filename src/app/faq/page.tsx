@@ -4,12 +4,10 @@ import { notFound } from 'next/navigation'
 import Faqs from '~/components/Faqs/Faqs'
 import PageContainer from '~/components/PageContainer'
 import PageInProgress from '~/components/PageInProgress/PageInProgress'
-import { getFaqPageContent } from '~/lib/sanity/queries/sanity.pageContentQueries'
-import { getClient } from '~/lib/sanity/sanity.client'
+import { performPageContentQuery } from '~/lib/sanity/queries/sanity.pageContentQueries'
 
 export async function generateMetadata(): Promise<Metadata> {
-  const client = getClient(undefined)
-  const content = await getFaqPageContent(client)
+  const content = await performPageContentQuery('faqPageContent')
   if (!content) return {}
 
   return {
@@ -23,8 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const FaqPage = async () => {
-  const client = getClient(undefined)
-  const content = await getFaqPageContent(client)
+  const content = await performPageContentQuery('faqPageContent')
 
   if (!content) return notFound()
 

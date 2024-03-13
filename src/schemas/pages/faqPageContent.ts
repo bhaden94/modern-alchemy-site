@@ -1,12 +1,13 @@
 import { IconScript } from '@tabler/icons-react'
-import { defineArrayMember, defineField, defineType, TypedObject } from 'sanity'
+import { defineArrayMember, defineField, defineType } from 'sanity'
 
 import { BaseSanitySchema } from '..'
+import { BlockContent } from '../models/blockContent'
 import { BasePageContent } from './basePageContent'
 
 interface Faq {
   question: string
-  answer: TypedObject | TypedObject[]
+  answer: BlockContent
 }
 
 export interface FaqPageContent

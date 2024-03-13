@@ -4,12 +4,10 @@ import { notFound } from 'next/navigation'
 import GeneralPage from '~/components/GeneralPage/GeneralPage'
 import PageContainer from '~/components/PageContainer'
 import PageInProgress from '~/components/PageInProgress/PageInProgress'
-import { getAftercareInfoPageContent } from '~/lib/sanity/queries/sanity.pageContentQueries'
-import { getClient } from '~/lib/sanity/sanity.client'
+import { performPageContentQuery } from '~/lib/sanity/queries/sanity.pageContentQueries'
 
 export async function generateMetadata(): Promise<Metadata> {
-  const client = getClient(undefined)
-  const content = await getAftercareInfoPageContent(client)
+  const content = await performPageContentQuery('aftercareInfoPageContent')
   if (!content) return {}
 
   return {
@@ -23,14 +21,15 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const AftercareInfoPage = async () => {
-  const client = getClient(undefined)
-  const content = await getAftercareInfoPageContent(client)
+  const content = await performPageContentQuery('aftercareInfoPageContent')
 
   if (!content) return notFound()
 
   if (!content.isActive) {
     return <PageInProgress />
   }
+
+  // console.log(content)
 
   return (
     <PageContainer>

@@ -73,7 +73,7 @@ export async function DELETE(request: NextRequest) {
     })
   }
 
-  const imageIds: string[] | undefined = body.imageIds
+  const imageIds = body.imageIds
     ? body.imageIds
     : body.imageReferences?.map((image) => image._key)
 

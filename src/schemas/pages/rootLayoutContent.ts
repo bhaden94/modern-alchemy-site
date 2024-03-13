@@ -1,11 +1,13 @@
 import { IconLayout } from '@tabler/icons-react'
-import { defineField, defineType, ImageAsset } from 'sanity'
+import { defineField, defineType } from 'sanity'
+
+import { ImageReference } from '~/utils/images/uploadImagesToSanity'
 
 import { BaseSanitySchema } from '..'
 
 export interface RootLayoutContent
   extends BaseSanitySchema<'rootLayoutContent'> {
-  businessLogo: { asset: ImageAsset }
+  businessLogo: ImageReference
   copyrightText: string
   businessLogoCaption?: string
   instagramLink?: string

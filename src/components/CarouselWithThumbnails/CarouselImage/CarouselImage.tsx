@@ -1,18 +1,22 @@
 'use client'
 
 import Image from 'next/image'
-import { ImageAsset } from 'sanity'
 
+import { getImageFromRef } from '~/lib/sanity/sanity.image'
 import { generateNextImagePlaceholder } from '~/utils'
+import { ImageReference } from '~/utils/images/uploadImagesToSanity'
 
 interface ICarouselImage {
-  image: ImageAsset
+  imageRef: ImageReference
 }
 
-const CarouselImage = ({ image }: ICarouselImage) => {
+const CarouselImage = ({ imageRef }: ICarouselImage) => {
+  const image = getImageFromRef(imageRef)
+  if (!image) return undefined
+
   return (
     <Image
-      src={image.url}
+      src={getImageFromRef(image)?.url || ''}
       alt="Portfolio image"
       fill
       sizes="100%"
