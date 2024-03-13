@@ -1,5 +1,5 @@
 export type ImageReference = {
-  _key: string
+  _key?: string
   _type: 'image'
   asset: {
     _ref: string

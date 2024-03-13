@@ -1,5 +1,7 @@
 import { IconFileCode } from '@tabler/icons-react'
-import { defineField, defineType, ImageAsset } from 'sanity'
+import { defineField, defineType } from 'sanity'
+
+import { ImageReference } from '~/utils/images/uploadImagesToSanity'
 
 import { BaseSanitySchema } from '..'
 
@@ -7,7 +9,7 @@ export interface LayoutMetadataContent
   extends BaseSanitySchema<'layoutMetadataContent'> {
   businessName: string
   description?: string
-  openGraphImage?: { asset: ImageAsset }
+  openGraphImage?: ImageReference
 }
 
 export default defineType({

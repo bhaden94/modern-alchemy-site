@@ -16,6 +16,7 @@ import {
   getRootLayoutContent,
 } from '~/lib/sanity/queries/sanity.pageContentQueries'
 import { getClient } from '~/lib/sanity/sanity.client'
+import { getImageFromRef } from '~/lib/sanity/sanity.image'
 import { colorScheme } from '~/utils/theme'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -36,7 +37,7 @@ export async function generateMetadata(): Promise<Metadata> {
         default: metadata.businessName,
       },
       description: metadata.description,
-      images: metadata.openGraphImage?.asset.url,
+      images: getImageFromRef(metadata.openGraphImage)?.url,
     },
   }
 }
@@ -56,10 +57,10 @@ export default async function RootLayout({
       </head>
       <body className="flex min-h-screen flex-col">
         <Providers>
-          <Header logo={content?.businessLogo.asset} />
+          <Header logo={content?.businessLogo} />
           <div className="flex-1">{children}</div>
           <Footer
-            logo={content?.businessLogo.asset}
+            logo={content?.businessLogo}
             copyrightText={content?.copyrightText}
             logoCaption={content?.businessLogoCaption}
             instagram={content?.instagramLink}

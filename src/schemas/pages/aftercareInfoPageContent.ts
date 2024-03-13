@@ -1,13 +1,14 @@
 import { IconScript } from '@tabler/icons-react'
-import { defineField, defineType, TypedObject } from 'sanity'
+import { defineField, defineType } from 'sanity'
 
 import { BaseSanitySchema } from '..'
+import { BlockContent } from '../models/blockContent'
 import { BasePageContent } from './basePageContent'
 
 export interface AftercareInfoPageContent
   extends BaseSanitySchema<'aftercareInfoPageContent'>,
     BasePageContent {
-  information?: TypedObject | TypedObject[]
+  information?: BlockContent
 }
 
 export default defineType({

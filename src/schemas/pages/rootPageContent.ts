@@ -1,19 +1,16 @@
 import { IconScript } from '@tabler/icons-react'
-import {
-  defineArrayMember,
-  defineField,
-  defineType,
-  ImageAsset,
-  TypedObject,
-} from 'sanity'
+import { defineArrayMember, defineField, defineType, TypedObject } from 'sanity'
+
+import { ImageReference } from '~/utils/images/uploadImagesToSanity'
 
 import { BaseSanitySchema } from '..'
+import { BlockContent } from '../models/blockContent'
 import { BasePageContent } from './basePageContent'
 
 export interface AboutContent {
   heading: string
-  text: TypedObject | TypedObject[]
-  image?: { asset: ImageAsset }
+  text: BlockContent
+  image?: ImageReference
 }
 
 export interface RootPageContent

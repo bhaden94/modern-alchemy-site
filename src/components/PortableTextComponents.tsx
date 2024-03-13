@@ -2,6 +2,7 @@ import { Image } from '@mantine/core'
 import { PortableTextReactComponents } from '@portabletext/react'
 import Link from 'next/link'
 
+import { getImageFromRef } from '~/lib/sanity/sanity.image'
 import { BlockContentImage } from '~/schemas/models/blockContent'
 
 export const PortableTextComponents: Partial<PortableTextReactComponents> = {
@@ -26,7 +27,7 @@ export const PortableTextComponents: Partial<PortableTextReactComponents> = {
     image: ({ value }: { value: BlockContentImage }) => {
       return (
         <Image
-          src={value.asset.url}
+          src={getImageFromRef(value)?.url}
           alt={value.altText}
           radius="var(--mantine-radius-default)"
         />

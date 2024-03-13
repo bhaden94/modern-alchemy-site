@@ -32,6 +32,8 @@ const AftercareInfoPage = async () => {
     return <PageInProgress />
   }
 
+  // console.log(content)
+
   return (
     <PageContainer>
       <GeneralPage {...content} />

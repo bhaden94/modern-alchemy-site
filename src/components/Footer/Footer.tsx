@@ -3,8 +3,9 @@
 import { ActionIcon, Container, Group, rem, Text } from '@mantine/core'
 import { IconBrandFacebook, IconBrandInstagram } from '@tabler/icons-react'
 import Image from 'next/image'
-import { ImageAsset } from 'sanity'
 
+import { getImageFromRef } from '~/lib/sanity/sanity.image'
+import { ImageReference } from '~/utils/images/uploadImagesToSanity'
 import { ExtraNavLinks, NavLinks } from '~/utils/navigation'
 
 import NavMenuDropdown from '../NavMenu/NavMenuDropdown'
@@ -12,7 +13,7 @@ import NavMenuLink from '../NavMenu/NavMenuLink'
 import classes from './Footer.module.css'
 
 interface IFooter {
-  logo: ImageAsset
+  logo: ImageReference
   copyrightText?: string
   logoCaption?: string
   instagram?: string
@@ -38,7 +39,12 @@ const Footer = (props: IFooter) => {
     <footer className={classes.footer}>
       <Container className="flex flex-col items-center sm:justify-between sm:flex-row">
         <div className="flex flex-col items-center sm:max-w-[200px] sm:items-start">
-          <Image src={logo?.url} alt="Business logo" width={120} height={46} />
+          <Image
+            src={getImageFromRef(logo)?.url || ''}
+            alt="Business logo"
+            width={120}
+            height={46}
+          />
           <Text size="xs" className="mt-1 text-center sm:text-left">
             {logoCaption || ''}
           </Text>

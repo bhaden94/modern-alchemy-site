@@ -1,13 +1,8 @@
 import { IconUsers } from '@tabler/icons-react'
-import {
-  defineArrayMember,
-  defineField,
-  defineType,
-  ImageAsset,
-  TypedObject,
-} from 'sanity'
+import { defineArrayMember, defineField, defineType, ImageAsset } from 'sanity'
 
 import { BaseSanitySchema } from '..'
+import { BlockContent } from './blockContent'
 
 export interface Artist extends BaseSanitySchema<'artist'> {
   email: string
@@ -18,8 +13,8 @@ export interface Artist extends BaseSanitySchema<'artist'> {
   isActive: boolean
   externalBookingLink?: string
   socials?: { label: string; link: string }[]
-  bookingInstructions?: TypedObject | TypedObject[]
-  booksClosedMessage?: TypedObject | TypedObject[]
+  bookingInstructions?: BlockContent
+  booksClosedMessage?: BlockContent
   portfolioImages?: { asset: ImageAsset }[]
   headshot?: { asset: ImageAsset }
   styles?: string[]
