@@ -1,7 +1,7 @@
 'use client'
 
 import { Carousel, CarouselProps, Embla } from '@mantine/carousel'
-import { Stack } from '@mantine/core'
+import { Button, Stack } from '@mantine/core'
 import { useCallback, useEffect, useState } from 'react'
 
 import { ImageReference } from '~/utils/images/uploadImagesToSanity'
@@ -20,12 +20,21 @@ const sharedCarouselProps: Partial<CarouselProps> = {
 
 interface ICarouselWithThumbnails {
   imageRefs: ImageReference[]
+  deleteImageCallback?: (imageRef: ImageReference) => void
+  isDeleting?: boolean
 }
 
-const CarouselWithThumbnails = ({ imageRefs }: ICarouselWithThumbnails) => {
+const CarouselWithThumbnails = ({
+  imageRefs,
+  deleteImageCallback,
+  isDeleting,
+}: ICarouselWithThumbnails) => {
   const [embla, setEmbla] = useState<Embla | null>(null)
   const [emblaThumbs, setEmblaThumbs] = useState<Embla | null>(null)
   const [thumbIndex, setThumbIndex] = useState<number>(0)
+  const newImageRefInView = embla?.slidesInView(true)[0]
+    ? imageRefs[embla?.slidesInView(true)[0]]
+    : imageRefs[0]
 
   const onSelect = useCallback(() => {
     if (embla && emblaThumbs) {
@@ -52,7 +61,7 @@ const CarouselWithThumbnails = ({ imageRefs }: ICarouselWithThumbnails) => {
   }, [embla, onSelect])
 
   const mainImageSlides = imageRefs?.map((image) => (
-    <Carousel.Slide key={image._key}>
+    <Carousel.Slide key={image._key} h="100%" mih={400}>
       <CarouselImage imageRef={image} />
     </Carousel.Slide>
   ))
@@ -69,7 +78,17 @@ const CarouselWithThumbnails = ({ imageRefs }: ICarouselWithThumbnails) => {
   ))
 
   return (
-    <Stack gap={8} h="100%" mih={475}>
+    <Stack gap={8} h="100%" mih="475px">
+      {deleteImageCallback && (
+        <Button
+          onClick={() => deleteImageCallback(newImageRefInView)}
+          color="red"
+          className={classes.deleteBtn}
+          loading={isDeleting}
+        >
+          Delete Image
+        </Button>
+      )}
       <Carousel
         {...sharedCarouselProps}
         classNames={{ root: classes.mainCarouselRoot }}

@@ -1,6 +1,14 @@
 'use client'
 
-import { Alert, Button, Dialog, Group, Radio, Title } from '@mantine/core'
+import {
+  Alert,
+  Button,
+  Dialog,
+  Group,
+  Radio,
+  Stack,
+  Title,
+} from '@mantine/core'
 import { DateTimePicker, DateValue } from '@mantine/dates'
 import { useForm } from '@mantine/form'
 import { useDisclosure } from '@mantine/hooks'
@@ -61,8 +69,8 @@ const AdminBooksStatus = ({ booksStatus }: IAdminBooksStatus) => {
   }
 
   return (
-    <>
-      <Title ta="center" mb="md" order={2}>
+    <Stack>
+      <Title ta="center" order={2}>
         Update Books Status
       </Title>
 
@@ -106,7 +114,7 @@ const AdminBooksStatus = ({ booksStatus }: IAdminBooksStatus) => {
           There was an issue updating your books.
         </Alert>
       </Dialog>
-    </>
+    </Stack>
   )
 }
 

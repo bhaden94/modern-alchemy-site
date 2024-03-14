@@ -3,7 +3,7 @@ import { FileRejection } from '@mantine/dropzone'
 
 interface ImageErrorsProps {
   imageUploadRejections: FileRejection[]
-  formError: string | undefined
+  formError?: string
 }
 
 const ImageErrors = ({
