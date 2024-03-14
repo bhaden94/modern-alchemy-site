@@ -1,6 +1,5 @@
 import { Alert, List } from '@mantine/core'
 import { FileRejection } from '@mantine/dropzone'
-import { IconExclamationCircle } from '@tabler/icons-react'
 
 interface ImageErrorsProps {
   imageUploadRejections: FileRejection[]
@@ -14,12 +13,7 @@ const ImageErrors = ({
   if (imageUploadRejections.length === 0 && !formError) return undefined
 
   return (
-    <Alert
-      variant="light"
-      color="red"
-      title="Image Errors"
-      icon={<IconExclamationCircle />}
-    >
+    <Alert title="Image Errors">
       <List icon="•">
         {imageUploadRejections.length > 0 ? (
           imageUploadRejections[0].errors.map((error, i) => (

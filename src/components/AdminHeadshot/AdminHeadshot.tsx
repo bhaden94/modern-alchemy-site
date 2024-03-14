@@ -12,7 +12,6 @@ import {
   Title,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import { IconInfoCircle } from '@tabler/icons-react'
 import imageCompression from 'browser-image-compression'
 import Image from 'next/image'
 import { useRef, useState } from 'react'
@@ -29,7 +28,6 @@ interface IAdminHeadshot {
   headshotRef?: ImageReference
 }
 
-const icon = <IconInfoCircle />
 const generalFailureMessage = 'Something went wrong. Please try to re-submit.'
 const AdminHeadshot = ({ artistId, headshotRef }: IAdminHeadshot) => {
   const resetRef = useRef<() => void>(null)
@@ -129,6 +127,7 @@ const AdminHeadshot = ({ artistId, headshotRef }: IAdminHeadshot) => {
     } else {
       open()
     }
+    open()
 
     setIsSubmitting(false)
   }
@@ -160,25 +159,13 @@ const AdminHeadshot = ({ artistId, headshotRef }: IAdminHeadshot) => {
             </Button>
           )}
         </FileButton>
-        <Button
-          onClick={onImageDelete}
-          color="red"
-          variant="outline"
-          loading={isSubmitting}
-        >
+        <Button onClick={onImageDelete} color="red" loading={isSubmitting}>
           Delete
         </Button>
       </Group>
 
       <Dialog opened={opened} onClose={close} p={0}>
-        <Alert
-          icon={icon}
-          variant="filled"
-          color="red.9"
-          title="Bummer!"
-          withCloseButton
-          onClose={close}
-        >
+        <Alert title="Bummer!" withCloseButton onClose={close}>
           {generalFailureMessage}
         </Alert>
       </Dialog>

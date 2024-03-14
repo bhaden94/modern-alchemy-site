@@ -4,7 +4,6 @@ import { Alert, Button, Dialog, Group, Radio, Title } from '@mantine/core'
 import { DateTimePicker, DateValue } from '@mantine/dates'
 import { useForm } from '@mantine/form'
 import { useDisclosure } from '@mantine/hooks'
-import { IconInfoCircle } from '@tabler/icons-react'
 import { zodResolver } from 'mantine-form-zod-resolver'
 import { useState } from 'react'
 
@@ -19,8 +18,6 @@ import {
 interface IAdminBooksStatus {
   booksStatus: BooksStatus
 }
-
-const icon = <IconInfoCircle />
 
 const AdminBooksStatus = ({ booksStatus }: IAdminBooksStatus) => {
   const [opened, { open, close }] = useDisclosure(false)
@@ -105,14 +102,7 @@ const AdminBooksStatus = ({ booksStatus }: IAdminBooksStatus) => {
       </form>
 
       <Dialog opened={opened} onClose={close} p={0}>
-        <Alert
-          icon={icon}
-          variant="filled"
-          color="red.9"
-          title="Bummer!"
-          withCloseButton
-          onClose={close}
-        >
+        <Alert title="Bummer!" withCloseButton onClose={close}>
           There was an issue updating your books.
         </Alert>
       </Dialog>

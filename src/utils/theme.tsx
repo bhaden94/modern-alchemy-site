@@ -1,6 +1,7 @@
 'use client'
 
 import {
+  Alert,
   Button,
   createTheme,
   CSSVariablesResolver,
@@ -13,6 +14,7 @@ import {
   rem,
   Text,
 } from '@mantine/core'
+import { IconExclamationCircle } from '@tabler/icons-react'
 import { EB_Garamond } from 'next/font/google'
 
 const ebGaramond = EB_Garamond({
@@ -38,20 +40,18 @@ const themeOverride = createTheme({
       '#1F1F1F',
       '#141414',
     ],
-    // original academia
-    // keep until happy with colors
-    // academia: [
-    //   '#f3f7f3',
-    //   '#e5ebe5',
-    //   '#c8d6c8',
-    //   '#a7c0a7',
-    //   '#8cae8b',
-    //   '#7aa27a',
-    //   '#709d70',
-    //   '#5e895e',
-    //   '#537952',
-    //   '#446944',
-    // ],
+    red: [
+      '#ffeded',
+      '#f5dada',
+      '#e7b2b2',
+      '#db8786',
+      '#d06362',
+      '#cb4c4b',
+      '#c9403f',
+      '#b13231',
+      '#9f2b2b',
+      '#8c2123',
+    ],
     academia: [
       '#f4f6f4',
       '#e8e9e8',
@@ -130,6 +130,13 @@ const themeOverride = createTheme({
         root: {
           borderRadius: 25,
         },
+      },
+    }),
+    Alert: Alert.extend({
+      defaultProps: {
+        color: 'red',
+        variant: 'light',
+        icon: <IconExclamationCircle />,
       },
     }),
   },
