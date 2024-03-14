@@ -108,7 +108,7 @@ export default function BookingCard({ booking }: IBookingCardProps) {
             <CarouselWithThumbnails imageRefs={booking.referenceImages} />
           </Box>
         ) : (
-          <Alert title="Image Upload Issue" color="red.9">
+          <Alert title="Image Upload Issue">
             There was an issue with images uploading for this booking request.
             You may want to follow up with the requester.
           </Alert>

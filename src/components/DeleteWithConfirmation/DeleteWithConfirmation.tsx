@@ -35,7 +35,6 @@ const DeleteWithConfirmation = ({
         <Button
           onClick={() => setPopoverOpened((o) => !o)}
           loading={isDeleting}
-          variant="outline"
           color="red"
           mt={16}
           className="self-center"
@@ -47,22 +46,21 @@ const DeleteWithConfirmation = ({
         <Text>{confirmationMessage}</Text>
         <Group justify="center">
           <Button
+            onClick={() => setPopoverOpened((o) => !o)}
+            disabled={isDeleting}
+            mt={16}
+            className="self-center"
+          >
+            Do not delete
+          </Button>
+          <Button
             onClick={() => deleteConfirmed()}
-            loading={isDeleting}
-            variant="outline"
+            disabled={isDeleting}
             color="red"
             mt={16}
             className="self-center"
           >
             Confirm Deletion
-          </Button>
-          <Button
-            onClick={() => setPopoverOpened((o) => !o)}
-            loading={isDeleting}
-            mt={16}
-            className="self-center"
-          >
-            Do not delete
           </Button>
         </Group>
       </Popover.Dropdown>

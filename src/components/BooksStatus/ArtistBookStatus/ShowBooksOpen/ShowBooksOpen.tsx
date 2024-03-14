@@ -3,7 +3,6 @@
 import { Alert, Dialog, Loader, Text } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { PortableText } from '@portabletext/react'
-import { IconInfoCircle } from '@tabler/icons-react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -28,7 +27,6 @@ const TattooForm = dynamic(
   },
 )
 
-const icon = <IconInfoCircle />
 const generalFailureMessage = 'Something went wrong. Please try to re-submit.'
 const excessiveFailureMessage =
   'Looks like the site is having trouble. Please reach out to the artist directly for further assistance.'
@@ -105,14 +103,7 @@ const ShowBooksOpen = ({ showForm }: { showForm: boolean }) => {
       )}
 
       <Dialog opened={opened} onClose={close} p={0}>
-        <Alert
-          icon={icon}
-          variant="filled"
-          color="red.9"
-          title="Bummer!"
-          withCloseButton
-          onClose={close}
-        >
+        <Alert title="Bummer!" withCloseButton onClose={close}>
           {failureMessage}
         </Alert>
       </Dialog>

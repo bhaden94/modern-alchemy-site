@@ -2,7 +2,6 @@
 
 import {
   Alert,
-  Box,
   Button,
   Dialog,
   FileButton,
@@ -12,7 +11,6 @@ import {
   Title,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import { IconInfoCircle } from '@tabler/icons-react'
 import imageCompression from 'browser-image-compression'
 import Image from 'next/image'
 import { useRef, useState } from 'react'
@@ -29,7 +27,6 @@ interface IAdminHeadshot {
   headshotRef?: ImageReference
 }
 
-const icon = <IconInfoCircle />
 const generalFailureMessage = 'Something went wrong. Please try to re-submit.'
 const AdminHeadshot = ({ artistId, headshotRef }: IAdminHeadshot) => {
   const resetRef = useRef<() => void>(null)
@@ -55,7 +52,7 @@ const AdminHeadshot = ({ artistId, headshotRef }: IAdminHeadshot) => {
         useWebWorker: true,
       })
     } catch (error) {
-      console.log('image compression error')
+      open()
     }
 
     // upload image
@@ -134,11 +131,11 @@ const AdminHeadshot = ({ artistId, headshotRef }: IAdminHeadshot) => {
   }
 
   return (
-    <Stack>
-      <Title ta="center" mb="md" order={2}>
+    <Stack justify="center" align="center">
+      <Title ta="center" order={2}>
         Update Headshot
       </Title>
-      <Box p={0} m={0} pos="relative">
+      <Group p={0} m={0} pos="relative" style={{ height: 300, width: 300 }}>
         <LoadingOverlay visible={isSubmitting} />
         <Image
           src={headshotImage?.url || '/user.svg'}
@@ -147,8 +144,8 @@ const AdminHeadshot = ({ artistId, headshotRef }: IAdminHeadshot) => {
           height={300}
           placeholder={generateNextImagePlaceholder(300, 300)}
         />
-      </Box>
-      <Group justify="space-around">
+      </Group>
+      <Group w="100%" justify="space-around">
         <FileButton
           onChange={onImageChange}
           resetRef={resetRef}
@@ -160,25 +157,13 @@ const AdminHeadshot = ({ artistId, headshotRef }: IAdminHeadshot) => {
             </Button>
           )}
         </FileButton>
-        <Button
-          onClick={onImageDelete}
-          color="red"
-          variant="outline"
-          loading={isSubmitting}
-        >
+        <Button onClick={onImageDelete} color="red" loading={isSubmitting}>
           Delete
         </Button>
       </Group>
 
       <Dialog opened={opened} onClose={close} p={0}>
-        <Alert
-          icon={icon}
-          variant="filled"
-          color="red.9"
-          title="Bummer!"
-          withCloseButton
-          onClose={close}
-        >
+        <Alert title="Bummer!" withCloseButton onClose={close}>
           {generalFailureMessage}
         </Alert>
       </Dialog>

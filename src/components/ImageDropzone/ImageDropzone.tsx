@@ -79,7 +79,7 @@ const ImageDropzone = ({
         </Group>
 
         <Stack justify="center" align="center" gap={3}>
-          <Text size="xl">
+          <Text size="xl" ta="center">
             <Dropzone.Accept>Drop images here</Dropzone.Accept>
             <Dropzone.Reject>{rejectionMessage}</Dropzone.Reject>
             <Dropzone.Idle>Drag&apos;n&apos;drop images here</Dropzone.Idle>
