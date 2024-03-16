@@ -1,11 +1,12 @@
 'use client'
 
 import { Carousel, CarouselProps, Embla } from '@mantine/carousel'
-import { Button, Stack } from '@mantine/core'
+import { Box, Stack } from '@mantine/core'
 import { useCallback, useEffect, useState } from 'react'
 
 import { ImageReference } from '~/utils/images/uploadImagesToSanity'
 
+import DeleteWithConfirmation from '../DeleteWithConfirmation/DeleteWithConfirmation'
 import CarouselImage from './CarouselImage/CarouselImage'
 import CarouselThumbnail from './CarouselThumbnail/CarouselThumbnail'
 import classes from './CarouselWithThumbnails.module.css'
@@ -80,14 +81,14 @@ const CarouselWithThumbnails = ({
   return (
     <Stack gap={8} h="100%" mih="475px">
       {deleteImageCallback && (
-        <Button
-          onClick={() => deleteImageCallback(newImageRefInView)}
-          color="red"
-          className={classes.deleteBtn}
-          loading={isDeleting}
-        >
-          Delete Image
-        </Button>
+        <Box className="self-center">
+          <DeleteWithConfirmation
+            isDeleting={isDeleting ?? false}
+            onDeleteConfirmed={() => deleteImageCallback(newImageRefInView)}
+            deleteButtonText="Delete Image"
+            confirmationMessage="Are you sure you want to delete this image from your portfolio?"
+          />
+        </Box>
       )}
       <Carousel
         {...sharedCarouselProps}

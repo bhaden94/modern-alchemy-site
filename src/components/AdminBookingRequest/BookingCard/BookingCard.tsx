@@ -129,12 +129,14 @@ export default function BookingCard({ booking }: IBookingCardProps) {
           </Grid.Col>
         </Grid>
       </SimpleGrid>
-      <DeleteWithConfirmation
-        isDeleting={isDeleting}
-        onDeleteConfirmed={deleteBookingById}
-        deleteButtonText="Delete Booking"
-        confirmationMessage={`Are you sure you want to delete the booking for ${booking.name}?`}
-      />
+      <Box mt={16} className="self-center">
+        <DeleteWithConfirmation
+          isDeleting={isDeleting}
+          onDeleteConfirmed={deleteBookingById}
+          deleteButtonText="Delete Booking"
+          confirmationMessage={`Are you sure you want to delete the booking for ${booking.name}?`}
+        />
+      </Box>
     </Card>
   )
 }

@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 
-import { NavigationLink } from '~/utils/navigation'
+import { NavigationLink } from '~/schemas/pages/rootLayoutContent'
 
 import classes from './NavMenu.module.css'
 

@@ -5,8 +5,9 @@ import { IconBrandFacebook, IconBrandInstagram } from '@tabler/icons-react'
 import Image from 'next/image'
 
 import { getImageFromRef } from '~/lib/sanity/sanity.image'
+import { NavigationItem } from '~/schemas/pages/rootLayoutContent'
 import { ImageReference } from '~/utils/images/uploadImagesToSanity'
-import { ExtraNavLinks, NavLinks } from '~/utils/navigation'
+import { ExtraNavLinks } from '~/utils/navigation'
 
 import NavMenuDropdown from '../NavMenu/NavMenuDropdown'
 import NavMenuLink from '../NavMenu/NavMenuLink'
@@ -18,12 +19,14 @@ interface IFooter {
   logoCaption?: string
   instagram?: string
   facebook?: string
+  navItems?: NavigationItem[]
 }
 
 const Footer = (props: IFooter) => {
-  const { logo, copyrightText, logoCaption, instagram, facebook } = props
+  const { logo, copyrightText, logoCaption, instagram, facebook, navItems } =
+    props
 
-  const navGroup = NavLinks.map((navItem) => {
+  const navGroup = navItems?.map((navItem) => {
     return 'links' in navItem ? (
       <NavMenuDropdown key={navItem.label} navItem={navItem} />
     ) : (

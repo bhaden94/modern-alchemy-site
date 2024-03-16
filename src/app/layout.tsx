@@ -57,7 +57,10 @@ export default async function RootLayout({
       </head>
       <body className="flex min-h-screen flex-col">
         <Providers>
-          <Header logo={content?.businessLogo} />
+          <Header
+            logo={content?.businessLogo}
+            navItems={content.navigationItems}
+          />
           <div className="flex-1">{children}</div>
           <Footer
             logo={content?.businessLogo}
@@ -65,6 +68,7 @@ export default async function RootLayout({
             logoCaption={content?.businessLogoCaption}
             instagram={content?.instagramLink}
             facebook={content?.facebookLink}
+            navItems={content.navigationItems}
           />
         </Providers>
         <Analytics />

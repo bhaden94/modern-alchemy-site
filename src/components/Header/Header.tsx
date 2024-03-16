@@ -7,14 +7,20 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 import { getImageFromRef } from '~/lib/sanity/sanity.image'
+import { NavigationItem } from '~/schemas/pages/rootLayoutContent'
 import { ImageReference } from '~/utils/images/uploadImagesToSanity'
-import { NavigationPages, NavLinks } from '~/utils/navigation'
+import { NavigationPages } from '~/utils/navigation'
 
 import NavMenuDropdown from '../NavMenu/NavMenuDropdown'
 import NavMenuLink from '../NavMenu/NavMenuLink'
 import classes from './Header.module.css'
 
-const Header = ({ logo }: { logo: ImageReference }) => {
+interface IHeader {
+  logo: ImageReference
+  navItems?: NavigationItem[]
+}
+
+const Header = ({ logo, navItems }: IHeader) => {
   const router = useRouter()
   const [opened, { toggle, close }] = useDisclosure(false)
   const onLinkClick = (
@@ -26,7 +32,7 @@ const Header = ({ logo }: { logo: ImageReference }) => {
     close()
   }
 
-  const items = NavLinks.map((navItem) => {
+  const items = navItems?.map((navItem) => {
     return 'links' in navItem ? (
       <NavMenuDropdown
         key={navItem.label}
@@ -61,7 +67,7 @@ const Header = ({ logo }: { logo: ImageReference }) => {
 
         <Drawer opened={opened} onClose={close}>
           <List className="list-none" hiddenFrom="xs">
-            {items.map((item) => (
+            {items?.map((item) => (
               <List.Item key={item.key} className="my-4">
                 {item}
               </List.Item>
