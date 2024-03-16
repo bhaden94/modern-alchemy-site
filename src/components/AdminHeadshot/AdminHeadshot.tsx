@@ -97,7 +97,7 @@ const AdminHeadshot = ({ artistId, headshotRef }: IAdminHeadshot) => {
     setIsSubmitting(false)
   }
 
-  const onImageDelete = async () => {
+  const onImageDelete = async (): Promise<void> => {
     if (!imageRef) return
 
     setIsSubmitting(true)
@@ -162,6 +162,7 @@ const AdminHeadshot = ({ artistId, headshotRef }: IAdminHeadshot) => {
         <DeleteWithConfirmation
           isDeleting={isSubmitting}
           onDeleteConfirmed={onImageDelete}
+          disabled={imageRef === null}
           confirmationMessage="Are you sure you want to remove your headshot image?"
         />
       </Group>
