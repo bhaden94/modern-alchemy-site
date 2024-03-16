@@ -74,7 +74,7 @@ const SideNav = ({ session, id }: { session: Session; id: string }) => {
       </Drawer>
       <ActionIcon
         onClick={toggle}
-        className="rounded-r-full rounded-l-none z-10"
+        className="rounded-r-full rounded-l-none z-[205]"
         variant="filled"
         aria-label="Settings"
         size="xl"

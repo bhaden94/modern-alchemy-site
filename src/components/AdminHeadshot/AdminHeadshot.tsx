@@ -22,6 +22,8 @@ import uploadImagesToSanity, {
   ImageReference,
 } from '~/utils/images/uploadImagesToSanity'
 
+import DeleteWithConfirmation from '../DeleteWithConfirmation/DeleteWithConfirmation'
+
 interface IAdminHeadshot {
   artistId: string
   headshotRef?: ImageReference
@@ -157,9 +159,11 @@ const AdminHeadshot = ({ artistId, headshotRef }: IAdminHeadshot) => {
             </Button>
           )}
         </FileButton>
-        <Button onClick={onImageDelete} color="red" loading={isSubmitting}>
-          Delete
-        </Button>
+        <DeleteWithConfirmation
+          isDeleting={isSubmitting}
+          onDeleteConfirmed={onImageDelete}
+          confirmationMessage="Are you sure you want to remove your headshot image?"
+        />
       </Group>
 
       <Dialog opened={opened} onClose={close} p={0}>

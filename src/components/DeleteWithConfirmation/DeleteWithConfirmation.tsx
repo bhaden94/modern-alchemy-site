@@ -36,8 +36,6 @@ const DeleteWithConfirmation = ({
           onClick={() => setPopoverOpened((o) => !o)}
           loading={isDeleting}
           color="red"
-          mt={16}
-          className="self-center"
         >
           {deleteButtonText}
         </Button>

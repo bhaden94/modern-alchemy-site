@@ -185,7 +185,7 @@ const AdminPortfolioImages = ({
           Portfolio Images
         </Title>
         <Box p={0} m={0} pos="relative">
-          <LoadingOverlay visible={isSubmitting} />
+          <LoadingOverlay visible={isSubmitting} zIndex={150} />
           <CarouselWithThumbnails
             imageRefs={portfolioImageRefs}
             deleteImageCallback={deleteImage}

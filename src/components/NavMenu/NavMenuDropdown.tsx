@@ -4,7 +4,7 @@ import { Center, Menu, Text } from '@mantine/core'
 import { IconChevronDown } from '@tabler/icons-react'
 import Link from 'next/link'
 
-import { NestedNavigationLink } from '~/utils/navigation'
+import { NestedNavigationLink } from '~/schemas/pages/rootLayoutContent'
 
 import classes from './NavMenu.module.css'
 

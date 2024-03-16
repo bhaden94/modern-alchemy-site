@@ -14,35 +14,12 @@ export enum NavigationPages {
   PrivacyPolicy = '/privacy-policy',
 }
 
-interface BaseNavigationLink {
+interface NavigationLink {
   label: string
+  link: '/employee-portal' | '/studio'
 }
-
-export interface NavigationLink extends BaseNavigationLink {
-  link: NavigationPages
-}
-
-export interface NestedNavigationLink extends BaseNavigationLink {
-  links: NavigationLink[]
-}
-
-type NavigationLinkType = NavigationLink | NestedNavigationLink
-
-export const NavLinks: NavigationLinkType[] = [
-  { link: NavigationPages.Home, label: 'Home' },
-  { link: NavigationPages.Artists, label: 'Artists' },
-  {
-    label: 'Information',
-    links: [
-      { link: NavigationPages.AftercareInfo, label: 'Aftercare Info' },
-      // { link: NavigationPages.BookingInfo, label: 'Booking Info' },
-      { link: NavigationPages.Faqs, label: 'FAQs' },
-      { link: NavigationPages.PrivacyPolicy, label: 'Privacy Policy' },
-    ],
-  },
-]
 
 export const ExtraNavLinks: NavigationLink[] = [
-  { link: NavigationPages.EmployeePortal, label: 'Employee Portal' },
-  { link: NavigationPages.Studio, label: 'Studio' },
+  { link: '/employee-portal', label: 'Employee Portal' },
+  { link: '/studio', label: 'Studio' },
 ]

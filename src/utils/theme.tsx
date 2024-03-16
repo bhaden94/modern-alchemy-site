@@ -64,18 +64,6 @@ const themeOverride = createTheme({
       '#393d32',
       '#26302a',
     ],
-    wood: [
-      '#faf2f0',
-      '#ede2e0',
-      '#ddc2ba',
-      '#cfa093',
-      '#c38370',
-      '#bc705a',
-      '#b9664f',
-      '#a35640',
-      '#391c14',
-      '#391c14',
-    ],
   },
   defaultGradient: {
     from: 'academia.6',
@@ -123,7 +111,7 @@ const themeOverride = createTheme({
     }),
     Divider: Divider.extend({
       defaultProps: {
-        color: 'wood.7',
+        color: 'academia',
         size: 'xl',
       },
       styles: {
