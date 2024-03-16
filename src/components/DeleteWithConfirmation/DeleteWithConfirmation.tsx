@@ -6,6 +6,7 @@ import { useState } from 'react'
 interface IDeleteWithConfirmation {
   isDeleting: boolean
   onDeleteConfirmed: () => void
+  disabled?: boolean
   confirmationMessage?: string
   deleteButtonText?: string
 }
@@ -13,6 +14,7 @@ interface IDeleteWithConfirmation {
 const DeleteWithConfirmation = ({
   isDeleting,
   onDeleteConfirmed,
+  disabled = false,
   confirmationMessage = 'Are you sure you want to delete this?',
   deleteButtonText = 'Delete',
 }: IDeleteWithConfirmation) => {
@@ -35,6 +37,7 @@ const DeleteWithConfirmation = ({
         <Button
           onClick={() => setPopoverOpened((o) => !o)}
           loading={isDeleting}
+          disabled={disabled}
           color="red"
         >
           {deleteButtonText}

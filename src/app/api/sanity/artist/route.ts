@@ -78,10 +78,15 @@ const updateHeadshot = async (
     `Headshot: ${headshot}`,
   )
 
-  const patchOperation = await client
-    .patch(artistId)
-    .set({ headshot: headshot === 'DELETE' ? {} : headshot })
-    .commit()
+  let patchOperation: SanityDocument<Record<string, any>>
+  if (headshot === 'DELETE') {
+    patchOperation = await client.patch(artistId).unset(['headshot']).commit()
+  } else {
+    patchOperation = await client
+      .patch(artistId)
+      .set({ headshot: headshot })
+      .commit()
+  }
 
   console.log(
     `Patch operation completed for ArtistId ${artistId}`,
