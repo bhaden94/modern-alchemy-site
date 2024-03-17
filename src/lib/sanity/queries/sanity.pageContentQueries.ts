@@ -4,6 +4,7 @@ import { SanityClient } from 'sanity'
 import { AftercareInfoPageContent } from '~/schemas/pages/aftercareInfoPageContent'
 import { ArtistsPageContent } from '~/schemas/pages/artistsPageContent'
 import { BookingInfoPageContent } from '~/schemas/pages/bookingInfoPageContent'
+import { DisclaimerPageContent } from '~/schemas/pages/disclaimerPageContent'
 import { FaqPageContent } from '~/schemas/pages/faqPageContent'
 import { LayoutMetadataContent } from '~/schemas/pages/layoutMetadataContent'
 import { PrivacyPolicyPageContent } from '~/schemas/pages/privacyPolicyPageContent'
@@ -19,6 +20,7 @@ type QueryReturnType = {
   privacyPolicyPageContent: PrivacyPolicyPageContent
   artistsPageContent: ArtistsPageContent
   bookingInfoPageContent: BookingInfoPageContent
+  disclaimerPageContent: DisclaimerPageContent
 }
 
 export async function performPageContentQuery<T extends keyof QueryReturnType>(

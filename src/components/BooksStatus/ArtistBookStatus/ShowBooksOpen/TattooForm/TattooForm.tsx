@@ -101,7 +101,21 @@ const formAgreements = [
     value: 'privacyPolicy',
   },
   // {
-  //   label: 'I accept the above disclaimer.',
+  //   label: (
+  //     <Text>
+  //       I accept the{' '}
+  //       <Anchor
+  //         component={Link}
+  //         href={NavigationPages.Disclaimer}
+  //         underline="hover"
+  //         target="_blank"
+  //         c="primary"
+  //       >
+  //         tattoo disclaimer
+  //       </Anchor>
+  //       .
+  //     </Text>
+  //   ),
   //   value: 'disclaimer',
   // },
 ] as const

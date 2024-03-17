@@ -12,6 +12,7 @@ export enum NavigationPages {
   Studio = '/studio',
   Unauthorized = '/unauthorized',
   PrivacyPolicy = '/privacy-policy',
+  Disclaimer = '/disclaimer',
 }
 
 interface NavigationLink {
