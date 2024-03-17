@@ -22,7 +22,7 @@ import uploadImagesToSanity, {
   ImageReference,
 } from '~/utils/images/uploadImagesToSanity'
 
-import DeleteWithConfirmation from '../DeleteWithConfirmation/DeleteWithConfirmation'
+import DeleteWithConfirmation from '../../DeleteWithConfirmation/DeleteWithConfirmation'
 
 interface IAdminHeadshot {
   artistId: string
@@ -137,13 +137,21 @@ const AdminHeadshot = ({ artistId, headshotRef }: IAdminHeadshot) => {
       <Title ta="center" order={2}>
         Update Headshot
       </Title>
-      <Group p={0} m={0} pos="relative" style={{ height: 300, width: 300 }}>
+      <Group
+        p={0}
+        m={0}
+        pos="relative"
+        style={{ height: '100%', width: '100%', minHeight: 300, maxWidth: 300 }}
+      >
         <LoadingOverlay visible={isSubmitting} />
         <Image
           src={headshotImage?.url || '/user.svg'}
           alt="Artist headshot"
-          width={300}
-          height={300}
+          fill
+          sizes="100%"
+          style={{
+            objectFit: 'contain',
+          }}
           placeholder={generateNextImagePlaceholder(300, 300)}
         />
       </Group>

@@ -16,7 +16,6 @@ const sharedCarouselProps: Partial<CarouselProps> = {
   height: '100%',
   align: 'center',
   loop: true,
-  classNames: { controls: classes.controls },
 }
 
 interface ICarouselWithThumbnails {
@@ -92,7 +91,10 @@ const CarouselWithThumbnails = ({
       )}
       <Carousel
         {...sharedCarouselProps}
-        classNames={{ root: classes.mainCarouselRoot }}
+        classNames={{
+          root: classes.mainCarouselRoot,
+          controls: classes.controls,
+        }}
         getEmblaApi={setEmbla}
         withControls={imageRefs.length > 1}
       >
@@ -101,6 +103,7 @@ const CarouselWithThumbnails = ({
       {Boolean(imageRefs.length > 1) && (
         <Carousel
           {...sharedCarouselProps}
+          classNames={{ controls: classes.controls }}
           getEmblaApi={setEmblaThumbs}
           dragFree
           slideSize="10%"

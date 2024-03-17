@@ -62,10 +62,13 @@ const updateBooksStatus = async (
     `BooksOpenAt: ${patchOperation.booksOpenAt}`,
   )
 
-  return NextResponse.json({
-    booksOpen: patchOperation.booksOpen,
-    booksOpenAt: patchOperation.booksOpenAt,
-  })
+  return NextResponse.json(
+    {
+      booksOpen: patchOperation.booksOpen,
+      booksOpenAt: patchOperation.booksOpenAt,
+    },
+    { status: 200 },
+  )
 }
 
 const updateHeadshot = async (
@@ -93,9 +96,12 @@ const updateHeadshot = async (
     `Headshot: ${patchOperation.headshot}`,
   )
 
-  return NextResponse.json({
-    headshot: patchOperation.headshot,
-  })
+  return NextResponse.json(
+    {
+      headshot: patchOperation.headshot,
+    },
+    { status: 200 },
+  )
 }
 
 const updatePortfolioImages = async (
@@ -150,9 +156,12 @@ const updatePortfolioImages = async (
     `PortfolioImages: ${patchOperation.portfolioImages}`,
   )
 
-  return NextResponse.json({
-    portfolioImages: patchOperation.portfolioImages,
-  })
+  return NextResponse.json(
+    {
+      portfolioImages: patchOperation.portfolioImages,
+    },
+    { status: 200 },
+  )
 }
 
 export async function PATCH(request: NextRequest) {

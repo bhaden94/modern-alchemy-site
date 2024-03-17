@@ -25,7 +25,7 @@ export async function PUT(request: NextRequest) {
 
     console.log('Booking created with data: ', response)
 
-    return NextResponse.json({ status: 'Success' })
+    return NextResponse.json({}, { status: 200 })
   } catch (error) {
     console.error(`There was an error creating the booking for ${body.name}`)
 
@@ -47,11 +47,12 @@ export async function DELETE(request: NextRequest) {
   const client = getClient(token)
   const body = await request.json()
 
-  if (!body.id) return NextResponse.json({ status: 'id not given' })
+  if (!body.id)
+    return NextResponse.json({}, { status: 400, statusText: 'MissingId' })
 
   const response = await client
     .delete(body.id)
-    .catch((err) => NextResponse.json(err))
+    .catch((err) => NextResponse.json(err, { status: 400 }))
 
-  return NextResponse.json(response)
+  return NextResponse.json(response, { status: 200 })
 }
