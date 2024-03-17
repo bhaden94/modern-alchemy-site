@@ -22,7 +22,7 @@ import uploadImagesToSanity, {
   ImageReference,
 } from '~/utils/images/uploadImagesToSanity'
 
-import DeleteWithConfirmation from '../DeleteWithConfirmation/DeleteWithConfirmation'
+import DeleteWithConfirmation from '../../DeleteWithConfirmation/DeleteWithConfirmation'
 
 interface IAdminHeadshot {
   artistId: string

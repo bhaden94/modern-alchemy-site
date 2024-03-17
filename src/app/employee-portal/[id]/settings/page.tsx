@@ -1,9 +1,6 @@
-import { Box, Group } from '@mantine/core'
 import { redirect } from 'next/navigation'
 
-import AdminBooksStatus from '~/components/AdminBooksStatus/AdminBooksStatus'
-import AdminHeadshot from '~/components/AdminHeadshot/AdminHeadshot'
-import AdminPortfolioImages from '~/components/AdminPortfolioImages/AdminPortfolioImages'
+import AdminControls from '~/components/AdminControls/AdminControls'
 import PageContainer from '~/components/PageContainer'
 import PageTitle from '~/components/PageTitle/PageTitle'
 import { REDIRECT_URL } from '~/lib/next-auth/auth.utils'
@@ -26,25 +23,7 @@ const EmployeePortalPage = async ({ params }: { params: { id: string } }) => {
   return (
     <PageContainer>
       <PageTitle title={`${artist.name} Settings`} />
-      <Group justify="space-around" align="start" gap="lg">
-        <Box w={{ md: 300 }}>
-          <AdminBooksStatus
-            booksStatus={{
-              booksOpen: artist.booksOpen,
-              booksOpenAt: artist.booksOpenAt,
-              name: artist.name,
-              _id: artist._id,
-            }}
-          />
-        </Box>
-        <Box w={{ md: 300 }}>
-          <AdminHeadshot artistId={artist._id} headshotRef={artist.headshot} />
-        </Box>
-        <AdminPortfolioImages
-          artistId={artist._id}
-          portfolioRefs={artist.portfolioImages}
-        />
-      </Group>
+      <AdminControls artist={artist} />
     </PageContainer>
   )
 }
