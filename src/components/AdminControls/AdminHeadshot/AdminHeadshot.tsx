@@ -1,9 +1,7 @@
 'use client'
 
 import {
-  Alert,
   Button,
-  Dialog,
   FileButton,
   Group,
   LoadingOverlay,
@@ -15,6 +13,7 @@ import imageCompression from 'browser-image-compression'
 import Image from 'next/image'
 import { useRef, useState } from 'react'
 
+import ErrorDialog from '~/components/ErrorDialog/ErrorDialog'
 import { getImageFromRef } from '~/lib/sanity/sanity.image'
 import { generateNextImagePlaceholder } from '~/utils'
 import { ACCEPTED_IMAGE_TYPES } from '~/utils/forms/FormConstants'
@@ -175,11 +174,7 @@ const AdminHeadshot = ({ artistId, headshotRef }: IAdminHeadshot) => {
         />
       </Group>
 
-      <Dialog opened={opened} onClose={close} p={0}>
-        <Alert title="Bummer!" withCloseButton onClose={close}>
-          {generalFailureMessage}
-        </Alert>
-      </Dialog>
+      <ErrorDialog opened={opened} onClose={close} />
     </Stack>
   )
 }

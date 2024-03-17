@@ -1,9 +1,7 @@
 'use client'
 
 import {
-  Alert,
   Box,
-  Dialog,
   Group,
   LoadingOverlay,
   SimpleGrid,
@@ -17,11 +15,11 @@ import { Artist } from '~/schemas/models/artist'
 import { ImageReference } from '~/utils/images/uploadImagesToSanity'
 
 import CarouselWithThumbnails from '../CarouselWithThumbnails/CarouselWithThumbnails'
+import ErrorDialog from '../ErrorDialog/ErrorDialog'
 import AdminBooksStatus from './AdminBooksStatus/AdminBooksStatus'
 import AdminHeadshot from './AdminHeadshot/AdminHeadshot'
 import AdminPortfolioImages from './AdminPortfolioImages/AdminPortfolioImages'
 
-const generalFailureMessage = 'Something went wrong. Please try to re-submit.'
 const AdminControls = ({ artist }: { artist: Artist }) => {
   const [opened, { open, close }] = useDisclosure(false)
   const [portfolioImageRefs, setPortfolioImageRefs] = useState<
@@ -104,11 +102,7 @@ const AdminControls = ({ artist }: { artist: Artist }) => {
         </Stack>
       </SimpleGrid>
 
-      <Dialog opened={opened} onClose={close} p={0}>
-        <Alert title="Bummer!" withCloseButton onClose={close}>
-          {generalFailureMessage}
-        </Alert>
-      </Dialog>
+      <ErrorDialog opened={opened} onClose={close} />
     </>
   )
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { Alert, Dialog, Loader, Text } from '@mantine/core'
+import { Loader, Text } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { PortableText } from '@portabletext/react'
 import dynamic from 'next/dynamic'
@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
+import ErrorDialog from '~/components/ErrorDialog/ErrorDialog'
 import { useArtist } from '~/hooks/useArtist'
 import { NavigationPages } from '~/utils/navigation'
 
@@ -102,11 +103,7 @@ const ShowBooksOpen = ({ showForm }: { showForm: boolean }) => {
         <BookingRequestLink />
       )}
 
-      <Dialog opened={opened} onClose={close} p={0}>
-        <Alert title="Bummer!" withCloseButton onClose={close}>
-          {failureMessage}
-        </Alert>
-      </Dialog>
+      <ErrorDialog opened={opened} onClose={close} message={failureMessage} />
     </>
   )
 }

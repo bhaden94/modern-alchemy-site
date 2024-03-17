@@ -179,6 +179,7 @@ export async function PATCH(request: NextRequest) {
     portfolioImages,
     operation,
   } = body
+
   if (!artistId) {
     return new NextResponse(`Error performing PATCH on artist.`, {
       status: 400,
