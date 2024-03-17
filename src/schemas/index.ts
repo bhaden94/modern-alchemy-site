@@ -7,6 +7,7 @@ import aftercareInfoPageContent from './pages/aftercareInfoPageContent'
 import artistsPageContent from './pages/artistsPageContent'
 import basePageContent from './pages/basePageContent'
 import bookingInfoPageContent from './pages/bookingInfoPageContent'
+import disclaimerPageContent from './pages/disclaimerPageContent'
 import faqPageContent from './pages/faqPageContent'
 import layoutMetadataContent from './pages/layoutMetadataContent'
 import privacyPolicyPageContent from './pages/privacyPolicyPageContent'
@@ -21,6 +22,7 @@ export const schemaTypes = {
   rootPageContent,
   faqPageContent,
   privacyPolicyPageContent,
+  disclaimerPageContent,
   aftercareInfoPageContent,
   artistsPageContent,
   bookingInfoPageContent,
@@ -39,6 +41,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     aftercareInfoPageContent,
     faqPageContent,
     privacyPolicyPageContent,
+    disclaimerPageContent,
     bookingInfoPageContent,
     // Models
     artist,
