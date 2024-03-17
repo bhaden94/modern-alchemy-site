@@ -83,6 +83,7 @@ const CarouselWithThumbnails = ({
         <Box className="self-center">
           <DeleteWithConfirmation
             isDeleting={isDeleting ?? false}
+            disabled={imageRefs.length === 0}
             onDeleteConfirmed={() => deleteImageCallback(newImageRefInView)}
             deleteButtonText="Delete Image"
             confirmationMessage="Are you sure you want to delete this image from your portfolio?"

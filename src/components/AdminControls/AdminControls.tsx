@@ -29,7 +29,8 @@ const AdminControls = ({ artist }: { artist: Artist }) => {
   >(artist.portfolioImages || [])
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const deleteImage = async (imageRef: ImageReference) => {
+  const deleteImage = async (imageRef?: ImageReference) => {
+    if (!imageRef) return
     setIsSubmitting(true)
 
     // Clear image from array
