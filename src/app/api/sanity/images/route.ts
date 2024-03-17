@@ -45,7 +45,10 @@ export async function PUT(
 
     console.log('Image references created: ', imageReferences)
 
-    return NextResponse.json({ imageReferences: imageReferences })
+    return NextResponse.json(
+      { imageReferences: imageReferences },
+      { status: 200 },
+    )
   } catch (error) {
     console.error('There was an error uploading images')
 
@@ -95,5 +98,5 @@ export async function DELETE(request: NextRequest) {
 
   console.log('Finished deleting image assets')
 
-  return NextResponse.json({ status: 200 })
+  return NextResponse.json({}, { status: 200 })
 }

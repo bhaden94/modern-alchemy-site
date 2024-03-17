@@ -6,6 +6,7 @@ import {
   Dialog,
   Group,
   LoadingOverlay,
+  SimpleGrid,
   Stack,
   Title,
 } from '@mantine/core'
@@ -64,7 +65,7 @@ const AdminControls = ({ artist }: { artist: Artist }) => {
   return (
     <>
       <Group justify="space-around" align="start" gap="lg">
-        <Box w={{ md: 300 }}>
+        <Box w={{ base: '100%', sm: 300 }}>
           <AdminBooksStatus
             booksStatus={{
               booksOpen: artist.booksOpen,
@@ -74,10 +75,10 @@ const AdminControls = ({ artist }: { artist: Artist }) => {
             }}
           />
         </Box>
-        <Box w={{ md: 300 }}>
+        <Box w={{ base: '100%', sm: 300 }}>
           <AdminHeadshot artistId={artist._id} headshotRef={artist.headshot} />
         </Box>
-        <Box w={{ md: 300 }}>
+        <Box w={{ base: '100%', sm: 300 }}>
           <AdminPortfolioImages
             artistId={artist._id}
             setPortfolioRefs={setPortfolioImageRefs}
@@ -86,12 +87,12 @@ const AdminControls = ({ artist }: { artist: Artist }) => {
           />
         </Box>
       </Group>
-      <Group justify="center" mt="lg">
+      <SimpleGrid cols={1} mt="lg">
         <Stack gap={0}>
           <Title ta="center" mb="md" order={2}>
             Portfolio Images
           </Title>
-          <Box p={0} m={0} pos="relative">
+          <Box pos="relative">
             <LoadingOverlay visible={isSubmitting} zIndex={150} />
             <CarouselWithThumbnails
               imageRefs={portfolioImageRefs}
@@ -100,7 +101,7 @@ const AdminControls = ({ artist }: { artist: Artist }) => {
             />
           </Box>
         </Stack>
-      </Group>
+      </SimpleGrid>
 
       <Dialog opened={opened} onClose={close} p={0}>
         <Alert title="Bummer!" withCloseButton onClose={close}>
