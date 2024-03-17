@@ -1,20 +1,13 @@
 'use client'
 
-import {
-  Alert,
-  Button,
-  Dialog,
-  Group,
-  Radio,
-  Stack,
-  Title,
-} from '@mantine/core'
+import { Button, Group, Radio, Stack, Title } from '@mantine/core'
 import { DateTimePicker, DateValue } from '@mantine/dates'
 import { useForm } from '@mantine/form'
 import { useDisclosure } from '@mantine/hooks'
 import { zodResolver } from 'mantine-form-zod-resolver'
 import { useState } from 'react'
 
+import ErrorDialog from '~/components/ErrorDialog/ErrorDialog'
 import { BooksStatus } from '~/lib/sanity/queries/sanity.artistsQuery'
 import {
   BOOKS_OPEN,
@@ -109,11 +102,11 @@ const AdminBooksStatus = ({ booksStatus }: IAdminBooksStatus) => {
         </Button>
       </form>
 
-      <Dialog opened={opened} onClose={close} p={0}>
-        <Alert title="Bummer!" withCloseButton onClose={close}>
-          There was an issue updating your books.
-        </Alert>
-      </Dialog>
+      <ErrorDialog
+        opened={opened}
+        onClose={close}
+        message="There was an issue updating your books."
+      />
     </Stack>
   )
 }
