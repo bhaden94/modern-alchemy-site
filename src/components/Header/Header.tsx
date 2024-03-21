@@ -65,7 +65,7 @@ const Header = ({ logo, navItems }: IHeader) => {
           {items}
         </Group>
 
-        <Drawer opened={opened} onClose={close}>
+        <Drawer opened={opened} onClose={close} position="right">
           <List className="list-none" hiddenFrom="xs">
             {items?.map((item) => (
               <List.Item key={item.key} className="my-4">

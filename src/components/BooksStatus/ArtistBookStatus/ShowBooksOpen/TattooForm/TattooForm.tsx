@@ -85,6 +85,18 @@ const formAgreements = [
   {
     label: (
       <Text>
+        I accept the above{' '}
+        <Anchor href="#" underline="hover" c="primary">
+          tattoo disclaimer
+        </Anchor>
+        .
+      </Text>
+    ),
+    value: 'disclaimer',
+  },
+  {
+    label: (
+      <Text>
         I accept the{' '}
         <Anchor
           component={Link}
@@ -100,24 +112,6 @@ const formAgreements = [
     ),
     value: 'privacyPolicy',
   },
-  // {
-  //   label: (
-  //     <Text>
-  //       I accept the{' '}
-  //       <Anchor
-  //         component={Link}
-  //         href={NavigationPages.Disclaimer}
-  //         underline="hover"
-  //         target="_blank"
-  //         c="primary"
-  //       >
-  //         tattoo disclaimer
-  //       </Anchor>
-  //       .
-  //     </Text>
-  //   ),
-  //   value: 'disclaimer',
-  // },
 ] as const
 
 interface ITattooForm {
