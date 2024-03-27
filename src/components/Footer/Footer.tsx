@@ -6,6 +6,7 @@ import Image from 'next/image'
 
 import { getImageFromRef } from '~/lib/sanity/sanity.image'
 import { NavigationItem } from '~/schemas/pages/rootLayoutContent'
+import { Base64Logo } from '~/utils'
 import { ImageReference } from '~/utils/images/uploadImagesToSanity'
 import { ExtraNavLinks } from '~/utils/navigation'
 
@@ -47,6 +48,8 @@ const Footer = (props: IFooter) => {
             alt="Business logo"
             width={120}
             height={46}
+            placeholder="blur"
+            blurDataURL={Base64Logo}
           />
           <Text size="xs" className="mt-1 text-center sm:text-left">
             {logoCaption || ''}
