@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation'
 
 import { getImageFromRef } from '~/lib/sanity/sanity.image'
 import { NavigationItem } from '~/schemas/pages/rootLayoutContent'
+import { Base64Logo } from '~/utils'
 import { ImageReference } from '~/utils/images/uploadImagesToSanity'
 import { NavigationPages } from '~/utils/navigation'
 
@@ -59,6 +60,8 @@ const Header = ({ logo, navItems }: IHeader) => {
             alt="Business logo"
             width={220}
             height={84}
+            placeholder="blur"
+            blurDataURL={Base64Logo}
           />
         </Link>
         <Group gap={5} visibleFrom="xs">
