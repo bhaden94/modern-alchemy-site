@@ -22,6 +22,7 @@ const createTransporter =
 
 export const sendMail = async (
   toEmail: string,
+  replyToEmail: string,
   subject: string,
   text: string,
   base64Images: any[],
@@ -29,6 +30,7 @@ export const sendMail = async (
   const mailOptions: Mail.Options = {
     from: process.env.GMAIL_ACCOUNT,
     to: toEmail,
+    replyTo: replyToEmail,
     subject: subject,
     text: text,
     attachments: base64Images.map((url, i) => {

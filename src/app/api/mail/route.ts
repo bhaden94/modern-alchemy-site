@@ -34,6 +34,7 @@ ${field.label}:
 
   const mailResponse: SMTPTransport.SentMessageInfo = await sendMail(
     body.artistEmail,
+    body.email,
     `${body.name} Booking Request`,
     emailText,
     body.base64Images,
