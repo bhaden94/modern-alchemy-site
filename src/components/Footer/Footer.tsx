@@ -59,7 +59,7 @@ const Footer = (props: IFooter) => {
             >
               {line}
             </Text>
-          ))}
+          )) || ''}
         </div>
         <div className="flex flex-wrap gap-4 sm:self-end">
           <div className="hidden sm:flex sm:flex-wrap sm:gap-4">{navGroup}</div>
