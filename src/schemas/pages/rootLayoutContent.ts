@@ -28,7 +28,7 @@ export interface RootLayoutContent
   extends BaseSanitySchema<'rootLayoutContent'> {
   businessLogo: ImageReference
   copyrightText: string
-  businessLogoCaption?: string
+  businessLogoCaption?: string[]
   instagramLink?: string
   facebookLink?: string
   navigationItems?: NavigationItem[]
@@ -60,7 +60,7 @@ export default defineType({
       type: 'string',
       title: 'Copyright Text',
       validation: (Rule) =>
-        Rule.required().custom((text) => {
+        Rule.required().custom((text: string) => {
           return text?.includes('{currentYear}')
             ? true
             : 'The copyright should include the {currentYear} literal in it.'
@@ -68,8 +68,15 @@ export default defineType({
     }),
     defineField({
       name: 'businessLogoCaption',
-      type: 'string',
+      type: 'array',
       title: 'Business Logo Caption',
+      of: [
+        defineArrayMember({
+          title: 'Line',
+          type: 'string',
+          name: 'line',
+        }),
+      ],
     }),
     defineField({
       name: 'instagramLink',
