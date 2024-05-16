@@ -17,7 +17,7 @@ import classes from './Footer.module.css'
 interface IFooter {
   logo: ImageReference
   copyrightText?: string
-  logoCaption?: string
+  logoCaption?: string[]
   instagram?: string
   facebook?: string
   navItems?: NavigationItem[]
@@ -42,7 +42,7 @@ const Footer = (props: IFooter) => {
   return (
     <footer className={classes.footer}>
       <Container className="flex flex-col items-center sm:justify-between sm:flex-row">
-        <div className="flex flex-col items-center sm:max-w-[200px] sm:items-start">
+        <div className="flex flex-col items-center sm:max-w-[250px] sm:items-start">
           <Image
             src={getImageFromRef(logo)?.url || ''}
             alt="Business logo"
@@ -51,11 +51,17 @@ const Footer = (props: IFooter) => {
             placeholder="blur"
             blurDataURL={Base64Logo}
           />
-          <Text size="xs" className="mt-1 text-center sm:text-left">
-            {logoCaption || ''}
-          </Text>
+          {logoCaption?.map((line) => (
+            <Text
+              key={line}
+              size="xs"
+              className="mt-1 text-center sm:text-left"
+            >
+              {line}
+            </Text>
+          ))}
         </div>
-        <div className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap gap-4 sm:self-end">
           <div className="hidden sm:flex sm:flex-wrap sm:gap-4">{navGroup}</div>
           <div className="flex flex-wrap gap-4">{extraNavGroup}</div>
         </div>
