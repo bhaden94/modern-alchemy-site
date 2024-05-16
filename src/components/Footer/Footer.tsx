@@ -52,7 +52,11 @@ const Footer = (props: IFooter) => {
             blurDataURL={Base64Logo}
           />
           {logoCaption?.map((line) => (
-            <Text size="xs" className="mt-1 text-center sm:text-left">
+            <Text
+              key={line}
+              size="xs"
+              className="mt-1 text-center sm:text-left"
+            >
               {line}
             </Text>
           ))}

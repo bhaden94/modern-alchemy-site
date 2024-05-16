@@ -60,7 +60,7 @@ export default defineType({
       type: 'string',
       title: 'Copyright Text',
       validation: (Rule) =>
-        Rule.required().custom((text: string) => {
+        Rule.required().custom((text: string | undefined) => {
           return text?.includes('{currentYear}')
             ? true
             : 'The copyright should include the {currentYear} literal in it.'
