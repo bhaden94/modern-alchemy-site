@@ -24,6 +24,11 @@ export interface NestedNavigationLink extends BaseNavigationLink {
 
 export type NavigationItem = NavigationLink | NestedNavigationLink
 
+export interface Announcement {
+  isActive: boolean
+  title: string
+}
+
 export interface RootLayoutContent
   extends BaseSanitySchema<'rootLayoutContent'> {
   businessLogo: ImageReference
@@ -32,6 +37,7 @@ export interface RootLayoutContent
   instagramLink?: string
   facebookLink?: string
   navigationItems?: NavigationItem[]
+  announcement?: Announcement
 }
 
 const linkValidation = (
@@ -155,6 +161,23 @@ export default defineType({
               ],
             }),
           ],
+        }),
+      ],
+    }),
+    defineField({
+      name: 'announcement',
+      type: 'object',
+      title: 'Announcement',
+      fields: [
+        defineField({
+          name: 'isActive',
+          type: 'boolean',
+          title: 'Is Announcement Active?',
+        }),
+        defineField({
+          name: 'title',
+          type: 'string',
+          title: 'Title',
         }),
       ],
     }),

@@ -8,6 +8,7 @@ import { ColorSchemeScript } from '@mantine/core'
 import { Analytics } from '@vercel/analytics/react'
 import { Metadata } from 'next'
 
+import AnnouncementBanner from '~/components/AnnouncementBanner/AnnouncementBanner'
 import Footer from '~/components/Footer/Footer'
 import Header from '~/components/Header/Header'
 import Providers from '~/components/Providers'
@@ -57,6 +58,9 @@ export default async function RootLayout({
       </head>
       <body className="flex min-h-screen flex-col">
         <Providers>
+          {content.announcement && content.announcement.isActive ? (
+            <AnnouncementBanner title={content.announcement.title} />
+          ) : null}
           <Header
             logo={content?.businessLogo}
             navItems={content.navigationItems}

@@ -13,6 +13,7 @@ export enum NavigationPages {
   Unauthorized = '/unauthorized',
   PrivacyPolicy = '/privacy-policy',
   Disclaimer = '/disclaimer',
+  Announcement = '/announcement',
 }
 
 interface NavigationLink {
