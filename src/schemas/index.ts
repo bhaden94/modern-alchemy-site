@@ -4,6 +4,7 @@ import artist from './models/artist'
 import blockContent from './models/blockContent'
 import booking from './models/booking'
 import aftercareInfoPageContent from './pages/aftercareInfoPageContent'
+import announcementPageContent from './pages/announcementPageContent'
 import artistsPageContent from './pages/artistsPageContent'
 import basePageContent from './pages/basePageContent'
 import bookingInfoPageContent from './pages/bookingInfoPageContent'
@@ -43,6 +44,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     privacyPolicyPageContent,
     disclaimerPageContent,
     bookingInfoPageContent,
+    announcementPageContent,
     // Models
     artist,
     booking,

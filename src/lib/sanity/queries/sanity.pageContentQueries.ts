@@ -2,6 +2,7 @@ import { groq } from 'next-sanity'
 import { SanityClient } from 'sanity'
 
 import { AftercareInfoPageContent } from '~/schemas/pages/aftercareInfoPageContent'
+import { AnnouncementPageContent } from '~/schemas/pages/announcementPageContent'
 import { ArtistsPageContent } from '~/schemas/pages/artistsPageContent'
 import { BookingInfoPageContent } from '~/schemas/pages/bookingInfoPageContent'
 import { DisclaimerPageContent } from '~/schemas/pages/disclaimerPageContent'
@@ -21,6 +22,7 @@ type QueryReturnType = {
   artistsPageContent: ArtistsPageContent
   bookingInfoPageContent: BookingInfoPageContent
   disclaimerPageContent: DisclaimerPageContent
+  announcementPageContent: AnnouncementPageContent
 }
 
 export async function performPageContentQuery<T extends keyof QueryReturnType>(

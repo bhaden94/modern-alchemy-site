@@ -1,0 +1,19 @@
+.banner {
+  position: relative;
+  background-color: var(--mantine-color-academia-9);
+  border-bottom: rem(1px) solid var(--mantine-color-academia-9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.link {
+  color: var(--mantine-color-dark-0);
+  text-decoration: none;
+  padding: rem(8px);
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
