@@ -1,6 +1,6 @@
 'use client'
 
-import { Anchor, Badge, Button, Card, Group, Text } from '@mantine/core'
+import { Anchor, Badge, Button, Card, Group, Stack, Text } from '@mantine/core'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -15,19 +15,7 @@ interface IArtistCard {
 }
 
 const ArtistCard = ({ artist, showPortfolioLink }: IArtistCard) => {
-  const CardButton = () => {
-    if (showPortfolioLink) {
-      return (
-        <Button
-          component={Link}
-          href={`${NavigationPages.Artists}/${encodeURIComponent(artist._id)}`}
-          radius="sm"
-        >
-          View Portfolio
-        </Button>
-      )
-    }
-
+  const BookingButton = () => {
     if (artist.externalBookingLink) {
       return (
         <Button
@@ -51,6 +39,17 @@ const ArtistCard = ({ artist, showPortfolioLink }: IArtistCard) => {
         fz="xs"
       >
         submit booking request
+      </Button>
+    )
+  }
+  const PortfolioButton = () => {
+    return (
+      <Button
+        component={Link}
+        href={`${NavigationPages.Artists}/${encodeURIComponent(artist._id)}`}
+        radius="sm"
+      >
+        View Portfolio
       </Button>
     )
   }
@@ -102,9 +101,10 @@ const ArtistCard = ({ artist, showPortfolioLink }: IArtistCard) => {
         ))}
       </Group>
 
-      <Group justify="center" mt="auto" pb={6} pt={18}>
-        <CardButton />
-      </Group>
+      <Stack justify="center" mt="auto" pb={6} pt={18}>
+        {showPortfolioLink && <PortfolioButton />}
+        <BookingButton />
+      </Stack>
     </Card>
   )
 }

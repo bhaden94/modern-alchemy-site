@@ -13,7 +13,7 @@ const Artists = ({ content, artists }: IArtists) => {
   return (
     <>
       <PageTitle title={content.pageTitle} />
-      <ArtistList artists={artists} />
+      <ArtistList artists={artists} showPortfolioLink />
     </>
   )
 }
