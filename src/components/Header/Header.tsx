@@ -16,6 +16,8 @@ import NavMenuDropdown from '../NavMenu/NavMenuDropdown'
 import NavMenuLink from '../NavMenu/NavMenuLink'
 import classes from './Header.module.css'
 
+const hamburgerMenuBreakpoint = 'sm'
+
 interface IHeader {
   logo: ImageReference
   navItems?: NavigationItem[]
@@ -64,7 +66,7 @@ const Header = ({ logo, navItems }: IHeader) => {
             blurDataURL={Base64Logo}
           />
         </Link>
-        <Group gap={5} visibleFrom="xs">
+        <Group gap={5} visibleFrom={hamburgerMenuBreakpoint}>
           {items}
         </Group>
 
@@ -81,7 +83,7 @@ const Header = ({ logo, navItems }: IHeader) => {
           opened={opened}
           onClick={toggle}
           className={classes.burger}
-          hiddenFrom="xs"
+          hiddenFrom={hamburgerMenuBreakpoint}
           size="md"
         />
       </Container>
