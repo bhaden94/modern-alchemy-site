@@ -10,6 +10,8 @@ interface IAdditionalBodyFields {
   artistEmail: string
 }
 
+export const maxDuration = 60 // This function can run for up to 60 seconds
+
 export async function PUT(request: NextRequest) {
   const body: TBookingSchema & IAdditionalBodyFields = await request.json()
 
@@ -32,15 +34,24 @@ ${field.label}:
     emailText,
   )
 
-  const mailResponse: SMTPTransport.SentMessageInfo = await sendMail(
-    body.artistEmail,
-    body.email,
-    `${body.name} Booking Request`,
-    emailText,
-    body.base64Images,
-  )
+  try {
+    const mailResponse: SMTPTransport.SentMessageInfo = await sendMail(
+      body.artistEmail,
+      body.email,
+      `${body.name} Booking Request`,
+      emailText,
+      body.base64Images,
+    )
 
-  console.log('Email response: ', mailResponse)
+    console.log('Email response: ', mailResponse)
 
-  return NextResponse.json({ status: 200 })
+    return NextResponse.json({ status: 200 })
+  } catch (error) {
+    console.log('Error sending email', error)
+    
+    return new NextResponse(`There was an error sending the email`, {
+      status: 500,
+      statusText: JSON.stringify(error),
+    })
+  }
 }

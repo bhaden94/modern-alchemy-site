@@ -161,13 +161,19 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
   // Form boolean states
   const [isUploadingImages, setIsUploadingImages] = useState<boolean>(false)
   const [isSubmittingForm, setIsSubmittingForm] = useState<boolean>(false)
-  const isSubmitting = isUploadingImages || isSubmittingForm
+  const [isSendingEmail, setIsSendingEmail] = useState<boolean>(false)
+  const isSubmitting = isUploadingImages || isSubmittingForm || isSendingEmail
   const isCompressingImages =
     isCompressingBodyPlacementImages || isCompressingReferenceImages
   const allFormAgreementsAccepted =
     formAgreementsAccepted.length !== formAgreements.length
 
   // Form variables
+  const customOverlayLoaderText = isUploadingImages
+    ? 'Uploading images'
+    : isSubmittingForm
+      ? 'Submitting booking'
+      : 'Sending artist email'
   const form = useForm<TBookingSchema>({
     initialValues: getBookingFormInitialValues(),
     validate: zodResolver(bookingSchema),
@@ -184,14 +190,14 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
   const sendArtistBookingEmail = async (
     images: File[],
     emailTextData: TBookingSchema,
-  ) => {
+  ): Promise<Response> => {
     const base64Images = await Promise.all(
       images.map(async (image) => {
         const base64 = await convertBlobToBase64(image as File)
         return base64
       }),
     )
-    fetch('/api/mail', {
+    return fetch('/api/mail', {
       method: 'PUT',
       body: JSON.stringify({
         ...emailTextData,
@@ -203,6 +209,7 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
 
   // Form methods
   const onFormSubmit = async (data: TBookingSchema) => {
+    /* Upload images start */
     setIsUploadingImages(true)
 
     const images: File[] = [
@@ -230,6 +237,9 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
     }
 
     setIsUploadingImages(false)
+    /* Upload images end */
+
+    /* Submit booking start */
     setIsSubmittingForm(true)
 
     /* Create booking */
@@ -243,11 +253,21 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
       }),
     })
 
-    // send booking request email
-    // don't hold up the UI for this
-    if (artist.shouldEmailBookings) sendArtistBookingEmail(images, data)
-
     setIsSubmittingForm(false)
+    /* Submit booking end */
+
+    /* Send email start */
+    if (artist.shouldEmailBookings) {
+      setIsSendingEmail(true)
+      const emailResponse = await sendArtistBookingEmail(images, data)
+      setIsSendingEmail(false)
+
+      if (!emailResponse.ok) {
+        onFailure()
+        return
+      }
+    }
+    /* Send email end */
 
     if (response.ok) {
       onSuccessfulBooking()
@@ -316,11 +336,7 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
           visible={isSubmitting}
           zIndex={150}
           loaderProps={{
-            children: isUploadingImages ? (
-              <CustomLoader label={'Uploading images'} />
-            ) : (
-              <CustomLoader label={'Submitting booking'} />
-            ),
+            children: <CustomLoader label={customOverlayLoaderText} />,
           }}
         />
         <form

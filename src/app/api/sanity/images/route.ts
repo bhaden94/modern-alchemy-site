@@ -16,6 +16,8 @@ interface ImagesPutResponseBody {
   imageReferences: ImageReference[]
 }
 
+export const maxDuration = 60 // This function can run for up to 60 seconds
+
 // upload image assets to sanity
 // return references
 export async function PUT(
