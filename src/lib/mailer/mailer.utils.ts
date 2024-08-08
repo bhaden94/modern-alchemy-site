@@ -2,6 +2,40 @@ import nodemailer from 'nodemailer'
 import Mail from 'nodemailer/lib/mailer'
 import SMTPTransport from 'nodemailer/lib/smtp-transport'
 
+function sendMailWithRetry(
+  fn: () => Promise<SMTPTransport.SentMessageInfo>,
+  maxAttempts = 3,
+  baseDelayMs = 1000,
+) {
+  let attempt = 1
+
+  const execute = async (): Promise<SMTPTransport.SentMessageInfo> => {
+    try {
+      const response = await fn()
+
+      console.log('Email response in retry function: ', response)
+
+      if (response.rejected.length > 0) {
+        throw new Error(JSON.stringify(response))
+      }
+
+      return response
+    } catch (error) {
+      if (attempt >= maxAttempts) {
+        throw error
+      }
+
+      console.log(`Retry attempt ${attempt} after ${baseDelayMs}ms`)
+      await new Promise((resolve) => setTimeout(resolve, baseDelayMs))
+
+      attempt++
+      return execute()
+    }
+  }
+
+  return execute()
+}
+
 // TODO: write code to refresh token when expired
 const createTransporter =
   (): nodemailer.Transporter<SMTPTransport.SentMessageInfo> => {
@@ -42,5 +76,5 @@ export const sendMail = async (
   }
 
   let emailTransporter = createTransporter()
-  return await emailTransporter.sendMail(mailOptions)
+  return sendMailWithRetry(() => emailTransporter.sendMail(mailOptions))
 }
