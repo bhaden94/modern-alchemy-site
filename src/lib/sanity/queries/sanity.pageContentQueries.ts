@@ -48,7 +48,7 @@ export async function getRootLayoutContent(
   return await client.fetch(
     rootLayoutContentQuery,
     {},
-    SANITY_CLIENT_CACHE_SETTING,
+    { next: { tags: ['rootLayoutContent'] } },
   )
 }
 
@@ -59,6 +59,6 @@ export async function getLayoutMetadata(
   return await client.fetch(
     layoutMetadataQuery,
     {},
-    SANITY_CLIENT_CACHE_SETTING,
+    { next: { tags: ['layoutMetadataContent'] } },
   )
 }
