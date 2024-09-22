@@ -35,6 +35,7 @@ export async function POST(req: NextRequest) {
       })
     }
 
+    console.log('Revalidating tag for type', body._type)
     revalidateTag(body._type)
 
     return NextResponse.json({ body })

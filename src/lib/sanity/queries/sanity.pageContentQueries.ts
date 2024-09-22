@@ -38,7 +38,7 @@ export async function performPageContentQuery<T extends keyof QueryReturnType>(
     ...,
     ${additionalQuery}
   }`
-  return await client.fetch(query, {}, SANITY_CLIENT_CACHE_SETTING)
+  return await client.fetch(query, {}, { next: { tags: [`'${param}'`] } })
 }
 
 const rootLayoutContentQuery = groq`*[_type == "rootLayoutContent"][0]`
