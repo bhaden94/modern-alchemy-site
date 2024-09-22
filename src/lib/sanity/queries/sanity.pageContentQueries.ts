@@ -12,7 +12,7 @@ import { PrivacyPolicyPageContent } from '~/schemas/pages/privacyPolicyPageConte
 import { RootLayoutContent } from '~/schemas/pages/rootLayoutContent'
 import { RootPageContent } from '~/schemas/pages/rootPageContent'
 
-import { getClient, NEXT_TAGS_CONFIG } from '../sanity.client'
+import { getClient, NEXT_CACHE_CONFIG } from '../sanity.client'
 
 type QueryReturnType = {
   rootPageContent: RootPageContent
@@ -48,7 +48,7 @@ export async function getRootLayoutContent(
   return await client.fetch(
     rootLayoutContentQuery,
     {},
-    NEXT_TAGS_CONFIG.ROOT_LAYOUT_CONTENT,
+    NEXT_CACHE_CONFIG.ROOT_LAYOUT_CONTENT,
   )
 }
 
@@ -59,6 +59,6 @@ export async function getLayoutMetadata(
   return await client.fetch(
     layoutMetadataQuery,
     {},
-    NEXT_TAGS_CONFIG.LAYOUT_METADATA_CONTENT,
+    NEXT_CACHE_CONFIG.LAYOUT_METADATA_CONTENT,
   )
 }

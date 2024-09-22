@@ -4,7 +4,7 @@ import { SanityClient } from 'sanity'
 
 import { Booking } from '~/schemas/models/booking'
 
-import { NEXT_TAGS_CONFIG } from '../sanity.client'
+import { NEXT_CACHE_CONFIG } from '../sanity.client'
 
 export const bookingsByArtistIdQuery = groq`*[_type == "booking" && artist._ref == $artistId] | order(_createdAt asc)`
 export async function getBookingsByArtistId(
@@ -15,7 +15,7 @@ export async function getBookingsByArtistId(
   return await client.fetch(
     bookingsByArtistIdQuery,
     idParam,
-    NEXT_TAGS_CONFIG.BOOKING,
+    NEXT_CACHE_CONFIG.BOOKING,
   )
 }
 

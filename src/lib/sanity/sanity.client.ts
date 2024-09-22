@@ -1,5 +1,6 @@
 import {
   createClient,
+  FilteredResponseQueryOptions,
   SanityClient,
 } from '@sanity/client'
 
@@ -45,9 +46,23 @@ export function getPreviewClient(preview?: { token: string }): SanityClient {
   return client
 }
 
-export const NEXT_TAGS_CONFIG = {
+interface ICacheOptions {
+  [key: string]: FilteredResponseQueryOptions
+}
+
+const TAGS_CACHE: ICacheOptions = {
   ARTIST: { next: { tags: ['artist'] } },
   BOOKING: { next: { tags: ['booking'] } },
   ROOT_LAYOUT_CONTENT: { next: { tags: ['rootLayoutContent'] } },
   LAYOUT_METADATA_CONTENT: { next: { tags: ['layoutMetadataContent'] } },
 }
+
+const NO_CACHE: ICacheOptions = {
+  ARTIST: { cache: 'no-store' },
+  BOOKING: { cache: 'no-store' },
+  ROOT_LAYOUT_CONTENT: { cache: 'no-store' },
+  LAYOUT_METADATA_CONTENT: { cache: 'no-store' },
+}
+
+export const NEXT_CACHE_CONFIG =
+  process.env.NODE_ENV === 'production' ? TAGS_CACHE : NO_CACHE
