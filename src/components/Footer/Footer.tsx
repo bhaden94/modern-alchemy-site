@@ -36,7 +36,9 @@ const Footer = (props: IFooter) => {
   })
 
   const extraNavGroup = ExtraNavLinks.map((navItem) => {
-    return <NavMenuLink key={navItem.label} navItem={navItem} />
+    return (
+      <NavMenuLink key={navItem.label} navItem={navItem} prefetch={false} />
+    )
   })
 
   return (

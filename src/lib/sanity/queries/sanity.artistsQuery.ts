@@ -5,18 +5,18 @@ import { SanityClient } from 'sanity'
 
 import { Artist } from '~/schemas/models/artist'
 
-import { SANITY_CLIENT_CACHE_SETTING } from '../sanity.client'
+import { NEXT_CACHE_CONFIG } from '../sanity.client'
 
 const artistsQuery = groq`*[_type == "artist"]`
 export async function getArtists(client: SanityClient): Promise<Artist[]> {
-  return await client.fetch(artistsQuery, {}, SANITY_CLIENT_CACHE_SETTING)
+  return await client.fetch(artistsQuery, {}, NEXT_CACHE_CONFIG.ARTIST)
 }
 
 const activeArtistsQuery = groq`*[_type == "artist" && isActive]`
 export async function getActiveArtists(
   client: SanityClient,
 ): Promise<Artist[]> {
-  return await client.fetch(activeArtistsQuery, {}, SANITY_CLIENT_CACHE_SETTING)
+  return await client.fetch(activeArtistsQuery, {}, NEXT_CACHE_CONFIG.ARTIST)
 }
 
 const artistsEmailQuery = groq`*[_type == "artist" && email == $email][0]{name, _id}`
@@ -28,7 +28,7 @@ export async function getArtistByEmail(
   return await client.fetch(
     artistsEmailQuery,
     emailParam,
-    SANITY_CLIENT_CACHE_SETTING,
+    NEXT_CACHE_CONFIG.ARTIST,
   )
 }
 
@@ -38,11 +38,7 @@ export async function getArtistById(
   id: string,
 ): Promise<Artist> {
   const idParam = { id: id }
-  return await client.fetch(
-    artistsIdQuery,
-    idParam,
-    SANITY_CLIENT_CACHE_SETTING,
-  )
+  return await client.fetch(artistsIdQuery, idParam, NEXT_CACHE_CONFIG.ARTIST)
 }
 
 export interface BooksStatus {

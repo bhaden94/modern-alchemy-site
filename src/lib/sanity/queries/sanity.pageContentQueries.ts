@@ -12,7 +12,7 @@ import { PrivacyPolicyPageContent } from '~/schemas/pages/privacyPolicyPageConte
 import { RootLayoutContent } from '~/schemas/pages/rootLayoutContent'
 import { RootPageContent } from '~/schemas/pages/rootPageContent'
 
-import { getClient, SANITY_CLIENT_CACHE_SETTING } from '../sanity.client'
+import { getClient, NEXT_CACHE_CONFIG } from '../sanity.client'
 
 type QueryReturnType = {
   rootPageContent: RootPageContent
@@ -38,7 +38,7 @@ export async function performPageContentQuery<T extends keyof QueryReturnType>(
     ...,
     ${additionalQuery}
   }`
-  return await client.fetch(query, {}, SANITY_CLIENT_CACHE_SETTING)
+  return await client.fetch(query, {}, { next: { tags: [param] } })
 }
 
 const rootLayoutContentQuery = groq`*[_type == "rootLayoutContent"][0]`
@@ -48,7 +48,7 @@ export async function getRootLayoutContent(
   return await client.fetch(
     rootLayoutContentQuery,
     {},
-    SANITY_CLIENT_CACHE_SETTING,
+    NEXT_CACHE_CONFIG.ROOT_LAYOUT_CONTENT,
   )
 }
 
@@ -59,6 +59,6 @@ export async function getLayoutMetadata(
   return await client.fetch(
     layoutMetadataQuery,
     {},
-    SANITY_CLIENT_CACHE_SETTING,
+    NEXT_CACHE_CONFIG.LAYOUT_METADATA_CONTENT,
   )
 }

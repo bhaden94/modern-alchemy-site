@@ -9,6 +9,7 @@ import classes from './NavMenu.module.css'
 interface INavMenuLink {
   navItem: NavigationLink
   isHeader?: boolean
+  prefetch?: boolean | undefined
   onLinkClick?: (
     event: React.MouseEvent<HTMLAnchorElement>,
     link: string,
@@ -18,6 +19,7 @@ interface INavMenuLink {
 const NavMenuLink = ({
   navItem,
   isHeader = false,
+  prefetch = undefined,
   onLinkClick,
 }: INavMenuLink) => {
   const linkClass = isHeader ? classes.linkHeader : classes.linkFooter
@@ -27,6 +29,7 @@ const NavMenuLink = ({
       key={navItem.label}
       href={navItem.link}
       className={linkClass}
+      prefetch={prefetch}
       onClick={(event) => onLinkClick && onLinkClick(event, navItem.link)}
     >
       {navItem.label}
