@@ -48,7 +48,7 @@ ${field.label}:
     return NextResponse.json({ status: 200 })
   } catch (error) {
     console.log('Error sending email', error)
-    
+
     return new NextResponse(`There was an error sending the email`, {
       status: 500,
       statusText: JSON.stringify(error),
