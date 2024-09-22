@@ -1,6 +1,5 @@
 import {
   createClient,
-  ResponseQueryOptions,
   SanityClient,
 } from '@sanity/client'
 
@@ -44,4 +43,11 @@ export function getPreviewClient(preview?: { token: string }): SanityClient {
     })
   }
   return client
+}
+
+export const NEXT_TAGS_CONFIG = {
+  ARTIST: { next: { tags: ['artist'] } },
+  BOOKING: { next: { tags: ['booking'] } },
+  ROOT_LAYOUT_CONTENT: { next: { tags: ['rootLayoutContent'] } },
+  LAYOUT_METADATA_CONTENT: { next: { tags: ['layoutMetadataContent'] } },
 }

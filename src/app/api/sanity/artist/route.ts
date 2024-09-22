@@ -9,7 +9,7 @@ import {
   logAuthorizedRequest,
   notAuthorizedResponse,
 } from '~/lib/next-auth/auth.utils'
-import { getClient } from '~/lib/sanity/sanity.client'
+import { getClient, NEXT_TAGS_CONFIG } from '~/lib/sanity/sanity.client'
 import { ImageReference } from '~/utils/images/uploadImagesToSanity'
 
 const token = process.env.SANITY_API_WRITE_TOKEN
@@ -24,7 +24,7 @@ const filterDuplicatePortfolioImages = async (
   const currentPortfolioImages: ImageReference[] = await client.fetch(
     groq`*[_id == $artistId][0].portfolioImages`,
     { artistId: artistId },
-    { next: { tags: ['artist'] } },
+    NEXT_TAGS_CONFIG.ARTIST,
   )
   const currentPortfolioImageRefs = currentPortfolioImages.map(
     (image) => image.asset._ref,
