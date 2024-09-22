@@ -45,7 +45,3 @@ export function getPreviewClient(preview?: { token: string }): SanityClient {
   }
   return client
 }
-
-export const SANITY_CLIENT_CACHE_SETTING: ResponseQueryOptions = {
-  cache: 'no-cache',
-}
