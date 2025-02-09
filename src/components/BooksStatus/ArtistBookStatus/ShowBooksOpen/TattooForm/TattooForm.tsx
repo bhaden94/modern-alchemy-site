@@ -37,7 +37,6 @@ import {
   getBookingFormInitialValues,
   ImagesBookingField,
   MAX_FILES,
-  preferredDayOptions,
   priorTattooOptions,
   styleOptions,
   TBookingSchema,
