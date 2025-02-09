@@ -5,13 +5,13 @@ import { formatPhoneNumber } from '..'
 import { ACCEPTED_IMAGE_TYPES, MAX_FILES_SIZE } from './FormConstants'
 
 const joinPreferredDayLabels = (days: string[]): string => {
-  if (days.length === 5) {
-    return 'Any weekday'
+  if (days.length === bookingDayChoices.length) {
+    return 'Any day'
   }
 
   const labels: string[] = []
 
-  preferredDayOptions.forEach((option) => {
+  bookingDayChoices.forEach((option) => {
     if (days.includes(option.value)) {
       labels.push(option.label)
     }
@@ -59,7 +59,11 @@ export const priorTattooOptions: { value: string; label: string }[] = [
   },
 ]
 
-export const preferredDayOptions: ComboboxItem[] = [
+export const bookingDayChoices: ComboboxItem[] = [
+  {
+    value: 'sunday',
+    label: 'Sunday',
+  },
   {
     value: 'monday',
     label: 'Monday',
@@ -80,7 +84,27 @@ export const preferredDayOptions: ComboboxItem[] = [
     value: 'friday',
     label: 'Friday',
   },
+  {
+    value: 'saturday',
+    label: 'Saturday',
+  },
 ]
+export const getArtistAvailableDays = (
+  artistAvailability: string[] | null | undefined,
+): ComboboxItem[] => {
+  if (
+    !artistAvailability ||
+    artistAvailability.length === 0 ||
+    artistAvailability.length === bookingDayChoices.length
+  ) {
+    return bookingDayChoices
+  }
+
+  // Filter out days that are not in the artist's availability
+  return bookingDayChoices.filter((day) =>
+    artistAvailability.includes(day.value),
+  )
+}
 
 const nameError = 'Please enter your full name'
 const phoneNumberRegexError = 'Invalid phone number'

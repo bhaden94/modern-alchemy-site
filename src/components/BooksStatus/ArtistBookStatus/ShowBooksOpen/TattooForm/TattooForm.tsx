@@ -41,6 +41,7 @@ import {
   priorTattooOptions,
   styleOptions,
   TBookingSchema,
+  getArtistAvailableDays,
 } from '~/utils/forms/bookingFormUtils'
 import uploadImagesToSanity from '~/utils/images/uploadImagesToSanity'
 import { NavigationPages } from '~/utils/navigation'
@@ -490,7 +491,7 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
             {...form.getInputProps(BookingField.PreferredDays.id)}
           >
             <Group my="xs">
-              {preferredDayOptions.map((option) => (
+              {getArtistAvailableDays(artist.availableDays).map((option) => (
                 <Checkbox
                   key={option.value}
                   value={option.value}

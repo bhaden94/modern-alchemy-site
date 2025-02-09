@@ -119,11 +119,13 @@ export default defineType({
           title: 'Preferred Day',
           options: {
             list: [
+              { title: 'Sunday', value: 'sunday' },
               { title: 'Monday', value: 'monday' },
               { title: 'Tuesday', value: 'tuesday' },
               { title: 'Wednesday', value: 'wednesday' },
               { title: 'Thursday', value: 'thursday' },
               { title: 'Friday', value: 'friday' },
+              { title: 'Saturday', value: 'saturday' },
             ],
           },
         }),

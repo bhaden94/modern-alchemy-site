@@ -20,6 +20,9 @@ export interface Artist extends BaseSanitySchema<'artist'> {
   portfolioImages?: ImageReference[]
   headshot?: ImageReference
   styles?: string[]
+
+  // Form field settings
+  availableDays?: string[]
 }
 
 export default defineType({
@@ -133,6 +136,31 @@ export default defineType({
       name: 'externalBookingLink',
       type: 'string',
       title: 'External Booking Link',
+    }),
+
+    // Form field settings
+    defineField({
+      name: 'availableDays',
+      type: 'array',
+      title: 'Available Days',
+      of: [
+        defineArrayMember({
+          name: 'day',
+          type: 'string',
+          title: 'Day',
+          options: {
+            list: [
+              { title: 'Sunday', value: 'sunday' },
+              { title: 'Monday', value: 'monday' },
+              { title: 'Tuesday', value: 'tuesday' },
+              { title: 'Wednesday', value: 'wednesday' },
+              { title: 'Thursday', value: 'thursday' },
+              { title: 'Friday', value: 'friday' },
+              { title: 'Saturday', value: 'saturday' },
+            ],
+          },
+        }),
+      ],
     }),
   ],
 })
