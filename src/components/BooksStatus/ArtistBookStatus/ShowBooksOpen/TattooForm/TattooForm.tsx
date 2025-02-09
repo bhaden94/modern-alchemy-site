@@ -15,6 +15,8 @@ import {
   NumberInputProps,
   Radio,
   RadioGroupProps,
+  Select,
+  SelectProps,
   Stack,
   Text,
   TextareaProps,
@@ -61,7 +63,8 @@ const inputSharedProps = (
     NativeSelectProps &
     RadioGroupProps &
     CheckboxGroupProps &
-    TextareaProps
+    TextareaProps &
+    SelectProps
 > => ({
   className: 'w-full',
   withAsterisk: true,
@@ -500,6 +503,20 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
               ))}
             </Group>
           </Checkbox.Group>
+
+          {/* Budget/Session length */}
+          {artist.budgetOptions && (
+            <Select
+              {...inputSharedProps(
+                BookingField.Budget.id,
+                BookingField.Budget.label,
+                '',
+                isSubmitting,
+              )}
+              {...form.getInputProps(BookingField.Budget.id)}
+              data={artist.budgetOptions}
+            />
+          )}
 
           {/* Description */}
           <Textarea

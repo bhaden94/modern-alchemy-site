@@ -89,6 +89,7 @@ export const bookingDayChoices: ComboboxItem[] = [
     label: 'Saturday',
   },
 ]
+
 export const getArtistAvailableDays = (
   artistAvailability: string[] | null | undefined,
 ): ComboboxItem[] => {
@@ -114,6 +115,7 @@ const travelingFromError = 'Please enter where you are coming from'
 const minAgeError = 'You must be at least 18 to get a tattoo'
 const maxAgeError = 'Congrats on being the oldest person in history!'
 const charactersError = 'Please enter the list of characters you would like'
+const budgetError = 'Please select a budget/session length option'
 const descriptionError = 'Please describe your idea'
 const locationError =
   'Please enter where on your body you would like the tattoo'
@@ -189,6 +191,7 @@ export const bookingSchema = z.object({
   characters: z
     .string({ required_error: charactersError })
     .min(1, charactersError),
+  budget: z.string().min(1, budgetError),
   description: z
     .string({ required_error: descriptionError })
     .min(1, descriptionError),
@@ -310,6 +313,12 @@ export const BookingField = {
     label: 'Preferred days of Appointment',
     initialValue: [],
     getValue: (days: string[]) => joinPreferredDayLabels(days),
+  },
+  Budget: {
+    id: 'budget',
+    label: 'Budget/Session length',
+    initialValue: '',
+    getValue: (budget: string) => budget,
   },
   Description: {
     id: 'description',
