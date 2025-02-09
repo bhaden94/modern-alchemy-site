@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 
-import AdminControls from '~/components/AdminControls/AdminControls'
+import AdminPortfolioSettingControls from '~/components/AdminControls/AdminPortfolioSettingControls'
 import PageContainer from '~/components/PageContainer'
 import PageTitle from '~/components/PageTitle/PageTitle'
 import { REDIRECT_URL } from '~/lib/next-auth/auth.utils'
@@ -22,8 +22,8 @@ const EmployeePortalPage = async ({ params }: { params: { id: string } }) => {
 
   return (
     <PageContainer>
-      <PageTitle title={`${artist.name} Settings`} />
-      <AdminControls artist={artist} />
+      <PageTitle title={`${artist.name} Portfolio Settings`} />
+      <AdminPortfolioSettingControls artist={artist} />
     </PageContainer>
   )
 }
