@@ -34,7 +34,8 @@ export const getImageFromRef = (
   imageRef?: ImageReference | SanityImageSource | null,
 ): SanityImageAsset | undefined => {
   return (
-    imageRef &&
-    tryGetImageAsset(imageRef, { projectId: projectId, dataset: dataset })
+    imageRef ?
+      tryGetImageAsset(imageRef, { projectId: projectId, dataset: dataset }) :
+      undefined
   )
 }
