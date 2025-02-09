@@ -23,6 +23,7 @@ export interface Artist extends BaseSanitySchema<'artist'> {
 
   // Form field settings
   availableDays?: string[]
+  budgetOptions?: string[]
 }
 
 export default defineType({
@@ -159,6 +160,18 @@ export default defineType({
               { title: 'Saturday', value: 'saturday' },
             ],
           },
+        }),
+      ],
+    }),
+    defineField({
+      name: 'budgetOptions',
+      type: 'array',
+      title: 'Budget Options',
+      of: [
+        defineArrayMember({
+          name: 'option',
+          type: 'string',
+          title: 'Option',
         }),
       ],
     }),

@@ -27,6 +27,7 @@ export interface Booking extends BaseSanitySchema<'booking'> {
   style: 'color' | 'black_and_grey'
   priorTattoo: 'no' | 'new_tattoo' | 'ongoing_project'
   preferredDays: string[]
+  budget: string
   referenceImages: ImageReference[]
   artist: any
 }
@@ -130,6 +131,11 @@ export default defineType({
           },
         }),
       ],
+    }),
+    defineField({
+      name: 'budget',
+      type: 'string',
+      title: 'Budget/Session length',
     }),
     defineField({
       name: 'referenceImages',
