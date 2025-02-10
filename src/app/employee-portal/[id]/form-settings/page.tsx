@@ -8,7 +8,11 @@ import { getArtistById } from '~/lib/sanity/queries/sanity.artistsQuery'
 import { getClient } from '~/lib/sanity/sanity.client'
 import { NavigationPages } from '~/utils/navigation'
 
-const EmployeePortalFormSettingsPage = async ({ params }: { params: { id: string } }) => {
+const EmployeePortalFormSettingsPage = async ({
+  params,
+}: {
+  params: { id: string }
+}) => {
   const client = getClient(undefined)
   const artist = await getArtistById(client, decodeURI(params.id))
 

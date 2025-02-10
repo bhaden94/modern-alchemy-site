@@ -4,6 +4,7 @@ import { Box, Group } from '@mantine/core'
 
 import { Artist } from '~/schemas/models/artist'
 import AdminBooksStatus from './AdminBooksStatus/AdminBooksStatus'
+import AdminDayAvailability from './AdminDayAvailability/AdminDayAvailability'
 
 const AdminFormSettingControls = ({ artist }: { artist: Artist }) => {
   return (
@@ -17,6 +18,13 @@ const AdminFormSettingControls = ({ artist }: { artist: Artist }) => {
               name: artist.name,
               _id: artist._id,
             }}
+          />
+        </Box>
+
+        <Box w={{ base: '100%', sm: 300 }}>
+          <AdminDayAvailability
+            dayAvailability={artist.availableDays}
+            artistId={artist._id}
           />
         </Box>
       </Group>
