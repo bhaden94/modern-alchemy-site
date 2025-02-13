@@ -515,6 +515,7 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
               )}
               {...form.getInputProps(BookingField.Budget.id)}
               data={artist.budgetOptions}
+              allowDeselect={false}
             />
           )}
 
