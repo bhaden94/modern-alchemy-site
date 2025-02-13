@@ -129,6 +129,34 @@ const updateAvailableDays = async (
   )
 }
 
+const updateBudgetOptions = async (
+  client: SanityClient,
+  artistId: string,
+  budgetOptions: string[],
+): Promise<NextResponse> => {
+  console.log(
+    `Patch artist budgetOptions with Id: ${artistId}`,
+    `budgetOptions: ${budgetOptions}`,
+  )
+
+  const patchOperation = await client
+    .patch(artistId)
+    .set({ budgetOptions: budgetOptions })
+    .commit()
+
+  console.log(
+    `Patch operation completed for ArtistId ${artistId}`,
+    `budgetOptions: ${patchOperation.budgetOptions}`,
+  )
+
+  return NextResponse.json(
+    {
+      budgetOptions: patchOperation.budgetOptions,
+    },
+    { status: 200 },
+  )
+}
+
 const updatePortfolioImages = async (
   client: SanityClient,
   artistId: string,
@@ -202,6 +230,7 @@ export async function PATCH(request: NextRequest) {
     booksOpenAt,
     headshot,
     availableDays,
+    budgetOptions,
     portfolioImages,
     operation,
   } = body
@@ -223,6 +252,10 @@ export async function PATCH(request: NextRequest) {
 
   if (availableDays) {
     return await updateAvailableDays(client, artistId, availableDays)
+  }
+
+  if (budgetOptions) {
+    return await updateBudgetOptions(client, artistId, budgetOptions)
   }
 
   if (portfolioImages && operation) {
