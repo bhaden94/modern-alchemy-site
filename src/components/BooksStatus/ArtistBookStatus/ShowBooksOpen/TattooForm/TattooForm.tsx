@@ -35,7 +35,6 @@ import { useArtist } from '~/hooks/useArtist'
 import { convertBlobToBase64 } from '~/utils'
 import {
   BookingField,
-  bookingSchema,
   getBookingFormInitialValues,
   ImagesBookingField,
   MAX_FILES,
@@ -43,6 +42,7 @@ import {
   styleOptions,
   TBookingSchema,
   getArtistAvailableDays,
+  generateBookingFormSchema,
 } from '~/utils/forms/bookingFormUtils'
 import uploadImagesToSanity from '~/utils/images/uploadImagesToSanity'
 import { NavigationPages } from '~/utils/navigation'
@@ -125,7 +125,7 @@ interface ITattooForm {
 /*
 Places to update for form changes:
   - TattooForm component (this file)
-  - bookingFormUtils schema
+  - bookingFormUtil generateBookingFormSchema function
   - bookingFormUtil BookingField object
   - booking sanity model schema
   - booking sanity model interface
@@ -179,7 +179,7 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
       : 'Sending artist email'
   const form = useForm<TBookingSchema>({
     initialValues: getBookingFormInitialValues(),
-    validate: zodResolver(bookingSchema),
+    validate: zodResolver(generateBookingFormSchema(artist)),
   })
   const formHasErrors = Object.keys(form.errors).length > 0
 

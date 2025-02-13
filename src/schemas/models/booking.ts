@@ -8,7 +8,7 @@ import { BaseSanitySchema } from '..'
 /*
 Places to update for form changes:
   - TattooForm component
-  - bookingFormUtils schema
+  - bookingFormUtil generateBookingFormSchema function
   - bookingFormUtil BookingField enum
   - booking sanity model schema (this file)
   - booking sanity model interface (this file)
