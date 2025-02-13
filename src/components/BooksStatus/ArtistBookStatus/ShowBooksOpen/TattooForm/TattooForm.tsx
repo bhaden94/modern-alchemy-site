@@ -505,7 +505,7 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
           </Checkbox.Group>
 
           {/* Budget/Session length */}
-          {artist.budgetOptions && (
+          {artist.budgetOptions && artist.budgetOptions.length > 0 && (
             <Select
               {...inputSharedProps(
                 BookingField.Budget.id,

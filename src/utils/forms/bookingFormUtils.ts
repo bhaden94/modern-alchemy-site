@@ -317,7 +317,7 @@ export const BookingField = {
   Budget: {
     id: 'budget',
     label: 'Budget/Session length',
-    initialValue: '',
+    initialValue: 'None chosen',
     getValue: (budget: string) => budget,
   },
   Description: {
