@@ -13,7 +13,7 @@ export type TDayAvailabilitySchema = z.infer<typeof dayAvailabilitySchema>
 export const DayAvailabilityField = {
   DayAvailability: {
     id: 'dayAvailability',
-    label: 'Books Open At',
-    placeholder: 'When will your books open again?',
+    label: '',
+    placeholder: '',
   },
 } as const
