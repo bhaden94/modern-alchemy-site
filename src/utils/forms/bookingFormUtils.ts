@@ -191,6 +191,9 @@ export const bookingSchema = z.object({
   characters: z
     .string({ required_error: charactersError })
     .min(1, charactersError),
+  // Problem with budget: this is an optional field depending on if the artist has budget options. If they do, then it should be a required field.
+  // This can be fixed if we move to mantine validators inside the form component since we will have access to the artist state.
+  // For now, we make the field have a default value of 'None chosen'.
   budget: z.string().min(1, budgetError),
   description: z
     .string({ required_error: descriptionError })
