@@ -30,7 +30,7 @@ export default withAuth(
         new URL(
           `${req.nextUrl.pathname}/${encodeURIComponent(
             req.nextauth.token?.artistId,
-          )}${NavigationPages.EmployeePortalSettings}`,
+          )}${NavigationPages.EmployeePortalFormSettings}`,
           req.url,
         ),
       )

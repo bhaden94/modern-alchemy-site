@@ -101,6 +101,62 @@ const updateHeadshot = async (
   )
 }
 
+const updateAvailableDays = async (
+  client: SanityClient,
+  artistId: string,
+  availableDays: string[],
+): Promise<NextResponse> => {
+  console.log(
+    `Patch artist available days with Id: ${artistId}`,
+    `availableDays: ${availableDays}`,
+  )
+
+  const patchOperation = await client
+    .patch(artistId)
+    .set({ availableDays: availableDays })
+    .commit()
+
+  console.log(
+    `Patch operation completed for ArtistId ${artistId}`,
+    `availableDays: ${patchOperation.availableDays}`,
+  )
+
+  return NextResponse.json(
+    {
+      availableDays: patchOperation.availableDays,
+    },
+    { status: 200 },
+  )
+}
+
+const updateBudgetOptions = async (
+  client: SanityClient,
+  artistId: string,
+  budgetOptions: string[],
+): Promise<NextResponse> => {
+  console.log(
+    `Patch artist budgetOptions with Id: ${artistId}`,
+    `budgetOptions: ${budgetOptions}`,
+  )
+
+  const patchOperation = await client
+    .patch(artistId)
+    .set({ budgetOptions: budgetOptions })
+    .commit()
+
+  console.log(
+    `Patch operation completed for ArtistId ${artistId}`,
+    `budgetOptions: ${patchOperation.budgetOptions}`,
+  )
+
+  return NextResponse.json(
+    {
+      budgetOptions: patchOperation.budgetOptions,
+    },
+    { status: 200 },
+  )
+}
+
 const updatePortfolioImages = async (
   client: SanityClient,
   artistId: string,
@@ -173,6 +229,8 @@ export async function PATCH(request: NextRequest) {
     booksOpen,
     booksOpenAt,
     headshot,
+    availableDays,
+    budgetOptions,
     portfolioImages,
     operation,
   } = body
@@ -190,6 +248,14 @@ export async function PATCH(request: NextRequest) {
 
   if (headshot) {
     return await updateHeadshot(client, artistId, headshot)
+  }
+
+  if (availableDays) {
+    return await updateAvailableDays(client, artistId, availableDays)
+  }
+
+  if (budgetOptions) {
+    return await updateBudgetOptions(client, artistId, budgetOptions)
   }
 
   if (portfolioImages && operation) {

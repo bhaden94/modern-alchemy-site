@@ -3,6 +3,7 @@ import z from 'zod'
 
 import { formatPhoneNumber } from '..'
 import { ACCEPTED_IMAGE_TYPES, MAX_FILES_SIZE } from './FormConstants'
+import { Artist } from '~/schemas/models/artist'
 
 const joinPreferredDayLabels = (days: string[]): string => {
   if (days.length === bookingDayChoices.length) {
@@ -29,32 +30,32 @@ export const MAX_AGE = 117
 const MIN_FILES = 1
 export const MAX_FILES = 5
 
-export const TATTOO_STYLE = ['color', 'black_and_grey'] as const
-export const zTattooStyle = z.enum(TATTOO_STYLE)
-export const styleOptions: { value: string; label: string }[] = [
+const zTattooStyle = z.enum(['color', 'black_and_grey'])
+type TTattooStyle = z.infer<typeof zTattooStyle>
+export const styleOptions: { value: TTattooStyle; label: string }[] = [
   {
-    value: zTattooStyle.Values.color,
+    value: 'color',
     label: 'Color',
   },
   {
-    value: zTattooStyle.Values.black_and_grey,
+    value: 'black_and_grey',
     label: 'Black & Grey',
   },
 ]
 
-export const PRIOR_TATTOO = ['no', 'new_tattoo', 'ongoing_project'] as const
-export const zPriorTattoo = z.enum(PRIOR_TATTOO)
-export const priorTattooOptions: { value: string; label: string }[] = [
+const zPriorTattoo = z.enum(['no', 'new_tattoo', 'ongoing_project'])
+type TPriorTattoo = z.infer<typeof zPriorTattoo>
+export const priorTattooOptions: { value: TPriorTattoo; label: string }[] = [
   {
-    value: zPriorTattoo.Values.no,
+    value: 'no',
     label: 'No',
   },
   {
-    value: zPriorTattoo.Values.new_tattoo,
+    value: 'new_tattoo',
     label: 'Yes - I want a new tattoo',
   },
   {
-    value: zPriorTattoo.Values.ongoing_project,
+    value: 'ongoing_project',
     label: 'Yes - this is an ongoing project',
   },
 ]
@@ -124,7 +125,7 @@ const preferredDayError = 'Please select at least 1 preferred day'
 /*
 Places to update for form changes:
   - TattooForm component
-  - bookingFormUtils schema (this file)
+  - bookingFormUtil generateBookingFormSchema function (this file)
   - bookingFormUtil BookingField object (this file)
   - booking sanity model schema
   - booking sanity model interface
@@ -171,47 +172,81 @@ const imagesRefinement = (files: File[], ctx: z.RefinementCtx): boolean => {
   return true
 }
 
-// Booking form schema
-export const bookingSchema = z.object({
-  name: z.string({ required_error: nameError }).min(1, nameError),
-  phoneNumber: z
-    .string()
-    .min(1, phoneNumberError)
-    .regex(phoneRegex, phoneNumberRegexError),
-  email: z.string().email({ message: emailError }),
-  instagramName: z.string().optional(),
-  travelingFrom: z
-    .string({ required_error: travelingFromError })
-    .min(1, travelingFromError),
-  age: z.coerce
-    .number()
-    .int()
-    .gte(MIN_AGE, minAgeError)
-    .lte(MAX_AGE, maxAgeError),
-  characters: z
-    .string({ required_error: charactersError })
-    .min(1, charactersError),
-  budget: z.string().min(1, budgetError),
-  description: z
-    .string({ required_error: descriptionError })
-    .min(1, descriptionError),
-  location: z
-    .string({
-      required_error: locationError,
-    })
-    .min(1, locationError),
-  style: zTattooStyle,
-  priorTattoo: zPriorTattoo,
-  preferredDays: z
-    .string({ required_error: preferredDayError })
-    .array()
-    .min(1, preferredDayError),
-  bodyPlacementImages: z.custom<File[]>().superRefine(imagesRefinement),
-  referenceImages: z.custom<File[]>().superRefine(imagesRefinement),
-})
+// Generated a schema given an artist
+export const generateBookingFormSchema = (artist: Artist): z.ZodObject<any> => {
+  return z.object({
+    name: z.string({ required_error: nameError }).min(1, nameError),
+    phoneNumber: z
+      .string()
+      .min(1, phoneNumberError)
+      .regex(phoneRegex, phoneNumberRegexError),
+    email: z.string().email({ message: emailError }),
+    instagramName: z.string().optional(),
+    travelingFrom: z
+      .string({ required_error: travelingFromError })
+      .min(1, travelingFromError),
+    age: z.coerce
+      .number()
+      .int()
+      .gte(MIN_AGE, minAgeError)
+      .lte(MAX_AGE, maxAgeError),
+    characters: z
+      .string({ required_error: charactersError })
+      .min(1, charactersError),
+    budget: z
+      .string()
+      .optional()
+      .refine(
+        (value) => {
+          // if budgetOptions is defined and length is greater than 0,
+          // then the budget field is required and should be one of the options chosen
+          if (artist.budgetOptions && artist.budgetOptions.length > 0) {
+            return value && artist.budgetOptions.includes(value)
+          }
+
+          return true
+        },
+        {
+          message: budgetError,
+        },
+      ),
+    description: z
+      .string({ required_error: descriptionError })
+      .min(1, descriptionError),
+    location: z
+      .string({
+        required_error: locationError,
+      })
+      .min(1, locationError),
+    style: zTattooStyle,
+    priorTattoo: zPriorTattoo,
+    preferredDays: z
+      .string({ required_error: preferredDayError })
+      .array()
+      .min(1, preferredDayError),
+    bodyPlacementImages: z.custom<File[]>().superRefine(imagesRefinement),
+    referenceImages: z.custom<File[]>().superRefine(imagesRefinement),
+  })
+}
 
 // extracting the type
-export type TBookingSchema = z.infer<typeof bookingSchema>
+export type TBookingSchema = {
+  name: string
+  phoneNumber: string
+  email: string
+  instagramName?: string | undefined
+  travelingFrom: string
+  age: number
+  characters: string
+  budget?: string | undefined
+  description: string
+  location: string
+  style: TTattooStyle
+  priorTattoo: TPriorTattoo
+  preferredDays: string[]
+  bodyPlacementImages: File[]
+  referenceImages: File[]
+}
 
 // This object is used just for the booking form
 // There are 2 image upload fields that get combined

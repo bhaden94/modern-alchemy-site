@@ -16,11 +16,10 @@ import { ImageReference } from '~/utils/images/uploadImagesToSanity'
 
 import CarouselWithThumbnails from '../CarouselWithThumbnails/CarouselWithThumbnails'
 import ErrorDialog from '../ErrorDialog/ErrorDialog'
-import AdminBooksStatus from './AdminBooksStatus/AdminBooksStatus'
 import AdminHeadshot from './AdminHeadshot/AdminHeadshot'
 import AdminPortfolioImages from './AdminPortfolioImages/AdminPortfolioImages'
 
-const AdminControls = ({ artist }: { artist: Artist }) => {
+const AdminPortfolioSettingControls = ({ artist }: { artist: Artist }) => {
   const [opened, { open, close }] = useDisclosure(false)
   const [portfolioImageRefs, setPortfolioImageRefs] = useState<
     ImageReference[]
@@ -65,16 +64,6 @@ const AdminControls = ({ artist }: { artist: Artist }) => {
     <>
       <Group justify="space-around" align="start" gap="lg">
         <Box w={{ base: '100%', sm: 300 }}>
-          <AdminBooksStatus
-            booksStatus={{
-              booksOpen: artist.booksOpen,
-              booksOpenAt: artist.booksOpenAt,
-              name: artist.name,
-              _id: artist._id,
-            }}
-          />
-        </Box>
-        <Box w={{ base: '100%', sm: 300 }}>
           <AdminHeadshot artistId={artist._id} headshotRef={artist.headshot} />
         </Box>
         <Box w={{ base: '100%', sm: 300 }}>
@@ -107,4 +96,4 @@ const AdminControls = ({ artist }: { artist: Artist }) => {
   )
 }
 
-export default AdminControls
+export default AdminPortfolioSettingControls

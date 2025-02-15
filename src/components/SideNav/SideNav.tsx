@@ -13,6 +13,7 @@ import { useDisclosure } from '@mantine/hooks'
 import {
   IconArrowBadgeRight,
   IconBook,
+  IconCameraUp,
   IconSettings,
 } from '@tabler/icons-react'
 import Link from 'next/link'
@@ -24,8 +25,13 @@ import { NavigationPages } from '~/utils/navigation'
 const links = [
   {
     icon: <IconSettings stroke={1.5} />,
-    label: 'Settings',
-    page: NavigationPages.EmployeePortalSettings,
+    label: 'Form/Books Settings',
+    page: NavigationPages.EmployeePortalFormSettings,
+  },
+  {
+    icon: <IconCameraUp stroke={1.5} />,
+    label: 'Portfolio Settings',
+    page: NavigationPages.EmployeePortalPortfolioSettings,
   },
   {
     icon: <IconBook stroke={1.5} />,
