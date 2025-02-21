@@ -3,9 +3,11 @@
 import { Box, Group } from '@mantine/core'
 
 import { Artist } from '~/schemas/models/artist'
+
 import AdminBooksStatus from './AdminBooksStatus/AdminBooksStatus'
-import AdminDayAvailability from './AdminDayAvailability/AdminDayAvailability'
 import AdminBudgetOptions from './AdminBudgetOptions/AdminBudgetOptions'
+import AdminDayAvailability from './AdminDayAvailability/AdminDayAvailability'
+import AdminTextEditor from './AdminTextEditor/AdminTextEditor'
 
 const AdminFormSettingControls = ({ artist }: { artist: Artist }) => {
   return (
@@ -32,6 +34,24 @@ const AdminFormSettingControls = ({ artist }: { artist: Artist }) => {
         <Box w={{ base: '100%', sm: 300 }}>
           <AdminBudgetOptions
             budgetOptions={artist.budgetOptions}
+            artistId={artist._id}
+          />
+        </Box>
+
+        <Box w={{ base: '100%', sm: 900 }}>
+          <AdminTextEditor
+            title="Booking Instructions"
+            initialValue={artist.bookingInstructions}
+            fieldName="bookingInstructions"
+            artistId={artist._id}
+          />
+        </Box>
+
+        <Box w={{ base: '100%', sm: 900 }}>
+          <AdminTextEditor
+            title="Books Closed Message"
+            initialValue={artist.booksClosedMessage}
+            fieldName="booksClosedMessage"
             artistId={artist._id}
           />
         </Box>

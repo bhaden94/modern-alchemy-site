@@ -4,7 +4,7 @@
     "build": "next build",
     "dev": "next",
     "format": "npx prettier --write . --ignore-path .gitignore",
-    "lint": "next lint -- --ignore-path .gitignore",
+    "lint": "next lint . --ignore-path .gitignore",
     "lint:fix": "npm run format && npm run lint -- --fix",
     "start": "next start",
     "type-check": "tsc --noEmit"
@@ -20,6 +20,7 @@
     "@mantine/dropzone": "^7.16.3",
     "@mantine/form": "^7.16.3",
     "@mantine/hooks": "^7.16.3",
+    "@portabletext/editor": "^1.33.3",
     "@portabletext/react": "3.2.1",
     "@sanity/client": "6.27.2",
     "@sanity/demo": "1.0.2",

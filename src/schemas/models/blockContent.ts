@@ -1,4 +1,4 @@
-import { defineArrayMember, defineType, TypedObject } from 'sanity'
+import { defineArrayMember, defineType, PortableTextBlock } from 'sanity'
 
 import { ImageReference } from '~/utils/images/uploadImagesToSanity'
 
@@ -6,7 +6,7 @@ export interface BlockContentImage extends ImageReference {
   altText?: string
 }
 
-export type BlockContent = TypedObject | TypedObject[]
+export type BlockContent = PortableTextBlock[]
 
 /**
  * This is the schema definition for the rich text fields used for
