@@ -40,18 +40,9 @@ const AdminFormSettingControls = ({ artist }: { artist: Artist }) => {
 
         <Box w={{ base: '100%', sm: 900 }}>
           <AdminTextEditor
-            title="Booking Instructions"
+            title="Booking Form Disclaimer"
             initialValue={artist.bookingInstructions}
             fieldName="bookingInstructions"
-            artistId={artist._id}
-          />
-        </Box>
-
-        <Box w={{ base: '100%', sm: 900 }}>
-          <AdminTextEditor
-            title="Books Closed Message"
-            initialValue={artist.booksClosedMessage}
-            fieldName="booksClosedMessage"
             artistId={artist._id}
           />
         </Box>

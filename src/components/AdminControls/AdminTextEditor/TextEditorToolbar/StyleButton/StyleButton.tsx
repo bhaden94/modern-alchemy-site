@@ -1,6 +1,5 @@
 'use client'
 
-import { Button } from '@mantine/core'
 import { useEditor, useEditorSelector } from '@portabletext/editor'
 import * as selectors from '@portabletext/editor/selectors'
 import {
@@ -11,6 +10,8 @@ import {
   IconH5,
   IconH6,
 } from '@tabler/icons-react'
+
+import BaseToolbarButton from '../BaseToolbarButton/BaseToolbarButton'
 
 const styleIconMap = {
   h1: <IconH1 size={16} />,
@@ -48,14 +49,9 @@ const StyleButton = ({ style }: IStyleButton) => {
   }
 
   return (
-    <Button
-      onClick={onStyleToggle}
-      variant={active ? 'filled' : 'light'}
-      radius="xs"
-      size="compact-xs"
-    >
+    <BaseToolbarButton onClick={onStyleToggle} isActive={active}>
       {styleIcon}
-    </Button>
+    </BaseToolbarButton>
   )
 }
 

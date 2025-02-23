@@ -6,7 +6,7 @@ import { PortableText } from '@portabletext/react'
 import { FaqPageContent } from '~/schemas/pages/faqPageContent'
 
 import PageTitle from '../PageTitle/PageTitle'
-import { PortableTextComponents } from '../PortableTextComponents'
+import { PortableTextComponents } from '../PortableTextComponents/PortableTextComponents'
 
 const Faqs = (content: FaqPageContent) => {
   return (

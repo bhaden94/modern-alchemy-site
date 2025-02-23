@@ -7,15 +7,16 @@ import {
   Group,
   Image,
   LoadingOverlay,
-  Paper,
   Stack,
   Text,
   TextProps,
   Title,
   TitleOrder,
 } from '@mantine/core'
+import { useDisclosure } from '@mantine/hooks'
 import {
   defineSchema,
+  EditorEmittedEvent,
   EditorProvider,
   PortableTextEditable,
   RenderAnnotationFunction,
@@ -29,36 +30,21 @@ import { PortableText } from '@portabletext/react'
 import Link from 'next/link'
 import { useState } from 'react'
 
+import ErrorDialog from '~/components/ErrorDialog/ErrorDialog'
 import {
   ExternalLink,
   ExternalLinkMark,
+} from '~/components/PortableTextComponents/ExternalLink'
+import {
   InternalLink,
   InternalLinkMark,
-  PortableTextComponents,
-} from '~/components/PortableTextComponents'
+} from '~/components/PortableTextComponents/InternalLink'
+import { PortableTextComponents } from '~/components/PortableTextComponents/PortableTextComponents'
 import { getImageFromRef } from '~/lib/sanity/sanity.image'
 import { BlockContent, BlockContentImage } from '~/schemas/models/blockContent'
+
 import classes from './AdminTextEditor.module.css'
-
 import TextEditorToolbar from './TextEditorToolbar/TextEditorToolbar'
-
-// https://www.portabletext.org/getting-started
-// https://github.com/portabletext/editor/blob/main/examples/basic/src/App.tsx
-// TODO:
-//    : below DONE, but need to clean up.
-// - Extract out the components in PortableTextComponents.tsx to a separate file so we can re-use them in both places.
-// - Style the overall editor
-// - Add toolbar actions for each thing the sanity editor supports
-// -- Headers 1 - 6: DONE
-// -- Bold, italic, underline: DONE
-// -- bulleted list, numbered list
-// -- internal and external links: DONE
-// -- images: rendering DONE, uploading/adding is not
-
-// Email larry:
-// - I can give the ability to change text only for now. $200 for the initial work and $25 for any additional fields after that.
-// - Image handling will come at an additional cost of $200, so things like the announcements page would still need to go through me to update with images.
-// - I can give you access to turn on/off the announcement separately if you would like.
 
 const schemaDefinition = defineSchema({
   // Decorators are simple marks that don't hold any data
@@ -70,9 +56,9 @@ const schemaDefinition = defineSchema({
     { name: 'h1' },
     { name: 'h2' },
     { name: 'h3' },
-    { name: 'h4' },
-    { name: 'h5' },
-    { name: 'h6' },
+    // { name: 'h4' },
+    // { name: 'h5' },
+    // { name: 'h6' },
   ],
 
   // The types below are left empty for this example.
@@ -126,12 +112,12 @@ const renderStyle: RenderStyleFunction = (props) => {
 
 const renderDecorator: RenderDecoratorFunction = (props) => {
   const decoratorProperties: TextProps = {}
-  if (props.value === 'strong') decoratorProperties.fw = 700
+  if (props.value === 'strong') decoratorProperties.fw = 'bold'
   if (props.value === 'em') decoratorProperties.fs = 'italic'
   if (props.value === 'underline') decoratorProperties.td = 'underline'
 
   return (
-    <Text {...decoratorProperties} span>
+    <Text {...decoratorProperties} span fz="inherit" c="inherit">
       {props.children}
     </Text>
   )
@@ -143,6 +129,7 @@ const renderAnnotation: RenderAnnotationFunction = (
   const commonProps = {
     text: '',
     markType: props.schemaType.name,
+    fz: 'inherit',
     renderNode: () => undefined,
   }
 
@@ -203,10 +190,18 @@ const AdminTextEditor = ({
   fieldName,
   artistId,
 }: IAdminTextEditor) => {
-  // Set up the initial state getter and setter.
+  const [opened, { open, close }] = useDisclosure(false)
   const [value, setValue] = useState<BlockContent | undefined>(initialValue)
   const [preview, setPreview] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
+  const [hasEdited, setHasEdited] = useState<boolean>(false)
+
+  const onEditorEvent = (event: EditorEmittedEvent) => {
+    if (event.type === 'mutation') {
+      setHasEdited(true)
+      setValue(event.value)
+    }
+  }
 
   const onSubmit = async (): Promise<void> => {
     setIsSubmitting(true)
@@ -222,9 +217,9 @@ const AdminTextEditor = ({
     setIsSubmitting(false)
 
     if (response.ok) {
-      console.log('Success')
+      setHasEdited(false)
     } else {
-      console.error('Error')
+      open()
     }
   }
 
@@ -236,18 +231,12 @@ const AdminTextEditor = ({
           initialValue: value,
         }}
       >
-        <EventListenerPlugin
-          on={(event) => {
-            if (event.type === 'mutation') {
-              setValue(event.value)
-            }
-          }}
-        />
+        <EventListenerPlugin on={onEditorEvent} />
         <Stack>
           <Title order={2}>{title}</Title>
           <Box pos="relative">
             <LoadingOverlay visible={isSubmitting} zIndex={150} />
-            <Stack>
+            <Stack gap={0}>
               <TextEditorToolbar schemaDefinition={schemaDefinition} />
               <PortableTextEditable
                 disabled={isSubmitting}
@@ -256,7 +245,6 @@ const AdminTextEditor = ({
                 renderDecorator={renderDecorator}
                 renderAnnotation={renderAnnotation}
                 renderBlock={renderBlock}
-                renderListItem={(props) => <>{props.children}</>}
               />
             </Stack>
           </Box>
@@ -266,14 +254,20 @@ const AdminTextEditor = ({
               onClick={() => setPreview(!preview)}
               disabled={isSubmitting}
             >
-              Preview
+              {preview ? 'Hide Preview' : 'Show Preview'}
             </Button>
-            <Button onClick={onSubmit} disabled={isSubmitting}>
+            <Button onClick={onSubmit} disabled={isSubmitting || !hasEdited}>
               Save
             </Button>
           </Group>
         </Stack>
       </EditorProvider>
+
+      <ErrorDialog
+        opened={opened}
+        onClose={close}
+        message={`There was an issue updating the ${title}.`}
+      />
 
       {value && preview && (
         <PortableText value={value} components={PortableTextComponents} />

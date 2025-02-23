@@ -7,6 +7,8 @@ import { IconLink } from '@tabler/icons-react'
 import { useEffect, useState } from 'react'
 import { PortableTextObject } from 'sanity'
 
+import BaseToolbarButton from '../BaseToolbarButton/BaseToolbarButton'
+
 const annotationIconMap = {
   link: <IconLink size={16} />,
 } as const
@@ -73,15 +75,11 @@ const AnnotationButton = ({ annotation }: IAnnotationButton) => {
   return (
     <Popover trapFocus withArrow>
       <Popover.Target>
-        <Button
-          variant={active ? 'filled' : 'light'}
-          radius="xs"
-          size="compact-xs"
-        >
+        <BaseToolbarButton isActive={active}>
           {annotationIcon}
-        </Button>
+        </BaseToolbarButton>
       </Popover.Target>
-      <Popover.Dropdown>
+      <Popover.Dropdown p="xs">
         <Button.Group>
           <Button.GroupSection
             variant="default"

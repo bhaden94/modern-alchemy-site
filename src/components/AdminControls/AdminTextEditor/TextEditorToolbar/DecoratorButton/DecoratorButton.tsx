@@ -1,9 +1,10 @@
 'use client'
 
-import { Button } from '@mantine/core'
 import { useEditor, useEditorSelector } from '@portabletext/editor'
 import * as selectors from '@portabletext/editor/selectors'
 import { IconBold, IconItalic, IconUnderline } from '@tabler/icons-react'
+
+import BaseToolbarButton from '../BaseToolbarButton/BaseToolbarButton'
 
 const decoratorIconMap = {
   strong: <IconBold size={16} />,
@@ -38,14 +39,9 @@ const DecoratorButton = ({ decorator }: IDecoratorButton) => {
   }
 
   return (
-    <Button
-      onClick={onDecoratorToggle}
-      variant={active ? 'filled' : 'light'}
-      radius="xs"
-      size="compact-xs"
-    >
+    <BaseToolbarButton onClick={onDecoratorToggle} isActive={active}>
       {decoratorIcon}
-    </Button>
+    </BaseToolbarButton>
   )
 }
 

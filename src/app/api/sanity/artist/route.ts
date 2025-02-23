@@ -218,29 +218,30 @@ const updatePortfolioImages = async (
   )
 }
 
-const updateBooksClosedMessage = async (
+const updateRichTextField = async (
   client: SanityClient,
   artistId: string,
-  booksClosedMessage: BlockContent,
+  fieldName: string,
+  value: BlockContent,
 ): Promise<NextResponse> => {
   console.log(
-    `Patch artist booksClosedMessage with Id: ${artistId}`,
-    `booksClosedMessage: ${JSON.stringify(booksClosedMessage)}`,
+    `Patch artist ${fieldName} with Id: ${artistId}`,
+    `${fieldName}: ${JSON.stringify(value)}`,
   )
 
   const patchOperation = await client
     .patch(artistId)
-    .set({ booksClosedMessage: booksClosedMessage })
+    .set({ [fieldName]: value })
     .commit()
 
   console.log(
     `Patch operation completed for ArtistId ${artistId}`,
-    `booksClosedMessage: ${JSON.stringify(patchOperation.booksClosedMessage)}`,
+    `${fieldName}: ${JSON.stringify(patchOperation[fieldName])}`,
   )
 
   return NextResponse.json(
     {
-      booksClosedMessage: patchOperation.booksClosedMessage,
+      [fieldName]: patchOperation[fieldName],
     },
     { status: 200 },
   )
@@ -263,6 +264,7 @@ export async function PATCH(request: NextRequest) {
     portfolioImages,
     operation,
     booksClosedMessage,
+    bookingInstructions,
   } = body
 
   if (!artistId) {
@@ -298,7 +300,21 @@ export async function PATCH(request: NextRequest) {
   }
 
   if (booksClosedMessage) {
-    return await updateBooksClosedMessage(client, artistId, booksClosedMessage)
+    return await updateRichTextField(
+      client,
+      artistId,
+      'booksClosedMessage',
+      booksClosedMessage,
+    )
+  }
+
+  if (bookingInstructions) {
+    return await updateRichTextField(
+      client,
+      artistId,
+      'bookingInstructions',
+      bookingInstructions,
+    )
   }
 
   return new NextResponse(

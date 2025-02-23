@@ -1,9 +1,12 @@
-import { Button, Group } from '@mantine/core'
-import { SchemaDefinition, useEditor } from '@portabletext/editor'
+'use client'
 
-import AnnotationButton from '../AnnotationButton/AnnotationButton'
-import DecoratorButton from '../DecoratorButton/DecoratorButton'
-import StyleButton from '../StyleButton/StyleButton'
+import { Button, Group } from '@mantine/core'
+import { SchemaDefinition } from '@portabletext/editor'
+
+import AnnotationButton from './AnnotationButton/AnnotationButton'
+import DecoratorButton from './DecoratorButton/DecoratorButton'
+import StyleButton from './StyleButton/StyleButton'
+import classes from './TextEditorToolbar.module.css'
 
 interface ITextEditorToolbar {
   schemaDefinition: SchemaDefinition
@@ -44,7 +47,7 @@ const TextEditorToolbar = ({ schemaDefinition }: ITextEditorToolbar) => {
   //   )
 
   return (
-    <Group>
+    <Group className={classes.toolbar}>
       <Button.Group>{styleButtons}</Button.Group>
       <Button.Group>{decoratorButtons}</Button.Group>
       <Button.Group>{annotationButtons}</Button.Group>
