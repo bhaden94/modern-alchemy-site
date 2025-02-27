@@ -22,13 +22,7 @@ export const InternalLink: React.FC<
 
   anchorProps.component = inEditor ? Text : Link
   anchorProps.underline = inEditor ? 'always' : 'hover'
-  anchorProps.c = 'primary'
-  // if (!inEditor) {
-  //   anchorProps.href = href
-  // }
 
-  // TODO: Might need to change functionality here
-  // When set to Text component, it still moves the page when clicked
   return (
     <Anchor {...anchorProps} href={inEditor ? undefined : href}>
       {children}

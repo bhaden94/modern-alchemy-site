@@ -24,7 +24,6 @@ import {
   RenderDecoratorFunction,
   RenderStyleFunction,
 } from '@portabletext/editor'
-import { BlockAnnotationRenderProps } from '@portabletext/editor'
 import { EventListenerPlugin } from '@portabletext/editor/plugins'
 import { PortableText } from '@portabletext/react'
 import Link from 'next/link'
@@ -117,20 +116,18 @@ const renderDecorator: RenderDecoratorFunction = (props) => {
   if (props.value === 'underline') decoratorProperties.td = 'underline'
 
   return (
-    <Text {...decoratorProperties} span fz="inherit" c="inherit">
+    <Text {...decoratorProperties} span fw="inherit" fz="inherit" c="inherit">
       {props.children}
     </Text>
   )
 }
 
-const renderAnnotation: RenderAnnotationFunction = (
-  props: BlockAnnotationRenderProps,
-) => {
+const renderAnnotation: RenderAnnotationFunction = (props) => {
   const commonProps = {
     text: '',
     markType: props.schemaType.name,
-    fz: 'inherit',
     renderNode: () => undefined,
+    inEditor: true,
   }
 
   switch (props.schemaType.name) {
@@ -146,7 +143,6 @@ const renderAnnotation: RenderAnnotationFunction = (
     case 'internalLink':
       return (
         <InternalLink
-          inEditor={true}
           value={props.value as unknown as InternalLinkMark}
           {...commonProps}
         >

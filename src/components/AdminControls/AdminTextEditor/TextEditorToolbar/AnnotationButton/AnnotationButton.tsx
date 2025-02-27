@@ -1,6 +1,7 @@
 'use client'
 
-import { Button, Popover, TextInput } from '@mantine/core'
+import { Button, Group, Popover, TextInput } from '@mantine/core'
+import { useForm } from '@mantine/form'
 import { useEditor, useEditorSelector } from '@portabletext/editor'
 import * as selectors from '@portabletext/editor/selectors'
 import { IconLink } from '@tabler/icons-react'
@@ -21,8 +22,28 @@ const AnnotationButton = ({ annotation }: IAnnotationButton) => {
   // We know the annotation will be in the map, so we can ignore the TS error
   // @ts-ignore
   const annotationIcon: JSX.Element = annotationIconMap[annotation.name]
-  const [linkValue, setLinkValue] = useState<string>('')
+  const [opened, setOpened] = useState(false)
   const editor = useEditor()
+
+  const form = useForm({
+    mode: 'uncontrolled',
+    initialValues: {
+      link: '',
+    },
+    validate: {
+      link: (value: string) => {
+        if (!value) return
+
+        const startsWithHttp =
+          value.toLowerCase().startsWith('http://') ||
+          value.toLowerCase().startsWith('https://')
+
+        return !startsWithHttp
+          ? 'Link must start with http:// or https://'
+          : null
+      },
+    },
+  })
 
   // Editor selectors
   const active = useEditorSelector(
@@ -35,17 +56,19 @@ const AnnotationButton = ({ annotation }: IAnnotationButton) => {
   )
 
   useEffect(() => {
-    if (annotationValues.length === 0) setLinkValue('')
-
     annotationValues.forEach((annotationValue: PortableTextObject) => {
       if (annotationValue._type === 'link') {
-        setLinkValue(annotationValue.href as string)
+        form.initialize({ link: annotationValue.href as string })
       }
     })
+    // Adding form to the dependency array causes an infinite rendering loop
+    // We only care about updating the form when the annotation values change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [annotationValues])
 
-  const onAnnotationSave = () => {
-    // if active, remove then re-add
+  const onMantineSubmit = async (data: { link: string }) => {
+    form.resetDirty()
+
     if (active) {
       editor.send({
         type: 'annotation.remove',
@@ -56,7 +79,10 @@ const AnnotationButton = ({ annotation }: IAnnotationButton) => {
     }
 
     // If text is empty, then we just want to remove the link
-    if (linkValue === '') return
+    if (data.link === '') {
+      setOpened(false)
+      return
+    }
 
     editor.send({
       type: 'annotation.add',
@@ -64,40 +90,38 @@ const AnnotationButton = ({ annotation }: IAnnotationButton) => {
         name: annotation.name,
         value:
           annotation.name === 'link'
-            ? { href: linkValue, blank: true }
+            ? { href: data.link, blank: true }
             : { page: '' },
       },
     })
 
+    setOpened(false)
     editor.send({ type: 'focus' })
   }
 
   return (
-    <Popover trapFocus withArrow>
+    <Popover trapFocus withArrow opened={opened} onChange={setOpened}>
       <Popover.Target>
-        <BaseToolbarButton isActive={active}>
+        <BaseToolbarButton
+          onClick={() => setOpened((o) => !o)}
+          isActive={active}
+        >
           {annotationIcon}
         </BaseToolbarButton>
       </Popover.Target>
       <Popover.Dropdown p="xs">
-        <Button.Group>
-          <Button.GroupSection
-            variant="default"
-            bg="var(--mantine-color-dark-6)"
-            pl="xs"
-          >
+        <form onSubmit={form.onSubmit(onMantineSubmit)}>
+          <Group justify="center">
             <TextInput
               className="w-full"
-              value={linkValue}
-              onChange={(event) => setLinkValue(event.currentTarget.value)}
-              variant="unstyled"
+              {...form.getInputProps('link')}
+              key={form.key('link')}
               placeholder="Ex: https://www.modernalchemytattoo.com"
             />
-          </Button.GroupSection>
-          <Button radius="xs" onClick={onAnnotationSave}>
-            Save
-          </Button>
-        </Button.Group>
+
+            <Button type="submit">Save</Button>
+          </Group>
+        </form>
       </Popover.Dropdown>
     </Popover>
   )
