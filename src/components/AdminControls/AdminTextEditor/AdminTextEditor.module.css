@@ -3,3 +3,8 @@
   border-radius: 0 0 var(--mantine-radius-default) var(--mantine-radius-default);
   padding: rem(10px);
 }
+
+.editor:focus-visible {
+  outline: rem(1px) solid var(--mantine-color-dark-0);
+  outline-offset: rem(-1px);
+}
