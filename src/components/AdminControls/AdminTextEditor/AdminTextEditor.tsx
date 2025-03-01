@@ -100,12 +100,12 @@ const renderStyle: RenderStyleFunction = (props) => {
 const renderDecorator: RenderDecoratorFunction = (props) => {
   const decoratorProperties: TextProps = {}
 
-  if (props.value === 'strong') decoratorProperties.fw = 'bold'
-  if (props.value === 'em') decoratorProperties.fs = 'italic'
-  if (props.value === 'underline') decoratorProperties.td = 'underline'
+  decoratorProperties.fw = props.value === 'strong' ? 'bold' : 'inherit'
+  decoratorProperties.fs = props.value === 'em' ? 'italic' : 'inherit'
+  decoratorProperties.td = props.value === 'underline' ? 'underline' : 'inherit'
 
   return (
-    <Text {...decoratorProperties} span fw="inherit" fz="inherit" c="inherit">
+    <Text {...decoratorProperties} span fz="inherit" c="inherit">
       {props.children}
     </Text>
   )
