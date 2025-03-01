@@ -44,6 +44,7 @@ import { BlockContent, BlockContentImage } from '~/schemas/models/blockContent'
 import classes from './AdminTextEditor.module.css'
 import TextEditorToolbar from './TextEditorToolbar/TextEditorToolbar'
 
+export type CustomSchemaDefinition = typeof schemaDefinition
 const schemaDefinition = defineSchema({
   // Decorators are simple marks that don't hold any data
   decorators: [{ name: 'strong' }, { name: 'em' }, { name: 'underline' }],

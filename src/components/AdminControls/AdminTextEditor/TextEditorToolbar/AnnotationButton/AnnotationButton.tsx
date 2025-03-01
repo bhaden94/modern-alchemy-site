@@ -12,15 +12,14 @@ import BaseToolbarButton from '../BaseToolbarButton/BaseToolbarButton'
 
 const annotationIconMap = {
   link: <IconLink size={16} />,
+  internalLink: <IconLink size={16} />,
 } as const
 
 interface IAnnotationButton {
-  annotation: { name: string }
+  annotation: { name: keyof typeof annotationIconMap }
 }
 
 const AnnotationButton = ({ annotation }: IAnnotationButton) => {
-  // We know the annotation will be in the map, so we can ignore the TS error
-  // @ts-ignore
   const annotationIcon: JSX.Element = annotationIconMap[annotation.name]
   const [opened, setOpened] = useState(false)
   const editor = useEditor()

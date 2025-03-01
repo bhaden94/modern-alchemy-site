@@ -1,15 +1,15 @@
 'use client'
 
 import { Button, Group } from '@mantine/core'
-import { SchemaDefinition } from '@portabletext/editor'
 
+import { CustomSchemaDefinition } from '../AdminTextEditor'
 import AnnotationButton from './AnnotationButton/AnnotationButton'
 import DecoratorButton from './DecoratorButton/DecoratorButton'
 import StyleButton from './StyleButton/StyleButton'
 import classes from './TextEditorToolbar.module.css'
 
 interface ITextEditorToolbar {
-  schemaDefinition: SchemaDefinition
+  schemaDefinition: CustomSchemaDefinition
 }
 
 const TextEditorToolbar = ({ schemaDefinition }: ITextEditorToolbar) => {
