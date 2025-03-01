@@ -1,4 +1,4 @@
-import { Image } from '@mantine/core'
+import { AnchorProps, Image } from '@mantine/core'
 import { PortableTextReactComponents } from '@portabletext/react'
 
 import { getImageFromRef } from '~/lib/sanity/sanity.image'
@@ -9,6 +9,22 @@ import { InternalLink } from './InternalLink'
 
 export interface InEditorProps {
   inEditor?: boolean
+}
+
+export const getSharedLinkProps = (
+  inEditor: boolean | undefined,
+): AnchorProps => {
+  const anchorProps: AnchorProps &
+    React.AnchorHTMLAttributes<HTMLAnchorElement> = {}
+
+  anchorProps.onClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (inEditor) {
+      e.preventDefault()
+    }
+  }
+  anchorProps.underline = inEditor ? 'always' : 'hover'
+
+  return anchorProps
 }
 
 export const PortableTextComponents: Partial<PortableTextReactComponents> = {

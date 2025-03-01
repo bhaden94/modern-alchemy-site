@@ -1,8 +1,8 @@
-import { Anchor, AnchorProps } from '@mantine/core'
+import { Anchor } from '@mantine/core'
 import { PortableTextMarkComponentProps } from '@portabletext/react'
 import Link from 'next/link'
 
-import { InEditorProps } from './PortableTextComponents'
+import { getSharedLinkProps, InEditorProps } from './PortableTextComponents'
 
 export interface InternalLinkMark {
   _type: 'internalLink'
@@ -16,15 +16,12 @@ export const InternalLink: React.FC<
   const page = value?.page || ''
   const href = `/${encodeURIComponent(page)}`
 
-  const anchorProps: AnchorProps & {
-    component?: any
-  } = {}
-
-  anchorProps.component = inEditor ? Text : Link
-  anchorProps.underline = inEditor ? 'always' : 'hover'
-
   return (
-    <Anchor {...anchorProps} href={inEditor ? undefined : href}>
+    <Anchor
+      component={Link}
+      href={inEditor ? '' : href}
+      {...getSharedLinkProps(inEditor)}
+    >
       {children}
     </Anchor>
   )
