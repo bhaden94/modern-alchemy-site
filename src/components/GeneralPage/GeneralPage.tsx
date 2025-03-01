@@ -6,7 +6,7 @@ import { BlockContent } from '~/schemas/models/blockContent'
 import { BasePageContent } from '~/schemas/pages/basePageContent'
 
 import PageTitle from '../PageTitle/PageTitle'
-import { PortableTextComponents } from '../PortableTextComponents'
+import { PortableTextComponents } from '../PortableTextComponents/PortableTextComponents'
 
 const GeneralPage = (
   content: BasePageContent & { information?: BlockContent },

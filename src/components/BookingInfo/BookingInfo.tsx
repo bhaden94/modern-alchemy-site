@@ -7,7 +7,7 @@ import { BookingInfoPageContent } from '~/schemas/pages/bookingInfoPageContent'
 
 import ArtistList from '../Artists/ArtistList/ArtistList'
 import PageTitle from '../PageTitle/PageTitle'
-import { PortableTextComponents } from '../PortableTextComponents'
+import { PortableTextComponents } from '../PortableTextComponents/PortableTextComponents'
 
 interface IBookingInfo {
   content: BookingInfoPageContent

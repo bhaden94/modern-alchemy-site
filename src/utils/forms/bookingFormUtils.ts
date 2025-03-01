@@ -1,9 +1,10 @@
 import { ComboboxItem } from '@mantine/core'
 import z from 'zod'
 
+import { Artist } from '~/schemas/models/artist'
+
 import { formatPhoneNumber } from '..'
 import { ACCEPTED_IMAGE_TYPES, MAX_FILES_SIZE } from './FormConstants'
-import { Artist } from '~/schemas/models/artist'
 
 const joinPreferredDayLabels = (days: string[]): string => {
   if (days.length === bookingDayChoices.length) {

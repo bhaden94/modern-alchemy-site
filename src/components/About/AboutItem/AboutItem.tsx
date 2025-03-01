@@ -8,7 +8,7 @@ import { getImageFromRef } from '~/lib/sanity/sanity.image'
 import { AboutContent } from '~/schemas/pages/rootPageContent'
 import { generateNextImagePlaceholder } from '~/utils'
 
-import { PortableTextComponents } from '../../PortableTextComponents'
+import { PortableTextComponents } from '../../PortableTextComponents/PortableTextComponents'
 
 // TODO: see if we can add scroll in animations
 // We can possibly use 'use-intersection' hook and transitions together to achieve this
