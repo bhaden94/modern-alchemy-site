@@ -13,12 +13,10 @@ const decoratorIconMap = {
 } as const
 
 interface IDecoratorButton {
-  decorator: { name: string }
+  decorator: { name: keyof typeof decoratorIconMap }
 }
 
 const DecoratorButton = ({ decorator }: IDecoratorButton) => {
-  // We know the decorator will be in the map, so we can ignore the TS error
-  // @ts-ignore
   const decoratorIcon: JSX.Element = decoratorIconMap[decorator.name]
   const editor = useEditor()
 

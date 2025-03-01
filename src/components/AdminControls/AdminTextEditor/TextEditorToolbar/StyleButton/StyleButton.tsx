@@ -20,14 +20,14 @@ const styleIconMap = {
   h4: <IconH4 size={16} />,
   h5: <IconH5 size={16} />,
   h6: <IconH6 size={16} />,
+  normal: undefined,
 } as const
 
 interface IStyleButton {
-  style: { name: string }
+  style: { name: keyof typeof styleIconMap }
 }
 
 const StyleButton = ({ style }: IStyleButton) => {
-  // @ts-ignore
   const styleIcon = styleIconMap[style.name]
   const editor = useEditor()
 
