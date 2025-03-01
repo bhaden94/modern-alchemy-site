@@ -11,9 +11,10 @@ export type ExternalLinkMark = {
   blank?: boolean
 }
 
-export const ExternalLink: React.FC<
-  PortableTextMarkComponentProps<ExternalLinkMark> & InEditorProps
-> = ({ value, inEditor, children }) => {
+export function ExternalLink(
+  props: PortableTextMarkComponentProps<ExternalLinkMark> & InEditorProps,
+) {
+  const { value, inEditor = false, children } = props
   const { blank, href } = value || { blank: false, href: '' }
 
   // Read https://css-tricks.com/use-target_blank/

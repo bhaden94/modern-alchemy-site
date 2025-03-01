@@ -10,9 +10,10 @@ export interface InternalLinkMark {
   page: string
 }
 
-export const InternalLink: React.FC<
-  PortableTextMarkComponentProps<InternalLinkMark> & InEditorProps
-> = ({ value, children, inEditor = false }) => {
+export function InternalLink(
+  props: PortableTextMarkComponentProps<InternalLinkMark> & InEditorProps,
+) {
+  const { value, children, inEditor = false } = props
   const page = value?.page || ''
   const href = `/${encodeURIComponent(page)}`
 

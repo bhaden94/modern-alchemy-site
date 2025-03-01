@@ -55,9 +55,16 @@ const AnnotationButton = ({ annotation }: IAnnotationButton) => {
   )
 
   useEffect(() => {
+    if (annotationValues.length === 0) {
+      form.setFieldValue('link', '')
+      return
+    }
+
     annotationValues.forEach((annotationValue: PortableTextObject) => {
       if (annotationValue._type === 'link') {
-        form.initialize({ link: annotationValue.href as string })
+        form.setFieldValue('link', annotationValue.href as string)
+      } else if (annotationValue._type === 'internalLink') {
+        form.setFieldValue('link', annotationValue.page as string)
       }
     })
     // Adding form to the dependency array causes an infinite rendering loop

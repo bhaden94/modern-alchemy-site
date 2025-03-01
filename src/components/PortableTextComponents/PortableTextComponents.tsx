@@ -29,6 +29,8 @@ export const getSharedLinkProps = (
 
 export const PortableTextComponents: Partial<PortableTextReactComponents> = {
   marks: {
+    // Link components must stay as regular function and not be arrow functions
+    // Otherwise, there will be an exception thrown
     internalLink: InternalLink,
     link: ExternalLink,
   },
