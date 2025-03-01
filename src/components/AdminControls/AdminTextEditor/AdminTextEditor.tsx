@@ -11,7 +11,6 @@ import {
   Text,
   TextProps,
   Title,
-  TitleOrder,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import {
