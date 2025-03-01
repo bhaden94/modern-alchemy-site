@@ -2,6 +2,7 @@
 
 import {
   Alert,
+  Anchor,
   Button,
   createTheme,
   CSSVariablesResolver,
@@ -125,6 +126,13 @@ const themeOverride = createTheme({
         color: 'red',
         variant: 'light',
         icon: <IconExclamationCircle />,
+      },
+    }),
+    Anchor: Anchor.extend({
+      defaultProps: {
+        fz: 'inherit',
+        fw: 'inherit',
+        c: 'primary',
       },
     }),
   },

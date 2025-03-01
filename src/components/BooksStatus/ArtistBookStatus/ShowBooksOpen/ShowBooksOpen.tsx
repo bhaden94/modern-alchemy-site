@@ -12,7 +12,7 @@ import ErrorDialog from '~/components/ErrorDialog/ErrorDialog'
 import { useArtist } from '~/hooks/useArtist'
 import { NavigationPages } from '~/utils/navigation'
 
-import { PortableTextComponents } from '../../../PortableTextComponents'
+import { PortableTextComponents } from '../../../PortableTextComponents/PortableTextComponents'
 
 const TattooForm = dynamic(
   () =>

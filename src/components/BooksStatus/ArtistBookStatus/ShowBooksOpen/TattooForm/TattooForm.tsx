@@ -35,14 +35,14 @@ import { useArtist } from '~/hooks/useArtist'
 import { convertBlobToBase64 } from '~/utils'
 import {
   BookingField,
+  generateBookingFormSchema,
+  getArtistAvailableDays,
   getBookingFormInitialValues,
   ImagesBookingField,
   MAX_FILES,
   priorTattooOptions,
   styleOptions,
   TBookingSchema,
-  getArtistAvailableDays,
-  generateBookingFormSchema,
 } from '~/utils/forms/bookingFormUtils'
 import uploadImagesToSanity from '~/utils/images/uploadImagesToSanity'
 import { NavigationPages } from '~/utils/navigation'

@@ -5,7 +5,7 @@ import { PortableText } from '@portabletext/react'
 
 import { useArtist } from '~/hooks/useArtist'
 
-import { PortableTextComponents } from '../../../PortableTextComponents'
+import { PortableTextComponents } from '../../../PortableTextComponents/PortableTextComponents'
 import BooksOpenAt from './BooksOpenAt/BooksOpenAt'
 
 const ShowBooksClosed = () => {

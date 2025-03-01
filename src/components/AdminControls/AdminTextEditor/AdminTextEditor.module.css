@@ -1,0 +1,5 @@
+.editor {
+  border: rem(1px) solid var(--mantine-color-academia-filled);
+  border-radius: 0 0 var(--mantine-radius-default) var(--mantine-radius-default);
+  padding: rem(10px);
+}

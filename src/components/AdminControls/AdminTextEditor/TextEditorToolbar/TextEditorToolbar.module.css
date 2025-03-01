@@ -1,0 +1,7 @@
+.toolbar {
+  border-top: rem(1px) solid var(--mantine-color-academia-filled);
+  border-left: rem(1px) solid var(--mantine-color-academia-filled);
+  border-right: rem(1px) solid var(--mantine-color-academia-filled);
+  border-radius: var(--mantine-radius-default) var(--mantine-radius-default) 0 0;
+  padding: rem(10px);
+}
