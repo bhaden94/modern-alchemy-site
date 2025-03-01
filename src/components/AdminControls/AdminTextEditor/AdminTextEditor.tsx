@@ -75,32 +75,20 @@ const schemaDefinition = defineSchema({
 })
 
 const renderStyle: RenderStyleFunction = (props) => {
-  let order: TitleOrder = 1
-
-  switch (props.schemaType.value) {
-    case 'h1':
-      order = 1
-      break
-    case 'h2':
-      order = 2
-      break
-    case 'h3':
-      order = 3
-      break
-    case 'h4':
-      order = 4
-      break
-    case 'h5':
-      order = 5
-      break
-    case 'h6':
-      order = 6
-      break
-  }
-
   if (props.schemaType.value === 'normal') {
     return <Text span>{props.children}</Text>
   }
+
+  const orderMap = {
+    h1: 1,
+    h2: 2,
+    h3: 3,
+    h4: 4,
+    h5: 5,
+    h6: 6,
+  } as const
+
+  const order = orderMap[props.schemaType.value as keyof typeof orderMap]
 
   return (
     <Title order={order} mb="1rem">
@@ -111,6 +99,7 @@ const renderStyle: RenderStyleFunction = (props) => {
 
 const renderDecorator: RenderDecoratorFunction = (props) => {
   const decoratorProperties: TextProps = {}
+
   if (props.value === 'strong') decoratorProperties.fw = 'bold'
   if (props.value === 'em') decoratorProperties.fs = 'italic'
   if (props.value === 'underline') decoratorProperties.td = 'underline'
