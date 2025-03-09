@@ -79,12 +79,18 @@ const AdminBooksStatus = ({ booksStatus }: IAdminBooksStatus) => {
         >
           <Group mt="xs">
             {BOOKS_OPEN.map((option) => (
-              <Radio key={option} value={option} label={option} />
+              <Radio
+                key={option}
+                value={option}
+                label={option}
+                disabled={isSubmitting}
+              />
             ))}
           </Group>
         </Radio.Group>
         <DateTimePicker
           {...form.getInputProps(BooksStatusField.BooksOpenAt.id)}
+          disabled={isSubmitting}
           onChange={onBooksOpenAtChange}
           id={BooksStatusField.BooksOpenAt.id}
           label={BooksStatusField.BooksOpenAt.label}
