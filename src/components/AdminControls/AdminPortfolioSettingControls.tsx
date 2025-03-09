@@ -1,9 +1,6 @@
 'use client'
 
-import {
-  Box,
-  Group,
-} from '@mantine/core'
+import { Box, Group } from '@mantine/core'
 import { useState } from 'react'
 
 import { Artist } from '~/schemas/models/artist'
