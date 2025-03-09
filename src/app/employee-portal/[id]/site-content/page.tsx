@@ -5,7 +5,10 @@ import PageContainer from '~/components/PageContainer'
 import PageTitle from '~/components/PageTitle/PageTitle'
 import { REDIRECT_URL } from '~/lib/next-auth/auth.utils'
 import { getArtistById } from '~/lib/sanity/queries/sanity.artistsQuery'
-import { performPageContentQuery } from '~/lib/sanity/queries/sanity.pageContentQueries'
+import {
+  getRootLayoutContent,
+  performPageContentQuery,
+} from '~/lib/sanity/queries/sanity.pageContentQueries'
 import { getClient } from '~/lib/sanity/sanity.client'
 import { NavigationPages } from '~/utils/navigation'
 
@@ -17,6 +20,7 @@ const EmployeePortalSiteContentPage = async ({
 }) => {
   const client = getClient(undefined)
   const artist = await getArtistById(client, decodeURI(params.id))
+  const rootLayoutContent = await getRootLayoutContent(client)
   const announcementPageContent = await performPageContentQuery(
     'announcementPageContent',
   )
@@ -34,6 +38,7 @@ const EmployeePortalSiteContentPage = async ({
       <PageTitle title="Site Content" />
       <AdminSiteContentControls
         announcementPageContent={announcementPageContent}
+        rootLayoutContent={rootLayoutContent}
       />
     </PageContainer>
   )
