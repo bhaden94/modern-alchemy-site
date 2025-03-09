@@ -3,11 +3,10 @@
 import { Button, Group, Radio, Stack, Title } from '@mantine/core'
 import { DateTimePicker, DateValue } from '@mantine/dates'
 import { useForm } from '@mantine/form'
-import { useDisclosure } from '@mantine/hooks'
 import { zodResolver } from 'mantine-form-zod-resolver'
 import { useState } from 'react'
 
-import ErrorDialog from '~/components/ErrorDialog/ErrorDialog'
+import { useErrorDialog } from '~/hooks/useErrorDialog'
 import { BooksStatus } from '~/lib/sanity/queries/sanity.artistsQuery'
 import {
   BOOKS_OPEN,
@@ -21,7 +20,7 @@ interface IAdminBooksStatus {
 }
 
 const AdminBooksStatus = ({ booksStatus }: IAdminBooksStatus) => {
-  const [opened, { open, close }] = useDisclosure(false)
+  const { openErrorDialog } = useErrorDialog()
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const form = useForm<TBooksStatusSchema>({
@@ -51,7 +50,8 @@ const AdminBooksStatus = ({ booksStatus }: IAdminBooksStatus) => {
     if (response.ok) {
       form.resetDirty()
     } else {
-      open()
+      openErrorDialog('There was an issue updating your books.')
+      form.reset()
     }
 
     setIsSubmitting(false)
@@ -101,12 +101,6 @@ const AdminBooksStatus = ({ booksStatus }: IAdminBooksStatus) => {
           Update Books
         </Button>
       </form>
-
-      <ErrorDialog
-        opened={opened}
-        onClose={close}
-        message="There was an issue updating your books."
-      />
     </Stack>
   )
 }

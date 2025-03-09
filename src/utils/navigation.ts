@@ -10,6 +10,7 @@ export enum NavigationPages {
   EmployeePortalFormSettings = '/form-settings',
   EmployeePortalPortfolioSettings = '/portfolio-settings',
   EmployeePortalBookings = '/bookings',
+  EmployeePortalSiteContent = '/site-content',
   Studio = '/studio',
   Unauthorized = '/unauthorized',
   PrivacyPolicy = '/privacy-policy',

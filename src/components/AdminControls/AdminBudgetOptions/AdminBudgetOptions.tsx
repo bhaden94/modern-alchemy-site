@@ -10,12 +10,12 @@ import {
   Title,
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
-import { randomId, useDisclosure } from '@mantine/hooks'
+import { randomId } from '@mantine/hooks'
 import { IconTrash } from '@tabler/icons-react'
 import { zodResolver } from 'mantine-form-zod-resolver'
 import { useState } from 'react'
 
-import ErrorDialog from '~/components/ErrorDialog/ErrorDialog'
+import { useErrorDialog } from '~/hooks/useErrorDialog'
 import {
   BudgetOptionsField,
   budgetOptionsSchema,
@@ -31,7 +31,7 @@ const AdminBudgetOptions = ({
   budgetOptions,
   artistId,
 }: IAdminBudgetOptions) => {
-  const [opened, { open, close }] = useDisclosure(false)
+  const { openErrorDialog } = useErrorDialog()
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const form = useForm<TBudgetOptionsSchema>({
@@ -86,7 +86,8 @@ const AdminBudgetOptions = ({
     if (response.ok) {
       form.resetDirty()
     } else {
-      open()
+      openErrorDialog('There was an issue updating budget options.')
+      form.reset()
     }
 
     setIsSubmitting(false)
@@ -132,12 +133,6 @@ const AdminBudgetOptions = ({
           Update Options
         </Button>
       </form>
-
-      <ErrorDialog
-        opened={opened}
-        onClose={close}
-        message="There was an issue updating budget options."
-      />
     </Stack>
   )
 }
