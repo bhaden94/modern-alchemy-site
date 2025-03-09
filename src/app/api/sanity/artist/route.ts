@@ -10,7 +10,6 @@ import {
   notAuthorizedResponse,
 } from '~/lib/next-auth/auth.utils'
 import { getClient, NEXT_CACHE_CONFIG } from '~/lib/sanity/sanity.client'
-import { BlockContent } from '~/schemas/models/blockContent'
 import { ImageReference } from '~/utils/images/uploadImagesToSanity'
 
 const token = process.env.SANITY_API_WRITE_TOKEN
@@ -218,35 +217,6 @@ const updatePortfolioImages = async (
   )
 }
 
-const updateRichTextField = async (
-  client: SanityClient,
-  artistId: string,
-  fieldName: string,
-  value: BlockContent,
-): Promise<NextResponse> => {
-  console.log(
-    `Patch artist ${fieldName} with Id: ${artistId}`,
-    `${fieldName}: ${JSON.stringify(value)}`,
-  )
-
-  const patchOperation = await client
-    .patch(artistId)
-    .set({ [fieldName]: value })
-    .commit()
-
-  console.log(
-    `Patch operation completed for ArtistId ${artistId}`,
-    `${fieldName}: ${JSON.stringify(patchOperation[fieldName])}`,
-  )
-
-  return NextResponse.json(
-    {
-      [fieldName]: patchOperation[fieldName],
-    },
-    { status: 200 },
-  )
-}
-
 export async function PATCH(request: NextRequest) {
   const session = await getServerSession(authOptions)
   if (!session) return notAuthorizedResponse(request)
@@ -263,8 +233,6 @@ export async function PATCH(request: NextRequest) {
     budgetOptions,
     portfolioImages,
     operation,
-    booksClosedMessage,
-    bookingInstructions,
   } = body
 
   if (!artistId) {
@@ -296,24 +264,6 @@ export async function PATCH(request: NextRequest) {
       artistId,
       operation,
       portfolioImages,
-    )
-  }
-
-  if (booksClosedMessage) {
-    return await updateRichTextField(
-      client,
-      artistId,
-      'booksClosedMessage',
-      booksClosedMessage,
-    )
-  }
-
-  if (bookingInstructions) {
-    return await updateRichTextField(
-      client,
-      artistId,
-      'bookingInstructions',
-      bookingInstructions,
     )
   }
 

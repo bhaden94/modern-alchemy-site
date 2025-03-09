@@ -2,11 +2,10 @@
 
 import { Button, Checkbox, Group, Stack, Title } from '@mantine/core'
 import { useForm } from '@mantine/form'
-import { useDisclosure } from '@mantine/hooks'
 import { zodResolver } from 'mantine-form-zod-resolver'
 import { useState } from 'react'
 
-import ErrorDialog from '~/components/ErrorDialog/ErrorDialog'
+import { useErrorDialog } from '~/hooks/useErrorDialog'
 import { bookingDayChoices } from '~/utils/forms/bookingFormUtils'
 import {
   DayAvailabilityField,
@@ -23,7 +22,7 @@ const AdminDayAvailability = ({
   dayAvailability,
   artistId,
 }: IAdminDayAvailability) => {
-  const [opened, { open, close }] = useDisclosure(false)
+  const { openErrorDialog } = useErrorDialog()
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const form = useForm<TDayAvailabilitySchema>({
@@ -47,7 +46,8 @@ const AdminDayAvailability = ({
     if (response.ok) {
       form.resetDirty()
     } else {
-      open()
+      openErrorDialog('There was an issue updating your days available.')
+      form.reset()
     }
 
     setIsSubmitting(false)
@@ -89,12 +89,6 @@ const AdminDayAvailability = ({
           Update Availability
         </Button>
       </form>
-
-      <ErrorDialog
-        opened={opened}
-        onClose={close}
-        message="There was an issue updating your books."
-      />
     </Stack>
   )
 }

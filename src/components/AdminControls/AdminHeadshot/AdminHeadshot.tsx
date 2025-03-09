@@ -8,12 +8,11 @@ import {
   Stack,
   Title,
 } from '@mantine/core'
-import { useDisclosure } from '@mantine/hooks'
 import imageCompression from 'browser-image-compression'
 import Image from 'next/image'
 import { useRef, useState } from 'react'
 
-import ErrorDialog from '~/components/ErrorDialog/ErrorDialog'
+import { useErrorDialog } from '~/hooks/useErrorDialog'
 import { getImageFromRef } from '~/lib/sanity/sanity.image'
 import { generateNextImagePlaceholder } from '~/utils'
 import { ACCEPTED_IMAGE_TYPES } from '~/utils/forms/FormConstants'
@@ -28,7 +27,6 @@ interface IAdminHeadshot {
   headshotRef?: ImageReference
 }
 
-const generalFailureMessage = 'Something went wrong. Please try to re-submit.'
 const AdminHeadshot = ({ artistId, headshotRef }: IAdminHeadshot) => {
   const resetRef = useRef<() => void>(null)
   const [imageRef, setImageRef] = useState<ImageReference | null>(
@@ -36,7 +34,7 @@ const AdminHeadshot = ({ artistId, headshotRef }: IAdminHeadshot) => {
   )
   const headshotImage = imageRef ? getImageFromRef(imageRef) : null
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
-  const [opened, { open, close }] = useDisclosure(false)
+  const { openErrorDialog } = useErrorDialog()
 
   const onImageChange = async (file: File | null) => {
     if (!file) return
@@ -53,7 +51,7 @@ const AdminHeadshot = ({ artistId, headshotRef }: IAdminHeadshot) => {
         useWebWorker: true,
       })
     } catch (error) {
-      open()
+      openErrorDialog()
     }
 
     // upload image
@@ -64,7 +62,7 @@ const AdminHeadshot = ({ artistId, headshotRef }: IAdminHeadshot) => {
       imageReferences === 'SizeLimitError' ||
       imageReferences.length > 1
     ) {
-      open()
+      openErrorDialog()
       setIsSubmitting(false)
       return
     }
@@ -90,7 +88,7 @@ const AdminHeadshot = ({ artistId, headshotRef }: IAdminHeadshot) => {
         })
       }
     } else {
-      open()
+      openErrorDialog()
     }
 
     setIsSubmitting(false)
@@ -111,7 +109,7 @@ const AdminHeadshot = ({ artistId, headshotRef }: IAdminHeadshot) => {
     })
 
     if (!response.ok) {
-      open()
+      openErrorDialog()
       return
     }
 
@@ -125,7 +123,7 @@ const AdminHeadshot = ({ artistId, headshotRef }: IAdminHeadshot) => {
       setImageRef(null)
       resetRef.current?.()
     } else {
-      open()
+      openErrorDialog()
     }
 
     setIsSubmitting(false)
@@ -173,8 +171,6 @@ const AdminHeadshot = ({ artistId, headshotRef }: IAdminHeadshot) => {
           confirmationMessage="Are you sure you want to remove your headshot image?"
         />
       </Group>
-
-      <ErrorDialog opened={opened} onClose={close} />
     </Stack>
   )
 }
