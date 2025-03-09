@@ -1,4 +1,4 @@
-import { Button } from '@mantine/core'
+import { Button, ButtonProps } from '@mantine/core'
 import { forwardRef, MouseEventHandler } from 'react'
 
 interface IBaseToolbarButton {
@@ -9,9 +9,9 @@ interface IBaseToolbarButton {
 
 const BaseToolbarButton = forwardRef<
   HTMLButtonElement,
-  React.ComponentPropsWithoutRef<'button'> & IBaseToolbarButton
+  React.ComponentPropsWithoutRef<'button'> & IBaseToolbarButton & ButtonProps
 >((props, ref) => {
-  const { onClick, isActive, children } = props
+  const { onClick, isActive, children, leftSection } = props
 
   return (
     <Button
@@ -20,6 +20,7 @@ const BaseToolbarButton = forwardRef<
       radius="xs"
       size="xs"
       onClick={onClick}
+      leftSection={leftSection}
     >
       {children}
     </Button>
