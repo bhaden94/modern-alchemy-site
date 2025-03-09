@@ -5,6 +5,7 @@ import { Button, Group } from '@mantine/core'
 import { CustomSchemaDefinition } from '../AdminTextEditor'
 import AnnotationButton from './AnnotationButton/AnnotationButton'
 import DecoratorButton from './DecoratorButton/DecoratorButton'
+import ImageButton from './ImageButton/ImageButton'
 import StyleButton from './StyleButton/StyleButton'
 import classes from './TextEditorToolbar.module.css'
 
@@ -26,32 +27,16 @@ const TextEditorToolbar = ({ schemaDefinition }: ITextEditorToolbar) => {
     <AnnotationButton key={annotation.name} annotation={annotation} />
   ))
 
-  // TODO: images probably need to follow the same pattern as in the TattooForm
-  // We save to browser and only upload when the form is submitted.
-  //   const imageButton = (
-  //     <Button
-  //       onClick={() => {
-  //         editor.send({
-  //           type: 'insert.block object',
-  //           blockObject: {
-  //             name: 'image',
-  //             value: { src: 'https://example.com/image.jpg' },
-  //           },
-  //           placement: 'auto',
-  //         })
-  //         editor.send({ type: 'focus' })
-  //       }}
-  //     >
-  //       {schemaDefinition.blockObjects[0].name}
-  //     </Button>
-  //   )
+  const imageButtons = schemaDefinition.blockObjects?.map((blockObject) => (
+    <ImageButton key={blockObject.name} image={blockObject} />
+  ))
 
   return (
     <Group className={classes.toolbar}>
       <Button.Group>{styleButtons}</Button.Group>
       <Button.Group>{decoratorButtons}</Button.Group>
       <Button.Group>{annotationButtons}</Button.Group>
-      {/* {imageButton} */}
+      <Button.Group>{imageButtons}</Button.Group>
     </Group>
   )
 }

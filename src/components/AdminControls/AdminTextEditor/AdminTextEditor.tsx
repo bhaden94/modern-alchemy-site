@@ -5,21 +5,19 @@ import {
   Box,
   Button,
   Group,
-  Image,
   LoadingOverlay,
   Stack,
   Text,
   TextProps,
   Title,
 } from '@mantine/core'
-import { useDisclosure } from '@mantine/hooks'
 import {
+  BlockRenderProps,
   defineSchema,
   EditorEmittedEvent,
   EditorProvider,
   PortableTextEditable,
   RenderAnnotationFunction,
-  RenderBlockFunction,
   RenderDecoratorFunction,
   RenderStyleFunction,
 } from '@portabletext/editor'
@@ -28,7 +26,6 @@ import { PortableText } from '@portabletext/react'
 import Link from 'next/link'
 import { useState } from 'react'
 
-import ErrorDialog from '~/components/ErrorDialog/ErrorDialog'
 import {
   ExternalLink,
   ExternalLinkMark,
@@ -38,10 +35,11 @@ import {
   InternalLinkMark,
 } from '~/components/PortableTextComponents/InternalLink'
 import { PortableTextComponents } from '~/components/PortableTextComponents/PortableTextComponents'
-import { getImageFromRef } from '~/lib/sanity/sanity.image'
+import { useErrorDialog } from '~/hooks/useErrorDialog'
 import { BlockContent, BlockContentImage } from '~/schemas/models/blockContent'
 
 import classes from './AdminTextEditor.module.css'
+import EditorImage from './TextEditorToolbar/EditorImage/EditorImage'
 import TextEditorToolbar from './TextEditorToolbar/TextEditorToolbar'
 
 export type CustomSchemaDefinition = typeof schemaDefinition
@@ -147,14 +145,18 @@ const renderAnnotation: RenderAnnotationFunction = (props) => {
   }
 }
 
-const renderBlock: RenderBlockFunction = (props) => {
+const renderBlock = (
+  props: BlockRenderProps,
+  documentId: string,
+  fieldName: string,
+) => {
   if (props.schemaType.name === 'image') {
     const imageVal = props.value as unknown as BlockContentImage
     return (
-      <Image
-        src={getImageFromRef(imageVal)?.url}
-        alt={imageVal.altText}
-        radius="var(--mantine-radius-default)"
+      <EditorImage
+        image={imageVal}
+        documentId={documentId}
+        fieldName={fieldName}
       />
     )
   }
@@ -166,36 +168,48 @@ interface IAdminTextEditor {
   title: string
   initialValue: BlockContent | undefined
   fieldName: string
-  artistId: string
+  documentId: string
 }
 
 const AdminTextEditor = ({
   title,
   initialValue,
   fieldName,
-  artistId,
+  documentId,
 }: IAdminTextEditor) => {
-  const [opened, { open, close }] = useDisclosure(false)
+  const { openErrorDialog } = useErrorDialog()
   const [value, setValue] = useState<BlockContent | undefined>(initialValue)
   const [preview, setPreview] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
+  const [editorLoading, setEditorLoading] = useState<boolean>(false)
   const [hasEdited, setHasEdited] = useState<boolean>(false)
+
+  const showEditorLoading = editorLoading || isSubmitting
 
   const onEditorEvent = (event: EditorEmittedEvent) => {
     if (event.type === 'mutation') {
       setHasEdited(true)
       setValue(event.value)
     }
+
+    if (event.type === 'read only') {
+      setEditorLoading(true)
+    }
+
+    if (event.type === 'editable') {
+      setEditorLoading(false)
+    }
   }
 
   const onSubmit = async (): Promise<void> => {
     setIsSubmitting(true)
 
-    const response = await fetch('/api/sanity/artist', {
+    const response = await fetch('/api/sanity/block-content', {
       method: 'PATCH',
       body: JSON.stringify({
-        [fieldName]: value,
-        artistId: artistId,
+        documentId: documentId,
+        fieldName: fieldName,
+        value: value,
       }),
     })
 
@@ -204,7 +218,7 @@ const AdminTextEditor = ({
     if (response.ok) {
       setHasEdited(false)
     } else {
-      open()
+      openErrorDialog(`There was an issue updating the ${title}.`)
     }
   }
 
@@ -220,16 +234,18 @@ const AdminTextEditor = ({
         <Stack>
           <Title order={2}>{title}</Title>
           <Box pos="relative">
-            <LoadingOverlay visible={isSubmitting} zIndex={150} />
+            <LoadingOverlay visible={showEditorLoading} zIndex={150} />
             <Stack gap={0}>
               <TextEditorToolbar schemaDefinition={schemaDefinition} />
               <PortableTextEditable
-                disabled={isSubmitting}
+                disabled={showEditorLoading}
                 className={classes.editor}
                 renderStyle={renderStyle}
                 renderDecorator={renderDecorator}
                 renderAnnotation={renderAnnotation}
-                renderBlock={renderBlock}
+                renderBlock={(props) =>
+                  renderBlock(props, documentId, fieldName)
+                }
               />
             </Stack>
           </Box>
@@ -237,22 +253,19 @@ const AdminTextEditor = ({
           <Group justify="space-between">
             <Button
               onClick={() => setPreview(!preview)}
-              disabled={isSubmitting}
+              disabled={showEditorLoading}
             >
               {preview ? 'Hide Preview' : 'Show Preview'}
             </Button>
-            <Button onClick={onSubmit} disabled={isSubmitting || !hasEdited}>
+            <Button
+              onClick={onSubmit}
+              disabled={showEditorLoading || !hasEdited}
+            >
               Save
             </Button>
           </Group>
         </Stack>
       </EditorProvider>
-
-      <ErrorDialog
-        opened={opened}
-        onClose={close}
-        message={`There was an issue updating the ${title}.`}
-      />
 
       {value && preview && (
         <PortableText value={value} components={PortableTextComponents} />

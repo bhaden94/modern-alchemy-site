@@ -14,6 +14,7 @@ import {
   IconArrowBadgeRight,
   IconBook,
   IconCameraUp,
+  IconEdit,
   IconSettings,
 } from '@tabler/icons-react'
 import Link from 'next/link'
@@ -37,6 +38,11 @@ const links = [
     icon: <IconBook stroke={1.5} />,
     label: 'Bookings',
     page: NavigationPages.EmployeePortalBookings,
+  },
+  {
+    icon: <IconEdit stroke={1.5} />,
+    label: 'Site Content',
+    page: NavigationPages.EmployeePortalSiteContent,
   },
 ]
 

@@ -5,6 +5,7 @@ import { FileRejection, FileWithPath } from '@mantine/dropzone'
 import imageCompression from 'browser-image-compression'
 import { useState } from 'react'
 
+import { useErrorDialog } from '~/hooks/useErrorDialog'
 import { MAX_FILES } from '~/utils/forms/bookingFormUtils'
 import uploadImagesToSanity, {
   ImageReference,
@@ -21,20 +22,19 @@ interface IAdminPortfolioImages {
     isSubmitting: boolean
     setIsSubmitting: (value: boolean) => void
   }
-  onFailure: () => void
 }
 
 const AdminPortfolioImages = ({
   artistId,
   setPortfolioRefs,
   submittingState,
-  onFailure,
 }: IAdminPortfolioImages) => {
   const { isSubmitting, setIsSubmitting } = submittingState
   const [images, setImages] = useState<FileWithPath[]>([])
   const [imageUploadRejections, setImageUploadRejections] =
     useState<FileRejection[]>()
   const [isCompressing, setIsCompressing] = useState(false)
+  const { openErrorDialog } = useErrorDialog()
 
   const onImageDrop = async (files: FileWithPath[]) => {
     setIsCompressing(true)
@@ -51,7 +51,7 @@ const AdminPortfolioImages = ({
 
       setImages(compressedImages)
     } catch (error) {
-      onFailure()
+      openErrorDialog()
     }
 
     setImageUploadRejections([])
@@ -74,7 +74,7 @@ const AdminPortfolioImages = ({
       imageReferences === 'GeneralError' ||
       imageReferences === 'SizeLimitError'
     ) {
-      onFailure()
+      openErrorDialog()
       setIsSubmitting(false)
       return
     }
@@ -93,7 +93,7 @@ const AdminPortfolioImages = ({
       setPortfolioRefs(resJson.portfolioImages)
       setImages([])
     } else {
-      onFailure()
+      openErrorDialog()
     }
 
     setIsSubmitting(false)

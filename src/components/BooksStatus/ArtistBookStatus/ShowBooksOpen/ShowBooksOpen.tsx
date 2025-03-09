@@ -1,15 +1,14 @@
 'use client'
 
 import { Loader, Text } from '@mantine/core'
-import { useDisclosure } from '@mantine/hooks'
 import { PortableText } from '@portabletext/react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
-import ErrorDialog from '~/components/ErrorDialog/ErrorDialog'
 import { useArtist } from '~/hooks/useArtist'
+import { useErrorDialog } from '~/hooks/useErrorDialog'
 import { NavigationPages } from '~/utils/navigation'
 
 import { PortableTextComponents } from '../../../PortableTextComponents/PortableTextComponents'
@@ -35,13 +34,13 @@ const excessiveFailureMessage =
 const ShowBooksOpen = ({ showForm }: { showForm: boolean }) => {
   const router = useRouter()
   const { artist } = useArtist()
-  const [opened, { open, close }] = useDisclosure(false)
+  const { openErrorDialog, closeErrorDialog } = useErrorDialog()
 
   const [failuresCount, setFailuresCount] = useState(0)
   const [failureMessage, setFailureMessage] = useState(generalFailureMessage)
 
   const onSuccess = () => {
-    close()
+    closeErrorDialog()
     router.push(
       `${NavigationPages.BookingRequestSuccess}?name=${encodeURIComponent(
         artist.name,
@@ -57,7 +56,7 @@ const ShowBooksOpen = ({ showForm }: { showForm: boolean }) => {
         )
 
     setFailuresCount(failuresCount + 1)
-    open()
+    openErrorDialog(failureMessage)
   }
 
   const BookingRequestLink = () => {
@@ -102,8 +101,6 @@ const ShowBooksOpen = ({ showForm }: { showForm: boolean }) => {
       ) : (
         <BookingRequestLink />
       )}
-
-      <ErrorDialog opened={opened} onClose={close} message={failureMessage} />
     </>
   )
 }
