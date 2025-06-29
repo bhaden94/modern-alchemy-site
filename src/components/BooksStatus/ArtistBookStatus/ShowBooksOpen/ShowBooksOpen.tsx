@@ -1,9 +1,8 @@
 'use client'
 
-import { Loader, Text } from '@mantine/core'
+import { Loader } from '@mantine/core'
 import { PortableText } from '@portabletext/react'
 import dynamic from 'next/dynamic'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
@@ -12,6 +11,29 @@ import { useErrorDialog } from '~/hooks/useErrorDialog'
 import { NavigationPages } from '~/utils/navigation'
 
 import { PortableTextComponents } from '../../../PortableTextComponents/PortableTextComponents'
+
+const BookingRequestLink = dynamic(
+  () => import('./BookingRequestLink/BookingRequestLink'),
+  {
+    loading: () => (
+      <div className="flex flex-col items-center">
+        <Loader />
+      </div>
+    ),
+  },
+)
+
+const EmbeddedScriptWidget = dynamic(
+  () => import('./EmbeddedScriptWidget/EmbeddedScriptWidget'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex flex-col items-center">
+        <Loader />
+      </div>
+    ),
+  },
+)
 
 const TattooForm = dynamic(
   () =>
@@ -31,7 +53,7 @@ const generalFailureMessage = 'Something went wrong. Please try to re-submit.'
 const excessiveFailureMessage =
   'Looks like the site is having trouble. Please reach out to the artist directly for further assistance.'
 
-const ShowBooksOpen = ({ showForm }: { showForm: boolean }) => {
+const ShowBooksOpen = () => {
   const router = useRouter()
   const { artist } = useArtist()
   const { openErrorDialog, closeErrorDialog } = useErrorDialog()
@@ -59,50 +81,33 @@ const ShowBooksOpen = ({ showForm }: { showForm: boolean }) => {
     openErrorDialog(failureMessage)
   }
 
-  const BookingRequestLink = () => {
-    if (artist.externalBookingLink) {
-      return (
-        <Text
-          component={Link}
-          href={artist.externalBookingLink}
-          target="_blank"
-          display="block"
-        >
-          {artist.name}:&nbsp;Go to booking site
-        </Text>
-      )
-    }
-
+  const TattooFormComponent = () => {
     return (
-      <Text
-        component={Link}
-        href={`${NavigationPages.BookingRequest}/${encodeURIComponent(
-          artist._id,
-        )}`}
-        display="block"
-      >
-        {artist.name}:&nbsp;Click to book now
-      </Text>
+      <>
+        {artist.bookingInstructions ? (
+          <PortableText
+            value={artist.bookingInstructions}
+            components={PortableTextComponents}
+          />
+        ) : undefined}
+        <TattooForm onSuccess={onSuccess} onFailure={onFailure} />
+      </>
     )
   }
 
-  return (
-    <>
-      {showForm ? (
-        <>
-          {artist.bookingInstructions ? (
-            <PortableText
-              value={artist.bookingInstructions}
-              components={PortableTextComponents}
-            />
-          ) : undefined}
-          <TattooForm onSuccess={onSuccess} onFailure={onFailure} />
-        </>
-      ) : (
-        <BookingRequestLink />
-      )}
-    </>
-  )
+  const RenderComponent = () => {
+    if (!!artist.externalBookingLink) {
+      return <BookingRequestLink />
+    }
+
+    if (!!artist.embeddedWidget) {
+      return <EmbeddedScriptWidget />
+    }
+
+    return <TattooFormComponent />
+  }
+
+  return <RenderComponent />
 }
 
 export default ShowBooksOpen

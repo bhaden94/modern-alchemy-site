@@ -7,15 +7,14 @@ import ArtistBooksStatus from './ArtistBookStatus/ArtistBooksStatus'
 
 interface IBookStatuses {
   artists: Artist[]
-  showForm?: boolean
 }
 
-const BookStatuses = ({ artists, showForm }: IBookStatuses) => {
+const BookStatuses = ({ artists }: IBookStatuses) => {
   return (
     <>
       {artists?.map((artist) => (
         <ArtistProvider key={artist._id} artist={artist}>
-          <ArtistBooksStatus showForm={showForm} />
+          <ArtistBooksStatus />
         </ArtistProvider>
       ))}
     </>

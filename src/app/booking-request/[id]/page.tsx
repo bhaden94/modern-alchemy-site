@@ -54,7 +54,7 @@ const ArtistBookingRequestPage = async ({
   return (
     <PageContainer>
       <PageTitle title={`Booking with ${artist.name}`} />
-      <BookStatuses artists={[artist]} showForm />
+      <BookStatuses artists={[artist]} />
     </PageContainer>
   )
 }
