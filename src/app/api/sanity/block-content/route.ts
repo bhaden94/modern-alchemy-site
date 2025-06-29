@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
-import { groq } from 'next-sanity'
-import { SanityClient } from 'sanity'
+import { groq, SanityClient } from 'next-sanity'
 import { SanityDocument } from 'sanity'
 
 import {

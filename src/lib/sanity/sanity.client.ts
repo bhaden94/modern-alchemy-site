@@ -2,7 +2,7 @@ import {
   createClient,
   FilteredResponseQueryOptions,
   SanityClient,
-} from '@sanity/client'
+} from 'next-sanity'
 
 import { apiVersion, dataset, projectId, useCdn } from '~/lib/sanity/sanity.api'
 

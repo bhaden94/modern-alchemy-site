@@ -1,5 +1,5 @@
 import { groq } from 'next-sanity'
-import { SanityClient } from 'sanity'
+import { SanityClient } from 'next-sanity'
 
 import { AftercareInfoPageContent } from '~/schemas/pages/aftercareInfoPageContent'
 import { AnnouncementPageContent } from '~/schemas/pages/announcementPageContent'

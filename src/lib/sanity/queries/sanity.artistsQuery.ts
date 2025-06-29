@@ -1,7 +1,7 @@
 import { DateValue } from '@mantine/dates'
 import { groq } from 'next-sanity'
+import { SanityClient } from 'next-sanity'
 import { Observable } from 'rxjs'
-import { SanityClient } from 'sanity'
 
 import { Artist } from '~/schemas/models/artist'
 

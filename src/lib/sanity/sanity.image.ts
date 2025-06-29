@@ -31,8 +31,14 @@ export const urlForImage = (source: Image) => {
 }
 
 export const getImageFromRef = (
-  imageRef?: ImageReference | SanityImageSource | null,
+  imageRef?: ImageReference | SanityImageSource | string | null,
 ): SanityImageAsset | undefined => {
+  if (imageRef && typeof imageRef === 'string') {
+    // If the imageRef is a string, it means we are passing in the _key
+    // Convert to an image reference object
+    imageRef = { _type: 'image', asset: { _ref: imageRef, _type: 'reference' } }
+  }
+
   return imageRef
     ? tryGetImageAsset(imageRef, { projectId: projectId, dataset: dataset })
     : undefined
