@@ -38,7 +38,7 @@ export const PortableTextComponents: Partial<PortableTextReactComponents> = {
     image: ({ value }: { value: BlockContentImage }) => {
       return (
         <Image
-          src={getImageFromRef(value)?.url}
+          src={getImageFromRef(value._key)?.url}
           alt={value.altText}
           radius="var(--mantine-radius-default)"
         />

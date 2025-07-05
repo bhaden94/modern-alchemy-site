@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
-import { SanityClient } from 'sanity'
+import { SanityClient } from 'next-sanity'
 
 import {
   authOptions,

@@ -9,12 +9,7 @@ import { getClient } from '~/lib/sanity/sanity.client'
 import ShowBooksClosed from './ShowBooksClosed/ShowBooksClosed'
 import ShowBooksOpen from './ShowBooksOpen/ShowBooksOpen'
 
-interface IBooksStatus {
-  showForm?: boolean
-}
-
-const ArtistBooksStatus = (props: IBooksStatus) => {
-  const { showForm } = props
+const ArtistBooksStatus = () => {
   const { artist, updateArtist } = useArtist()
 
   useEffect(() => {
@@ -35,15 +30,7 @@ const ArtistBooksStatus = (props: IBooksStatus) => {
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  return (
-    <>
-      {artist.booksOpen ? (
-        <ShowBooksOpen showForm={!!showForm} />
-      ) : (
-        <ShowBooksClosed />
-      )}
-    </>
-  )
+  return <>{artist.booksOpen ? <ShowBooksOpen /> : <ShowBooksClosed />}</>
 }
 
 export default ArtistBooksStatus

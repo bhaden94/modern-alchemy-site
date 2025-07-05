@@ -16,6 +16,10 @@ export interface Artist extends BaseSanitySchema<'artist'> {
   externalBookingLink?: string
   socials?: { label: string; link: string }[]
   bookingInstructions?: BlockContent
+  embeddedWidget?: {
+    scriptSrc: string
+    querySelector: string // CSS class name where the widget will be embedded
+  }
   booksClosedMessage?: BlockContent
   portfolioImages?: ImageReference[]
   headshot?: ImageReference
@@ -137,6 +141,25 @@ export default defineType({
       name: 'externalBookingLink',
       type: 'string',
       title: 'External Booking Link',
+    }),
+    defineField({
+      name: 'embeddedWidget',
+      type: 'object',
+      title: 'Embedded Booking Widget',
+      fields: [
+        {
+          name: 'scriptSrc',
+          type: 'string',
+          title: 'Script Src',
+          validation: (Rule) => Rule.required().uri(),
+        },
+        {
+          name: 'querySelector',
+          type: 'string',
+          title: 'Query Selector',
+          validation: (Rule) => Rule.required(),
+        },
+      ],
     }),
 
     // Form field settings

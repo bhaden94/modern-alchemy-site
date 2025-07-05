@@ -1,10 +1,4 @@
-import {
-  Button,
-  Checkbox,
-  Stack,
-  TextInput,
-  Title,
-} from '@mantine/core'
+import { Button, Checkbox, Stack, TextInput, Title } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { zodResolver } from 'mantine-form-zod-resolver'
 import React, { useState } from 'react'

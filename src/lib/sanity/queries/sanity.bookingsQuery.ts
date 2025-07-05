@@ -1,6 +1,5 @@
-import { groq } from 'next-sanity'
+import { groq, SanityClient } from 'next-sanity'
 import { Observable } from 'rxjs'
-import { SanityClient } from 'sanity'
 
 import { Booking } from '~/schemas/models/booking'
 

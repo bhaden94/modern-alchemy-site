@@ -61,7 +61,7 @@ const EditorImage = ({ image, documentId, fieldName }: IEditorImage) => {
 
     editor.send({
       type: 'delete.block',
-      blockPath: [{ _key: image._key || '' }],
+      at: [{ _key: image._key || '' }],
     })
 
     editor.send({ type: 'focus' })
@@ -94,7 +94,7 @@ const EditorImage = ({ image, documentId, fieldName }: IEditorImage) => {
 
       <Card.Section>
         <Image
-          src={getImageFromRef(image)?.url}
+          src={getImageFromRef(image._key)?.url}
           alt={image.altText}
           radius="var(--mantine-radius-default)"
         />
