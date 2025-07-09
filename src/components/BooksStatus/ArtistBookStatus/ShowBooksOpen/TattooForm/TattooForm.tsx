@@ -190,6 +190,21 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
     onSuccess()
   }
 
+  const subscribeToMailingList = async (
+    email: string,
+    name: string,
+    phoneNumber: string,
+  ): Promise<Response> => {
+    return fetch('/api/mailer-lite', {
+      method: 'POST',
+      body: JSON.stringify({
+        email: email,
+        name: name,
+        phoneNumber,
+      }),
+    })
+  }
+
   const sendArtistBookingEmail = async (
     images: File[],
     emailTextData: TBookingSchema,
@@ -271,6 +286,10 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
       }
     }
     /* Send email end */
+
+    /* Subscribe user to mailing list start */
+    await subscribeToMailingList(data.email, data.name, data.phoneNumber)
+    /* Subscribe user to mailing list end */
 
     if (response.ok) {
       onSuccessfulBooking()
