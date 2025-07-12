@@ -1,24 +1,26 @@
 'use client'
 
 import {
+  Anchor,
   Button,
   Card,
   Stack,
+  Text,
   TextInput,
   Title,
-  Text,
-  Anchor,
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { IconMailOpened } from '@tabler/icons-react'
 import { zodResolver } from 'mantine-form-zod-resolver'
+import Link from 'next/link'
 import { useState } from 'react'
 import { z } from 'zod'
 
 import { useErrorDialog } from '~/hooks/useErrorDialog'
-import classes from './MailingList.module.css'
-import Link from 'next/link'
+import { MailingListFormContent } from '~/schemas/pages/mailingListFormContent'
 import { NavigationPages } from '~/utils/navigation'
+
+import classes from './MailingList.module.css'
 
 const mailingListSchema = z.object({
   email: z.string().email(),
@@ -26,14 +28,17 @@ const mailingListSchema = z.object({
 
 type TMailingListSchema = z.infer<typeof mailingListSchema>
 
-const MailingList = () => {
+interface IMailingList {
+  content?: MailingListFormContent
+}
+
+const MailingList = ({ content }: IMailingList) => {
   const { openErrorDialog } = useErrorDialog()
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const [isSuccess, setIsSuccess] = useState<boolean>(false)
 
-  // TODO: move to sanity so we can easily update these texts
-  const successTitle = 'Thanks for subscribing!'
-  const subscribeTitle = "Subscribe to be notified when Larry's books open"
+  const successTitle = content?.successMessage || 'Thank you for subscribing!'
+  const subscribeTitle = content?.formTitle || 'Subscribe to our mailing list'
 
   const form = useForm<TMailingListSchema>({
     initialValues: {
@@ -97,6 +102,8 @@ const MailingList = () => {
       </>
     )
   }
+
+  if (!content?.isActive) return undefined
 
   return (
     <div className={classes.container} id="mailing-list">
