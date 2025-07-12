@@ -1,0 +1,50 @@
+.container {
+  position: relative;
+  max-width: 450px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  scroll-margin-top: 2em;
+}
+
+.iconContainer {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  background: linear-gradient(
+    45deg,
+    var(--mantine-color-academia-6),
+    var(--mantine-color-academia-9)
+  ); /* Matches gradient defined in theme.tsx */
+  border-radius: 50%;
+  padding: var(--mantine-spacing-sm);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  padding-top: calc(var(--mantine-spacing-lg) + var(--mantine-spacing-xs));
+  min-height: 280px; /* Adjust this value to match your form height */
+}
+
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 200px; /* Adjust to maintain consistent inner height */
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--mantine-spacing-md);
+}
+
+.button {
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
