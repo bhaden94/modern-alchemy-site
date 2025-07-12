@@ -17,6 +17,8 @@ import { z } from 'zod'
 
 import { useErrorDialog } from '~/hooks/useErrorDialog'
 import classes from './MailingList.module.css'
+import Link from 'next/link'
+import { NavigationPages } from '~/utils/navigation'
 
 const mailingListSchema = z.object({
   email: z.string().email(),
@@ -43,26 +45,57 @@ const MailingList = () => {
   const onMantineSubmit = async (data: TMailingListSchema) => {
     setIsSubmitting(true)
 
-    try {
-      const response = await fetch('/api/mailer-lite', {
-        method: 'POST',
-        body: JSON.stringify({
-          email: data.email,
-          shouldResubscribe: true,
-        }),
-      })
+    const response = await fetch('/api/mailer-lite', {
+      method: 'POST',
+      body: JSON.stringify({
+        email: data.email,
+        shouldResubscribe: true,
+      }),
+    })
 
-      if (response.ok) {
-        setIsSuccess(true)
-        form.reset()
-      } else {
-        openErrorDialog('There was an issue subscribing to the mailing list.')
-      }
-    } catch (error) {
+    if (response.ok) {
+      setIsSuccess(true)
+      form.reset()
+    } else {
       openErrorDialog('There was an issue subscribing to the mailing list.')
-    } finally {
-      setIsSubmitting(false)
     }
+
+    setIsSubmitting(false)
+  }
+
+  const renderForm = () => {
+    return (
+      <>
+        <form
+          className={classes.form}
+          onSubmit={form.onSubmit(onMantineSubmit)}
+        >
+          <TextInput
+            {...form.getInputProps('email')}
+            disabled={isSubmitting}
+            id="email"
+            label={<Text span>Email</Text>}
+            type="email"
+            required
+          />
+          <Button type="submit" loading={isSubmitting}>
+            Subscribe
+          </Button>
+        </form>
+        <Text ta="center" size="sm" c="dimmed">
+          You can unsubscribe anytime. For more details, review our{' '}
+          <Anchor
+            component={Link}
+            href={NavigationPages.PrivacyPolicy}
+            underline="hover"
+            target="_blank"
+          >
+            Privacy Policy
+          </Anchor>
+          .
+        </Text>
+      </>
+    )
   }
 
   return (
@@ -75,35 +108,7 @@ const MailingList = () => {
           <Title ta="center" order={3}>
             {isSuccess ? successTitle : subscribeTitle}
           </Title>
-          {!isSuccess ? (
-            <>
-              <form
-                className={classes.form}
-                onSubmit={form.onSubmit(onMantineSubmit)}
-              >
-                <TextInput
-                  {...form.getInputProps('email')}
-                  disabled={isSubmitting}
-                  id="email"
-                  label={<Text span>Email</Text>}
-                  placeholder=""
-                  type="email"
-                  required
-                />
-                <Button
-                  type="submit"
-                  loading={isSubmitting}
-                  className={classes.button}
-                >
-                  Subscribe
-                </Button>
-              </form>
-              <Text ta="center" size="sm" c="dimmed" mt="sm">
-                You can unsubscribe anytime. For more details, review our{' '}
-                <Anchor href="/privacy-policy">Privacy Policy</Anchor>.
-              </Text>
-            </>
-          ) : undefined}
+          {isSuccess ? undefined : renderForm()}
         </Stack>
       </Card>
     </div>

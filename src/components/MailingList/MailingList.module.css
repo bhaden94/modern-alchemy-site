@@ -1,9 +1,7 @@
 .container {
   position: relative;
-  max-width: 450px;
+  max-width: 500px;
   margin: 0 auto;
-  display: flex;
-  justify-content: center;
   scroll-margin-top: 2em;
 }
 
@@ -25,15 +23,19 @@
 }
 
 .card {
-  padding-top: calc(var(--mantine-spacing-lg) + var(--mantine-spacing-xs));
-  min-height: 280px; /* Adjust this value to match your form height */
+  padding: var(--mantine-spacing-xl);
+  min-height: 355px; /* Adjust this value to match your form height */
+
+  @media (max-width: $mantine-breakpoint-xs) {
+    padding: var(--mantine-spacing-xl) var(--mantine-spacing-sm);
+  }
 }
 
 .cardContent {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-height: 200px; /* Adjust to maintain consistent inner height */
+  margin: auto auto;
 }
 
 .form {
@@ -41,10 +43,4 @@
   flex-direction: column;
   justify-content: center;
   gap: var(--mantine-spacing-md);
-}
-
-.button {
-  text-transform: uppercase;
-  font-weight: 700;
-  letter-spacing: 0.5px;
 }
