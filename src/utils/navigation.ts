@@ -1,3 +1,7 @@
+export enum NavigationInternalIds {
+  MailingList = 'mailing-list',
+}
+
 export enum NavigationPages {
   Home = '/',
   Artists = '/artists',

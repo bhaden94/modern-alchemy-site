@@ -2,6 +2,7 @@ import { defineField, defineType } from 'sanity'
 
 export interface MailingListFormContent {
   isActive?: boolean
+  heroTitle?: string
   formTitle?: string
   successMessage?: string
 }
@@ -15,6 +16,11 @@ export default defineType({
       name: 'isActive',
       type: 'boolean',
       title: 'Form Active Status',
+    }),
+    defineField({
+      name: 'heroTitle',
+      type: 'string',
+      title: 'Hero Title',
     }),
     defineField({
       name: 'formTitle',

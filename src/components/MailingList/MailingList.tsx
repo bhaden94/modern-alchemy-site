@@ -18,7 +18,7 @@ import { z } from 'zod'
 
 import { useErrorDialog } from '~/hooks/useErrorDialog'
 import { MailingListFormContent } from '~/schemas/pages/mailingListFormContent'
-import { NavigationPages } from '~/utils/navigation'
+import { NavigationInternalIds, NavigationPages } from '~/utils/navigation'
 
 import classes from './MailingList.module.css'
 
@@ -106,7 +106,7 @@ const MailingList = ({ content }: IMailingList) => {
   if (!content?.isActive) return undefined
 
   return (
-    <div className={classes.container} id="mailing-list">
+    <div className={classes.container} id={NavigationInternalIds.MailingList}>
       <div className={classes.iconContainer}>
         <IconMailOpened size={32} stroke={1.5} />
       </div>
