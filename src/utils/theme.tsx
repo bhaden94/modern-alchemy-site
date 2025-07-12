@@ -143,6 +143,8 @@ export const cssVariableResolver: CSSVariablesResolver = () => ({
     '--mantine-header-height': rem(94),
     '--header-footer-color': 'var(--mantine-color-academia-filled)',
     '--header-footer-hover': 'var(--mantine-color-academia-filled-hover)',
+    '--default-linear-gradient':
+      'linear-gradient(45deg,var(--mantine-color-academia-6),var(--mantine-color-academia-9))',
   },
   light: {},
   dark: {},
