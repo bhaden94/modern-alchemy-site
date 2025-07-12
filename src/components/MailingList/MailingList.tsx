@@ -109,7 +109,7 @@ const MailingList = ({ content }: IMailingList) => {
     )
   }
 
-  if (!content?.isActive) return undefined
+  if (!content?.isActive) return null
 
   return (
     <div className={classes.container} id={NavigationInternalIds.MailingList}>
