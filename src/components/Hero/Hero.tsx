@@ -1,17 +1,8 @@
-import {
-  Button,
-  Container,
-  Group,
-  Overlay,
-  Text,
-  Title,
-} from '@mantine/core'
+import { Button, Container, Group, Overlay, Text, Title } from '@mantine/core'
 import Image from 'next/image'
 import Link from 'next/link'
 
-import {
-  MailingListFormContent,
-} from '~/schemas/pages/mailingListFormContent'
+import { MailingListFormContent } from '~/schemas/pages/mailingListFormContent'
 import { Base64heroImage } from '~/utils'
 import { NavigationPages } from '~/utils/navigation'
 

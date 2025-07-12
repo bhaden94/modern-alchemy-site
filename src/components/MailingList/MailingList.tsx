@@ -8,6 +8,7 @@ import {
   Text,
   TextInput,
   Title,
+  Transition,
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { IconMailOpened } from '@tabler/icons-react'
@@ -39,6 +40,11 @@ const MailingList = ({ content }: IMailingList) => {
 
   const successTitle = content?.successMessage || 'Thank you for subscribing!'
   const subscribeTitle = content?.formTitle || 'Subscribe to our mailing list'
+
+  // Animation settings
+  const transitionDuration = 300 // Duration for the transition effects
+  const transition = 'fade'
+  const timingFunction = 'ease'
 
   const form = useForm<TMailingListSchema>({
     initialValues: {
@@ -112,10 +118,42 @@ const MailingList = ({ content }: IMailingList) => {
       </div>
       <Card shadow="sm" className={classes.card}>
         <Stack className={classes.cardContent}>
-          <Title ta="center" order={3}>
-            {isSuccess ? successTitle : subscribeTitle}
-          </Title>
-          {isSuccess ? undefined : renderForm()}
+          {/* Show form */}
+          <Transition
+            mounted={!isSuccess}
+            transition={transition}
+            duration={transitionDuration}
+            timingFunction={timingFunction}
+          >
+            {(styles) => (
+              <Title ta="center" order={3} style={styles}>
+                {subscribeTitle}
+              </Title>
+            )}
+          </Transition>
+          <Transition
+            mounted={!isSuccess}
+            transition={transition}
+            duration={transitionDuration}
+            timingFunction={timingFunction}
+          >
+            {(styles) => <div style={styles}>{renderForm()}</div>}
+          </Transition>
+
+          {/* Success */}
+          <Transition
+            mounted={isSuccess}
+            transition={transition}
+            duration={transitionDuration}
+            timingFunction={timingFunction}
+            enterDelay={transitionDuration + 5} // Small delay to let form fade out first
+          >
+            {(styles) => (
+              <Title ta="center" order={3} style={styles}>
+                {successTitle}
+              </Title>
+            )}
+          </Transition>
         </Stack>
       </Card>
     </div>
