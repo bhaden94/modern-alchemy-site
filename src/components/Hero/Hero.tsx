@@ -1,20 +1,29 @@
-import { Button, Container, Overlay, Text, Title } from '@mantine/core'
+import { Button, Container, Group, Overlay, Text, Title } from '@mantine/core'
 import Image from 'next/image'
 import Link from 'next/link'
 
+import { MailingListFormContent } from '~/schemas/pages/mailingListFormContent'
 import { Base64heroImage } from '~/utils'
 import { NavigationPages } from '~/utils/navigation'
 
 import classes from './Hero.module.css'
+import MailingListFormLink from './MailingListFormLink/MailingListFormLink'
 
 interface IHero {
   title: string
   description?: string
   buttonText?: string
   buttonLink?: string
+  mailingListFormContent?: MailingListFormContent
 }
 
-const Hero = ({ title, description, buttonText, buttonLink }: IHero) => {
+const Hero = ({
+  title,
+  description,
+  buttonText,
+  buttonLink,
+  mailingListFormContent,
+}: IHero) => {
   return (
     <div className={classes.hero}>
       <Overlay
@@ -42,26 +51,28 @@ const Hero = ({ title, description, buttonText, buttonLink }: IHero) => {
           </Text>
         ) : undefined}
 
-        <Button
-          component={Link}
-          href={buttonLink || NavigationPages.Artists}
-          visibleFrom="xs"
-          variant="gradient"
-          size="xl"
-          className={classes.control}
-        >
-          {buttonText || 'View our artists'}
-        </Button>
-        <Button
-          component={Link}
-          href={buttonLink || NavigationPages.Artists}
-          hiddenFrom="xs"
-          variant="gradient"
-          size="md"
-          className={classes.control}
-        >
-          {buttonText || 'View our artists'}
-        </Button>
+        <Group className={classes.control}>
+          <Button
+            component={Link}
+            href={buttonLink || NavigationPages.Artists}
+            visibleFrom="xs"
+            variant="gradient"
+            size="xl"
+          >
+            {buttonText || 'View our artists'}
+          </Button>
+          <Button
+            component={Link}
+            href={buttonLink || NavigationPages.Artists}
+            hiddenFrom="xs"
+            variant="gradient"
+            size="md"
+            fullWidth
+          >
+            {buttonText || 'View our artists'}
+          </Button>
+          <MailingListFormLink content={mailingListFormContent} />
+        </Group>
       </Container>
     </div>
   )

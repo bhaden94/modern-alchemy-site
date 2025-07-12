@@ -1,0 +1,7 @@
+.arrowIcon {
+  transition: transform 0.3s ease;
+}
+
+.link:hover .arrowIcon {
+  transform: translateY(3px);
+}
