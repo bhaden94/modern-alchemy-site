@@ -16,8 +16,12 @@ export default async function RootPage() {
         description={content.heroDescription}
         buttonText={content.heroButtonText}
         buttonLink={content.heroButtonLink}
+        mailingListFormContent={content.mailingListFormContent}
       />
-      <About content={content.aboutContent} />
+      <About
+        aboutContent={content.aboutContent}
+        mailingListFormContent={content.mailingListFormContent}
+      />
     </>
   )
 }

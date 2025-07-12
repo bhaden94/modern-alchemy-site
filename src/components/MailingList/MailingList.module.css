@@ -1,0 +1,42 @@
+.container {
+  position: relative;
+  max-width: 500px;
+  margin: 0 auto;
+  scroll-margin-top: 2em;
+}
+
+.iconContainer {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  background: var(--default-linear-gradient);
+  border-radius: 50%;
+  padding: var(--mantine-spacing-sm);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  padding: var(--mantine-spacing-xl);
+  min-height: 355px; /* Adjust this value to match your form height */
+
+  @media (max-width: $mantine-breakpoint-xs) {
+    padding: var(--mantine-spacing-xl) var(--mantine-spacing-sm);
+  }
+}
+
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: auto auto;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--mantine-spacing-md);
+}

@@ -1,6 +1,13 @@
 import MailerLite from '@mailerlite/mailerlite-nodejs'
 import { NextResponse } from 'next/server'
 
+interface Body {
+  email: string
+  name?: string
+  phoneNumber?: string
+  shouldResubscribe?: boolean
+}
+
 const API_KEY = process.env.MAILER_LITE_API_KEY || ''
 const BOOKING_GROUP_ID = process.env.MAILER_LITE_GROUP_ID || ''
 
@@ -9,8 +16,8 @@ const mlClient = new MailerLite({
 })
 
 export async function POST(request: Request) {
-  const body = await request.json()
-  const { email, name, phoneNumber } = body
+  const body: Body = await request.json()
+  const { email, name, phoneNumber, shouldResubscribe } = body
 
   console.log('Starting to create/update a subscriber with body:', body)
 
@@ -33,6 +40,9 @@ export async function POST(request: Request) {
       },
       groups: [BOOKING_GROUP_ID],
       status: 'active',
+      // resubscribe does exist, but is not officially documented.
+      // @ts-ignore
+      resubscribe: shouldResubscribe ?? false,
     })
 
     console.log('Subscriber created/updated', response.data.data)
