@@ -11,7 +11,7 @@ interface IMailingListFormLink {
 }
 
 const MailingListFormLink = ({ content }: IMailingListFormLink) => {
-  if (!content?.isActive) return undefined
+  if (!content?.isActive) return null
 
   return (
     <Anchor
