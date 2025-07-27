@@ -1,3 +1,12 @@
+export const formatStylesInSentence = (styles?: string[]): string => {
+  const formatter = new Intl.ListFormat('en-US', {
+    style: 'short', // uses '&' instead of 'and'
+    type: 'conjunction', // uses 'and' instead of 'or'
+  })
+
+  return formatter.format(styles || [])
+}
+
 export const convertBlobToBase64 = (blob: File) =>
   new Promise((resolve, reject) => {
     const reader = new FileReader()
