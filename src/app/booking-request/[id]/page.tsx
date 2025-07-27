@@ -8,8 +8,10 @@ import {
   getArtistById,
   getArtists,
 } from '~/lib/sanity/queries/sanity.artistsQuery'
+import { getLayoutMetadata } from '~/lib/sanity/queries/sanity.pageContentQueries'
 import { getClient } from '~/lib/sanity/sanity.client'
 import { getImageFromRef } from '~/lib/sanity/sanity.image'
+import { formatStylesInSentence } from '~/utils'
 
 export const generateStaticParams = async () => {
   const client = getClient(undefined)
@@ -24,11 +26,15 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const client = getClient(undefined)
   const artist = await getArtistById(client, decodeURI(params.id))
+  const metadata = await getLayoutMetadata(client)
 
   if (!artist) return {}
 
   const title = `${artist.name} Booking Request`
-  const description = `Submit a tattoo appointment booking request to ${artist.name}.`
+
+  const formattedStyles = formatStylesInSentence(artist.styles)
+  const stylesSection = formattedStyles ? `for ${formattedStyles} tattoos ` : ''
+  const description = `Submit a booking request ${stylesSection}with ${artist.name} at ${metadata.businessName} located in ${metadata.location}.`
 
   return {
     title: title,
