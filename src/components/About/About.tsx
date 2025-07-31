@@ -1,6 +1,6 @@
 'use client'
 
-import { MailingListFormContent } from '~/schemas/pages/mailingListFormContent'
+import { MailingListContent } from '~/schemas/models/mailingList'
 import { AboutContent } from '~/schemas/pages/rootPageContent'
 
 import MailingList from '../MailingList/MailingList'
@@ -9,16 +9,16 @@ import AboutItem from './AboutItem/AboutItem'
 
 interface IAbout {
   aboutContent?: AboutContent[]
-  mailingListFormContent?: MailingListFormContent
+  mailingListContent?: MailingListContent
 }
 
-const About = ({ aboutContent, mailingListFormContent }: IAbout) => {
+const About = ({ aboutContent, mailingListContent }: IAbout) => {
   return (
     <PageContainer>
       {aboutContent?.map((aboutItem, i) => (
         <AboutItem key={aboutItem.heading} item={aboutItem} index={i} />
       ))}
-      <MailingList content={mailingListFormContent} />
+      <MailingList content={mailingListContent} />
     </PageContainer>
   )
 }

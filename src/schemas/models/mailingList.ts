@@ -1,6 +1,9 @@
+import { IconMail } from '@tabler/icons-react'
 import { defineField, defineType } from 'sanity'
 
-export interface MailingListFormContent {
+import { BaseSanitySchema } from '..'
+
+export interface MailingListContent extends BaseSanitySchema<'mailingList'> {
   isActive?: boolean
   heroTitle?: string
   formTitle?: string
@@ -8,9 +11,10 @@ export interface MailingListFormContent {
 }
 
 export default defineType({
-  name: 'mailingListFormContent',
-  type: 'object',
-  title: 'Mailing List Form Content',
+  name: 'mailingList',
+  type: 'document',
+  title: 'Mailing List Content',
+  icon: IconMail,
   fields: [
     defineField({
       name: 'isActive',

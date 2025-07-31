@@ -2,10 +2,12 @@ import { notFound } from 'next/navigation'
 
 import About from '~/components/About/About'
 import Hero from '~/components/Hero/Hero'
+import { getDefaultMailingList } from '~/lib/sanity/queries/sanity.mailingListQuery'
 import { performPageContentQuery } from '~/lib/sanity/queries/sanity.pageContentQueries'
 
 export default async function RootPage() {
   const content = await performPageContentQuery('rootPageContent')
+  const mailingListContent = await getDefaultMailingList()
 
   if (!content) return notFound()
 
@@ -16,11 +18,11 @@ export default async function RootPage() {
         description={content.heroDescription}
         buttonText={content.heroButtonText}
         buttonLink={content.heroButtonLink}
-        mailingListFormContent={content.mailingListFormContent}
+        mailingListContent={mailingListContent}
       />
       <About
         aboutContent={content.aboutContent}
-        mailingListFormContent={content.mailingListFormContent}
+        mailingListContent={mailingListContent}
       />
     </>
   )

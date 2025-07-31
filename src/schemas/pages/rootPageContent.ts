@@ -6,7 +6,6 @@ import { ImageReference } from '~/utils/images/uploadImagesToSanity'
 import { BaseSanitySchema } from '..'
 import { BlockContent } from '../models/blockContent'
 import { BasePageContent } from './basePageContent'
-import { MailingListFormContent } from './mailingListFormContent'
 
 export interface AboutContent {
   heading: string
@@ -21,7 +20,6 @@ export interface RootPageContent
   heroButtonText?: string
   heroButtonLink?: string
   aboutContent?: AboutContent[]
-  mailingListFormContent?: MailingListFormContent
 }
 
 export default defineType({
@@ -85,11 +83,6 @@ export default defineType({
           ],
         }),
       ],
-    }),
-    defineField({
-      name: 'mailingListFormContent',
-      type: 'mailingListFormContent',
-      title: 'Mailing List Form Content',
     }),
   ],
 })
