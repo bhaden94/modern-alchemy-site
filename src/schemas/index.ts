@@ -3,6 +3,7 @@ import { SchemaTypeDefinition } from 'sanity'
 import artist from './models/artist'
 import blockContent from './models/blockContent'
 import booking from './models/booking'
+import mailingList from './models/mailingList'
 import aftercareInfoPageContent from './pages/aftercareInfoPageContent'
 import announcementPageContent from './pages/announcementPageContent'
 import artistsPageContent from './pages/artistsPageContent'
@@ -11,7 +12,6 @@ import bookingInfoPageContent from './pages/bookingInfoPageContent'
 import disclaimerPageContent from './pages/disclaimerPageContent'
 import faqPageContent from './pages/faqPageContent'
 import layoutMetadataContent from './pages/layoutMetadataContent'
-import mailingListFormContent from './pages/mailingListFormContent'
 import privacyPolicyPageContent from './pages/privacyPolicyPageContent'
 import rootLayoutContent from './pages/rootLayoutContent'
 import rootPageContent from './pages/rootPageContent'
@@ -20,8 +20,8 @@ export const schemaTypes = {
   blockContent,
   booking,
   artist,
+  mailingList,
   basePageContent,
-  mailingListFormContent,
   rootPageContent,
   faqPageContent,
   privacyPolicyPageContent,
@@ -39,7 +39,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     rootLayoutContent,
     // Pages
     basePageContent,
-    mailingListFormContent,
     rootPageContent,
     artistsPageContent,
     aftercareInfoPageContent,
@@ -51,6 +50,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     // Models
     artist,
     booking,
+    mailingList,
     // Objects
     blockContent,
   ],

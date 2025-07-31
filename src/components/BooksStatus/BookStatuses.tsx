@@ -2,21 +2,25 @@
 
 import { ArtistProvider } from '~/hooks/useArtist'
 import { Artist } from '~/schemas/models/artist'
+import { MailingListContent } from '~/schemas/models/mailingList'
 
 import ArtistBooksStatus from './ArtistBookStatus/ArtistBooksStatus'
 
 interface IBookStatuses {
-  artists: Artist[]
+  artist: Artist
+  mailingList?: MailingListContent
 }
 
-const BookStatuses = ({ artists }: IBookStatuses) => {
+const BookStatuses = ({ artist, mailingList }: IBookStatuses) => {
   return (
     <>
-      {artists?.map((artist) => (
-        <ArtistProvider key={artist._id} artist={artist}>
-          <ArtistBooksStatus />
-        </ArtistProvider>
-      ))}
+      <ArtistProvider
+        key={artist._id}
+        artist={artist}
+        mailingList={mailingList}
+      >
+        <ArtistBooksStatus />
+      </ArtistProvider>
     </>
   )
 }

@@ -1,13 +1,13 @@
 import { Anchor, Group } from '@mantine/core'
 import { IconArrowDown } from '@tabler/icons-react'
 
-import { MailingListFormContent } from '~/schemas/pages/mailingListFormContent'
+import { MailingListContent } from '~/schemas/models/mailingList'
 import { NavigationInternalIds } from '~/utils/navigation'
 
 import classes from './MailingListFormLink.module.css'
 
 interface IMailingListFormLink {
-  content?: MailingListFormContent
+  content?: MailingListContent
 }
 
 const MailingListFormLink = ({ content }: IMailingListFormLink) => {

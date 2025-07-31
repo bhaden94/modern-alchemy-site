@@ -8,6 +8,7 @@ import {
   getArtistById,
   getArtists,
 } from '~/lib/sanity/queries/sanity.artistsQuery'
+import { getDefaultMailingList } from '~/lib/sanity/queries/sanity.mailingListQuery'
 import { getLayoutMetadata } from '~/lib/sanity/queries/sanity.pageContentQueries'
 import { getClient } from '~/lib/sanity/sanity.client'
 import { getImageFromRef } from '~/lib/sanity/sanity.image'
@@ -54,13 +55,15 @@ const ArtistBookingRequestPage = async ({
 }) => {
   const client = getClient(undefined)
   const artist = await getArtistById(client, decodeURI(params.id))
+  // When we have an artist specific mailing list, we can get that here.
+  const mailingList = await getDefaultMailingList(client)
 
   if (!artist || !artist.isActive) return notFound()
 
   return (
     <PageContainer>
       <PageTitle title={`Booking with ${artist.name}`} />
-      <BookStatuses artists={[artist]} />
+      <BookStatuses artist={artist} mailingList={mailingList} />
     </PageContainer>
   )
 }

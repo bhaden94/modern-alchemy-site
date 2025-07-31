@@ -2,7 +2,7 @@ import { Button, Container, Group, Overlay, Text, Title } from '@mantine/core'
 import Image from 'next/image'
 import Link from 'next/link'
 
-import { MailingListFormContent } from '~/schemas/pages/mailingListFormContent'
+import { MailingListContent } from '~/schemas/models/mailingList'
 import { Base64heroImage } from '~/utils'
 import { NavigationPages } from '~/utils/navigation'
 
@@ -14,7 +14,7 @@ interface IHero {
   description?: string
   buttonText?: string
   buttonLink?: string
-  mailingListFormContent?: MailingListFormContent
+  mailingListContent?: MailingListContent
 }
 
 const Hero = ({
@@ -22,7 +22,7 @@ const Hero = ({
   description,
   buttonText,
   buttonLink,
-  mailingListFormContent,
+  mailingListContent,
 }: IHero) => {
   return (
     <div className={classes.hero}>
@@ -71,7 +71,7 @@ const Hero = ({
           >
             {buttonText || 'View our artists'}
           </Button>
-          <MailingListFormLink content={mailingListFormContent} />
+          <MailingListFormLink content={mailingListContent} />
         </Group>
       </Container>
     </div>

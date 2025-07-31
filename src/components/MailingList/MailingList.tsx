@@ -18,7 +18,7 @@ import { useState } from 'react'
 import { z } from 'zod'
 
 import { useErrorDialog } from '~/hooks/useErrorDialog'
-import { MailingListFormContent } from '~/schemas/pages/mailingListFormContent'
+import { MailingListContent } from '~/schemas/models/mailingList'
 import { NavigationInternalIds, NavigationPages } from '~/utils/navigation'
 
 import classes from './MailingList.module.css'
@@ -30,7 +30,7 @@ const mailingListSchema = z.object({
 type TMailingListSchema = z.infer<typeof mailingListSchema>
 
 interface IMailingList {
-  content?: MailingListFormContent
+  content?: MailingListContent
 }
 
 const MailingList = ({ content }: IMailingList) => {
