@@ -7,6 +7,7 @@ import { performPageContentQuery } from '~/lib/sanity/queries/sanity.pageContent
 
 export default async function RootPage() {
   const content = await performPageContentQuery('rootPageContent')
+  // When we have an artist specific mailing list, we should still get the default here
   const mailingListContent = await getDefaultMailingList()
 
   if (!content) return notFound()

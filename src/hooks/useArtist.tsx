@@ -3,10 +3,12 @@
 import React, { createContext, useContext, useState } from 'react'
 
 import { Artist } from '~/schemas/models/artist'
+import { MailingListContent } from '~/schemas/models/mailingList'
 
 type ArtistContextType = {
   artist: Artist
   updateArtist: (artist: Artist) => void
+  mailingList?: MailingListContent
 }
 
 const ArtistContext = createContext<ArtistContextType>({
@@ -26,15 +28,24 @@ const ArtistContext = createContext<ArtistContextType>({
 
 interface IArtistProvider {
   artist: Artist
+  mailingList?: MailingListContent
   children: React.ReactNode
 }
 
-export const ArtistProvider = ({ artist, children }: IArtistProvider) => {
+export const ArtistProvider = ({
+  artist,
+  mailingList,
+  children,
+}: IArtistProvider) => {
   const [currentArtist, setArtist] = useState<Artist>(artist)
 
   return (
     <ArtistContext.Provider
-      value={{ artist: currentArtist, updateArtist: setArtist }}
+      value={{
+        artist: currentArtist,
+        updateArtist: setArtist,
+        mailingList: mailingList,
+      }}
     >
       {children}
     </ArtistContext.Provider>
