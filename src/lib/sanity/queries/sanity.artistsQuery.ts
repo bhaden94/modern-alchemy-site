@@ -19,7 +19,7 @@ export async function getActiveArtists(
   return await client.fetch(activeArtistsQuery, {}, NEXT_CACHE_CONFIG.ARTIST)
 }
 
-const artistsEmailQuery = groq`*[_type == "artist" && email == $email][0]{name, _id}`
+const artistsEmailQuery = groq`*[_type == "artist" && email == $email][0]{name, role, _id}`
 export async function getArtistByEmail(
   client: SanityClient,
   email: string,

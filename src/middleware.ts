@@ -1,15 +1,12 @@
 import { NextResponse } from 'next/server'
 import { withAuth } from 'next-auth/middleware'
 
-import { AUTHORIZED_ROLE, REDIRECT_URL } from './lib/next-auth/auth.utils'
+import { REDIRECT_URL } from './lib/next-auth/auth.utils'
 import { NavigationPages } from './utils/navigation'
 
 export default withAuth(
   function middleware(req) {
-    if (
-      !req.nextauth.token?.role ||
-      req.nextauth.token?.role !== AUTHORIZED_ROLE
-    ) {
+    if (!req.nextauth.token?.role) {
       return NextResponse.redirect(
         new URL(
           `/unauthorized?${REDIRECT_URL}=${encodeURIComponent(
@@ -23,7 +20,7 @@ export default withAuth(
     if (
       req.nextUrl.pathname === config.matcher[0] &&
       req.nextauth.token?.artistId &&
-      req.nextauth.token?.role === AUTHORIZED_ROLE
+      req.nextauth.token?.role
     ) {
       // route to settings page by default
       return NextResponse.redirect(

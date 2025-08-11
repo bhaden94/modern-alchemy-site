@@ -9,7 +9,14 @@ import { getArtistByEmail } from '../sanity/queries/sanity.artistsQuery'
 import { getClient } from '../sanity/sanity.client'
 
 export const REDIRECT_URL = 'redirectUrl'
-export const AUTHORIZED_ROLE = 'authorizedArtist'
+export type AuthorizedRoles = 'Owner' | 'Resident' | 'Guest'
+// If we add more roles, make sure this array is updated accordingly
+// It corresponds to the roles available in the Artist Sanity schema
+export const SanitySchemaRoles = [
+  { title: 'Owner', value: 'Owner' },
+  { title: 'Resident', value: 'Resident' },
+  { title: 'Guest', value: 'Guest' },
+]
 
 const getArtist = async (token: JWT): Promise<Partial<Artist> | null> => {
   if (!token?.email) return null
@@ -42,11 +49,17 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token }) {
       const artist = await getArtist(token)
 
-      token.role = artist ? AUTHORIZED_ROLE : null
+      token.role = artist?.role ?? null
       token.name = artist?.name
       token.artistId = artist?._id
 
       return token
+    },
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.role = token.role
+      }
+      return session
     },
   },
 }
@@ -68,6 +81,18 @@ export const logAuthorizedRequest = (
   request: NextRequest,
 ) => {
   console.log(
-    `${session.user?.name} - ${session.user?.email} requested a ${request.method} operation on ${request.nextUrl}.`,
+    `${session.user?.name} - ${session.user?.email} with role ${session.user?.role} requested a ${request.method} operation on ${request.nextUrl}.`,
   )
+}
+
+export const userIsAuthorizedForRoute = (
+  session: Session | null,
+  authorizedAccessRoles: AuthorizedRoles[],
+): boolean => {
+  if (!session?.user) return false
+
+  const userRole = session.user.role
+  if (!userRole) return false
+
+  return authorizedAccessRoles.includes(userRole)
 }
