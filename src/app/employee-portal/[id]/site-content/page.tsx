@@ -1,9 +1,15 @@
 import { redirect } from 'next/navigation'
+import { getServerSession } from 'next-auth'
 
 import AdminSiteContentControls from '~/components/AdminControls/AdminSiteContentControls'
 import PageContainer from '~/components/PageContainer'
 import PageTitle from '~/components/PageTitle/PageTitle'
-import { REDIRECT_URL } from '~/lib/next-auth/auth.utils'
+import {
+  authOptions,
+  AuthorizedRoles,
+  REDIRECT_URL,
+  userIsAuthorizedForRoute,
+} from '~/lib/next-auth/auth.utils'
 import { getArtistById } from '~/lib/sanity/queries/sanity.artistsQuery'
 import {
   getRootLayoutContent,
@@ -12,7 +18,8 @@ import {
 import { getClient } from '~/lib/sanity/sanity.client'
 import { NavigationPages } from '~/utils/navigation'
 
-// TODO: If there is ever another artist, we need roles so only the site owner can access this page.
+const authorizedAccessRoles: AuthorizedRoles[] = ['Owner']
+
 const EmployeePortalSiteContentPage = async ({
   params,
 }: {
@@ -20,12 +27,13 @@ const EmployeePortalSiteContentPage = async ({
 }) => {
   const client = getClient(undefined)
   const artist = await getArtistById(client, decodeURI(params.id))
+  const session = await getServerSession(authOptions)
   const rootLayoutContent = await getRootLayoutContent(client)
   const announcementPageContent = await performPageContentQuery(
     'announcementPageContent',
   )
 
-  if (!artist) {
+  if (!artist || !userIsAuthorizedForRoute(session, authorizedAccessRoles)) {
     redirect(
       `${NavigationPages.Unauthorized}?${REDIRECT_URL}=${encodeURIComponent(
         NavigationPages.EmployeePortal,
