@@ -22,6 +22,7 @@ const ArtistContext = createContext<ArtistContextType>({
     booksOpenAt: null,
     shouldEmailBookings: false,
     isActive: false,
+    role: 'Guest',
   },
   updateArtist: () => {},
 })

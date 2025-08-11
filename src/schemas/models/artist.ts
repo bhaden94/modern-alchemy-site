@@ -1,10 +1,16 @@
 import { IconUsers } from '@tabler/icons-react'
 import { defineArrayMember, defineField, defineType } from 'sanity'
 
+import { AuthorizedRoles, SanitySchemaRoles } from '~/lib/next-auth/auth.utils'
 import { ImageReference } from '~/utils/images/uploadImagesToSanity'
 
 import { BaseSanitySchema } from '..'
 import { BlockContent } from './blockContent'
+
+// TODO: Explicit choice for what shows on the booking page.
+// We currently have a hierarchy of choices. The order if provided is externalBookingLink -> embeddedWidget -> then tattoo form
+// We should have a choice so all these can be provided at the same time, but only one is chosen
+// This also gives us flexibility to add more options in the future without needing complex boolean checks.
 
 export interface Artist extends BaseSanitySchema<'artist'> {
   email: string
@@ -13,6 +19,7 @@ export interface Artist extends BaseSanitySchema<'artist'> {
   booksOpenAt?: Date | null
   shouldEmailBookings: boolean
   isActive: boolean
+  role: AuthorizedRoles
   externalBookingLink?: string
   socials?: { label: string; link: string }[]
   bookingInstructions?: BlockContent
@@ -52,6 +59,15 @@ export default defineType({
       name: 'isActive',
       type: 'boolean',
       title: 'Is Active',
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'role',
+      type: 'string',
+      title: 'Role',
+      options: {
+        list: SanitySchemaRoles,
+      },
       validation: (Rule) => Rule.required(),
     }),
     defineField({

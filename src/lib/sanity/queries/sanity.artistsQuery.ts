@@ -12,14 +12,14 @@ export async function getArtists(client: SanityClient): Promise<Artist[]> {
   return await client.fetch(artistsQuery, {}, NEXT_CACHE_CONFIG.ARTIST)
 }
 
-const activeArtistsQuery = groq`*[_type == "artist" && isActive]`
+const activeArtistsQuery = groq`*[_type == "artist" && isActive] | order(_createdAt asc)`
 export async function getActiveArtists(
   client: SanityClient,
 ): Promise<Artist[]> {
   return await client.fetch(activeArtistsQuery, {}, NEXT_CACHE_CONFIG.ARTIST)
 }
 
-const artistsEmailQuery = groq`*[_type == "artist" && email == $email][0]{name, _id}`
+const artistsEmailQuery = groq`*[_type == "artist" && email == $email][0]{name, role, _id}`
 export async function getArtistByEmail(
   client: SanityClient,
   email: string,
