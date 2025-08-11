@@ -7,7 +7,7 @@ import { BookingField, TBookingSchema } from '~/utils/forms/bookingFormUtils'
 interface IAdditionalBodyFields {
   base64Images: string[]
   artistId: string
-  artistEmail: string
+  artistEmail: string | string[]
 }
 
 export const maxDuration = 60 // This function can run for up to 60 seconds
@@ -30,7 +30,7 @@ ${field.label}:
   const emailText = emailTextArray.join('\n')
 
   console.log(
-    `Sending email to artist email ${body.artistEmail} with text: `,
+    `Sending email to artist email(s) ${[body.artistEmail].join(', ')} with text: `,
     emailText,
   )
 

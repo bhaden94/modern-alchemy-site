@@ -219,7 +219,7 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
       method: 'PUT',
       body: JSON.stringify({
         ...emailTextData,
-        artistEmail: artist.email,
+        artistEmail: artist.bookingEmails ?? artist.email,
         base64Images: base64Images,
       }),
     })
