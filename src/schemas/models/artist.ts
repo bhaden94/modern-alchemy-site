@@ -20,8 +20,6 @@ export const SanitySchemaBookingTypes = [
   { title: 'Tattoo Form', value: 'TattooForm' },
 ]
 
-// TODO: Add list of emails to send booking requests to in addition to the base email
-
 export interface Artist extends BaseSanitySchema<'artist'> {
   email: string
   bookingEmails?: string[]
