@@ -30,7 +30,7 @@ ${field.label}:
   const emailText = emailTextArray.join('\n')
 
   console.log(
-    `Sending email to artist email(s) ${[body.artistEmail].join(', ')} with text: `,
+    `Sending email to artist email(s) ${Array.isArray(body.artistEmail) ? body.artistEmail.join(', ') : body.artistEmail} with text: `,
     emailText,
   )
 
