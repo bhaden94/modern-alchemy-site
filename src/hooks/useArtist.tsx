@@ -23,6 +23,7 @@ const ArtistContext = createContext<ArtistContextType>({
     shouldEmailBookings: false,
     isActive: false,
     role: 'Guest',
+    bookingType: 'TattooForm',
   },
   updateArtist: () => {},
 })
