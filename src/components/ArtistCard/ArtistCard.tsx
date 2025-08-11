@@ -16,7 +16,10 @@ interface IArtistCard {
 
 const ArtistCard = ({ artist, showPortfolioLink }: IArtistCard) => {
   const BookingButton = () => {
-    if (artist.externalBookingLink) {
+    if (
+      artist.bookingType === 'ExternalBookingLink' &&
+      artist.externalBookingLink
+    ) {
       return (
         <Button
           component={Link}
