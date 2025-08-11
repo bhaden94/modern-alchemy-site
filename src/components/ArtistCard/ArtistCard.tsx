@@ -24,7 +24,9 @@ const ArtistCard = ({ artist, showPortfolioLink }: IArtistCard) => {
           href={artist.externalBookingLink}
           radius="sm"
         >
-          Go to booking site
+          {artist.externalBookingLink.startsWith('mailto')
+            ? 'Send Email'
+            : 'Go to booking site'}
         </Button>
       )
     }

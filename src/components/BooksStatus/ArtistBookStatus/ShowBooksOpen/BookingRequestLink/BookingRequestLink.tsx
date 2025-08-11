@@ -17,7 +17,10 @@ const BookingRequestLink = () => {
         target="_blank"
         display="block"
       >
-        {artist.name}:&nbsp;Go to booking site
+        {artist.name}:&nbsp;
+        {artist.externalBookingLink.startsWith('mailto')
+          ? 'Send Email'
+          : 'Go to booking site'}
       </Anchor>
     )
   }
