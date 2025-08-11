@@ -7,10 +7,18 @@ import { ImageReference } from '~/utils/images/uploadImagesToSanity'
 import { BaseSanitySchema } from '..'
 import { BlockContent } from './blockContent'
 
-// TODO: Explicit choice for what shows on the booking page.
-// We currently have a hierarchy of choices. The order if provided is externalBookingLink -> embeddedWidget -> then tattoo form
-// We should have a choice so all these can be provided at the same time, but only one is chosen
-// This also gives us flexibility to add more options in the future without needing complex boolean checks.
+export type BookingType =
+  | 'ExternalBookingLink'
+  | 'EmbeddedWidget'
+  | 'TattooForm'
+
+// If we add more booking types, make sure this array is updated accordingly
+// It corresponds to the booking types available in the Artist Sanity schema
+export const SanitySchemaBookingTypes = [
+  { title: 'External Booking Link', value: 'ExternalBookingLink' },
+  { title: 'Embedded Widget', value: 'EmbeddedWidget' },
+  { title: 'Tattoo Form', value: 'TattooForm' },
+]
 
 export interface Artist extends BaseSanitySchema<'artist'> {
   email: string
@@ -20,6 +28,7 @@ export interface Artist extends BaseSanitySchema<'artist'> {
   shouldEmailBookings: boolean
   isActive: boolean
   role: AuthorizedRoles
+  bookingType: BookingType
   externalBookingLink?: string
   socials?: { label: string; link: string }[]
   bookingInstructions?: BlockContent
@@ -67,6 +76,15 @@ export default defineType({
       title: 'Role',
       options: {
         list: SanitySchemaRoles,
+      },
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'bookingType',
+      type: 'string',
+      title: 'Booking Type',
+      options: {
+        list: SanitySchemaBookingTypes,
       },
       validation: (Rule) => Rule.required(),
     }),
@@ -157,11 +175,29 @@ export default defineType({
       name: 'externalBookingLink',
       type: 'string',
       title: 'External Booking Link',
+      validation: (Rule) =>
+        Rule.custom((value, context) => {
+          const { document } = context
+          const bookingType = document?.bookingType as BookingType
+          if (bookingType === 'ExternalBookingLink' && !value) {
+            return 'This field is required when booking type is External Booking Link'
+          }
+          return true
+        }),
     }),
     defineField({
       name: 'embeddedWidget',
       type: 'object',
       title: 'Embedded Booking Widget',
+      validation: (Rule) =>
+        Rule.custom((value, context) => {
+          const { document } = context
+          const bookingType = document?.bookingType as BookingType
+          if (bookingType === 'EmbeddedWidget' && !value) {
+            return 'This field is required when booking type is Embedded Widget'
+          }
+          return true
+        }),
       fields: [
         {
           name: 'scriptSrc',

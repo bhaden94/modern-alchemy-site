@@ -9,7 +9,10 @@ import { NavigationPages } from '~/utils/navigation'
 const BookingRequestLink = () => {
   const { artist } = useArtist()
 
-  if (artist.externalBookingLink) {
+  if (
+    artist.bookingType === 'ExternalBookingLink' &&
+    artist.externalBookingLink
+  ) {
     return (
       <Anchor
         component={Link}

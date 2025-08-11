@@ -96,15 +96,16 @@ const ShowBooksOpen = () => {
   }
 
   const RenderComponent = () => {
-    if (!!artist.externalBookingLink) {
-      return <BookingRequestLink />
+    switch (artist.bookingType) {
+      case 'ExternalBookingLink':
+        return <BookingRequestLink />
+      case 'EmbeddedWidget':
+        return <EmbeddedScriptWidget />
+      case 'TattooForm':
+        return <TattooFormComponent />
+      default:
+        return null
     }
-
-    if (!!artist.embeddedWidget) {
-      return <EmbeddedScriptWidget />
-    }
-
-    return <TattooFormComponent />
   }
 
   return <RenderComponent />
