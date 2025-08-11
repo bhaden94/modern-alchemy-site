@@ -55,7 +55,7 @@ const createTransporter =
   }
 
 export const sendMail = async (
-  toEmail: string,
+  toEmail: string | string[],
   replyToEmail: string,
   subject: string,
   text: string,

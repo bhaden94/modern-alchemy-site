@@ -22,6 +22,7 @@ export const SanitySchemaBookingTypes = [
 
 export interface Artist extends BaseSanitySchema<'artist'> {
   email: string
+  bookingEmails?: string[]
   name: string
   booksOpen: boolean
   booksOpenAt?: Date | null
@@ -57,6 +58,21 @@ export default defineType({
       type: 'string',
       title: 'Email',
       validation: (Rule) => Rule.required().lowercase(),
+    }),
+    defineField({
+      name: 'bookingEmails',
+      type: 'array',
+      title: 'Booking Emails',
+      description:
+        'Only required if the artist wants a different email, or multiple, for booking requests.',
+      of: [
+        defineArrayMember({
+          name: 'bookingEmail',
+          type: 'string',
+          title: 'Booking Email',
+          validation: (Rule) => Rule.required().lowercase(),
+        }),
+      ],
     }),
     defineField({
       name: 'name',
