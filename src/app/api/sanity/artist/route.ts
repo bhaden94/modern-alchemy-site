@@ -20,16 +20,17 @@ const filterDuplicatePortfolioImages = async (
   artistId: string,
   portfolioImages: ImageReference[],
 ): Promise<ImageReference[]> => {
-  const currentPortfolioImages: ImageReference[] = await client.fetch(
-    groq`*[_id == $artistId][0].portfolioImages`,
-    { artistId: artistId },
-    NEXT_CACHE_CONFIG.ARTIST,
-  )
-  const currentPortfolioImageRefs = currentPortfolioImages.map(
+  const currentPortfolioImages: ImageReference[] | undefined =
+    await client.fetch(
+      groq`*[_id == $artistId][0].portfolioImages`,
+      { artistId: artistId },
+      NEXT_CACHE_CONFIG.ARTIST,
+    )
+  const currentPortfolioImageRefs = currentPortfolioImages?.map(
     (image) => image.asset._ref,
   )
   const nonDupeImageRefs = portfolioImages.filter(
-    (image) => !currentPortfolioImageRefs.includes(image.asset._ref),
+    (image) => !currentPortfolioImageRefs?.includes(image.asset._ref),
   )
 
   return nonDupeImageRefs
