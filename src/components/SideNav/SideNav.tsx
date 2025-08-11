@@ -21,9 +21,17 @@ import Link from 'next/link'
 import { Session } from 'next-auth'
 import { signOut } from 'next-auth/react'
 
+import { AuthorizedRoles } from '~/lib/next-auth/auth.utils'
 import { NavigationPages } from '~/utils/navigation'
 
-const links = [
+type Link = {
+  icon: React.ReactNode
+  label: string
+  page: NavigationPages
+  requiredRoles?: AuthorizedRoles[]
+}
+
+const links: Link[] = [
   {
     icon: <IconSettings stroke={1.5} />,
     label: 'Form/Books Settings',
@@ -43,6 +51,7 @@ const links = [
     icon: <IconEdit stroke={1.5} />,
     label: 'Site Content',
     page: NavigationPages.EmployeePortalSiteContent,
+    requiredRoles: ['Owner'],
   },
 ]
 
@@ -52,16 +61,27 @@ const getUrl = (id: string, page: string): string => {
 
 const SideNav = ({ session, id }: { session: Session; id: string }) => {
   const [opened, { close, toggle }] = useDisclosure(false)
-  const mainLinks = links.map((link) => (
-    <NavLink
-      key={link.label}
-      component={Link}
-      onClick={toggle}
-      href={getUrl(id, link.page)}
-      label={link.label}
-      leftSection={link.icon}
-    />
-  ))
+  const mainLinks = links.map((link) => {
+    // If the artist does not have the required role, skip this link
+    if (
+      link.requiredRoles &&
+      session.user?.role &&
+      !link.requiredRoles.includes(session.user.role)
+    ) {
+      return null
+    }
+
+    return (
+      <NavLink
+        key={link.label}
+        component={Link}
+        onClick={toggle}
+        href={getUrl(id, link.page)}
+        label={link.label}
+        leftSection={link.icon}
+      />
+    )
+  })
 
   const DrawerTitle = () => (
     <>

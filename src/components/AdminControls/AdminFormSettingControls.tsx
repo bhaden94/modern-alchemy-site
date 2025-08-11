@@ -16,7 +16,7 @@ interface IAdminFormSettingControls {
 const AdminFormSettingControls = ({ artist }: IAdminFormSettingControls) => {
   return (
     <Group justify="space-around" align="start" gap="xl">
-      <Box w={{ base: '100%', sm: 300 }}>
+      <Box w={{ base: '100%', sm: 300 }} hidden={artist.role === 'Guest'}>
         <AdminBooksStatus
           booksStatus={{
             booksOpen: artist.booksOpen,
@@ -27,14 +27,14 @@ const AdminFormSettingControls = ({ artist }: IAdminFormSettingControls) => {
         />
       </Box>
 
-      <Box w={{ base: '100%', sm: 300 }}>
+      <Box w={{ base: '100%', sm: 300 }} hidden={artist.role === 'Guest'}>
         <AdminDayAvailability
           dayAvailability={artist.availableDays}
           artistId={artist._id}
         />
       </Box>
 
-      <Box w={{ base: '100%', sm: 300 }}>
+      <Box w={{ base: '100%', sm: 300 }} hidden={artist.role === 'Guest'}>
         <AdminBudgetOptions
           budgetOptions={artist.budgetOptions}
           artistId={artist._id}
