@@ -6,6 +6,7 @@ import { AnnouncementPageContent } from '~/schemas/pages/announcementPageContent
 import { ArtistsPageContent } from '~/schemas/pages/artistsPageContent'
 import { BookingInfoPageContent } from '~/schemas/pages/bookingInfoPageContent'
 import { DisclaimerPageContent } from '~/schemas/pages/disclaimerPageContent'
+import { EmploymentPageContent } from '~/schemas/pages/employmentPageContent'
 import { FaqPageContent } from '~/schemas/pages/faqPageContent'
 import { LayoutMetadataContent } from '~/schemas/pages/layoutMetadataContent'
 import { PrivacyPolicyPageContent } from '~/schemas/pages/privacyPolicyPageContent'
@@ -23,6 +24,7 @@ type QueryReturnType = {
   bookingInfoPageContent: BookingInfoPageContent
   disclaimerPageContent: DisclaimerPageContent
   announcementPageContent: AnnouncementPageContent
+  employmentPageContent: EmploymentPageContent
 }
 
 export async function performPageContentQuery<T extends keyof QueryReturnType>(
