@@ -34,6 +34,8 @@ export default defineType({
             name: 'internalLink',
             type: 'object',
             title: 'Internal link',
+            description:
+              'This can be used as a mailto link as well. Make sure the value starts with mailto for this.',
             fields: [
               {
                 name: 'page',

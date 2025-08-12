@@ -7,7 +7,7 @@ import PageInProgress from '~/components/PageInProgress/PageInProgress'
 import { performPageContentQuery } from '~/lib/sanity/queries/sanity.pageContentQueries'
 
 export async function generateMetadata(): Promise<Metadata> {
-  const content = await performPageContentQuery('announcementPageContent')
+  const content = await performPageContentQuery('employmentPageContent')
   if (!content) return {}
 
   return {
@@ -20,8 +20,8 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-const AnnouncementPage = async () => {
-  const content = await performPageContentQuery('announcementPageContent')
+const EmploymentPage = async () => {
+  const content = await performPageContentQuery('employmentPageContent')
 
   if (!content) return notFound()
 
@@ -36,4 +36,4 @@ const AnnouncementPage = async () => {
   )
 }
 
-export default AnnouncementPage
+export default EmploymentPage

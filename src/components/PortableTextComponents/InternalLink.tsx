@@ -15,12 +15,13 @@ export function InternalLink(
 ) {
   const { value, children, inEditor = false } = props
   const page = value?.page || ''
-  const href = `/${encodeURIComponent(page)}`
+  const href = page.startsWith('mailto') ? page : `/${encodeURIComponent(page)}`
 
   return (
     <Anchor
       component={Link}
       href={inEditor ? '' : href}
+      target={page.startsWith('mailto') ? '_blank' : '_self'}
       {...getSharedLinkProps(inEditor)}
     >
       {children}
