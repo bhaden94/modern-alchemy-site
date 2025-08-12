@@ -54,7 +54,7 @@ export const normalizeImageReference = (
       '_ref' in image.asset
     ) {
       // Already a valid image reference
-      // and image._key could be difference from image.asset._ref
+      // and image._key could be different from image.asset._ref
       return image as ImageReference
     }
 
