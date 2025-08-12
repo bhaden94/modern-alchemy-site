@@ -13,7 +13,7 @@ interface IAdminSiteContentControls {
   rootLayoutContent: RootLayoutContent
 }
 
-const AdminSiteContentControls = ({
+const AdminAnnouncementControls = ({
   announcementPageContent,
   rootLayoutContent,
 }: IAdminSiteContentControls) => {
@@ -38,4 +38,4 @@ const AdminSiteContentControls = ({
   )
 }
 
-export default AdminSiteContentControls
+export default AdminAnnouncementControls

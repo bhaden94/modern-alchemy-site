@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import { getServerSession } from 'next-auth'
 
-import AdminSiteContentControls from '~/components/AdminControls/AdminSiteContentControls'
+import AdminAnnouncementControls from '~/components/AdminControls/AdminAnnouncementControls'
 import PageContainer from '~/components/PageContainer'
 import PageTitle from '~/components/PageTitle/PageTitle'
 import {
@@ -44,7 +44,7 @@ const EmployeePortalSiteContentPage = async ({
   return (
     <PageContainer>
       <PageTitle title="Site Content" />
-      <AdminSiteContentControls
+      <AdminAnnouncementControls
         announcementPageContent={announcementPageContent}
         rootLayoutContent={rootLayoutContent}
       />
