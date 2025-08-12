@@ -7,7 +7,7 @@ import PageInProgress from '~/components/PageInProgress/PageInProgress'
 import { performPageContentQuery } from '~/lib/sanity/queries/sanity.pageContentQueries'
 
 export async function generateMetadata(): Promise<Metadata> {
-  const content = await performPageContentQuery('disclaimerPageContent')
+  const content = await performPageContentQuery('announcementPageContent')
   if (!content) return {}
 
   return {
