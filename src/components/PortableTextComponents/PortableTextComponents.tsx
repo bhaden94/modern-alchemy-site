@@ -1,7 +1,10 @@
 import { AnchorProps, Image } from '@mantine/core'
 import { PortableTextReactComponents } from '@portabletext/react'
 
-import { getImageFromRef } from '~/lib/sanity/sanity.image'
+import {
+  getImageFromRef,
+  normalizeImageReference,
+} from '~/lib/sanity/sanity.image'
 import { BlockContentImage } from '~/schemas/models/blockContent'
 
 import { ExternalLink } from './ExternalLink'
@@ -36,14 +39,10 @@ export const PortableTextComponents: Partial<PortableTextReactComponents> = {
   },
   types: {
     image: ({ value }: { value: BlockContentImage }) => {
-      // When an image is uploaded from a UI rich text editor, the _key will match the asset reference
-      // - In this case, we should just pass the key and let the function format the reference
-      // When an image is uploaded in the Sanity Studio, the _key will not match the asset reference
-      // - In this case, we can trust the asset reference is properly formatted and pass it directly
-      const isUploadedFromUi = value._key === value.asset._ref
+      const normalizedImage = normalizeImageReference(value)
       return (
         <Image
-          src={getImageFromRef(isUploadedFromUi ? value._key : value)?.url}
+          src={getImageFromRef(normalizedImage)?.url}
           alt={value.altText}
           radius="var(--mantine-radius-default)"
         />

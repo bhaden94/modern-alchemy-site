@@ -36,7 +36,8 @@ import {
 } from '~/components/PortableTextComponents/InternalLink'
 import { PortableTextComponents } from '~/components/PortableTextComponents/PortableTextComponents'
 import { useErrorDialog } from '~/hooks/useErrorDialog'
-import { BlockContent, BlockContentImage } from '~/schemas/models/blockContent'
+import { normalizeImageReference } from '~/lib/sanity/sanity.image'
+import { BlockContent } from '~/schemas/models/blockContent'
 
 import classes from './AdminTextEditor.module.css'
 import EditorImage from './TextEditorToolbar/EditorImage/EditorImage'
@@ -151,13 +152,16 @@ const renderBlock = (
   fieldName: string,
 ) => {
   if (props.schemaType.name === 'image') {
-    const imageVal = props.value as unknown as BlockContentImage
-    return (
+    let imageVal = normalizeImageReference(props.value as unknown)
+
+    return imageVal ? (
       <EditorImage
         image={imageVal}
         documentId={documentId}
         fieldName={fieldName}
       />
+    ) : (
+      <></>
     )
   }
 

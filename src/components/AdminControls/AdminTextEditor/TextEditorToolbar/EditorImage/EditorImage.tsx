@@ -94,7 +94,7 @@ const EditorImage = ({ image, documentId, fieldName }: IEditorImage) => {
 
       <Card.Section>
         <Image
-          src={getImageFromRef(image._key)?.url}
+          src={getImageFromRef(image)?.url}
           alt={image.altText}
           radius="var(--mantine-radius-default)"
         />
