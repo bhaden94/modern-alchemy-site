@@ -15,6 +15,8 @@ export enum NavigationPages {
   EmployeePortalPortfolioSettings = '/portfolio-settings',
   EmployeePortalBookings = '/bookings',
   EmployeePortalSiteContent = '/site-content',
+  EmployeePortalSiteContentAnnouncement = '/site-content/announcement',
+  EmployeePortalSiteContentEmployment = '/site-content/employment',
   Studio = '/studio',
   Unauthorized = '/unauthorized',
   PrivacyPolicy = '/privacy-policy',

@@ -13,9 +13,11 @@ import { useDisclosure } from '@mantine/hooks'
 import {
   IconArrowBadgeRight,
   IconBook,
+  IconBriefcase,
   IconCameraUp,
   IconEdit,
   IconSettings,
+  IconSpeakerphone,
 } from '@tabler/icons-react'
 import Link from 'next/link'
 import { Session } from 'next-auth'
@@ -24,14 +26,26 @@ import { signOut } from 'next-auth/react'
 import { AuthorizedRoles } from '~/lib/next-auth/auth.utils'
 import { NavigationPages } from '~/utils/navigation'
 
-type Link = {
-  icon: React.ReactNode
+interface BaseLink {
   label: string
-  page: NavigationPages
   requiredRoles?: AuthorizedRoles[]
 }
 
-const links: Link[] = [
+interface SimpleLink extends BaseLink {
+  icon: React.ReactNode
+  page: NavigationPages
+  children?: never
+}
+
+interface NestedLink extends BaseLink {
+  icon: React.ReactNode
+  children: SimpleLink[]
+  page?: never
+}
+
+type LinkItem = SimpleLink | NestedLink
+
+const links: LinkItem[] = [
   {
     icon: <IconSettings stroke={1.5} />,
     label: 'Form/Books Settings',
@@ -50,8 +64,20 @@ const links: Link[] = [
   {
     icon: <IconEdit stroke={1.5} />,
     label: 'Site Content',
-    page: NavigationPages.EmployeePortalSiteContent,
-    requiredRoles: ['Owner'],
+    children: [
+      {
+        icon: <IconSpeakerphone stroke={1.5} />,
+        label: 'Announcements',
+        page: NavigationPages.EmployeePortalSiteContentAnnouncement,
+        requiredRoles: ['Owner'],
+      },
+      {
+        icon: <IconBriefcase stroke={1.5} />,
+        label: 'Employment',
+        page: NavigationPages.EmployeePortalSiteContentEmployment,
+        requiredRoles: ['Owner'],
+      },
+    ],
   },
 ]
 
@@ -59,29 +85,72 @@ const getUrl = (id: string, page: string): string => {
   return `${NavigationPages.EmployeePortal}/${encodeURIComponent(id)}${page}`
 }
 
-const SideNav = ({ session, id }: { session: Session; id: string }) => {
-  const [opened, { close, toggle }] = useDisclosure(false)
-  const mainLinks = links.map((link) => {
-    // If the artist does not have the required role, skip this link
-    if (
-      link.requiredRoles &&
-      session.user?.role &&
-      !link.requiredRoles.includes(session.user.role)
-    ) {
-      return null
-    }
+const hasRequiredRole = (
+  requiredRoles: AuthorizedRoles[] | undefined,
+  userRole: AuthorizedRoles | null | undefined,
+): boolean => {
+  if (!requiredRoles) return true
+  if (!userRole) return false
+  return requiredRoles.includes(userRole)
+}
 
+const renderNavLink = (
+  link: LinkItem,
+  session: Session,
+  id: string,
+  onClose: () => void,
+  isTopLevel: boolean = true,
+): React.ReactNode | null => {
+  if (!hasRequiredRole(link.requiredRoles, session.user?.role)) {
+    return null
+  }
+
+  // Handle nested links
+  if ('children' in link && link.children) {
+    // Filter children based on their individual role requirements
+    const visibleChildren = link.children
+      .map((child) => renderNavLink(child, session, id, onClose, false))
+      .filter(Boolean)
+
+    // If no children are visible, don't render the parent
+    if (visibleChildren.length === 0) return null
+
+    return (
+      <NavLink
+        href="#required-for-focus"
+        key={link.label}
+        label={link.label}
+        leftSection={isTopLevel ? link.icon : undefined} // Only show icon if top-level
+        defaultOpened
+      >
+        {visibleChildren}
+      </NavLink>
+    )
+  }
+
+  // Handle simple links
+  if ('page' in link && link.page) {
     return (
       <NavLink
         key={link.label}
         component={Link}
-        onClick={toggle}
+        onClick={onClose}
         href={getUrl(id, link.page)}
         label={link.label}
-        leftSection={link.icon}
+        leftSection={isTopLevel ? link.icon : undefined} // Only show icon if top-level
       />
     )
-  })
+  }
+
+  return null
+}
+
+const SideNav = ({ session, id }: { session: Session; id: string }) => {
+  const [opened, { close, toggle }] = useDisclosure(false)
+
+  const mainLinks = links
+    .map((link) => renderNavLink(link, session, id, close, true))
+    .filter(Boolean)
 
   const DrawerTitle = () => (
     <>
