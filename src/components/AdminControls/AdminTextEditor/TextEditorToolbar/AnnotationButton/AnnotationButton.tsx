@@ -4,7 +4,7 @@ import { Button, Group, Popover, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { useEditor, useEditorSelector } from '@portabletext/editor'
 import * as selectors from '@portabletext/editor/selectors'
-import { IconLink } from '@tabler/icons-react'
+import { IconLink, IconLinkMinus } from '@tabler/icons-react'
 import { useEffect, useState } from 'react'
 import { PortableTextObject } from 'sanity'
 
@@ -12,8 +12,37 @@ import BaseToolbarButton from '../BaseToolbarButton/BaseToolbarButton'
 
 const annotationIconMap = {
   link: <IconLink size={16} />,
-  internalLink: <IconLink size={16} />,
+  internalLink: <IconLinkMinus size={16} />,
 } as const
+
+const internalLinkValidation = (value: string): string | null => {
+  // Must start with 'mailto' or '/'
+  // If it starts with http:// or https://, then have a message about using the external link instead
+  // It can be empty
+  if (
+    value.toLowerCase().startsWith('http') ||
+    value.toLowerCase().startsWith('www.')
+  ) {
+    return 'This looks like a link to an external site. You should use the external link instead.'
+  }
+
+  const startsWithAllowedCharacters =
+    value.toLowerCase().startsWith('mailto:') ||
+    // Allows letters and dashes to validate this is a page on the site
+    /^[a-z-]+$/.test(value.toLowerCase())
+
+  return startsWithAllowedCharacters
+    ? null
+    : 'Internal link must start with "mailto:" or be a valid page route on the site such as "artists".'
+}
+
+const externalLinkValidation = (value: string): string | null => {
+  const startsWithHttp =
+    value.toLowerCase().startsWith('http://') ||
+    value.toLowerCase().startsWith('https://')
+
+  return !startsWithHttp ? 'Link must start with http:// or https://' : null
+}
 
 interface IAnnotationButton {
   annotation: { name: keyof typeof annotationIconMap }
@@ -23,6 +52,14 @@ const AnnotationButton = ({ annotation }: IAnnotationButton) => {
   const annotationIcon: JSX.Element = annotationIconMap[annotation.name]
   const [opened, setOpened] = useState(false)
   const editor = useEditor()
+  const placeholder =
+    annotation.name === 'link'
+      ? 'Ex: https://www.modernalchemytattoo.com'
+      : 'Ex: artists or mailto:modernalchemytattoo@gmail.com'
+  const description =
+    annotation.name === 'link'
+      ? 'External link should be a valid URL starting with either http:// or https://'
+      : 'Internal link must start with "mailto:" or be a valid page route on the site such as "artists".'
 
   const form = useForm({
     mode: 'uncontrolled',
@@ -33,13 +70,10 @@ const AnnotationButton = ({ annotation }: IAnnotationButton) => {
       link: (value: string) => {
         if (!value) return
 
-        const startsWithHttp =
-          value.toLowerCase().startsWith('http://') ||
-          value.toLowerCase().startsWith('https://')
+        if (annotation.name === 'internalLink')
+          return internalLinkValidation(value)
 
-        return !startsWithHttp
-          ? 'Link must start with http:// or https://'
-          : null
+        return externalLinkValidation(value)
       },
     },
   })
@@ -90,14 +124,17 @@ const AnnotationButton = ({ annotation }: IAnnotationButton) => {
       return
     }
 
+    const annotationValue =
+      annotation.name === 'link'
+        ? { href: data.link, blank: true }
+        : { page: data.link }
+    console.log('submit annotation', annotationValue)
+
     editor.send({
       type: 'annotation.add',
       annotation: {
         name: annotation.name,
-        value:
-          annotation.name === 'link'
-            ? { href: data.link, blank: true }
-            : { page: '' },
+        value: annotationValue,
       },
     })
 
@@ -122,7 +159,7 @@ const AnnotationButton = ({ annotation }: IAnnotationButton) => {
               className="w-full"
               {...form.getInputProps('link')}
               key={form.key('link')}
-              placeholder="Ex: https://www.modernalchemytattoo.com"
+              placeholder={placeholder}
             />
 
             <Button type="submit">Save</Button>

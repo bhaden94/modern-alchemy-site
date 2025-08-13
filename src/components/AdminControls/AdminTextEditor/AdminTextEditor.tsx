@@ -23,6 +23,7 @@ import {
 } from '@portabletext/editor'
 import { EventListenerPlugin } from '@portabletext/editor/plugins'
 import { PortableText } from '@portabletext/react'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useState } from 'react'
 
@@ -63,8 +64,16 @@ const schemaDefinition = defineSchema({
   // See the rendering guide to learn more about each type.
 
   // Annotations are more complex marks that can hold data (for example, hyperlinks).
-  // Hide internal link for now
-  annotations: [{ name: 'link' } /*,{ name: 'internalLink' }*/],
+  annotations: [
+    {
+      name: 'link',
+      fields: [
+        { name: 'href', type: 'string' },
+        { name: 'blank', type: 'boolean' },
+      ],
+    },
+    { name: 'internalLink', fields: [{ name: 'page', type: 'string' }] },
+  ],
   // Lists apply to entire text blocks as well (for example, bullet, numbered).
   lists: [],
   // Inline objects hold arbitrary data that can be inserted into the text (for example, custom emoji).
@@ -175,7 +184,7 @@ interface IAdminTextEditor {
   documentId: string
 }
 
-const AdminTextEditor = ({
+const AdminTextEditorComponent = ({
   title,
   initialValue,
   fieldName,
@@ -280,5 +289,13 @@ const AdminTextEditor = ({
     </>
   )
 }
+
+const AdminTextEditor = dynamic(
+  () => Promise.resolve(AdminTextEditorComponent),
+  {
+    ssr: false,
+    loading: () => <LoadingOverlay visible={true} />,
+  },
+)
 
 export default AdminTextEditor
