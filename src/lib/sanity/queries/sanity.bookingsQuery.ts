@@ -1,7 +1,6 @@
 import { groq, SanityClient } from 'next-sanity'
 import { Observable } from 'rxjs'
 
-import { AuthorizedRoles } from '~/lib/next-auth/auth.utils'
 import { Booking } from '~/schemas/models/booking'
 
 import { NEXT_CACHE_CONFIG } from '../sanity.client'

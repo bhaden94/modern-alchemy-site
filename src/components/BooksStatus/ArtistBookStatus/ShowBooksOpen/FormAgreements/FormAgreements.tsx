@@ -24,7 +24,7 @@ const FormAgreements = ({
       Children.toArray(children).filter(Boolean).length !==
         formAgreementsAccepted.length,
     )
-  }, [formAgreementsAccepted, children])
+  }, [allAgreementsAccepted, formAgreementsAccepted, children])
 
   return (
     <Checkbox.Group

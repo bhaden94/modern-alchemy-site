@@ -13,25 +13,31 @@ import {
 import { useState } from 'react'
 
 import { Booking } from '~/schemas/models/booking'
+import { GenericBooking } from '~/schemas/models/genericBooking'
 import { formatDate } from '~/utils'
-import { BookingField } from '~/utils/forms/bookingFormUtils'
+import {
+  BookingField,
+  GenericBookingField,
+} from '~/utils/forms/bookingFormUtils'
 
 import CarouselWithThumbnails from '../../CarouselWithThumbnails/CarouselWithThumbnails'
 import DeleteWithConfirmation from '../../DeleteWithConfirmation/DeleteWithConfirmation'
 import InputCopyButton from './InputCopyButton/InputCopyButton'
 
 interface BookingFieldProperty {
-  id: keyof Booking
+  id: keyof Booking & keyof GenericBooking
   label: string
   getValue: (value: string) => string
 }
 
 interface IBookingCardProps {
-  booking: Booking
+  booking: Booking | GenericBooking
 }
 
 export default function BookingCard({ booking }: IBookingCardProps) {
   const [isDeleting, setIsDeleting] = useState<boolean>(false)
+  const bookingFields =
+    booking._type === 'booking' ? BookingField : GenericBookingField
 
   const deleteBookingById = async () => {
     setIsDeleting(true)
@@ -69,12 +75,12 @@ export default function BookingCard({ booking }: IBookingCardProps) {
 
   const renderComponent = (field: BookingFieldProperty) => {
     switch (field.id) {
-      case BookingField.Description.id:
+      case bookingFields.Description.id:
         return (
           <Textarea
             key={field.label}
-            label={<Text span>{BookingField.Description.label}</Text>}
-            value={BookingField.Description.getValue(booking.description)}
+            label={<Text span>{bookingFields.Description.label}</Text>}
+            value={bookingFields.Description.getValue(booking.description)}
             variant="filled"
             readOnly
             autosize
@@ -83,12 +89,12 @@ export default function BookingCard({ booking }: IBookingCardProps) {
             leftSectionPointerEvents="auto"
             leftSection={
               <InputCopyButton
-                value={BookingField.Description.getValue(booking.description)}
+                value={bookingFields.Description.getValue(booking.description)}
               />
             }
           />
         )
-      case BookingField.ReferenceImages.id:
+      case bookingFields.ReferenceImages.id:
         return null
       default:
         return renderInput(field)
@@ -96,7 +102,7 @@ export default function BookingCard({ booking }: IBookingCardProps) {
   }
 
   const BookingFieldsDisplay = () =>
-    Object.values(BookingField).map((field) =>
+    Object.values(bookingFields).map((field) =>
       renderComponent(field as BookingFieldProperty),
     )
 
