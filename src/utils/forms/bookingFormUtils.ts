@@ -283,7 +283,7 @@ export type TGenericBookingSchema = {
   phoneNumber: string
   email: string
   description: string
-  referenceImages?: File[] | undefined
+  referenceImages?: File[]
 }
 
 // This object is used just for the booking form
