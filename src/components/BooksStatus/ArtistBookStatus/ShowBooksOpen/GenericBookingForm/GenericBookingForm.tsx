@@ -309,7 +309,7 @@ const GenericBookingForm = ({ onSuccess, onFailure }: IGenericBookingForm) => {
               size="lg"
               variant="filled"
               type="submit"
-              disabled={isCompressingImages || allFormAgreementsAccepted}
+              disabled={isCompressingImages || !allFormAgreementsAccepted}
               loading={isSubmitting}
             >
               Send Request

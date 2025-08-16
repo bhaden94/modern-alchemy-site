@@ -21,7 +21,7 @@ const FormAgreements = ({
   useEffect(() => {
     allAgreementsAccepted(
       // Need to filter out the null values if any children are being conditionally rendered
-      Children.toArray(children).filter(Boolean).length !==
+      Children.toArray(children).filter(Boolean).length ===
         formAgreementsAccepted.length,
     )
   }, [allAgreementsAccepted, formAgreementsAccepted, children])

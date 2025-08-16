@@ -601,7 +601,7 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
             size="lg"
             variant="filled"
             type="submit"
-            disabled={isCompressingImages || allFormAgreementsAccepted}
+            disabled={isCompressingImages || !allFormAgreementsAccepted}
             loading={isSubmitting}
           >
             Send Request
