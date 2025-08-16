@@ -21,6 +21,7 @@ import ImageDropzone from '~/components/ImageDropzone/ImageDropzone'
 import ImageErrors from '~/components/ImageDropzone/ImageErrors'
 import ImageThumbnails from '~/components/ImageDropzone/ImageThumbnails'
 import { useArtist } from '~/hooks/useArtist'
+import { useFormSubmitStates } from '~/hooks/useFormSubmitStates'
 import {
   generateGenericBookingFormSchema,
   GenericBookingField,
@@ -37,12 +38,11 @@ import {
 import uploadImagesToSanity from '~/utils/images/uploadImagesToSanity'
 import { ImageReference } from '~/utils/images/uploadImagesToSanity'
 
+import CustomOverlayLoader from '../CustomOverlayLoader/CustomOverlayLoader'
 import DisclaimerAgreement from '../FormAgreements/DisclaimerAgreement/DisclaimerAgreement'
 import FormAgreements from '../FormAgreements/FormAgreements'
 import PrivacyPolicyAgreement from '../FormAgreements/PrivacyPolicyAgreement/PrivacyPolicyAgreement'
 import FormErrorAlert from '../TattooForm/FormErrorAlert/FormErrorAlert'
-import CustomOverlayLoader from '../CustomOverlayLoader/CustomOverlayLoader'
-import { useFormSubmitStates } from '~/hooks/useFormSubmitStates'
 
 const inputSharedProps = (
   id: keyof TGenericBookingSchema | string,

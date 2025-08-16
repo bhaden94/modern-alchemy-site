@@ -7,7 +7,6 @@ import {
   CheckboxGroupProps,
   Container,
   Group,
-  Loader,
   LoadingOverlay,
   NativeSelectProps,
   NumberInput,
@@ -29,6 +28,7 @@ import { zodResolver } from 'mantine-form-zod-resolver'
 import { SetStateAction, useState } from 'react'
 
 import { useArtist } from '~/hooks/useArtist'
+import { useFormSubmitStates } from '~/hooks/useFormSubmitStates'
 import {
   BookingField,
   generateBookingFormSchema,
@@ -51,12 +51,11 @@ import uploadImagesToSanity from '~/utils/images/uploadImagesToSanity'
 import ImageDropzone from '../../../../ImageDropzone/ImageDropzone'
 import ImageErrors from '../../../../ImageDropzone/ImageErrors'
 import ImageThumbnails from '../../../../ImageDropzone/ImageThumbnails'
+import CustomOverlayLoader from '../CustomOverlayLoader/CustomOverlayLoader'
 import DisclaimerAgreement from '../FormAgreements/DisclaimerAgreement/DisclaimerAgreement'
 import FormAgreements from '../FormAgreements/FormAgreements'
 import PrivacyPolicyAgreement from '../FormAgreements/PrivacyPolicyAgreement/PrivacyPolicyAgreement'
 import FormErrorAlert from './FormErrorAlert/FormErrorAlert'
-import CustomOverlayLoader from '../CustomOverlayLoader/CustomOverlayLoader'
-import { useFormSubmitStates } from '~/hooks/useFormSubmitStates'
 
 const inputSharedProps = (
   id: string,
