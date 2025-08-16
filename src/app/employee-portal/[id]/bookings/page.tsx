@@ -26,7 +26,7 @@ const BookingsPage = async ({ params }: { params: { id: string } }) => {
   return (
     <PageContainer>
       <PageTitle title={`${artist.name} Booking Requests`} />
-      <AdminBookings bookings={bookings} artistId={artist._id} />
+      <AdminBookings bookings={bookings} artist={artist} />
     </PageContainer>
   )
 }

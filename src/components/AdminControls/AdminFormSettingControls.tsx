@@ -27,14 +27,14 @@ const AdminFormSettingControls = ({ artist }: IAdminFormSettingControls) => {
         />
       </Box>
 
-      <Box w={{ base: '100%', sm: 300 }} hidden={artist.role === 'Guest'}>
+      <Box w={{ base: '100%', sm: 300 }} hidden={artist.role !== 'Owner'}>
         <AdminDayAvailability
           dayAvailability={artist.availableDays}
           artistId={artist._id}
         />
       </Box>
 
-      <Box w={{ base: '100%', sm: 300 }} hidden={artist.role === 'Guest'}>
+      <Box w={{ base: '100%', sm: 300 }} hidden={artist.role !== 'Owner'}>
         <AdminBudgetOptions
           budgetOptions={artist.budgetOptions}
           artistId={artist._id}

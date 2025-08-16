@@ -19,7 +19,7 @@ export async function PUT(request: NextRequest) {
     console.log(`Start booking request create for ${body.name}: ${body.email}`)
     // Submit the form data to Sanity CMS
     const response = await client.create({
-      _type: 'booking',
+      _type: body.isGeneric ? 'genericBooking' : 'booking',
       ...body,
     })
 

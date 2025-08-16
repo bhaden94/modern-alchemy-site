@@ -3,6 +3,7 @@ import { SchemaTypeDefinition } from 'sanity'
 import artist from './models/artist'
 import blockContent from './models/blockContent'
 import booking from './models/booking'
+import genericBooking from './models/genericBooking'
 import mailingList from './models/mailingList'
 import aftercareInfoPageContent from './pages/aftercareInfoPageContent'
 import announcementPageContent from './pages/announcementPageContent'
@@ -20,6 +21,7 @@ import rootPageContent from './pages/rootPageContent'
 export const schemaTypes = {
   blockContent,
   booking,
+  genericBooking,
   artist,
   mailingList,
   basePageContent,
@@ -54,6 +56,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     // Models
     artist,
     booking,
+    genericBooking,
     mailingList,
     // Objects
     blockContent,

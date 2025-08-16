@@ -2,35 +2,55 @@ import { NextRequest, NextResponse } from 'next/server'
 import SMTPTransport from 'nodemailer/lib/smtp-transport'
 
 import { sendMail } from '~/lib/mailer/mailer.utils'
-import { BookingField, TBookingSchema } from '~/utils/forms/bookingFormUtils'
+import {
+  BookingField,
+  GenericBookingField,
+  TBookingSchema,
+  TGenericBookingSchema,
+} from '~/utils/forms/bookingFormUtils'
 
 interface IAdditionalBodyFields {
+  isGeneric?: boolean
   base64Images: string[]
   artistId: string
   artistEmail: string | string[]
 }
 
-export const maxDuration = 60 // This function can run for up to 60 seconds
+export const maxDuration = 60
 
-export async function PUT(request: NextRequest) {
-  const body: TBookingSchema & IAdditionalBodyFields = await request.json()
-
-  const emailTextArray = Object.values(BookingField).map((field) => {
-    if (field.id !== BookingField.ReferenceImages.id) {
-      // ignore TS error here since we know types are a match
-      // @ts-ignore
-      const bodyVal: string & string[] = body[field.id]
+const buildEmailText = (
+  body: TBookingSchema | TGenericBookingSchema,
+  fields: object,
+): string => {
+  const emailTextArray = Object.values(fields).map((field) => {
+    if (field.id !== GenericBookingField.ReferenceImages.id) {
+      // @ts-ignore – body shape differs but fields exist for generic bookings
+      const bodyVal: string = body[field.id]
       return `
 ${field.label}:
 - ${field.getValue(bodyVal)}
-      `
+        `
     }
+    return ''
   })
+  return emailTextArray.join('\n')
+}
 
-  const emailText = emailTextArray.join('\n')
+export async function PUT(request: NextRequest) {
+  const body: IAdditionalBodyFields & (TBookingSchema | TGenericBookingSchema) =
+    await request.json()
+
+  const emailText = buildEmailText(
+    body,
+    body.isGeneric ? GenericBookingField : BookingField,
+  )
 
   console.log(
-    `Sending email to artist email(s) ${Array.isArray(body.artistEmail) ? body.artistEmail.join(', ') : body.artistEmail} with text: `,
+    `Sending email to artist email(s) ${
+      Array.isArray(body.artistEmail)
+        ? body.artistEmail.join(', ')
+        : body.artistEmail
+    } with text: `,
     emailText,
   )
 
@@ -40,7 +60,7 @@ ${field.label}:
       body.email,
       `${body.name} Booking Request`,
       emailText,
-      body.base64Images,
+      body.base64Images ?? [],
     )
 
     console.log('Email response: ', mailResponse)

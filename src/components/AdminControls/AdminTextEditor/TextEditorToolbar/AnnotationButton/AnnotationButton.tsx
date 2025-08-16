@@ -128,7 +128,6 @@ const AnnotationButton = ({ annotation }: IAnnotationButton) => {
       annotation.name === 'link'
         ? { href: data.link, blank: true }
         : { page: data.link }
-    console.log('submit annotation', annotationValue)
 
     editor.send({
       type: 'annotation.add',

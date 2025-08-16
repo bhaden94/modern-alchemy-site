@@ -3,7 +3,7 @@ import z from 'zod'
 
 import { Artist } from '~/schemas/models/artist'
 
-import { formatPhoneNumber } from '..'
+import { convertBlobToBase64, formatPhoneNumber } from '..'
 import { ACCEPTED_IMAGE_TYPES, MAX_FILES_SIZE } from './FormConstants'
 
 const joinPreferredDayLabels = (days: string[]): string => {
@@ -109,16 +109,19 @@ export const getArtistAvailableDays = (
   )
 }
 
+// Shared validation error messages
 const nameError = 'Please enter your full name'
 const phoneNumberRegexError = 'Invalid phone number'
 const phoneNumberError = 'Please enter your phone number'
 const emailError = 'Invalid email address'
+const descriptionError = 'Please describe your idea'
+
+// Tattoo-specific validation error messages
 const travelingFromError = 'Please enter where you are coming from'
 const minAgeError = 'You must be at least 18 to get a tattoo'
 const maxAgeError = 'Congrats on being the oldest person in history!'
 const charactersError = 'Please enter the list of characters you would like'
 const budgetError = 'Please select a budget/session length option'
-const descriptionError = 'Please describe your idea'
 const locationError =
   'Please enter where on your body you would like the tattoo'
 const preferredDayError = 'Please select at least 1 preferred day'
@@ -132,16 +135,8 @@ Places to update for form changes:
   - booking sanity model interface
 */
 
-// Custom checks for images in booking form
-const imagesRefinement = (files: File[], ctx: z.RefinementCtx): boolean => {
-  if (!files || files.length < MIN_FILES) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      message: `At least ${MIN_FILES} image(s) must be provided.`,
-    })
-    return false
-  }
-
+// Shared image validation logic
+const validateImageFiles = (files: File[], ctx: z.RefinementCtx): boolean => {
   if (files.length > MAX_FILES) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
@@ -173,15 +168,39 @@ const imagesRefinement = (files: File[], ctx: z.RefinementCtx): boolean => {
   return true
 }
 
+// Custom checks for required images in booking form
+const imagesRefinement = (files: File[], ctx: z.RefinementCtx): boolean => {
+  if (!files || files.length < MIN_FILES) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: `At least ${MIN_FILES} image(s) must be provided.`,
+    })
+    return false
+  }
+
+  return validateImageFiles(files, ctx)
+}
+
+// Shared validation schemas for common fields
+export const sharedValidationSchemas = {
+  name: z.string({ required_error: nameError }).min(1, nameError),
+  phoneNumber: z
+    .string()
+    .min(1, phoneNumberError)
+    .regex(phoneRegex, phoneNumberRegexError),
+  email: z.string().email({ message: emailError }),
+  description: z
+    .string({ required_error: descriptionError })
+    .min(1, descriptionError),
+  referenceImages: z.custom<File[]>().superRefine(imagesRefinement),
+}
+
 // Generated a schema given an artist
 export const generateBookingFormSchema = (artist: Artist): z.ZodObject<any> => {
   return z.object({
-    name: z.string({ required_error: nameError }).min(1, nameError),
-    phoneNumber: z
-      .string()
-      .min(1, phoneNumberError)
-      .regex(phoneRegex, phoneNumberRegexError),
-    email: z.string().email({ message: emailError }),
+    name: sharedValidationSchemas.name,
+    phoneNumber: sharedValidationSchemas.phoneNumber,
+    email: sharedValidationSchemas.email,
     instagramName: z.string().optional(),
     travelingFrom: z
       .string({ required_error: travelingFromError })
@@ -211,9 +230,7 @@ export const generateBookingFormSchema = (artist: Artist): z.ZodObject<any> => {
           message: budgetError,
         },
       ),
-    description: z
-      .string({ required_error: descriptionError })
-      .min(1, descriptionError),
+    description: sharedValidationSchemas.description,
     location: z
       .string({
         required_error: locationError,
@@ -225,8 +242,19 @@ export const generateBookingFormSchema = (artist: Artist): z.ZodObject<any> => {
       .string({ required_error: preferredDayError })
       .array()
       .min(1, preferredDayError),
-    bodyPlacementImages: z.custom<File[]>().superRefine(imagesRefinement),
-    referenceImages: z.custom<File[]>().superRefine(imagesRefinement),
+    bodyPlacementImages: sharedValidationSchemas.referenceImages,
+    referenceImages: sharedValidationSchemas.referenceImages,
+  })
+}
+
+// Schema for generic booking form
+export const generateGenericBookingFormSchema = (): z.ZodObject<any> => {
+  return z.object({
+    name: sharedValidationSchemas.name,
+    phoneNumber: sharedValidationSchemas.phoneNumber,
+    email: sharedValidationSchemas.email,
+    description: sharedValidationSchemas.description,
+    referenceImages: sharedValidationSchemas.referenceImages,
   })
 }
 
@@ -247,6 +275,15 @@ export type TBookingSchema = {
   preferredDays: string[]
   bodyPlacementImages: File[]
   referenceImages: File[]
+}
+
+// Generic booking schema type
+export type TGenericBookingSchema = {
+  name: string
+  phoneNumber: string
+  email: string
+  description: string
+  referenceImages?: File[]
 }
 
 // This object is used just for the booking form
@@ -371,6 +408,44 @@ export const BookingField = {
   },
 } as const
 
+// Generic booking field definitions
+export const GenericBookingField = {
+  Name: {
+    id: 'name',
+    label: 'First and Last Name',
+    placeholder: 'Enter your full name',
+    initialValue: '',
+    getValue: (name: string) => name,
+  },
+  PhoneNumber: {
+    id: 'phoneNumber',
+    label: 'Phone Number',
+    placeholder: 'Enter your phone number',
+    initialValue: '',
+    getValue: (number: string) => formatPhoneNumber(number) || '',
+  },
+  Email: {
+    id: 'email',
+    label: 'Email',
+    placeholder: 'Enter your email',
+    initialValue: '',
+    getValue: (email: string) => email,
+  },
+  Description: {
+    id: 'description',
+    label: 'Description',
+    placeholder: 'Describe your idea',
+    initialValue: '',
+    getValue: (description: string) => description,
+  },
+  ReferenceImages: {
+    id: 'referenceImages',
+    label: 'Reference Images',
+    initialValue: [],
+    getValue: () => '',
+  },
+} as const
+
 export const getBookingFormInitialValues = (): TBookingSchema => {
   const bookingFormInitialValues: any = {}
 
@@ -383,4 +458,43 @@ export const getBookingFormInitialValues = (): TBookingSchema => {
   })
 
   return bookingFormInitialValues as TBookingSchema
+}
+
+export const getGenericBookingFormInitialValues = (): TGenericBookingSchema => {
+  const genericBookingFormInitialValues: any = {}
+
+  Object.values(GenericBookingField).forEach((field) => {
+    genericBookingFormInitialValues[field.id] = field.initialValue
+  })
+
+  return genericBookingFormInitialValues as TGenericBookingSchema
+}
+
+interface IBookingEmail {
+  images: File[]
+  emailTextData: TBookingSchema | TGenericBookingSchema
+  artist: Artist
+  isGenericForm: boolean
+}
+export const sendArtistBookingEmail = async ({
+  images,
+  emailTextData,
+  artist,
+  isGenericForm,
+}: IBookingEmail): Promise<Response> => {
+  const base64Images = await Promise.all(
+    images.map(async (image) => {
+      const base64 = await convertBlobToBase64(image as File)
+      return base64
+    }),
+  )
+  return fetch('/api/mail', {
+    method: 'PUT',
+    body: JSON.stringify({
+      ...emailTextData,
+      isGeneric: isGenericForm,
+      artistEmail: artist.bookingEmails ?? artist.email,
+      base64Images,
+    }),
+  })
 }

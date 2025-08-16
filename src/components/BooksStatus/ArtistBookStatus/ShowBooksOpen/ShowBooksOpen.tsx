@@ -49,6 +49,20 @@ const TattooForm = dynamic(
   },
 )
 
+const GenericBookingForm = dynamic(
+  () =>
+    import(
+      '~/components/BooksStatus/ArtistBookStatus/ShowBooksOpen/GenericBookingForm/GenericBookingForm'
+    ),
+  {
+    loading: () => (
+      <div className="flex flex-col items-center">
+        <Loader />
+      </div>
+    ),
+  },
+)
+
 const generalFailureMessage = 'Something went wrong. Please try to re-submit.'
 const excessiveFailureMessage =
   'Looks like the site is having trouble. Please reach out to the artist directly for further assistance.'
@@ -90,7 +104,11 @@ const ShowBooksOpen = () => {
             components={PortableTextComponents}
           />
         ) : undefined}
-        <TattooForm onSuccess={onSuccess} onFailure={onFailure} />
+        {artist.role === 'Owner' ? (
+          <TattooForm onSuccess={onSuccess} onFailure={onFailure} />
+        ) : (
+          <GenericBookingForm onSuccess={onSuccess} onFailure={onFailure} />
+        )}
       </>
     )
   }
