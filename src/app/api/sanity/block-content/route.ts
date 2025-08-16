@@ -110,6 +110,15 @@ export async function POST(request: NextRequest) {
     (ref) => ref._id === documentId,
   )
 
+  // There could be references to an image that are not in the blockContent field
+  // If we get here, it means the image has not been referenced correctly in the blockContent
+  if (filteredImageRefsToDocument.length === 0) {
+    return new NextResponse(`Error performing POST on blockContent.`, {
+      status: 500,
+      statusText: 'InvalidImageReference',
+    })
+  }
+
   // Get the field we want to target since there could be multiple blockContent fields
   // in a given document
   const blockContentField = filteredImageRefsToDocument[0][

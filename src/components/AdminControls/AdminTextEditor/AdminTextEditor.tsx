@@ -79,7 +79,23 @@ const schemaDefinition = defineSchema({
   // Inline objects hold arbitrary data that can be inserted into the text (for example, custom emoji).
   inlineObjects: [],
   // Block objects hold arbitrary data that live side-by-side with text blocks (for example, images, code blocks, and tables).
-  blockObjects: [{ name: 'image' }],
+  blockObjects: [
+    {
+      name: 'image',
+      fields: [
+        { name: '_key', type: 'string' },
+        { name: '_type', type: 'string' },
+        {
+          name: 'asset',
+          type: 'object',
+          fields: [
+            { name: '_ref', type: 'string' },
+            { name: '_type', type: 'reference' },
+          ],
+        },
+      ],
+    },
+  ],
 })
 
 const renderStyle: RenderStyleFunction = (props) => {
