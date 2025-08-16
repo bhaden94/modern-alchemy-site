@@ -42,6 +42,7 @@ import FormAgreements from '../FormAgreements/FormAgreements'
 import PrivacyPolicyAgreement from '../FormAgreements/PrivacyPolicyAgreement/PrivacyPolicyAgreement'
 import FormErrorAlert from '../TattooForm/FormErrorAlert/FormErrorAlert'
 import CustomOverlayLoader from '../CustomOverlayLoader/CustomOverlayLoader'
+import { useFormSubmitStates } from '~/hooks/useFormSubmitStates'
 
 const inputSharedProps = (
   id: keyof TGenericBookingSchema | string,
@@ -65,6 +66,13 @@ interface IGenericBookingForm {
 
 const GenericBookingForm = ({ onSuccess, onFailure }: IGenericBookingForm) => {
   const { artist } = useArtist()
+  const {
+    setIsUploadingImages,
+    setIsSubmittingForm,
+    setIsSendingEmail,
+    isSubmitting,
+    customOverlayLoaderText,
+  } = useFormSubmitStates()
 
   // images state
   const [isCompressingImages, setIsCompressingImages] = useState(false)
@@ -75,18 +83,6 @@ const GenericBookingForm = ({ onSuccess, onFailure }: IGenericBookingForm) => {
 
   const [allFormAgreementsAccepted, setAllFormAgreementsAccepted] =
     useState(false)
-
-  // submit states
-  const [isUploadingImages, setIsUploadingImages] = useState<boolean>(false)
-  const [isSubmittingForm, setIsSubmittingForm] = useState<boolean>(false)
-  const [isSendingEmail, setIsSendingEmail] = useState<boolean>(false)
-  const isSubmitting = isUploadingImages || isSubmittingForm || isSendingEmail
-
-  const customOverlayLoaderText = isUploadingImages
-    ? 'Uploading images'
-    : isSubmittingForm
-      ? 'Submitting booking'
-      : 'Sending artist email'
 
   const form = useForm<TGenericBookingSchema>({
     initialValues: getGenericBookingFormInitialValues(),

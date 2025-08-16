@@ -56,6 +56,7 @@ import FormAgreements from '../FormAgreements/FormAgreements'
 import PrivacyPolicyAgreement from '../FormAgreements/PrivacyPolicyAgreement/PrivacyPolicyAgreement'
 import FormErrorAlert from './FormErrorAlert/FormErrorAlert'
 import CustomOverlayLoader from '../CustomOverlayLoader/CustomOverlayLoader'
+import { useFormSubmitStates } from '~/hooks/useFormSubmitStates'
 
 const inputSharedProps = (
   id: string,
@@ -96,6 +97,13 @@ Places to update for form changes:
 
 const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
   const { artist } = useArtist()
+  const {
+    setIsUploadingImages,
+    setIsSubmittingForm,
+    setIsSendingEmail,
+    isSubmitting,
+    customOverlayLoaderText,
+  } = useFormSubmitStates()
 
   // Body placement images state
   const [
@@ -120,21 +128,11 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
     useState<FileRejection[]>([])
 
   // Form boolean states
-  const [isUploadingImages, setIsUploadingImages] = useState<boolean>(false)
-  const [isSubmittingForm, setIsSubmittingForm] = useState<boolean>(false)
-  const [isSendingEmail, setIsSendingEmail] = useState<boolean>(false)
   const [allFormAgreementsAccepted, setAllFormAgreementsAccepted] =
     useState(false)
-  const isSubmitting = isUploadingImages || isSubmittingForm || isSendingEmail
   const isCompressingImages =
     isCompressingBodyPlacementImages || isCompressingReferenceImages
 
-  // Form variables
-  const customOverlayLoaderText = isUploadingImages
-    ? 'Uploading images'
-    : isSubmittingForm
-      ? 'Submitting booking'
-      : 'Sending artist email'
   const form = useForm<TBookingSchema>({
     initialValues: getBookingFormInitialValues(),
     validate: zodResolver(generateBookingFormSchema(artist)),
