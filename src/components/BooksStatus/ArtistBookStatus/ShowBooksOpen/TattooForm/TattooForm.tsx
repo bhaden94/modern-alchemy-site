@@ -1,7 +1,6 @@
 'use client'
 
 import {
-  Anchor,
   Box,
   Button,
   Checkbox,
@@ -26,13 +25,10 @@ import { TextInput } from '@mantine/core'
 import { Textarea } from '@mantine/core'
 import { FileRejection, FileWithPath } from '@mantine/dropzone'
 import { useForm } from '@mantine/form'
-import imageCompression from 'browser-image-compression'
 import { zodResolver } from 'mantine-form-zod-resolver'
-import Link from 'next/link'
 import { SetStateAction, useState } from 'react'
 
 import { useArtist } from '~/hooks/useArtist'
-import { convertBlobToBase64 } from '~/utils'
 import {
   BookingField,
   generateBookingFormSchema,
@@ -41,16 +37,25 @@ import {
   ImagesBookingField,
   MAX_FILES,
   priorTattooOptions,
+  sendArtistBookingEmail,
   styleOptions,
   TBookingSchema,
 } from '~/utils/forms/bookingFormUtils'
+import {
+  handleImageDrop,
+  handleImageReject,
+  handleImageRemove,
+} from '~/utils/forms/imageHandlingUtils'
 import uploadImagesToSanity from '~/utils/images/uploadImagesToSanity'
-import { NavigationPages } from '~/utils/navigation'
 
 import ImageDropzone from '../../../../ImageDropzone/ImageDropzone'
 import ImageErrors from '../../../../ImageDropzone/ImageErrors'
 import ImageThumbnails from '../../../../ImageDropzone/ImageThumbnails'
+import DisclaimerAgreement from '../FormAgreements/DisclaimerAgreement/DisclaimerAgreement'
+import FormAgreements from '../FormAgreements/FormAgreements'
+import PrivacyPolicyAgreement from '../FormAgreements/PrivacyPolicyAgreement/PrivacyPolicyAgreement'
 import FormErrorAlert from './FormErrorAlert/FormErrorAlert'
+import CustomOverlayLoader from '../CustomOverlayLoader/CustomOverlayLoader'
 
 const inputSharedProps = (
   id: string,
@@ -74,48 +79,6 @@ const inputSharedProps = (
   placeholder: placeholder,
   disabled: isDisabled,
 })
-
-const CustomLoader = ({ label }: { label: string }) => {
-  return (
-    <div className="flex flex-col justify-center items-center	gap-4">
-      <Loader />
-      <Text>{label}</Text>
-    </div>
-  )
-}
-
-const formAgreements = [
-  {
-    label: (
-      <Text>
-        I accept the above{' '}
-        <Anchor href="#" underline="hover" c="primary">
-          tattoo disclaimer
-        </Anchor>
-        .
-      </Text>
-    ),
-    value: 'disclaimer',
-  },
-  {
-    label: (
-      <Text>
-        I accept the{' '}
-        <Anchor
-          component={Link}
-          href={NavigationPages.PrivacyPolicy}
-          underline="hover"
-          target="_blank"
-          c="primary"
-        >
-          privacy policy
-        </Anchor>
-        .
-      </Text>
-    ),
-    value: 'privacyPolicy',
-  },
-] as const
 
 interface ITattooForm {
   onSuccess: () => void
@@ -156,20 +119,15 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
   const [referenceImageUploadRejections, setReferenceImageUploadRejections] =
     useState<FileRejection[]>([])
 
-  // Form agreements checkboxes
-  const [formAgreementsAccepted, setFormAgreementsAccepted] = useState<
-    string[]
-  >([])
-
   // Form boolean states
   const [isUploadingImages, setIsUploadingImages] = useState<boolean>(false)
   const [isSubmittingForm, setIsSubmittingForm] = useState<boolean>(false)
   const [isSendingEmail, setIsSendingEmail] = useState<boolean>(false)
+  const [allFormAgreementsAccepted, setAllFormAgreementsAccepted] =
+    useState(false)
   const isSubmitting = isUploadingImages || isSubmittingForm || isSendingEmail
   const isCompressingImages =
     isCompressingBodyPlacementImages || isCompressingReferenceImages
-  const allFormAgreementsAccepted =
-    formAgreementsAccepted.length !== formAgreements.length
 
   // Form variables
   const customOverlayLoaderText = isUploadingImages
@@ -201,26 +159,6 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
         email: email,
         name: name,
         phoneNumber,
-      }),
-    })
-  }
-
-  const sendArtistBookingEmail = async (
-    images: File[],
-    emailTextData: TBookingSchema,
-  ): Promise<Response> => {
-    const base64Images = await Promise.all(
-      images.map(async (image) => {
-        const base64 = await convertBlobToBase64(image as File)
-        return base64
-      }),
-    )
-    return fetch('/api/mail', {
-      method: 'PUT',
-      body: JSON.stringify({
-        ...emailTextData,
-        artistEmail: artist.bookingEmails ?? artist.email,
-        base64Images: base64Images,
       }),
     })
   }
@@ -265,6 +203,7 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
       method: 'PUT',
       body: JSON.stringify({
         ...data,
+        isGeneric: false,
         artist: { _ref: artist._id, _type: 'reference', _weak: true },
         [BookingField.ReferenceImages.id]:
           imageReferences === 'GeneralError' ? [] : imageReferences,
@@ -277,7 +216,12 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
     /* Send email start */
     if (artist.shouldEmailBookings) {
       setIsSendingEmail(true)
-      const emailResponse = await sendArtistBookingEmail(images, data)
+      const emailResponse = await sendArtistBookingEmail({
+        images,
+        emailTextData: data,
+        artist,
+        isGenericForm: false,
+      })
       setIsSendingEmail(false)
 
       if (!emailResponse.ok) {
@@ -302,7 +246,7 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
     rejections: FileRejection[],
     imageUploadSetter: (value: SetStateAction<FileRejection[]>) => void,
   ) => {
-    imageUploadSetter(rejections)
+    handleImageReject(rejections, imageUploadSetter)
   }
 
   const onImageDrop = async (
@@ -314,30 +258,11 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
       imageFilesSetter: (value: SetStateAction<FileWithPath[]>) => void
     },
   ) => {
-    setters.compressSetter(true)
-    form.clearFieldError(formId)
-    setters.imageRejectionSetter([])
-    setters.imageFilesSetter([])
-
-    try {
-      const filesPromises = files.map((file) =>
-        imageCompression(file, {
-          maxSizeMB: 1,
-          maxWidthOrHeight: 1920,
-          useWebWorker: true,
-        }),
-      )
-      const compressedImages = await Promise.all(filesPromises)
-
-      setters.imageFilesSetter(compressedImages)
-      form.setValues({ [formId]: compressedImages })
-    } catch (error) {
-      onFailure(
-        'There was a problem compressing the images. Please try again. If the issue persists, please try different images.',
-      )
-    }
-
-    setters.compressSetter(false)
+    await handleImageDrop(files, formId, setters, {
+      onFailure,
+      clearFieldError: form.clearFieldError,
+      setFormValues: form.setValues,
+    })
   }
 
   const onImageRemove = (
@@ -346,9 +271,13 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
     images: FileWithPath[],
     imagesSetter: (value: SetStateAction<FileWithPath[]>) => void,
   ) => {
-    const filteredFiles = images.filter((image) => image.name !== nameToRemove)
-    imagesSetter(filteredFiles)
-    form.setValues({ [formId]: filteredFiles })
+    handleImageRemove(
+      nameToRemove,
+      formId,
+      images,
+      imagesSetter,
+      form.setValues,
+    )
   }
 
   return (
@@ -358,7 +287,7 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
           visible={isSubmitting}
           zIndex={150}
           loaderProps={{
-            children: <CustomLoader label={customOverlayLoaderText} />,
+            children: <CustomOverlayLoader label={customOverlayLoaderText} />,
           }}
         />
         <form
@@ -576,7 +505,9 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
               dropzoneProps={{
                 loading: isCompressingBodyPlacementImages,
                 loaderProps: {
-                  children: <CustomLoader label={'Compressing images'} />,
+                  children: (
+                    <CustomOverlayLoader label={'Compressing images'} />
+                  ),
                 },
                 maxFiles: MAX_FILES,
               }}
@@ -625,7 +556,9 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
               dropzoneProps={{
                 loading: isCompressingReferenceImages,
                 loaderProps: {
-                  children: <CustomLoader label={'Compressing images'} />,
+                  children: (
+                    <CustomOverlayLoader label={'Compressing images'} />
+                  ),
                 },
                 maxFiles: MAX_FILES,
               }}
@@ -651,27 +584,18 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
           </Box>
 
           {/* Form Agreements */}
-          <Checkbox.Group
-            {...inputSharedProps(
+          <FormAgreements
+            allAgreementsAccepted={setAllFormAgreementsAccepted}
+            otherProps={inputSharedProps(
               'agreementsGroup',
               'Terms and Conditions',
               '',
               isSubmitting,
             )}
-            value={formAgreementsAccepted}
-            onChange={setFormAgreementsAccepted}
           >
-            <Stack my="xs">
-              {formAgreements.map((agreement) => (
-                <Checkbox
-                  key={agreement.value}
-                  label={agreement.label}
-                  value={agreement.value}
-                  error={false}
-                />
-              ))}
-            </Stack>
-          </Checkbox.Group>
+            {artist.bookingInstructions && <DisclaimerAgreement />}
+            <PrivacyPolicyAgreement />
+          </FormAgreements>
 
           {formHasErrors ? <FormErrorAlert /> : undefined}
 
