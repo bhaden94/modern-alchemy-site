@@ -29,9 +29,11 @@ const ShowBooksClosed = () => {
         ) : undefined}
       </div>
 
-      <div className={classes.mailingList}>
-        <MailingList content={mailingList} />
-      </div>
+      {artist.role === 'Owner' && (
+        <div className={classes.mailingList}>
+          <MailingList content={mailingList} />
+        </div>
+      )}
     </>
   )
 }
