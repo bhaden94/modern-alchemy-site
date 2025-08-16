@@ -10,11 +10,12 @@ import {
 import { getClient } from '~/lib/sanity/sanity.client'
 import { Artist } from '~/schemas/models/artist'
 import { Booking } from '~/schemas/models/booking'
+import { GenericBooking } from '~/schemas/models/genericBooking'
 
 import CommandBar from './CommandBar/CommandBar'
 
 interface IBookings {
-  bookings: Booking[]
+  bookings: (Booking | GenericBooking)[]
   artist: Artist
 }
 
@@ -22,7 +23,8 @@ interface IBookings {
 // This is because it could cause weird things to happen if we have pagination for bookings
 export default function AdminBookings({ bookings, artist }: IBookings) {
   const client = getClient(undefined)
-  const [bookingsList, setBookingsList] = useState<Booking[]>(bookings)
+  const [bookingsList, setBookingsList] =
+    useState<(Booking | GenericBooking)[]>(bookings)
   const [refreshDisabled, setRefreshDisabled] = useState(true)
 
   const refreshList = useCallback(() => {

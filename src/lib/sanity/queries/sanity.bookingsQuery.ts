@@ -2,6 +2,7 @@ import { groq, SanityClient } from 'next-sanity'
 import { Observable } from 'rxjs'
 
 import { Booking } from '~/schemas/models/booking'
+import { GenericBooking } from '~/schemas/models/genericBooking'
 
 import { NEXT_CACHE_CONFIG } from '../sanity.client'
 
@@ -9,7 +10,7 @@ export const bookingsByArtistIdQuery = groq`*[_type in ['booking', 'genericBooki
 export async function getBookingsByArtistId(
   client: SanityClient,
   id: string,
-): Promise<Booking[]> {
+): Promise<(Booking | GenericBooking)[]> {
   const idParam = {
     artistId: id,
   }
