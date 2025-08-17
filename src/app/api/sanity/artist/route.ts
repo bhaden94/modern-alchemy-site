@@ -13,6 +13,14 @@ import { ImageReference } from '~/utils/images/uploadImagesToSanity'
 
 const token = process.env.SANITY_API_WRITE_TOKEN
 
+// Personal Information helper & types (future expand)
+type PersonalInformationPatch = {
+  name?: string
+  // bookingEmails?: string[]
+  // socials?: { label: string; link: string }[]
+  // styles?: string[]
+}
+
 // Trying to append references that already exists results in an error
 // This filters the images down to ones that are unique
 const filterDuplicatePortfolioImages = async (
@@ -217,6 +225,47 @@ const updatePortfolioImages = async (
   )
 }
 
+const updatePersonalInformation = async (
+  client: SanityClient,
+  artistId: string,
+  personalInformation: PersonalInformationPatch,
+): Promise<NextResponse> => {
+  const setData: PersonalInformationPatch = {}
+
+  if (personalInformation.name) {
+    const trimmed = personalInformation.name.trim()
+    if (trimmed.length === 0 || trimmed.length > 80) {
+      return new NextResponse(
+        `Error performing PATCH on artist with id ${artistId}`,
+        {
+          status: 400,
+          statusText: 'InvalidPersonalInformation',
+        },
+      )
+    }
+    setData.name = trimmed
+  }
+
+  if (Object.keys(setData).length === 0) {
+    return new NextResponse(
+      `Error performing PATCH on artist with id ${artistId}`,
+      {
+        status: 400,
+        statusText: 'NoValidPersonalInformationFields',
+      },
+    )
+  }
+
+  console.log(
+    `Patch artist personal information with Id: ${artistId}`,
+    `Data: ${JSON.stringify(setData)}`,
+  )
+
+  const patchOperation = await client.patch(artistId).set(setData).commit()
+
+  return NextResponse.json({ name: patchOperation.name }, { status: 200 })
+}
+
 export async function PATCH(request: NextRequest) {
   const session = await getServerSession(authOptions)
   if (!session) return notAuthorizedResponse(request)
@@ -233,6 +282,7 @@ export async function PATCH(request: NextRequest) {
     budgetOptions,
     portfolioImages,
     operation,
+    personalInformation,
   } = body
 
   if (!artistId) {
@@ -264,6 +314,14 @@ export async function PATCH(request: NextRequest) {
       artistId,
       operation,
       portfolioImages,
+    )
+  }
+
+  if (personalInformation) {
+    return await updatePersonalInformation(
+      client,
+      artistId,
+      personalInformation,
     )
   }
 
