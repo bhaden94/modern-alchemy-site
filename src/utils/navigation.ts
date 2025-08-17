@@ -11,6 +11,7 @@ export enum NavigationPages {
   BookingRequest = '/booking-request',
   BookingRequestSuccess = '/booking-request/success',
   EmployeePortal = '/employee-portal',
+  EmployeePortalPersonalInformation = '/personal-information',
   EmployeePortalFormSettings = '/form-settings',
   EmployeePortalPortfolioSettings = '/portfolio-settings',
   EmployeePortalBookings = '/bookings',

@@ -18,6 +18,7 @@ import {
   IconEdit,
   IconSettings,
   IconSpeakerphone,
+  IconUser,
 } from '@tabler/icons-react'
 import Link from 'next/link'
 import { Session } from 'next-auth'
@@ -46,6 +47,11 @@ interface NestedLink extends BaseLink {
 type LinkItem = SimpleLink | NestedLink
 
 const links: LinkItem[] = [
+  {
+    icon: <IconUser stroke={1.5} />,
+    label: 'Personal Information',
+    page: NavigationPages.EmployeePortalPersonalInformation,
+  },
   {
     icon: <IconSettings stroke={1.5} />,
     label: 'Form/Books Settings',
