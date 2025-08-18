@@ -16,7 +16,7 @@ const token = process.env.SANITY_API_WRITE_TOKEN
 // Personal Information helper & types (future expand)
 type PersonalInformationPatch = {
   name?: string
-  // bookingEmails?: string[]
+  bookingEmails?: string[]
   // socials?: { label: string; link: string }[]
   // styles?: string[]
 }
@@ -230,23 +230,7 @@ const updatePersonalInformation = async (
   artistId: string,
   personalInformation: PersonalInformationPatch,
 ): Promise<NextResponse> => {
-  const setData: PersonalInformationPatch = {}
-
-  if (personalInformation.name) {
-    const trimmed = personalInformation.name.trim()
-    if (trimmed.length === 0 || trimmed.length > 80) {
-      return new NextResponse(
-        `Error performing PATCH on artist with id ${artistId}`,
-        {
-          status: 400,
-          statusText: 'InvalidPersonalInformation',
-        },
-      )
-    }
-    setData.name = trimmed
-  }
-
-  if (Object.keys(setData).length === 0) {
+  if (Object.keys(personalInformation).length === 0) {
     return new NextResponse(
       `Error performing PATCH on artist with id ${artistId}`,
       {
@@ -258,12 +242,23 @@ const updatePersonalInformation = async (
 
   console.log(
     `Patch artist personal information with Id: ${artistId}`,
-    `Data: ${JSON.stringify(setData)}`,
+    `Set: ${JSON.stringify(personalInformation)}`,
   )
 
-  const patchOperation = await client.patch(artistId).set(setData).commit()
+  const patchOperation = await client
+    .patch(artistId)
+    .set(personalInformation)
+    .commit()
 
-  return NextResponse.json({ name: patchOperation.name }, { status: 200 })
+  return NextResponse.json(
+    {
+      name: patchOperation.name,
+      bookingEmails: patchOperation.bookingEmails,
+      // socials: patchOperation.socials, // Uncomment when implemented
+      // styles: patchOperation.styles, // Uncomment when implemented
+    },
+    { status: 200 },
+  )
 }
 
 export async function PATCH(request: NextRequest) {

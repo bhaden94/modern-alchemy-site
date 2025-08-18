@@ -38,11 +38,11 @@ import {
 import uploadImagesToSanity from '~/utils/images/uploadImagesToSanity'
 import { ImageReference } from '~/utils/images/uploadImagesToSanity'
 
+import FormErrorAlert from '../../../../FormErrorAlert/FormErrorAlert'
 import CustomOverlayLoader from '../CustomOverlayLoader/CustomOverlayLoader'
 import DisclaimerAgreement from '../FormAgreements/DisclaimerAgreement/DisclaimerAgreement'
 import FormAgreements from '../FormAgreements/FormAgreements'
 import PrivacyPolicyAgreement from '../FormAgreements/PrivacyPolicyAgreement/PrivacyPolicyAgreement'
-import FormErrorAlert from '../TattooForm/FormErrorAlert/FormErrorAlert'
 
 const inputSharedProps = (
   id: keyof TGenericBookingSchema | string,
@@ -302,7 +302,7 @@ const GenericBookingForm = ({ onSuccess, onFailure }: IGenericBookingForm) => {
             <PrivacyPolicyAgreement />
           </FormAgreements>
 
-          {formHasErrors ? <FormErrorAlert /> : undefined}
+          {formHasErrors ? <FormErrorAlert title="Oops!" /> : undefined}
 
           <Group justify="center" mt="xs">
             <Button
