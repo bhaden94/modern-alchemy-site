@@ -1,7 +1,7 @@
 'use client'
 
 import { useDisclosure } from '@mantine/hooks'
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useEffect, useRef, useState } from 'react'
 
 import SuccessDialog from '~/components/SuccessDialog/SuccessDialog'
 
@@ -22,16 +22,31 @@ interface ISuccessDialogProvider {
 export const SuccessDialogProvider = ({ children }: ISuccessDialogProvider) => {
   const [opened, { open, close }] = useDisclosure(false)
   const [successMessage, setSuccessMessage] = useState<string | undefined>()
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const openDialog = (message?: string) => {
     if (message) setSuccessMessage(message)
     open()
 
+    // Clear any existing timeout before setting a new one
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+
     // Auto close after 3 seconds
-    setTimeout(() => {
+    timeoutRef.current = setTimeout(() => {
       close()
     }, 3000)
   }
+
+  // Cleanup timeout when the component unmounts
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+    }
+  }, [])
 
   return (
     <SuccessDialogContext.Provider
