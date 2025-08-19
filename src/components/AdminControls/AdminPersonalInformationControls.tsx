@@ -112,25 +112,31 @@ const AdminPersonalInformationControls = ({
       .map((i) => i.email.trim().toLowerCase())
       .filter((e) => e.length > 0)
 
-    const response = await fetch('/api/sanity/artist', {
-      method: 'PATCH',
-      body: JSON.stringify({
-        artistId: artist._id,
-        personalInformation: {
-          name: trimmedName,
-          bookingEmails: bookingEmailsArray,
-        },
-      }),
-    })
+    try {
+      const response = await fetch('/api/sanity/artist', {
+        method: 'PATCH',
+        body: JSON.stringify({
+          artistId: artist._id,
+          personalInformation: {
+            name: trimmedName,
+            bookingEmails: bookingEmailsArray,
+          },
+        }),
+      })
 
-    if (response.ok) {
-      form.resetDirty()
-      openSuccessDialog('Information updated successfully.')
-    } else {
-      openErrorDialog('There was an issue updating the information.')
+      if (response.ok) {
+        form.resetDirty()
+        openSuccessDialog('Information updated successfully.')
+      } else {
+        openErrorDialog('There was an issue updating the information.')
+      }
+    } catch (error) {
+      openErrorDialog(
+        'There was an error updating the information. Please try again.',
+      )
+    } finally {
+      setIsSubmitting(false)
     }
-
-    setIsSubmitting(false)
   }
 
   return (
