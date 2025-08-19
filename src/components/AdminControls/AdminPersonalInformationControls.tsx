@@ -142,7 +142,12 @@ const AdminPersonalInformationControls = ({
           </Title>
           {/* Try an update on this email field later */}
           {/* Will require a force logout I believe */}
-          <TextInput label="Email" value={artist.email} disabled />
+          <TextInput
+            label="Email"
+            value={artist.email}
+            description="Email used to login on the employee portal (this page)"
+            disabled
+          />
           <form
             onSubmit={form.onSubmit(onSubmit)}
             className="flex flex-col gap-6"
