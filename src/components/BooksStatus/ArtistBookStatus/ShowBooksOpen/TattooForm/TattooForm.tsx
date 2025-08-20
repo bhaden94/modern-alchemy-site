@@ -48,6 +48,7 @@ import {
 } from '~/utils/forms/imageHandlingUtils'
 import uploadImagesToSanity from '~/utils/images/uploadImagesToSanity'
 
+import FormErrorAlert from '../../../../FormErrorAlert/FormErrorAlert'
 import ImageDropzone from '../../../../ImageDropzone/ImageDropzone'
 import ImageErrors from '../../../../ImageDropzone/ImageErrors'
 import ImageThumbnails from '../../../../ImageDropzone/ImageThumbnails'
@@ -55,7 +56,6 @@ import CustomOverlayLoader from '../CustomOverlayLoader/CustomOverlayLoader'
 import DisclaimerAgreement from '../FormAgreements/DisclaimerAgreement/DisclaimerAgreement'
 import FormAgreements from '../FormAgreements/FormAgreements'
 import PrivacyPolicyAgreement from '../FormAgreements/PrivacyPolicyAgreement/PrivacyPolicyAgreement'
-import FormErrorAlert from './FormErrorAlert/FormErrorAlert'
 
 const inputSharedProps = (
   id: string,
@@ -594,7 +594,7 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
             <PrivacyPolicyAgreement />
           </FormAgreements>
 
-          {formHasErrors ? <FormErrorAlert /> : undefined}
+          {formHasErrors ? <FormErrorAlert title="Oops!" /> : undefined}
 
           {/* Submit button */}
           <Button

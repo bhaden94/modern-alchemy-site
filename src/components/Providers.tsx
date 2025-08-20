@@ -3,6 +3,7 @@
 import { MantineProvider } from '@mantine/core'
 
 import { ErrorDialogProvider } from '~/hooks/useErrorDialog'
+import { SuccessDialogProvider } from '~/hooks/useSuccessDialog'
 import { colorScheme, cssVariableResolver, theme } from '~/utils/theme'
 
 // const PreviewProvider = lazy(() => import('~/components/PreviewProvider'))
@@ -14,7 +15,9 @@ export default function Providers({ children }: { children: React.ReactNode }) {
       cssVariablesResolver={cssVariableResolver}
       defaultColorScheme={colorScheme}
     >
-      <ErrorDialogProvider>{children}</ErrorDialogProvider>
+      <ErrorDialogProvider>
+        <SuccessDialogProvider>{children}</SuccessDialogProvider>
+      </ErrorDialogProvider>
     </MantineProvider>
   )
 }

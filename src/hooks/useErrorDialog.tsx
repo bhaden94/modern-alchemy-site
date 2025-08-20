@@ -1,7 +1,7 @@
 'use client'
 
 import { useDisclosure } from '@mantine/hooks'
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useEffect, useRef, useState } from 'react'
 
 import ErrorDialog from '~/components/ErrorDialog/ErrorDialog'
 
@@ -22,6 +22,7 @@ interface IErrorDialogProvider {
 export const ErrorDialogProvider = ({ children }: IErrorDialogProvider) => {
   const [opened, { open, close }] = useDisclosure(false)
   const [errorMessage, setErrorMessage] = useState<string | undefined>()
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const openDialog = (message?: string) => {
     if (message) {
@@ -30,11 +31,25 @@ export const ErrorDialogProvider = ({ children }: IErrorDialogProvider) => {
 
     open()
 
-    // Close the dialog after 5 seconds
-    setTimeout(() => {
+    // Clear any existing timeout before setting a new one
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+
+    // Auto close after 5 seconds
+    timeoutRef.current = setTimeout(() => {
       close()
     }, 5000)
   }
+
+  // Cleanup timeout when the component unmounts
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+    }
+  }, [])
 
   return (
     <ErrorDialogContext.Provider
