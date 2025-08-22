@@ -1,20 +1,8 @@
 'use client'
 
-import {
-  ActionIcon,
-  Box,
-  Button,
-  Fieldset,
-  Group,
-  InputDescription,
-  Stack,
-  Text,
-  TextInput,
-  Title,
-} from '@mantine/core'
+import { Box, Button, Group, Stack, TextInput, Title } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { randomId } from '@mantine/hooks'
-import { IconTrash } from '@tabler/icons-react'
 import { zodResolver } from 'mantine-form-zod-resolver'
 import { useState } from 'react'
 import { z } from 'zod'
@@ -23,7 +11,8 @@ import { useErrorDialog } from '~/hooks/useErrorDialog'
 import { useSuccessDialog } from '~/hooks/useSuccessDialog'
 import { Artist } from '~/schemas/models/artist'
 
-import FormErrorAlert from '../FormErrorAlert/FormErrorAlert'
+import AdminBookingRequestEmails from './AdminBookingRequestEmails/AdminBookingRequestEmails'
+import AdminSocialLinks from './AdminSocialLinks/AdminSocialLinks'
 
 const personalInfoSchema = z
   .object({
@@ -49,10 +38,17 @@ const personalInfoSchema = z
           message: 'Duplicate emails are not allowed',
         },
       ),
+    socials: z.array(
+      z.object({
+        label: z.string().min(1).max(100),
+        link: z.string().url({ message: 'Invalid URL' }),
+        _key: z.string(),
+      }),
+    ),
   })
   .strict()
 
-type TPersonalInfoSchema = z.infer<typeof personalInfoSchema>
+export type TPersonalInfoSchema = z.infer<typeof personalInfoSchema>
 
 interface IAdminPersonalInformationControls {
   artist: Artist
@@ -64,7 +60,6 @@ const AdminPersonalInformationControls = ({
   const { openErrorDialog } = useErrorDialog()
   const { openSuccessDialog } = useSuccessDialog()
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [shouldAutoFocus, setShouldAutoFocus] = useState(false)
 
   const form = useForm<TPersonalInfoSchema>({
     mode: 'uncontrolled',
@@ -72,38 +67,15 @@ const AdminPersonalInformationControls = ({
       name: artist.name,
       bookingEmails:
         artist.bookingEmails?.map((e) => ({ email: e, key: randomId() })) || [],
+      socials:
+        artist.socials?.map((s) => ({
+          label: s.label,
+          link: s.link,
+          _key: s._key || randomId(),
+        })) || [],
     },
     validate: zodResolver(personalInfoSchema),
   })
-
-  const bookingEmailRows = form.getValues().bookingEmails.map((item, index) => (
-    <Group key={item.key} gap="xs">
-      <TextInput
-        placeholder="mybookings@example.com"
-        style={{ flex: 1 }}
-        disabled={isSubmitting}
-        autoFocus={shouldAutoFocus}
-        key={form.key(`bookingEmails.${index}.email`)}
-        {...form.getInputProps(`bookingEmails.${index}.email`)}
-      />
-      <ActionIcon
-        color="red"
-        disabled={isSubmitting}
-        onClick={() => form.removeListItem('bookingEmails', index)}
-      >
-        <IconTrash size={16} />
-      </ActionIcon>
-    </Group>
-  ))
-
-  // Allows for auto focus when adding new items, but not on page load
-  const onNewEmailItem = () => {
-    form.insertListItem('bookingEmails', {
-      email: '',
-      key: randomId(),
-    })
-    setShouldAutoFocus(true)
-  }
 
   const onSubmit = async (data: TPersonalInfoSchema) => {
     setIsSubmitting(true)
@@ -111,6 +83,11 @@ const AdminPersonalInformationControls = ({
     const bookingEmailsArray = data.bookingEmails
       .map((i) => i.email.trim().toLowerCase())
       .filter((e) => e.length > 0)
+    const socialsArray = data.socials.map((s) => ({
+      _key: s._key,
+      label: s.label.trim(),
+      link: s.link.trim(),
+    }))
 
     try {
       const response = await fetch('/api/sanity/artist', {
@@ -120,11 +97,13 @@ const AdminPersonalInformationControls = ({
           personalInformation: {
             name: trimmedName,
             bookingEmails: bookingEmailsArray,
+            socials: socialsArray,
           },
         }),
       })
 
       if (response.ok) {
+        form.setValues(await response.json())
         form.resetDirty()
         openSuccessDialog('Information updated successfully.')
       } else {
@@ -166,49 +145,18 @@ const AdminPersonalInformationControls = ({
               key={form.key('name')}
               {...form.getInputProps('name')}
             />
-            <Fieldset
-              legend="Booking Request Email Recipients"
-              disabled={isSubmitting}
-            >
-              <Stack>
-                <InputDescription>
-                  This field is optional. If you add emails here, ONLY these
-                  addresses receive booking requests. Leave empty to fall back
-                  to the primary email ({artist.email}). Max 3 emails.
-                </InputDescription>
-                {form.getValues().bookingEmails.length === 0 ? (
-                  <Text size="sm" c="dimmed">
-                    No additional booking emails added.
-                  </Text>
-                ) : (
-                  bookingEmailRows
-                )}
-                {form.errors.bookingEmails && (
-                  <FormErrorAlert
-                    message={form.errors.bookingEmails?.toString()}
-                  />
-                )}
-                <Group justify="center">
-                  <Button
-                    variant="light"
-                    disabled={
-                      isSubmitting || form.getValues().bookingEmails.length >= 3
-                    }
-                    onClick={onNewEmailItem}
-                  >
-                    + Add email
-                  </Button>
-                  {form.getValues().bookingEmails.length >= 3 && (
-                    <Text size="xs" c="dimmed">
-                      Max of 3 emails. Need more? Contact the developer to
-                      discuss options.
-                    </Text>
-                  )}
-                </Group>
-              </Stack>
-            </Fieldset>
+
+            <AdminBookingRequestEmails
+              artist={artist}
+              form={form}
+              isSubmitting={isSubmitting}
+            />
+
+            <AdminSocialLinks form={form} isSubmitting={isSubmitting} />
+
             <Button
               type="submit"
+              size="lg"
               loading={isSubmitting}
               disabled={!form.isDirty() || isSubmitting}
             >

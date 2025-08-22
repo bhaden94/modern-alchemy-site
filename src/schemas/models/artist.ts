@@ -31,7 +31,7 @@ export interface Artist extends BaseSanitySchema<'artist'> {
   role: AuthorizedRoles
   bookingType: BookingType
   externalBookingLink?: string
-  socials?: { label: string; link: string }[]
+  socials?: { _key: string; label: string; link: string }[]
   bookingInstructions?: BlockContent
   embeddedWidget?: {
     scriptSrc: string

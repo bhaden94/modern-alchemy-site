@@ -14,6 +14,10 @@
     "singleQuote": true
   },
   "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/modifiers": "^9.0.0",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
     "@mailerlite/mailerlite-nodejs": "^1.4.0",
     "@mantine/carousel": "^7.16.3",
     "@mantine/core": "^7.16.3",
@@ -25,7 +29,7 @@
     "@portabletext/react": "3.2.1",
     "@sanity/client": "^7.6.0",
     "@sanity/vision": "^3.95.0",
-    "@tabler/icons-react": "^2.44.0",
+    "@tabler/icons-react": "^3.34.1",
     "@tailwindcss/typography": "0.5.10",
     "@types/react-dom": "^18.2.18",
     "@vercel/analytics": "^1.4.1",
