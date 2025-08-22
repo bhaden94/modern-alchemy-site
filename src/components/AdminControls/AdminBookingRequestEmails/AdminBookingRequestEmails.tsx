@@ -29,15 +29,16 @@ const AdminBookingRequestEmails = ({
   form,
   isSubmitting,
 }: IAdminBookingRequestEmails) => {
-  const [shouldAutoFocus, setShouldAutoFocus] = useState(false)
+  const [autoFocusKey, setAutoFocusKey] = useState<string | null>(null)
 
   // Allows for auto focus when adding new items, but not on page load
   const onNewEmailItem = () => {
+    const key = randomId()
     form.insertListItem('bookingEmails', {
       email: '',
-      key: randomId(),
+      key: key,
     })
-    setShouldAutoFocus(true)
+    setAutoFocusKey(key)
   }
 
   const bookingEmailRows = form.getValues().bookingEmails.map((item, index) => (
@@ -46,7 +47,7 @@ const AdminBookingRequestEmails = ({
         placeholder="mybookings@example.com"
         style={{ flex: 1 }}
         disabled={isSubmitting}
-        autoFocus={shouldAutoFocus}
+        autoFocus={autoFocusKey === item.key}
         key={form.key(`bookingEmails.${index}.email`)}
         {...form.getInputProps(`bookingEmails.${index}.email`)}
       />

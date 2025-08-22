@@ -29,7 +29,7 @@ interface IAdminSocialLinks {
 }
 
 const AdminSocialLinks = ({ form, isSubmitting }: IAdminSocialLinks) => {
-  const [shouldAutoFocus, setShouldAutoFocus] = useState(false)
+  const [autoFocusKey, setAutoFocusKey] = useState<string | null>(null)
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
@@ -45,12 +45,13 @@ const AdminSocialLinks = ({ form, isSubmitting }: IAdminSocialLinks) => {
   }
 
   const onNewSocialItem = () => {
+    const key = randomId()
     form.insertListItem('socials', {
       label: '',
       link: '',
-      key: randomId(),
+      key: key,
     })
-    setShouldAutoFocus(true)
+    setAutoFocusKey(key)
   }
 
   const onDelete = (index: number) => {
@@ -77,7 +78,7 @@ const AdminSocialLinks = ({ form, isSubmitting }: IAdminSocialLinks) => {
                       label="Label"
                       placeholder="Instagram"
                       w="100%"
-                      autoFocus={shouldAutoFocus}
+                      autoFocus={autoFocusKey === social.key}
                       key={form.key(`socials.${index}.label`)}
                       {...form.getInputProps(`socials.${index}.label`)}
                     />
