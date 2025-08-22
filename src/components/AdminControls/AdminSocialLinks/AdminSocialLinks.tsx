@@ -36,8 +36,8 @@ const AdminSocialLinks = ({ form, isSubmitting }: IAdminSocialLinks) => {
 
     if (over && active.id !== over.id) {
       form.setFieldValue('socials', (s) => {
-        const oldIndex = s.findIndex((i) => i.label === active.id)
-        const newIndex = s.findIndex((i) => i.label === over.id)
+        const oldIndex = s.findIndex((i) => i.key === active.id)
+        const newIndex = s.findIndex((i) => i.key === over.id)
 
         return arrayMove(s, oldIndex, newIndex)
       })
@@ -65,11 +65,11 @@ const AdminSocialLinks = ({ form, isSubmitting }: IAdminSocialLinks) => {
           onDragEnd={handleDragEnd}
           modifiers={[restrictToVerticalAxis, restrictToWindowEdges]}
         >
-          <SortableContext items={form.getValues().socials.map((s) => s.label)}>
+          <SortableContext items={form.getValues().socials.map((s) => s.key)}>
             {form.getValues().socials.map((social, index) => (
               <SortableItem
                 key={social.key}
-                id={social.label}
+                id={social.key}
                 onDelete={() => onDelete(index)}
               >
                 <Stack>
