@@ -52,6 +52,8 @@ const AdminBookingRequestEmails = ({
       />
       <ActionIcon
         color="red"
+        size="lg"
+        aria-label="Delete"
         disabled={isSubmitting}
         onClick={() => form.removeListItem('bookingEmails', index)}
       >
