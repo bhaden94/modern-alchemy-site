@@ -17,7 +17,7 @@ const token = process.env.SANITY_API_WRITE_TOKEN
 type PersonalInformationPatch = {
   name?: string
   bookingEmails?: string[]
-  socials?: { _key: string; label: string; link: string }[]
+  socials?: { label: string; link: string }[]
   // styles?: string[]
 }
 
@@ -248,7 +248,7 @@ const updatePersonalInformation = async (
   const patchOperation = await client
     .patch(artistId)
     .set(personalInformation)
-    .commit()
+    .commit({ autoGenerateArrayKeys: true })
 
   return NextResponse.json(
     {

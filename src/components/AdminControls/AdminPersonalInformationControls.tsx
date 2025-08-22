@@ -42,7 +42,7 @@ const personalInfoSchema = z
       z.object({
         label: z.string().min(1).max(100),
         link: z.string().url({ message: 'Invalid URL' }),
-        _key: z.string(),
+        key: z.string(),
       }),
     ),
   })
@@ -71,7 +71,7 @@ const AdminPersonalInformationControls = ({
         artist.socials?.map((s) => ({
           label: s.label,
           link: s.link,
-          _key: s._key || randomId(),
+          key: randomId(),
         })) || [],
     },
     validate: zodResolver(personalInfoSchema),
@@ -84,7 +84,6 @@ const AdminPersonalInformationControls = ({
       .map((i) => i.email.trim().toLowerCase())
       .filter((e) => e.length > 0)
     const socialsArray = data.socials.map((s) => ({
-      _key: s._key,
       label: s.label.trim(),
       link: s.link.trim(),
     }))
@@ -103,7 +102,6 @@ const AdminPersonalInformationControls = ({
       })
 
       if (response.ok) {
-        form.setValues(await response.json())
         form.resetDirty()
         openSuccessDialog('Information updated successfully.')
       } else {

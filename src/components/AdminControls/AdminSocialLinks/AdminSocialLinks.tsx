@@ -1,3 +1,5 @@
+'use client'
+
 import { DndContext, DragEndEvent } from '@dnd-kit/core'
 import {
   restrictToVerticalAxis,
@@ -7,6 +9,7 @@ import { arrayMove, SortableContext, useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import {
   ActionIcon,
+  Button,
   Fieldset,
   Group,
   Paper,
@@ -17,6 +20,8 @@ import { UseFormReturnType } from '@mantine/form'
 import { IconArrowsTransferUpDown, IconTrash } from '@tabler/icons-react'
 
 import { TPersonalInfoSchema } from '../AdminPersonalInformationControls'
+import { randomId } from '@mantine/hooks'
+import { useState } from 'react'
 
 interface IAdminSocialLinks {
   form: UseFormReturnType<TPersonalInfoSchema>
@@ -24,6 +29,8 @@ interface IAdminSocialLinks {
 }
 
 const AdminSocialLinks = ({ form, isSubmitting }: IAdminSocialLinks) => {
+  const [shouldAutoFocus, setShouldAutoFocus] = useState(false)
+
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
 
@@ -35,6 +42,15 @@ const AdminSocialLinks = ({ form, isSubmitting }: IAdminSocialLinks) => {
         return arrayMove(s, oldIndex, newIndex)
       })
     }
+  }
+
+  const onNewSocialItem = () => {
+    form.insertListItem('socials', {
+      label: '',
+      link: '',
+      key: randomId(),
+    })
+    setShouldAutoFocus(true)
   }
 
   const onDelete = (index: number) => {
@@ -51,7 +67,7 @@ const AdminSocialLinks = ({ form, isSubmitting }: IAdminSocialLinks) => {
           <SortableContext items={form.getValues().socials.map((s) => s.label)}>
             {form.getValues().socials.map((social, index) => (
               <SortableItem
-                key={social._key}
+                key={social.key}
                 id={social.label}
                 onDelete={() => onDelete(index)}
               >
@@ -61,6 +77,7 @@ const AdminSocialLinks = ({ form, isSubmitting }: IAdminSocialLinks) => {
                       label="Label"
                       placeholder="Instagram"
                       w="100%"
+                      autoFocus={shouldAutoFocus}
                       key={form.key(`socials.${index}.label`)}
                       {...form.getInputProps(`socials.${index}.label`)}
                     />
@@ -77,6 +94,16 @@ const AdminSocialLinks = ({ form, isSubmitting }: IAdminSocialLinks) => {
             ))}
           </SortableContext>
         </DndContext>
+
+        <Group justify="center">
+          <Button
+            variant="light"
+            disabled={isSubmitting}
+            onClick={onNewSocialItem}
+          >
+            + Add social
+          </Button>
+        </Group>
       </Stack>
     </Fieldset>
   )
