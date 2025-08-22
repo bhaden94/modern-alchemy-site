@@ -17,11 +17,11 @@ import {
   TextInput,
 } from '@mantine/core'
 import { UseFormReturnType } from '@mantine/form'
+import { randomId } from '@mantine/hooks'
 import { IconArrowsTransferUpDown, IconTrash } from '@tabler/icons-react'
+import { useState } from 'react'
 
 import { TPersonalInfoSchema } from '../AdminPersonalInformationControls'
-import { randomId } from '@mantine/hooks'
-import { useState } from 'react'
 
 interface IAdminSocialLinks {
   form: UseFormReturnType<TPersonalInfoSchema>
