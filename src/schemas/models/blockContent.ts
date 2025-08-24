@@ -64,6 +64,10 @@ export default defineType({
           },
         ],
       },
+      lists: [
+        { title: 'Bullet', value: 'bullet' },
+        { title: 'Numbered', value: 'number' },
+      ],
     }),
     defineArrayMember({
       type: 'image',

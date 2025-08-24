@@ -1,5 +1,7 @@
 'use client'
 
+import './listStyles.css'
+
 import {
   Anchor,
   Box,
@@ -19,6 +21,7 @@ import {
   PortableTextEditable,
   RenderAnnotationFunction,
   RenderDecoratorFunction,
+  RenderListItemFunction,
   RenderStyleFunction,
 } from '@portabletext/editor'
 import { EventListenerPlugin } from '@portabletext/editor/plugins'
@@ -60,9 +63,6 @@ const schemaDefinition = defineSchema({
     // { name: 'h6' },
   ],
 
-  // The types below are left empty for this example.
-  // See the rendering guide to learn more about each type.
-
   // Annotations are more complex marks that can hold data (for example, hyperlinks).
   annotations: [
     {
@@ -75,7 +75,7 @@ const schemaDefinition = defineSchema({
     { name: 'internalLink', fields: [{ name: 'page', type: 'string' }] },
   ],
   // Lists apply to entire text blocks as well (for example, bullet, numbered).
-  lists: [],
+  lists: [{ name: 'bullet' }, { name: 'number' }],
   // Inline objects hold arbitrary data that can be inserted into the text (for example, custom emoji).
   inlineObjects: [],
   // Block objects hold arbitrary data that live side-by-side with text blocks (for example, images, code blocks, and tables).
@@ -169,6 +169,26 @@ const renderAnnotation: RenderAnnotationFunction = (props) => {
         </Anchor>
       )
   }
+}
+
+/**
+ * Uses custom css located in listStyles.css to render the list items correctly.
+ * Hopefully we will get some better support for this in the future
+ * https://github.com/portabletext/editor/issues/192
+ * @param props - The props for the list item.
+ * @returns The rendered list item.
+ */
+const renderListItem: RenderListItemFunction = (props) => {
+  return <>{props.children}</>
+
+  // For some reason using Mantine components here causes some bad lag
+  // I am guessing because we are creating a whole new list each time
+  // Maybe when the portable text component has a better way to render lists we can use this.
+  // return (
+  //   <List withPadding type={props.value === 'number' ? 'ordered' : 'unordered'}>
+  //     <List.Item>{props.children}</List.Item>
+  //   </List>
+  // )
 }
 
 const renderBlock = (
@@ -272,6 +292,7 @@ const AdminTextEditorComponent = ({
                 renderStyle={renderStyle}
                 renderDecorator={renderDecorator}
                 renderAnnotation={renderAnnotation}
+                renderListItem={renderListItem}
                 renderBlock={(props) =>
                   renderBlock(props, documentId, fieldName)
                 }

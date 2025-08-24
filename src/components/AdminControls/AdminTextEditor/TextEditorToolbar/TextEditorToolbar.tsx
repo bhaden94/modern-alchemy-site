@@ -6,6 +6,7 @@ import { CustomSchemaDefinition } from '../AdminTextEditor'
 import AnnotationButton from './AnnotationButton/AnnotationButton'
 import DecoratorButton from './DecoratorButton/DecoratorButton'
 import ImageButton from './ImageButton/ImageButton'
+import ListButton from './ListButton/ListButton'
 import StyleButton from './StyleButton/StyleButton'
 import classes from './TextEditorToolbar.module.css'
 
@@ -27,6 +28,10 @@ const TextEditorToolbar = ({ schemaDefinition }: ITextEditorToolbar) => {
     <AnnotationButton key={annotation.name} annotation={annotation} />
   ))
 
+  const listButtons = schemaDefinition.lists?.map((list) => (
+    <ListButton key={list.name} list={list} />
+  ))
+
   const imageButtons = schemaDefinition.blockObjects?.map((blockObject) => (
     <ImageButton key={blockObject.name} image={blockObject} />
   ))
@@ -35,6 +40,7 @@ const TextEditorToolbar = ({ schemaDefinition }: ITextEditorToolbar) => {
     <Group className={classes.toolbar}>
       <Button.Group>{styleButtons}</Button.Group>
       <Button.Group>{decoratorButtons}</Button.Group>
+      <Button.Group>{listButtons}</Button.Group>
       <Button.Group>{annotationButtons}</Button.Group>
       <Button.Group>{imageButtons}</Button.Group>
     </Group>
