@@ -134,9 +134,7 @@ const SortableItem = ({
       <Group wrap="nowrap" m="1rem 0" grow>
         <ActionIcon
           aria-label="Drag"
-          style={{
-            cursor: 'grab',
-          }}
+          style={{ touchAction: 'none', cursor: 'grab' }}
           {...attributes}
           {...listeners}
         >
