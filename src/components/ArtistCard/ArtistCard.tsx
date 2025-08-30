@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import { getImageFromRef } from '~/lib/sanity/sanity.image'
+import { resolveArtistUrl } from '~/lib/sanity/sanity.links'
 import { Artist } from '~/schemas/models/artist'
 import { generateNextImagePlaceholder } from '~/utils'
 import { NavigationPages } from '~/utils/navigation'
@@ -38,7 +39,7 @@ const ArtistCard = ({ artist, showPortfolioLink }: IArtistCard) => {
       <Button
         component={Link}
         href={`${NavigationPages.BookingRequest}/${encodeURIComponent(
-          artist._id,
+          resolveArtistUrl(artist),
         )}`}
         radius="sm"
         fz="xs"
