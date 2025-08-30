@@ -4,27 +4,28 @@ import { notFound } from 'next/navigation'
 import ArtistPortfolio from '~/components/ArtistPortfolio/ArtistPortfolio'
 import PageContainer from '~/components/PageContainer'
 import {
-  getArtistById,
+  getArtistByIdOrSlug,
   getArtists,
 } from '~/lib/sanity/queries/sanity.artistsQuery'
 import { getLayoutMetadata } from '~/lib/sanity/queries/sanity.pageContentQueries'
 import { getClient } from '~/lib/sanity/sanity.client'
 import { getImageFromRef } from '~/lib/sanity/sanity.image'
+import { resolveArtistUrl } from '~/lib/sanity/sanity.links'
 import { formatStylesInSentence } from '~/utils'
 
 export const generateStaticParams = async () => {
   const client = getClient(undefined)
   const artists = await getArtists(client)
-  return artists.map((artist) => ({ id: artist._id }))
+  return artists.map((artist) => ({ slug: resolveArtistUrl(artist) }))
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: { id: string }
+  params: { slug: string }
 }): Promise<Metadata> {
   const client = getClient(undefined)
-  const artist = await getArtistById(client, decodeURI(params.id))
+  const artist = await getArtistByIdOrSlug(client, decodeURI(params.slug))
   const metadata = await getLayoutMetadata(client)
 
   if (!artist) return {}
@@ -47,9 +48,13 @@ export async function generateMetadata({
   }
 }
 
-const ArtistPortfolioPage = async ({ params }: { params: { id: string } }) => {
+const ArtistPortfolioPage = async ({
+  params,
+}: {
+  params: { slug: string }
+}) => {
   const client = getClient(undefined)
-  const artist = await getArtistById(client, decodeURI(params.id))
+  const artist = await getArtistByIdOrSlug(client, decodeURI(params.slug))
 
   if (!artist || !artist.isActive) return notFound()
 

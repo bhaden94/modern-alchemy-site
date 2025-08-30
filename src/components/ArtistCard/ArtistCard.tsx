@@ -52,7 +52,7 @@ const ArtistCard = ({ artist, showPortfolioLink }: IArtistCard) => {
     return (
       <Button
         component={Link}
-        href={`${NavigationPages.Artists}/${encodeURIComponent(artist._id)}`}
+        href={`${NavigationPages.Artists}/${encodeURIComponent(resolveArtistUrl(artist))}`}
         radius="sm"
       >
         View Portfolio
