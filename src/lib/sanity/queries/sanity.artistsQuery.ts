@@ -37,9 +37,10 @@ export async function getArtistByIdOrSlug(
   client: SanityClient,
   idOrSlug: string,
 ): Promise<Artist | null> {
-  const artist = uuidValidate(idOrSlug)
-    ? await getArtistById(client, decodeURI(idOrSlug))
-    : await getArtistBySlug(client, decodeURI(idOrSlug))
+  const decodedIdOrSlug = decodeURI(idOrSlug)
+  const artist = uuidValidate(decodedIdOrSlug)
+    ? await getArtistById(client, decodedIdOrSlug)
+    : await getArtistBySlug(client, decodedIdOrSlug)
   return artist
 }
 
@@ -47,7 +48,7 @@ const artistsIdQuery = groq`*[_type == "artist" && _id == $id][0]`
 export async function getArtistById(
   client: SanityClient,
   id: string,
-): Promise<Artist> {
+): Promise<Artist | null> {
   const idParam = { id: id }
   return await client.fetch(artistsIdQuery, idParam, NEXT_CACHE_CONFIG.ARTIST)
 }
@@ -56,7 +57,7 @@ const artistsSlugQuery = groq`*[_type == "artist" && slug.current == $slug][0]`
 export async function getArtistBySlug(
   client: SanityClient,
   slug: string,
-): Promise<Artist> {
+): Promise<Artist | null> {
   const slugParam = { slug: slug }
   return await client.fetch(
     artistsSlugQuery,
