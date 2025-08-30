@@ -4,6 +4,7 @@ import { Anchor } from '@mantine/core'
 import Link from 'next/link'
 
 import { useArtist } from '~/hooks/useArtist'
+import { resolveArtistUrl } from '~/lib/sanity/sanity.links'
 import { NavigationPages } from '~/utils/navigation'
 
 const BookingRequestLink = () => {
@@ -31,7 +32,7 @@ const BookingRequestLink = () => {
   return (
     <Anchor
       component={Link}
-      href={`${NavigationPages.BookingRequest}/${encodeURIComponent(artist._id)}`}
+      href={`${NavigationPages.BookingRequest}/${encodeURIComponent(resolveArtistUrl(artist))}`}
       display="block"
     >
       {artist.name}:&nbsp;Click to book now

@@ -1,41 +1,41 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
-import BookStatuses from '~/components/BooksStatus/BookStatuses'
+import ArtistPortfolio from '~/components/ArtistPortfolio/ArtistPortfolio'
 import PageContainer from '~/components/PageContainer'
-import PageTitle from '~/components/PageTitle/PageTitle'
 import {
-  getArtistById,
+  getArtistByIdOrSlug,
   getArtists,
 } from '~/lib/sanity/queries/sanity.artistsQuery'
-import { getDefaultMailingList } from '~/lib/sanity/queries/sanity.mailingListQuery'
 import { getLayoutMetadata } from '~/lib/sanity/queries/sanity.pageContentQueries'
 import { getClient } from '~/lib/sanity/sanity.client'
 import { getImageFromRef } from '~/lib/sanity/sanity.image'
+import { resolveArtistUrl } from '~/lib/sanity/sanity.links'
 import { formatStylesInSentence } from '~/utils'
 
 export const generateStaticParams = async () => {
   const client = getClient(undefined)
   const artists = await getArtists(client)
-  return artists.map((artist) => ({ id: artist._id }))
+  return artists.map((artist) => ({ slug: resolveArtistUrl(artist) }))
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: { id: string }
+  params: { slug: string }
 }): Promise<Metadata> {
   const client = getClient(undefined)
-  const artist = await getArtistById(client, decodeURI(params.id))
+  const artist = await getArtistByIdOrSlug(client, decodeURI(params.slug))
   const metadata = await getLayoutMetadata(client)
 
   if (!artist) return {}
 
-  const title = `${artist.name} Booking Request`
+  const title = `${artist.name} Portfolio`
 
   const formattedStyles = formatStylesInSentence(artist.styles)
-  const stylesSection = formattedStyles ? `for ${formattedStyles} tattoos ` : ''
-  const description = `Submit a booking request ${stylesSection}with ${artist.name} at ${metadata.businessName} located in ${metadata.location}.`
+  const stylesSection = formattedStyles ? `of ${formattedStyles} tattoos ` : ''
+
+  const description = `Explore ${artist.name}’s portfolio ${stylesSection}at ${metadata.businessName} located in ${metadata.location}.`
 
   return {
     title: title,
@@ -48,24 +48,21 @@ export async function generateMetadata({
   }
 }
 
-const ArtistBookingRequestPage = async ({
+const ArtistPortfolioPage = async ({
   params,
 }: {
-  params: { id: string }
+  params: { slug: string }
 }) => {
   const client = getClient(undefined)
-  const artist = await getArtistById(client, decodeURI(params.id))
-  // When we have an artist specific mailing list, we can get that here.
-  const mailingList = await getDefaultMailingList(client)
+  const artist = await getArtistByIdOrSlug(client, decodeURI(params.slug))
 
   if (!artist || !artist.isActive) return notFound()
 
   return (
     <PageContainer>
-      <PageTitle title={`Booking with ${artist.name}`} />
-      <BookStatuses artist={artist} mailingList={mailingList} />
+      <ArtistPortfolio artist={artist} />
     </PageContainer>
   )
 }
 
-export default ArtistBookingRequestPage
+export default ArtistPortfolioPage

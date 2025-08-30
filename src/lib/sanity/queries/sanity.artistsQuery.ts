@@ -2,6 +2,7 @@ import { DateValue } from '@mantine/dates'
 import { groq } from 'next-sanity'
 import { SanityClient } from 'next-sanity'
 import { Observable } from 'rxjs'
+import { validate as uuidValidate } from 'uuid'
 
 import { Artist } from '~/schemas/models/artist'
 
@@ -19,7 +20,7 @@ export async function getActiveArtists(
   return await client.fetch(activeArtistsQuery, {}, NEXT_CACHE_CONFIG.ARTIST)
 }
 
-const artistsEmailQuery = groq`*[_type == "artist" && email == $email][0]{name, role, _id}`
+const artistsEmailQuery = groq`*[_type == "artist" && email == $email][0]{name, slug, role, _id}`
 export async function getArtistByEmail(
   client: SanityClient,
   email: string,
@@ -32,13 +33,37 @@ export async function getArtistByEmail(
   )
 }
 
+export async function getArtistByIdOrSlug(
+  client: SanityClient,
+  idOrSlug: string,
+): Promise<Artist | null> {
+  const decodedIdOrSlug = decodeURI(idOrSlug)
+  const artist = uuidValidate(decodedIdOrSlug)
+    ? await getArtistById(client, decodedIdOrSlug)
+    : await getArtistBySlug(client, decodedIdOrSlug)
+  return artist
+}
+
 const artistsIdQuery = groq`*[_type == "artist" && _id == $id][0]`
 export async function getArtistById(
   client: SanityClient,
   id: string,
-): Promise<Artist> {
+): Promise<Artist | null> {
   const idParam = { id: id }
   return await client.fetch(artistsIdQuery, idParam, NEXT_CACHE_CONFIG.ARTIST)
+}
+
+const artistsSlugQuery = groq`*[_type == "artist" && slug.current == $slug][0]`
+export async function getArtistBySlug(
+  client: SanityClient,
+  slug: string,
+): Promise<Artist | null> {
+  const slugParam = { slug: slug }
+  return await client.fetch(
+    artistsSlugQuery,
+    slugParam,
+    NEXT_CACHE_CONFIG.ARTIST,
+  )
 }
 
 export interface BooksStatus {
@@ -48,7 +73,7 @@ export interface BooksStatus {
   _id: string
 }
 
-const artistsBooksStatusChangesById = groq`*[_type == "artist" && _id == $id][0]{booksOpen, booksOpenAt, name, _id}`
+const artistsBooksStatusChangesById = groq`*[_type == "artist" && _id == $id][0]{booksOpen, booksOpenAt, name, slug, _id}`
 export function listenForArtistsBookStatusChanges(
   client: SanityClient,
   id: string,

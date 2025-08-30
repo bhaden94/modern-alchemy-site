@@ -24,6 +24,7 @@ export interface Artist extends BaseSanitySchema<'artist'> {
   email: string
   bookingEmails?: string[]
   name: string
+  slug?: { _type: 'slug'; current: string }
   booksOpen: boolean
   booksOpenAt?: Date | null
   shouldEmailBookings: boolean
@@ -79,6 +80,17 @@ export default defineType({
       type: 'string',
       title: 'Name',
       validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      options: {
+        source: 'name',
+        maxLength: 96,
+        isUnique: (value, context) => context.defaultIsUnique(value, context),
+      },
+      validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'isActive',
