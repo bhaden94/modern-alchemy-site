@@ -54,6 +54,7 @@ const TAGS_CACHE: ICacheOptions = {
   ARTIST: { next: { tags: ['artist'] } },
   BOOKING: { next: { tags: ['booking'] } },
   MAILING_LIST: { next: { tags: ['mailingList'] } },
+  BLOG: { next: { tags: ['blog'] } },
   ROOT_LAYOUT_CONTENT: { next: { tags: ['rootLayoutContent'] } },
   LAYOUT_METADATA_CONTENT: { next: { tags: ['layoutMetadataContent'] } },
 }
@@ -62,6 +63,7 @@ const NO_CACHE: ICacheOptions = {
   ARTIST: { cache: 'no-store' },
   BOOKING: { cache: 'no-store' },
   MAILING_LIST: { cache: 'no-store' },
+  BLOG: { cache: 'no-store' },
   ROOT_LAYOUT_CONTENT: { cache: 'no-store' },
   LAYOUT_METADATA_CONTENT: { cache: 'no-store' },
 }
