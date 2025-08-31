@@ -2,6 +2,7 @@ import { SchemaTypeDefinition } from 'sanity'
 
 import artist from './models/artist'
 import blockContent from './models/blockContent'
+import blog from './models/blog'
 import booking from './models/booking'
 import genericBooking from './models/genericBooking'
 import mailingList from './models/mailingList'
@@ -24,6 +25,7 @@ export const schemaTypes = {
   genericBooking,
   artist,
   mailingList,
+  blog,
   basePageContent,
   rootPageContent,
   faqPageContent,
@@ -58,6 +60,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     booking,
     genericBooking,
     mailingList,
+    blog,
     // Objects
     blockContent,
   ],
@@ -68,3 +71,5 @@ export type BaseSanitySchema<T extends string> = {
   _id: string
   _createdAt: string
 }
+
+export type Slug = { _type: 'slug'; current: string }
