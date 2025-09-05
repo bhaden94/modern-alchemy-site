@@ -2,8 +2,6 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { PortableText } from 'next-sanity'
 
-import PageContainer from '~/components/PageContainer'
-import PageTitle from '~/components/PageTitle/PageTitle'
 import {
   getBlogBySlug,
   getPublishedBlogs,
@@ -11,8 +9,9 @@ import {
 import { getLayoutMetadata } from '~/lib/sanity/queries/sanity.pageContentQueries'
 import { getClient } from '~/lib/sanity/sanity.client'
 import { getImageFromRef } from '~/lib/sanity/sanity.image'
-import { Container } from '@mantine/core'
-import CoverImage from '~/components/Blog/CoverImage/CoverImage'
+import { Blog } from '~/components/Blog'
+import { NavigationPages } from '~/utils/navigation'
+import { resolveArtistUrl } from '~/lib/sanity/sanity.links'
 
 export const generateStaticParams = async () => {
   const client = getClient(undefined)
@@ -53,17 +52,17 @@ const BlogPostPage = async ({ params }: { params: { slug: string } }) => {
   const image = getImageFromRef(blog.coverImage)
 
   return (
-    <>
-      {image?.url && <CoverImage image={{ url: image.url, alt: blog.title }} />}
-      <PageContainer>
-        <Container size="xs" px={0}>
-          <PageTitle title={blog.title} />
-          <article>
-            <PortableText value={blog.content} />
-          </article>
-        </Container>
-      </PageContainer>
-    </>
+    <Blog coverImage={{ url: image?.url, alt: blog.title }}>
+      <Blog.Header
+        title={blog.title}
+        authorName={blog.artist?.name || 'Unknown'}
+        authorUrl={`${NavigationPages.Artists}/${encodeURIComponent(resolveArtistUrl(blog.artist))}`}
+        publishedAt={blog.publishedAt}
+      />
+      <article>
+        <PortableText value={blog.content} />
+      </article>
+    </Blog>
   )
 }
 

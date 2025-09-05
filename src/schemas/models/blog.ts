@@ -12,8 +12,8 @@ export interface Blog extends BaseSanitySchema<'blog'> {
   title: string
   slug: Slug
   content: BlockContent
-  publishedAt?: Date
-  updatedAt?: Date
+  publishedAt?: string
+  updatedAt?: string
   artist: Artist
   state: 'draft' | 'published'
 }
