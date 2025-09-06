@@ -1,12 +1,12 @@
 'use client'
 
-import { Button } from '@mantine/core'
+import { BoxProps, Button } from '@mantine/core'
 import { IconShare } from '@tabler/icons-react'
 import React, { useEffect } from 'react'
 
 import { useSuccessDialog } from '~/hooks/useSuccessDialog'
 
-export interface IBlogShareButton {
+export interface IBlogShareButton extends BoxProps {
   title?: string
   text?: string
   url?: string
@@ -16,6 +16,7 @@ const BlogShareButton: React.FC<IBlogShareButton> = ({
   title = document.title,
   text = 'I found this interesting blog post',
   url,
+  ...props
 }) => {
   const [shareUrl, setShareUrl] = React.useState(url || '')
   const { openSuccessDialog } = useSuccessDialog()
@@ -64,6 +65,7 @@ const BlogShareButton: React.FC<IBlogShareButton> = ({
       rightSection={<IconShare size={16} />}
       size="sm"
       onClick={handleShare}
+      {...props}
     >
       Share
     </Button>

@@ -3,8 +3,10 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { PortableText } from 'next-sanity'
 
+import MinimalArtistCard from '~/components/ArtistCard/MinimalArtistCard'
 import { Blog } from '~/components/Blog'
 import MailingList from '~/components/MailingList/MailingList'
+import { PortableTextComponents } from '~/components/PortableTextComponents/PortableTextComponents'
 import {
   getBlogBySlug,
   getPublishedBlogs,
@@ -71,11 +73,20 @@ const BlogPostPage = async ({ params }: { params: { slug: string } }) => {
         />
         <Blog.ShareButton title={blog.title} />
       </Stack>
+
       <Blog.Content>
-        <PortableText value={blog.content} />
+        <PortableText
+          value={blog.content}
+          components={PortableTextComponents}
+        />
       </Blog.Content>
-      <Blog.ShareButton title={blog.title} />
-      {/* TODO: blog.Citation which contains the minimal artist card */}
+
+      <Blog.ShareButton title={blog.title} mb="lg" p={0} />
+      <MinimalArtistCard
+        artist={blog.artist}
+        showPortfolioLink
+        mb={{ base: 50, sm: 75, md: 100 }}
+      />
       <MailingList content={mailingListContent} />
     </Blog>
   )
