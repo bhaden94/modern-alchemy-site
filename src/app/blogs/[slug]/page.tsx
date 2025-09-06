@@ -4,10 +4,12 @@ import { notFound } from 'next/navigation'
 import { PortableText } from 'next-sanity'
 
 import { Blog } from '~/components/Blog'
+import MailingList from '~/components/MailingList/MailingList'
 import {
   getBlogBySlug,
   getPublishedBlogs,
 } from '~/lib/sanity/queries/sanity.blogsQuery'
+import { getDefaultMailingList } from '~/lib/sanity/queries/sanity.mailingListQuery'
 import { getLayoutMetadata } from '~/lib/sanity/queries/sanity.pageContentQueries'
 import { getClient } from '~/lib/sanity/sanity.client'
 import { getImageFromRef } from '~/lib/sanity/sanity.image'
@@ -47,6 +49,8 @@ export async function generateMetadata({
 const BlogPostPage = async ({ params }: { params: { slug: string } }) => {
   const client = getClient(undefined)
   const blog = await getBlogBySlug(client, decodeURI(params.slug))
+  // When we have an artist specific mailing list, we should get that here.
+  const mailingListContent = await getDefaultMailingList()
 
   if (!blog || blog.state !== 'published') return notFound()
 
@@ -67,11 +71,12 @@ const BlogPostPage = async ({ params }: { params: { slug: string } }) => {
         />
         <Blog.ShareButton title={blog.title} />
       </Stack>
-      {/* TODO: Blog.Content */}
-      <article>
+      <Blog.Content>
         <PortableText value={blog.content} />
-      </article>
-      {/* TODO: blog.footer */}
+      </Blog.Content>
+      <Blog.ShareButton title={blog.title} />
+      {/* TODO: blog.Citation which contains the minimal artist card */}
+      <MailingList content={mailingListContent} />
     </Blog>
   )
 }

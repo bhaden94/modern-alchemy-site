@@ -8,6 +8,7 @@ import {
 import CoverImage from '~/components/Blog/CoverImage/CoverImage'
 import PageContainer from '~/components/PageContainer'
 
+import BlogContent, { IBlogContent } from './BlogContent/BlogContent'
 import BlogShareButton, {
   IBlogShareButton,
 } from './BlogShareButton/BlogShareButton'
@@ -21,7 +22,7 @@ export interface IBlogRoot {
 
 const BlogRoot: React.FC<IBlogRoot> = ({ children, className, coverImage }) => {
   return (
-    <>
+    <article>
       {coverImage?.url && (
         <CoverImage
           image={{
@@ -35,7 +36,7 @@ const BlogRoot: React.FC<IBlogRoot> = ({ children, className, coverImage }) => {
           {children}
         </Container>
       </PageContainer>
-    </>
+    </article>
   )
 }
 
@@ -43,11 +44,13 @@ interface BlogComposition extends React.FC<IBlogRoot> {
   Title: React.FC<IBlogTitle>
   PublishInfo: React.FC<IBlogPublishInfo>
   ShareButton: React.FC<IBlogShareButton>
+  Content: React.FC<IBlogContent>
 }
 
 export const Blog = BlogRoot as BlogComposition
 Blog.Title = BlogTitle
 Blog.PublishInfo = BlogPublishInfo
 Blog.ShareButton = BlogShareButton
+Blog.Content = BlogContent
 
 export default Blog
