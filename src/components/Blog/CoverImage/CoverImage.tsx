@@ -1,7 +1,9 @@
 import { Overlay } from '@mantine/core'
-import classes from './CoverImage.module.css'
 import Image from 'next/image'
+
 import { generateNextImagePlaceholder } from '~/utils'
+
+import classes from './CoverImage.module.css'
 
 const CoverImage = ({ image }: { image: { url: string; alt: string } }) => (
   <div className={classes.wrapper}>

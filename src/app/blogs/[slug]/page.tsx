@@ -1,7 +1,9 @@
+import { Stack } from '@mantine/core'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { PortableText } from 'next-sanity'
 
+import { Blog } from '~/components/Blog'
 import {
   getBlogBySlug,
   getPublishedBlogs,
@@ -9,9 +11,8 @@ import {
 import { getLayoutMetadata } from '~/lib/sanity/queries/sanity.pageContentQueries'
 import { getClient } from '~/lib/sanity/sanity.client'
 import { getImageFromRef } from '~/lib/sanity/sanity.image'
-import { Blog } from '~/components/Blog'
-import { NavigationPages } from '~/utils/navigation'
 import { resolveArtistUrl } from '~/lib/sanity/sanity.links'
+import { NavigationPages } from '~/utils/navigation'
 
 export const generateStaticParams = async () => {
   const client = getClient(undefined)
@@ -50,18 +51,27 @@ const BlogPostPage = async ({ params }: { params: { slug: string } }) => {
   if (!blog || blog.state !== 'published') return notFound()
 
   const image = getImageFromRef(blog.coverImage)
+  const authorName = blog.artist?.name || 'Unknown'
+  const authorUrl = blog.artist?.isActive
+    ? `${NavigationPages.Artists}/${encodeURIComponent(resolveArtistUrl(blog.artist))}`
+    : NavigationPages.Artists
 
   return (
     <Blog coverImage={{ url: image?.url, alt: blog.title }}>
-      <Blog.Header
-        title={blog.title}
-        authorName={blog.artist?.name || 'Unknown'}
-        authorUrl={`${NavigationPages.Artists}/${encodeURIComponent(resolveArtistUrl(blog.artist))}`}
-        publishedAt={blog.publishedAt}
-      />
+      <Stack component="header" gap="lg" justify="center" align="center">
+        <Blog.Title title={blog.title} />
+        <Blog.PublishInfo
+          authorName={authorName}
+          authorUrl={authorUrl}
+          publishedAt={blog.publishedAt}
+        />
+        <Blog.ShareButton title={blog.title} />
+      </Stack>
+      {/* TODO: Blog.Content */}
       <article>
         <PortableText value={blog.content} />
       </article>
+      {/* TODO: blog.footer */}
     </Blog>
   )
 }
