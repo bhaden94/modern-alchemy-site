@@ -73,7 +73,7 @@ export const normalizeImageReference = (
 
 export const getImageFromRef = (
   imageRef?: ImageReference | SanityImageSource | string | null,
-): SanityImageAsset | undefined => {
+): (SanityImageAsset & { altText?: string }) | undefined => {
   if (imageRef && typeof imageRef === 'string') {
     // If the imageRef is a string, it means we are passing in the _key
     // Convert to an image reference object

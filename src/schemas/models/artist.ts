@@ -4,7 +4,7 @@ import { defineArrayMember, defineField, defineType } from 'sanity'
 import { AuthorizedRoles, SanitySchemaRoles } from '~/lib/next-auth/auth.utils'
 import { ImageReference } from '~/utils/images/uploadImagesToSanity'
 
-import { BaseSanitySchema } from '..'
+import { BaseSanitySchema, Slug } from '..'
 import { BlockContent } from './blockContent'
 
 export type BookingType =
@@ -24,7 +24,7 @@ export interface Artist extends BaseSanitySchema<'artist'> {
   email: string
   bookingEmails?: string[]
   name: string
-  slug?: { _type: 'slug'; current: string }
+  slug?: Slug
   booksOpen: boolean
   booksOpenAt?: Date | null
   shouldEmailBookings: boolean
