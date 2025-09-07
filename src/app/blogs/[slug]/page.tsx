@@ -63,7 +63,7 @@ const BlogPostPage = async ({ params }: { params: { slug: string } }) => {
     : NavigationPages.Artists
 
   return (
-    <Blog coverImage={{ url: image?.url, alt: blog.title }}>
+    <Blog coverImage={{ url: image?.url, alt: image?.altText || blog.title }}>
       <Stack component="header" gap="lg" justify="center" align="center">
         <Blog.Title title={blog.title} />
         <Blog.PublishInfo

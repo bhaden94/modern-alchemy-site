@@ -23,8 +23,8 @@ const BlogShareButton: React.FC<IBlogShareButton> = ({
 
   // Run effect to set URL since we must wait for the window to be available
   useEffect(() => {
-    setShareUrl(window?.location?.href || '')
-  }, [])
+    if (!url) setShareUrl(window?.location?.href || '')
+  }, [url])
 
   const handleShare = async () => {
     // Check if the Web Share API is supported

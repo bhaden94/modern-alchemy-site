@@ -2,6 +2,8 @@ import { Anchor, Divider, Group, Text } from '@mantine/core'
 import Link from 'next/link'
 import React from 'react'
 
+import classes from './BlogPublishInfo.module.css'
+
 export interface IBlogPublishInfo {
   authorName: string
   authorUrl: string
@@ -25,7 +27,7 @@ export const BlogPublishInfo: React.FC<IBlogPublishInfo> = ({
   const [displayDate, isoDate] = formatDate(publishedAt)
 
   return (
-    <Group style={{ color: 'var(--mantine-color-dimmed)' }}>
+    <Group className={classes.publishInfoContainer}>
       <Anchor
         component={Link}
         href={authorUrl}
