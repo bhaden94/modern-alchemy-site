@@ -92,6 +92,24 @@ export const bookingDayChoices: ComboboxItem[] = [
   },
 ]
 
+const zPreferredCommunicationMethod = z.enum(['email', 'phone'])
+type TPreferredCommunicationMethod = z.infer<
+  typeof zPreferredCommunicationMethod
+>
+export const preferredCommunicationMethodOptions: {
+  value: TPreferredCommunicationMethod
+  label: string
+}[] = [
+  {
+    value: 'email',
+    label: 'Email',
+  },
+  {
+    value: 'phone',
+    label: 'Phone',
+  },
+]
+
 export const getArtistAvailableDays = (
   artistAvailability: string[] | null | undefined,
 ): ComboboxItem[] => {
@@ -238,6 +256,7 @@ export const generateBookingFormSchema = (artist: Artist): z.ZodObject<any> => {
       .min(1, locationError),
     style: zTattooStyle,
     priorTattoo: zPriorTattoo,
+    preferredCommunicationMethod: zPreferredCommunicationMethod,
     preferredDays: z
       .string({ required_error: preferredDayError })
       .array()
@@ -331,6 +350,15 @@ export const BookingField = {
     placeholder: 'Enter your email',
     initialValue: '',
     getValue: (email: string) => email,
+  },
+  PreferredCommunicationMethod: {
+    id: 'preferredCommunicationMethod',
+    label: 'Preferred Communication Method',
+    initialValue: preferredCommunicationMethodOptions[0].value,
+    getValue: (method: string) =>
+      preferredCommunicationMethodOptions.find(
+        (option) => option.value === method,
+      )?.label || 'Email',
   },
   InstagramName: {
     id: 'instagramName',
@@ -431,6 +459,15 @@ export const GenericBookingField = {
     initialValue: '',
     getValue: (email: string) => email,
   },
+  PreferredCommunicationMethod: {
+    id: 'preferredCommunicationMethod',
+    label: 'Preferred Communication Method',
+    initialValue: preferredCommunicationMethodOptions[0].value,
+    getValue: (method: string) =>
+      preferredCommunicationMethodOptions.find(
+        (option) => option.value === method,
+      )?.label || 'Email',
+  },
   Description: {
     id: 'description',
     label: 'Description',
@@ -488,12 +525,17 @@ export const sendArtistBookingEmail = async ({
       return base64
     }),
   )
+  const artistEmail =
+    Array.isArray(artist.bookingEmails) && artist.bookingEmails.length > 0
+      ? artist.bookingEmails
+      : artist.email
+
   return fetch('/api/mail', {
     method: 'PUT',
     body: JSON.stringify({
       ...emailTextData,
       isGeneric: isGenericForm,
-      artistEmail: artist.bookingEmails ?? artist.email,
+      artistEmail: artistEmail,
       base64Images,
     }),
   })

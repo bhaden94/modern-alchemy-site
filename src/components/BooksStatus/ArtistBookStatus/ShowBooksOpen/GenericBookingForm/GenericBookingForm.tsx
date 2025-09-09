@@ -6,6 +6,8 @@ import {
   Container,
   Group,
   LoadingOverlay,
+  Radio,
+  RadioGroupProps,
   Text,
   Textarea,
   TextareaProps,
@@ -27,6 +29,7 @@ import {
   GenericBookingField,
   getGenericBookingFormInitialValues,
   MAX_FILES,
+  preferredCommunicationMethodOptions,
   sendArtistBookingEmail,
   TGenericBookingSchema,
 } from '~/utils/forms/bookingFormUtils'
@@ -49,7 +52,7 @@ const inputSharedProps = (
   label: string,
   placeholder: string,
   isSubmitting: boolean,
-): Partial<TextInputProps & TextareaProps> => ({
+): Partial<TextInputProps & TextareaProps & RadioGroupProps> => ({
   className: 'w-full',
   withAsterisk: true,
   size: 'md' as const,
@@ -242,6 +245,29 @@ const GenericBookingForm = ({ onSuccess, onFailure }: IGenericBookingForm) => {
             {...form.getInputProps(GenericBookingField.Email.id)}
             type="email"
           />
+
+          <Radio.Group
+            {...inputSharedProps(
+              GenericBookingField.PreferredCommunicationMethod.id,
+              GenericBookingField.PreferredCommunicationMethod.label,
+              '',
+              isSubmitting,
+            )}
+            {...form.getInputProps(
+              GenericBookingField.PreferredCommunicationMethod.id,
+            )}
+          >
+            <Group mt="xs">
+              {preferredCommunicationMethodOptions.map(({ value, label }) => (
+                <Radio
+                  key={value}
+                  value={value}
+                  label={label}
+                  disabled={isSubmitting}
+                />
+              ))}
+            </Group>
+          </Radio.Group>
 
           <Textarea
             {...inputSharedProps(
