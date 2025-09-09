@@ -36,6 +36,7 @@ import {
   getBookingFormInitialValues,
   ImagesBookingField,
   MAX_FILES,
+  preferredCommunicationMethodOptions,
   priorTattooOptions,
   sendArtistBookingEmail,
   styleOptions,
@@ -325,6 +326,30 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
             {...form.getInputProps(BookingField.Email.id)}
             type="email"
           />
+
+          {/* Preferred Communication Method */}
+          <Radio.Group
+            {...inputSharedProps(
+              BookingField.PreferredCommunicationMethod.id,
+              BookingField.PreferredCommunicationMethod.label,
+              '',
+              isSubmitting,
+            )}
+            {...form.getInputProps(
+              BookingField.PreferredCommunicationMethod.id,
+            )}
+          >
+            <Group mt="xs">
+              {preferredCommunicationMethodOptions.map(({ value, label }) => (
+                <Radio
+                  key={value}
+                  value={value}
+                  label={label}
+                  disabled={isSubmitting}
+                />
+              ))}
+            </Group>
+          </Radio.Group>
 
           {/* Instagram Name */}
           <TextInput

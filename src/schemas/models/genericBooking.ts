@@ -11,6 +11,7 @@ export interface GenericBooking extends BaseSanitySchema<'genericBooking'> {
   email: string
   description: string
   referenceImages: ImageReference[]
+  preferredCommunicationMethod?: 'email' | 'phone'
   artist: any
 }
 
@@ -51,6 +52,17 @@ export default defineType({
           name: 'image',
         }),
       ],
+    }),
+    defineField({
+      name: 'preferredCommunicationMethod',
+      type: 'string',
+      title: 'Preferred Communication Method',
+      options: {
+        list: [
+          { title: 'Email', value: 'email' },
+          { title: 'Phone', value: 'phone' },
+        ],
+      },
     }),
     defineField({
       name: 'artist',
