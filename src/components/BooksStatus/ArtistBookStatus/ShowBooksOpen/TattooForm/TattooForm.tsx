@@ -3,19 +3,15 @@
 import {
   Box,
   Button,
-  Checkbox,
   CheckboxGroupProps,
   Container,
-  Group,
   LoadingOverlay,
   NativeSelectProps,
   NumberInput,
   NumberInputProps,
-  Radio,
   RadioGroupProps,
   Select,
   SelectProps,
-  Stack,
   Text,
   TextareaProps,
   TextInputProps,
@@ -57,6 +53,8 @@ import CustomOverlayLoader from '../CustomOverlayLoader/CustomOverlayLoader'
 import DisclaimerAgreement from '../FormAgreements/DisclaimerAgreement/DisclaimerAgreement'
 import FormAgreements from '../FormAgreements/FormAgreements'
 import PrivacyPolicyAgreement from '../FormAgreements/PrivacyPolicyAgreement/PrivacyPolicyAgreement'
+import CheckboxGroup from '../FormComponents/CheckboxGroup'
+import RadioGroup from '../FormComponents/RadioGroup'
 
 const inputSharedProps = (
   id: string,
@@ -328,28 +326,17 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
           />
 
           {/* Preferred Communication Method */}
-          <Radio.Group
-            {...inputSharedProps(
+          <RadioGroup
+            id={BookingField.PreferredCommunicationMethod.id}
+            values={preferredCommunicationMethodOptions}
+            form={form}
+            additionalProps={inputSharedProps(
               BookingField.PreferredCommunicationMethod.id,
               BookingField.PreferredCommunicationMethod.label,
               '',
               isSubmitting,
             )}
-            {...form.getInputProps(
-              BookingField.PreferredCommunicationMethod.id,
-            )}
-          >
-            <Group mt="xs">
-              {preferredCommunicationMethodOptions.map(({ value, label }) => (
-                <Radio
-                  key={value}
-                  value={value}
-                  label={label}
-                  disabled={isSubmitting}
-                />
-              ))}
-            </Group>
-          </Radio.Group>
+          />
 
           {/* Instagram Name */}
           <TextInput
@@ -409,70 +396,47 @@ const TattooForm = ({ onSuccess, onFailure }: ITattooForm) => {
           />
 
           {/* Style */}
-          <Radio.Group
-            {...inputSharedProps(
+          <RadioGroup
+            id={BookingField.Style.id}
+            values={styleOptions}
+            form={form}
+            additionalProps={inputSharedProps(
               BookingField.Style.id,
               BookingField.Style.label,
               '',
               isSubmitting,
             )}
-            {...form.getInputProps(BookingField.Style.id)}
-          >
-            <Group mt="xs">
-              {styleOptions.map(({ value, label }) => (
-                <Radio
-                  key={value}
-                  value={value}
-                  label={label}
-                  disabled={isSubmitting}
-                />
-              ))}
-            </Group>
-          </Radio.Group>
+          />
 
           {/* Prior Tattoo */}
-          <Radio.Group
-            {...inputSharedProps(
+          <RadioGroup
+            id={BookingField.PriorTattoo.id}
+            values={priorTattooOptions}
+            form={form}
+            additionalProps={inputSharedProps(
               BookingField.PriorTattoo.id,
               BookingField.PriorTattoo.label,
               '',
               isSubmitting,
             )}
-            {...form.getInputProps(BookingField.PriorTattoo.id)}
-          >
-            <Stack mt="xs" gap="xs">
-              {priorTattooOptions.map(({ value, label }) => (
-                <Radio
-                  key={value}
-                  value={value}
-                  label={label}
-                  disabled={isSubmitting}
-                />
-              ))}
-            </Stack>
-          </Radio.Group>
+            direction="vertical"
+          />
 
           {/* Preferred Days */}
-          <Checkbox.Group
-            {...inputSharedProps(
+          <CheckboxGroup
+            id={BookingField.PreferredDays.id}
+            values={getArtistAvailableDays(artist.availableDays)}
+            form={form}
+            additionalGroupProps={inputSharedProps(
               BookingField.PreferredDays.id,
               BookingField.PreferredDays.label,
               '',
               isSubmitting,
             )}
-            {...form.getInputProps(BookingField.PreferredDays.id)}
-          >
-            <Group my="xs">
-              {getArtistAvailableDays(artist.availableDays).map((option) => (
-                <Checkbox
-                  key={option.value}
-                  value={option.value}
-                  label={option.label}
-                  error={!!form.errors[BookingField.PreferredDays.id]}
-                />
-              ))}
-            </Group>
-          </Checkbox.Group>
+            additionalCheckboxProps={{
+              error: !!form.errors[BookingField.PreferredDays.id],
+            }}
+          />
 
           {/* Budget/Session length */}
           {artist.budgetOptions && artist.budgetOptions.length > 0 && (

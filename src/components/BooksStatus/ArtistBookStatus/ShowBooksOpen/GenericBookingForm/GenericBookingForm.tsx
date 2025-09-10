@@ -6,7 +6,6 @@ import {
   Container,
   Group,
   LoadingOverlay,
-  Radio,
   RadioGroupProps,
   Text,
   Textarea,
@@ -46,6 +45,7 @@ import CustomOverlayLoader from '../CustomOverlayLoader/CustomOverlayLoader'
 import DisclaimerAgreement from '../FormAgreements/DisclaimerAgreement/DisclaimerAgreement'
 import FormAgreements from '../FormAgreements/FormAgreements'
 import PrivacyPolicyAgreement from '../FormAgreements/PrivacyPolicyAgreement/PrivacyPolicyAgreement'
+import RadioGroup from '../FormComponents/RadioGroup'
 
 const inputSharedProps = (
   id: keyof TGenericBookingSchema | string,
@@ -246,28 +246,17 @@ const GenericBookingForm = ({ onSuccess, onFailure }: IGenericBookingForm) => {
             type="email"
           />
 
-          <Radio.Group
-            {...inputSharedProps(
+          <RadioGroup
+            id={GenericBookingField.PreferredCommunicationMethod.id}
+            values={preferredCommunicationMethodOptions}
+            form={form}
+            additionalProps={inputSharedProps(
               GenericBookingField.PreferredCommunicationMethod.id,
               GenericBookingField.PreferredCommunicationMethod.label,
               '',
               isSubmitting,
             )}
-            {...form.getInputProps(
-              GenericBookingField.PreferredCommunicationMethod.id,
-            )}
-          >
-            <Group mt="xs">
-              {preferredCommunicationMethodOptions.map(({ value, label }) => (
-                <Radio
-                  key={value}
-                  value={value}
-                  label={label}
-                  disabled={isSubmitting}
-                />
-              ))}
-            </Group>
-          </Radio.Group>
+          />
 
           <Textarea
             {...inputSharedProps(
