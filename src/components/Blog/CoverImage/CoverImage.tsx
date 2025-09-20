@@ -5,7 +5,12 @@ import { generateNextImagePlaceholder } from '~/utils'
 
 import classes from './CoverImage.module.css'
 
-const CoverImage = ({ image }: { image: { url: string; alt: string } }) => (
+interface ICoverImage {
+  image: { url: string; alt: string }
+  overlayZIndex?: number
+}
+
+const CoverImage = ({ image, overlayZIndex }: ICoverImage) => (
   <div className={classes.wrapper}>
     <Image
       src={image.url}
@@ -15,7 +20,7 @@ const CoverImage = ({ image }: { image: { url: string; alt: string } }) => (
       className={classes.image}
       placeholder={generateNextImagePlaceholder(500, 500)}
     />
-    <Overlay color="#000" backgroundOpacity={0.35} />
+    <Overlay color="#000" backgroundOpacity={0.35} zIndex={overlayZIndex} />
   </div>
 )
 
