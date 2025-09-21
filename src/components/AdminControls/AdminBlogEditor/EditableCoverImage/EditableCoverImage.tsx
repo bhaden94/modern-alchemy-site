@@ -37,6 +37,7 @@ const EditableCoverImage = ({
   const openRef = useRef<() => void>(null)
   // Prefer resolving a server ImageReference to a displayable image.
   // If that fails, and a local preview object was provided (contains url), use it for immediate preview.
+  // TODO: simplify this logic
   let image: any = getImageFromRef(imageRef as ImageReference | undefined)
   if (!image && imageRef && typeof (imageRef as any).url === 'string') {
     image = {
@@ -45,13 +46,57 @@ const EditableCoverImage = ({
     }
   }
 
+  const coverImage: { url: string; alt: string } | undefined = image && {
+    url: image.url,
+    alt: image.altText || 'Blog cover image',
+  }
+
+  const AlwaysShownInDropzone = () => {
+    return (
+      <Group justify="center" style={{ pointerEvents: 'none' }}>
+        <Dropzone.Accept>
+          <IconUpload
+            style={{ width: rem(52), height: rem(52), color: 'primary' }}
+            stroke={1.5}
+          />
+        </Dropzone.Accept>
+
+        <Dropzone.Reject>
+          <IconX
+            style={{
+              width: rem(52),
+              height: rem(52),
+              color: 'var(--mantine-color-red-6)',
+            }}
+            stroke={1.5}
+          />
+        </Dropzone.Reject>
+
+        <Dropzone.Idle>
+          {!image && (
+            <>
+              <IconPhoto
+                style={{
+                  width: rem(52),
+                  height: rem(52),
+                  color: 'var(--mantine-color-dimmed)',
+                }}
+                stroke={1.5}
+              />
+            </>
+          )}
+        </Dropzone.Idle>
+      </Group>
+    )
+  }
+
   const WithImageToolbar = () => {
     return (
-      <Group gap="xs">
+      <Group justify="center" align="center">
         <Button
           size="sm"
           onClick={() => openRef.current?.()}
-          style={{ pointerEvents: 'all' }}
+          className={classes.toolbarAction}
           disabled={disabled}
         >
           Change cover image
@@ -61,7 +106,7 @@ const EditableCoverImage = ({
             size="sm"
             color="red"
             onClick={() => onRemove()}
-            style={{ pointerEvents: 'all' }}
+            className={classes.toolbarAction}
             disabled={disabled}
           >
             Remove cover image
@@ -73,29 +118,40 @@ const EditableCoverImage = ({
 
   const WithoutImageToolbar = () => {
     return (
-      <Stack justify="center" className={classes.centerContent}>
+      <>
+        <Text size="md" c="dimmed">
+          or
+        </Text>
         <Button
           size="sm"
           onClick={() => openRef.current?.()}
-          style={{ pointerEvents: 'all' }}
+          className={classes.toolbarAction}
           disabled={disabled}
         >
           Add cover image
         </Button>
+      </>
+    )
+  }
+
+  const DynamicDropzoneElements = () => {
+    return (
+      <Stack justify="center" align="center" gap={3}>
+        <Text size="xl" ta="center">
+          <Dropzone.Accept>Drop images here</Dropzone.Accept>
+          <Dropzone.Reject>{rejectionMessage}</Dropzone.Reject>
+          {!image && (
+            <Dropzone.Idle>Drag&apos;n&apos;drop images here</Dropzone.Idle>
+          )}
+        </Text>
+        {image ? <WithImageToolbar /> : <WithoutImageToolbar />}
       </Stack>
     )
   }
 
   return (
     <div className={classes.wrapper}>
-      {image ? (
-        <CoverImage
-          image={{ url: image.url, alt: image.altText || 'Blog cover image' }}
-          overlayZIndex={1}
-        />
-      ) : (
-        <div className={classes.placeholder} />
-      )}
+      <CoverImage image={coverImage} overlayZIndex={1} />
 
       {onReplace && (
         <Dropzone
@@ -105,60 +161,15 @@ const EditableCoverImage = ({
           maxFiles={1}
           onDrop={(files: FileWithPath[]) => onReplace(files)}
           onReject={(rejections: FileRejection[]) => {
+            // TODO: what do we need here?
             // keep this noop by default; parent can pass custom handler via dropzoneProps
           }}
           accept={ACCEPTED_IMAGE_TYPES}
           disabled={disabled}
           {...dropzoneProps}
         >
-          <Group
-            justify="center"
-            className={classes.centerContent}
-            style={{ pointerEvents: 'none' }}
-          >
-            <Dropzone.Accept>
-              <IconUpload
-                style={{ width: rem(52), height: rem(52), color: 'primary' }}
-                stroke={1.5}
-              />
-              <Text>Drop images here</Text>
-            </Dropzone.Accept>
-
-            <Dropzone.Reject>
-              <IconX
-                style={{
-                  width: rem(52),
-                  height: rem(52),
-                  color: 'var(--mantine-color-red-6)',
-                }}
-                stroke={1.5}
-              />
-              <Text>{rejectionMessage}</Text>
-            </Dropzone.Reject>
-
-            <Dropzone.Idle>
-              {!image && (
-                <>
-                  <IconPhoto
-                    style={{
-                      width: rem(52),
-                      height: rem(52),
-                      color: 'var(--mantine-color-dimmed)',
-                    }}
-                    stroke={1.5}
-                  />
-                  <Text size="xl" ta="center">
-                    Drag&apos;n&apos;drop images here
-                  </Text>
-                  <Text size="md" c="dimmed">
-                    or
-                  </Text>
-                </>
-              )}
-            </Dropzone.Idle>
-
-            {image ? <WithImageToolbar /> : <WithoutImageToolbar />}
-          </Group>
+          <AlwaysShownInDropzone />
+          <DynamicDropzoneElements />
         </Dropzone>
       )}
     </div>

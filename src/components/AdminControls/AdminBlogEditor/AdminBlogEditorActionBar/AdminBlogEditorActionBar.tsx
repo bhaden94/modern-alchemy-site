@@ -2,6 +2,8 @@
 
 import { Button, Card, Group } from '@mantine/core'
 
+import classes from './AdminBlogEditorActionBar.module.css'
+
 interface IAdminBlogEditorActionBar {
   saveAll: () => Promise<void>
   isSaving: boolean
@@ -19,14 +21,8 @@ const AdminBlogEditorActionBar = ({
   isSaving,
 }: IAdminBlogEditorActionBar) => {
   return (
-    <Card
-      style={{
-        position: 'sticky',
-        top: 0,
-        zIndex: 125,
-      }}
-    >
-      <Group justify="flex-end" style={{ padding: '0.5rem 2rem' }}>
+    <Card className={classes.actionBarCard}>
+      <Group justify="flex-end" p="0.5rem 2rem">
         <Button onClick={saveAll} disabled={isSaving} loading={isSaving}>
           Save Changes
         </Button>

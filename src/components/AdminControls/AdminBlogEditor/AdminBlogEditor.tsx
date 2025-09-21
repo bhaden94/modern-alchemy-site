@@ -13,8 +13,8 @@ import uploadImagesToSanity, {
   ImageReference,
 } from '~/utils/images/uploadImagesToSanity'
 
-import AdminBlogEditorActionBar from './AdminBlogEditorActionBar'
-import AdminBlogTitleEditor from './AdminBlogTitleEditor'
+import AdminBlogEditorActionBar from './AdminBlogEditorActionBar/AdminBlogEditorActionBar'
+import AdminBlogTitleEditor from './AdminBlogTitleEditor/AdminBlogTitleEditor'
 import EditableCoverImage from './EditableCoverImage/EditableCoverImage'
 
 interface AdminBlogEditorContentProps {
@@ -29,7 +29,7 @@ interface AdminBlogEditorContentProps {
 // - move inline styles to css module
 // - clean up any code smells
 
-export default function AdminBlogEditorContent({
+export default function AdminBlogEditor({
   documentId,
   initialTitle,
   initialContent,

@@ -1,8 +1,7 @@
-import AdminBlogEditorContent from '~/components/AdminControls/AdminBlogEditor/AdminBlogEditorContent'
+import AdminBlogEditor from '~/components/AdminControls/AdminBlogEditor/AdminBlogEditor'
 import PageContainer from '~/components/PageContainer'
 import { getBlogBySlug } from '~/lib/sanity/queries/sanity.blogsQuery'
 import { getClient } from '~/lib/sanity/sanity.client'
-import { getImageFromRef } from '~/lib/sanity/sanity.image'
 
 interface PageParams {
   params: {
@@ -24,7 +23,7 @@ export default async function Page({ params }: PageParams) {
   }
 
   return (
-    <AdminBlogEditorContent
+    <AdminBlogEditor
       documentId={blog._id}
       initialTitle={blog.title}
       initialContent={blog.content}

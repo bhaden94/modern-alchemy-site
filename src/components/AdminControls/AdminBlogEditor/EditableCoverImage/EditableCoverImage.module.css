@@ -1,8 +1,5 @@
 .wrapper {
   position: relative;
-  width: 100%;
-  min-height: 260px;
-  overflow: hidden;
 }
 
 .dropzone {
@@ -28,33 +25,6 @@
   }
 }
 
-.centerContent {
-  z-index: 4;
-  color: inherit;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  text-align: center;
-}
-
-.toolbar {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 5;
-  display: flex;
-  gap: 0.5rem;
-}
-
-.placeholder {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  min-height: 260px;
-  color: var(--mantine-color-dimmed, #6b7280);
-  gap: 8px;
+.toolbarAction {
+  pointer-events: all;
 }
