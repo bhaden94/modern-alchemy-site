@@ -25,6 +25,30 @@
   }
 }
 
+.dropzoneAlwaysShownInner {
+  pointer-events: none;
+}
+
+.iconBase {
+  width: rem(52);
+  height: rem(52);
+}
+
+.iconUpload {
+  @inherit: .iconBase;
+  color: var(--mantine-color-primary-6);
+}
+
+.iconX {
+  @inherit: .iconBase;
+  color: var(--mantine-color-red-6);
+}
+
+.iconPhoto {
+  @inherit: .iconBase;
+  color: var(--mantine-color-dimmed);
+}
+
 .toolbarAction {
   pointer-events: all;
 }

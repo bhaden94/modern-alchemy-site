@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, Group, rem, Stack, Text } from '@mantine/core'
+import { Button, Group, Stack, Text } from '@mantine/core'
 import {
   Dropzone,
   DropzoneProps,
@@ -53,38 +53,17 @@ const EditableCoverImage = ({
 
   const AlwaysShownInDropzone = () => {
     return (
-      <Group justify="center" style={{ pointerEvents: 'none' }}>
+      <Group justify="center" className={classes.dropzoneAlwaysShownInner}>
         <Dropzone.Accept>
-          <IconUpload
-            style={{ width: rem(52), height: rem(52), color: 'primary' }}
-            stroke={1.5}
-          />
+          <IconUpload className={classes.iconUpload} stroke={1.5} />
         </Dropzone.Accept>
 
         <Dropzone.Reject>
-          <IconX
-            style={{
-              width: rem(52),
-              height: rem(52),
-              color: 'var(--mantine-color-red-6)',
-            }}
-            stroke={1.5}
-          />
+          <IconX className={classes.iconX} stroke={1.5} />
         </Dropzone.Reject>
 
         <Dropzone.Idle>
-          {!image && (
-            <>
-              <IconPhoto
-                style={{
-                  width: rem(52),
-                  height: rem(52),
-                  color: 'var(--mantine-color-dimmed)',
-                }}
-                stroke={1.5}
-              />
-            </>
-          )}
+          {!image && <IconPhoto className={classes.iconPhoto} stroke={1.5} />}
         </Dropzone.Idle>
       </Group>
     )
