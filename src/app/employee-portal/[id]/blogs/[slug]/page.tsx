@@ -14,7 +14,6 @@ interface PageParams {
 export default async function Page({ params }: PageParams) {
   const client = getClient()
   const blog = await getBlogBySlug(client, params.slug)
-  const coverImage = getImageFromRef(blog.coverImage)
 
   if (!blog) {
     return (
@@ -29,10 +28,7 @@ export default async function Page({ params }: PageParams) {
       documentId={blog._id}
       initialTitle={blog.title}
       initialContent={blog.content}
-      initialCoverImage={{
-        url: coverImage?.url,
-        alt: coverImage?.altText || blog.title,
-      }}
+      initialCoverImage={blog.coverImage}
     />
   )
 }

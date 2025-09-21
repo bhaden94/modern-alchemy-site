@@ -8,6 +8,7 @@ import {
   notAuthorizedResponse,
 } from '~/lib/next-auth/auth.utils'
 import { getClient } from '~/lib/sanity/sanity.client'
+import { Blog } from '~/schemas/models/blog'
 
 const token = process.env.SANITY_API_WRITE_TOKEN
 
@@ -51,6 +52,10 @@ const updateFields = async (
     `updates: ${JSON.stringify(updates)}`,
   )
 
+  // Get blog post and use current coverImage as an image that can be deleted
+  const blogPost = await client.getDocument<Blog>(documentId)
+  const imageKeyToDelete = blogPost?.coverImage?._key
+
   const patchOperation = await client
     .patch(documentId)
     .set({ ...updates, updatedAt: new Date().toISOString() })
@@ -64,6 +69,7 @@ const updateFields = async (
   return NextResponse.json(
     {
       ...patchOperation,
+      imageKeyToDelete: imageKeyToDelete,
     },
     { status: 200 },
   )

@@ -28,13 +28,27 @@ export default defineType({
       name: 'coverImage',
       type: 'image',
       title: 'Cover Image',
-      validation: (rule) => rule.required(),
+      validation: (rule) =>
+        rule.custom((value, context) => {
+          const state = (context as any).document?.state
+          if (state === 'published' && !value) {
+            return 'Cover image is required when state is published'
+          }
+          return true
+        }),
     }),
     defineField({
       name: 'title',
       type: 'string',
       title: 'Title',
-      validation: (rule) => rule.required(),
+      validation: (rule) =>
+        rule.custom((value, context) => {
+          const state = (context as any).document?.state
+          if (state === 'published' && !value) {
+            return 'Title is required when state is published'
+          }
+          return true
+        }),
     }),
     defineField({
       name: 'slug',
@@ -51,7 +65,14 @@ export default defineType({
       name: 'content',
       title: 'Content',
       type: 'blockContent',
-      validation: (rule) => rule.required(),
+      validation: (rule) =>
+        rule.custom((value, context) => {
+          const state = (context as any).document?.state
+          if (state === 'published' && !value) {
+            return 'Blog content is required when state is published'
+          }
+          return true
+        }),
     }),
     defineField({
       name: 'publishedAt',

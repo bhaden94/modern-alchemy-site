@@ -3,7 +3,7 @@
 import { TextInput } from '@mantine/core'
 
 interface AdminBlogTitleEditorProps {
-  title: string
+  title?: string
   onChange: (value: string) => void
 }
 
