@@ -26,7 +26,6 @@ interface AdminBlogEditorContentProps {
 
 // Working cover image, title, and content editor for a blog post.
 // TODO:
-// - move inline styles to css module
 // - clean up any code smells
 
 export default function AdminBlogEditor({
