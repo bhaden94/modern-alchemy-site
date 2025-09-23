@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 
 import BookStatuses from '~/components/BooksStatus/BookStatuses'
 import PageContainer from '~/components/PageContainer'
@@ -60,6 +60,13 @@ const ArtistBookingRequestPage = async ({
   const mailingList = await getDefaultMailingList(client)
 
   if (!artist || !artist.isActive) return notFound()
+
+  if (
+    artist.bookingType === 'ExternalBookingLink' &&
+    artist.externalBookingLink?.startsWith('http')
+  ) {
+    redirect(artist.externalBookingLink)
+  }
 
   return (
     <PageContainer>
