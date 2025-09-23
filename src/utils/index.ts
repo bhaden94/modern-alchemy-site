@@ -1,3 +1,13 @@
+export function isHttpUrl(url: string | undefined): boolean {
+  if (!url) return false
+  try {
+    const parsed = new URL(url)
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:'
+  } catch {
+    return false
+  }
+}
+
 export const formatStylesInSentence = (styles?: string[]): string => {
   const formatter = new Intl.ListFormat('en-US', {
     style: 'short', // uses '&' instead of 'and'

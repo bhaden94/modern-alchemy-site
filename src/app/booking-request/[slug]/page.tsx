@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 
 import BookStatuses from '~/components/BooksStatus/BookStatuses'
 import PageContainer from '~/components/PageContainer'
@@ -13,7 +13,7 @@ import { getLayoutMetadata } from '~/lib/sanity/queries/sanity.pageContentQuerie
 import { getClient } from '~/lib/sanity/sanity.client'
 import { getImageFromRef } from '~/lib/sanity/sanity.image'
 import { resolveArtistUrl } from '~/lib/sanity/sanity.links'
-import { formatStylesInSentence } from '~/utils'
+import { formatStylesInSentence, isHttpUrl } from '~/utils'
 
 export const generateStaticParams = async () => {
   const client = getClient(undefined)
@@ -60,6 +60,14 @@ const ArtistBookingRequestPage = async ({
   const mailingList = await getDefaultMailingList(client)
 
   if (!artist || !artist.isActive) return notFound()
+
+  if (
+    artist.bookingType === 'ExternalBookingLink' &&
+    artist.externalBookingLink &&
+    isHttpUrl(artist.externalBookingLink)
+  ) {
+    redirect(artist.externalBookingLink)
+  }
 
   return (
     <PageContainer>
