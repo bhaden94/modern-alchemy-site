@@ -13,7 +13,7 @@ import { getLayoutMetadata } from '~/lib/sanity/queries/sanity.pageContentQuerie
 import { getClient } from '~/lib/sanity/sanity.client'
 import { getImageFromRef } from '~/lib/sanity/sanity.image'
 import { resolveArtistUrl } from '~/lib/sanity/sanity.links'
-import { formatStylesInSentence } from '~/utils'
+import { formatStylesInSentence, isHttpUrl } from '~/utils'
 
 export const generateStaticParams = async () => {
   const client = getClient(undefined)
@@ -63,7 +63,8 @@ const ArtistBookingRequestPage = async ({
 
   if (
     artist.bookingType === 'ExternalBookingLink' &&
-    artist.externalBookingLink?.startsWith('http')
+    artist.externalBookingLink &&
+    isHttpUrl(artist.externalBookingLink)
   ) {
     redirect(artist.externalBookingLink)
   }
