@@ -8,7 +8,7 @@ import {
   FileWithPath,
 } from '@mantine/dropzone'
 import { IconPhoto, IconUpload, IconX } from '@tabler/icons-react'
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 
 import { getImageFromRef } from '~/lib/sanity/sanity.image'
 import { ACCEPTED_IMAGE_TYPES } from '~/utils/forms/FormConstants'
@@ -23,7 +23,6 @@ interface EditableCoverImageProps {
   onRemove?: () => void
   disabled?: boolean
   dropzoneProps?: Partial<DropzoneProps>
-  rejectionMessage?: string
 }
 
 const EditableCoverImage = ({
@@ -32,23 +31,17 @@ const EditableCoverImage = ({
   onRemove,
   disabled = false,
   dropzoneProps,
-  rejectionMessage = 'File type not supported',
 }: EditableCoverImageProps) => {
+  const [rejectionMessage, setRejectionMessage] = useState<string>('')
   const openRef = useRef<() => void>(null)
-  // Prefer resolving a server ImageReference to a displayable image.
-  // If that fails, and a local preview object was provided (contains url), use it for immediate preview.
-  // TODO: simplify this logic
-  let image: any = getImageFromRef(imageRef as ImageReference | undefined)
-  if (!image && imageRef && typeof (imageRef as any).url === 'string') {
-    image = {
-      url: (imageRef as any).url,
-      altText: (imageRef as any).alt || 'Blog cover image',
-    }
-  }
+  let image: { url: string; altText?: string } | undefined =
+    imageRef && 'url' in imageRef
+      ? { url: imageRef.url, altText: imageRef.alt }
+      : getImageFromRef(imageRef)
 
   const coverImage: { url: string; alt: string } | undefined = image && {
     url: image.url,
-    alt: image.altText || 'Blog cover image',
+    alt: image.altText || 'Editable cover image',
   }
 
   const AlwaysShownInDropzone = () => {
@@ -140,8 +133,7 @@ const EditableCoverImage = ({
           maxFiles={1}
           onDrop={(files: FileWithPath[]) => onReplace(files)}
           onReject={(rejections: FileRejection[]) => {
-            // TODO: what do we need here?
-            // keep this noop by default; parent can pass custom handler via dropzoneProps
+            setRejectionMessage(rejections?.[0]?.errors?.[0]?.message || '')
           }}
           accept={ACCEPTED_IMAGE_TYPES}
           disabled={disabled}
