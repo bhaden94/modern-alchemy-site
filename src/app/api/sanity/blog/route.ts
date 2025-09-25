@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
-import { SanityClient } from 'next-sanity'
+import { SanityClient, SanityReference } from 'next-sanity'
 
 import {
   authOptions,
@@ -8,6 +8,7 @@ import {
   notAuthorizedResponse,
 } from '~/lib/next-auth/auth.utils'
 import { getClient } from '~/lib/sanity/sanity.client'
+import { Artist } from '~/schemas/models/artist'
 import { Blog } from '~/schemas/models/blog'
 
 const token = process.env.SANITY_API_WRITE_TOKEN
@@ -56,19 +57,25 @@ const updateFields = async (
   const blogPost = await client.getDocument<Blog>(documentId)
   const imageKeyToDelete = blogPost?.coverImage?._key
 
-  const patchOperation = await client
+  const patchOperation: Blog & { artist: SanityReference } = await client
     .patch(documentId)
     .set({ ...updates, updatedAt: new Date().toISOString() })
     .commit()
 
+  const artist = (await client.getDocument<Artist>(
+    patchOperation.artist._ref,
+  )) as Artist
+
+  const patchedBlogWithArtist: Blog = { ...patchOperation, artist: artist }
+
   console.log(
     `Update fields completed for document id: ${documentId}`,
-    `updates: ${JSON.stringify(patchOperation)}`,
+    `updates: ${JSON.stringify(patchedBlogWithArtist)}`,
   )
 
   return NextResponse.json(
     {
-      ...patchOperation,
+      ...patchedBlogWithArtist,
       imageKeyToDelete: imageKeyToDelete,
     },
     { status: 200 },
