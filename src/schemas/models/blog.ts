@@ -8,10 +8,10 @@ import { Artist } from './artist'
 import { BlockContent } from './blockContent'
 
 export interface Blog extends BaseSanitySchema<'blog'> {
-  coverImage: ImageReference
-  title: string
+  coverImage?: ImageReference
+  title?: string
   slug: Slug
-  content: BlockContent
+  content?: BlockContent
   publishedAt?: string
   updatedAt?: string
   artist: Artist

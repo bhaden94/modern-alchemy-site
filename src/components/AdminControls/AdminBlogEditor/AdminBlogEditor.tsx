@@ -5,6 +5,7 @@ import imageCompression from 'browser-image-compression'
 import { useRef, useState } from 'react'
 
 import AdminTextEditor from '~/components/AdminControls/AdminTextEditor/AdminTextEditor'
+import BlogPage from '~/components/Blog/BlogPage'
 import PageContainer from '~/components/PageContainer'
 import { useErrorDialog } from '~/hooks/useErrorDialog'
 import { BlockContent } from '~/schemas/models/blockContent'
@@ -19,9 +20,7 @@ import EditableCoverImage from './EditableCoverImage/EditableCoverImage'
 
 interface AdminBlogEditorContentProps {
   documentId: string
-  initialTitle?: string
-  initialContent?: BlockContent
-  initialCoverImage?: ImageReference
+  blog?: Blog
 }
 
 // Working cover image, title, and content editor for a blog post.
@@ -30,25 +29,27 @@ interface AdminBlogEditorContentProps {
 
 export default function AdminBlogEditor({
   documentId,
-  initialTitle,
-  initialContent,
-  initialCoverImage,
+  blog,
 }: AdminBlogEditorContentProps) {
   const { openErrorDialog } = useErrorDialog()
-  const [title, setTitle] = useState<string | undefined>(initialTitle)
+
+  const [savedBlog, setSavedBlog] = useState<Blog | undefined>(blog)
+
+  const [title, setTitle] = useState<string | undefined>(blog?.title)
   const [content, setContent] = useState<BlockContent | undefined>(
-    initialContent,
+    blog?.content,
   )
   const [coverImage, setCoverImage] = useState<
     ImageReference | { url: string; alt?: string } | undefined
-  >(initialCoverImage)
+  >(blog?.coverImage)
   const [pendingCoverFile, setPendingCoverFile] = useState<File | null>(null)
   const [pendingRemove, setPendingRemove] = useState<boolean>(false)
   const initialCoverImageRef = useRef<ImageReference | undefined>(
-    initialCoverImage,
+    blog?.coverImage,
   )
   const previewUrlRef = useRef<string | null>(null)
 
+  const [showBlogPreview, setShowBlogPreview] = useState<boolean>(false)
   const [isSaving, setIsSaving] = useState<boolean>(false)
 
   const onTitleChange = (value: string) => {
@@ -120,6 +121,7 @@ export default function AdminBlogEditor({
         setCoverImage(responseBody.coverImage)
         setContent(responseBody.content)
         setTitle(responseBody.title)
+        setSavedBlog(responseBody as Blog)
 
         if (responseBody.imageKeyToDelete) {
           // Delete image
@@ -184,30 +186,45 @@ export default function AdminBlogEditor({
     setCoverImage(undefined)
   }
 
+  const BlogPreview = () => {
+    return savedBlog && <BlogPage blog={savedBlog} />
+  }
+
   return (
     <>
-      <AdminBlogEditorActionBar saveAll={saveAll} isSaving={isSaving} />
-      <EditableCoverImage
-        imageRef={coverImage}
-        onReplace={handleImageReplace}
-        onRemove={coverImage ? handleImageRemove : undefined}
-        disabled={isSaving}
+      <AdminBlogEditorActionBar
+        saveAll={saveAll}
+        togglePreview={() => setShowBlogPreview(!showBlogPreview)}
+        isSaving={isSaving}
+        isPreview={showBlogPreview}
       />
-      <PageContainer>
-        <Stack>
-          <Container pos="relative" size="xs" px={0}>
-            <LoadingOverlay visible={isSaving} zIndex={150} />
-            <AdminBlogTitleEditor title={title} onChange={onTitleChange} />
-            <AdminTextEditor
-              initialValue={initialContent}
-              fieldName="content"
-              documentId={documentId}
-              hideActions
-              setContentCallback={setContent}
-            />
-          </Container>
-        </Stack>
-      </PageContainer>
+      {showBlogPreview ? (
+        <BlogPreview />
+      ) : (
+        <>
+          <EditableCoverImage
+            imageRef={coverImage}
+            onReplace={handleImageReplace}
+            onRemove={coverImage ? handleImageRemove : undefined}
+            disabled={isSaving}
+          />
+          <PageContainer>
+            <Stack>
+              <Container pos="relative" size="xs" px={0}>
+                <LoadingOverlay visible={isSaving} zIndex={150} />
+                <AdminBlogTitleEditor title={title} onChange={onTitleChange} />
+                <AdminTextEditor
+                  initialValue={blog?.content}
+                  fieldName="content"
+                  documentId={documentId}
+                  hideActions
+                  setContentCallback={setContent}
+                />
+              </Container>
+            </Stack>
+          </PageContainer>
+        </>
+      )}
     </>
   )
 }

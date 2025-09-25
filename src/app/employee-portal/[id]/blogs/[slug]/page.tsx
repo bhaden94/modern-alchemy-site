@@ -22,12 +22,5 @@ export default async function Page({ params }: PageParams) {
     )
   }
 
-  return (
-    <AdminBlogEditor
-      documentId={blog._id}
-      initialTitle={blog.title}
-      initialContent={blog.content}
-      initialCoverImage={blog.coverImage}
-    />
-  )
+  return <AdminBlogEditor documentId={blog._id} blog={blog} />
 }
