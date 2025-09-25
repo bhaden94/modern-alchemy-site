@@ -11,14 +11,14 @@ import { IconPhoto, IconUpload, IconX } from '@tabler/icons-react'
 import React, { useRef, useState } from 'react'
 
 import { getImageFromRef } from '~/lib/sanity/sanity.image'
+import { useBlogEditorFormContext } from '~/utils/forms/blogEditorFormContext'
+import { BlogEditorField } from '~/utils/forms/blogEditorUtils'
 import { ACCEPTED_IMAGE_TYPES } from '~/utils/forms/FormConstants'
-import { ImageReference } from '~/utils/images/uploadImagesToSanity'
 
 import CoverImage from '../../../Blog/CoverImage/CoverImage'
 import classes from './EditableCoverImage.module.css'
 
 interface EditableCoverImageProps {
-  imageRef?: ImageReference | { url: string; alt?: string }
   onReplace?: (files: FileWithPath[]) => void
   onRemove?: () => void
   disabled?: boolean
@@ -26,14 +26,16 @@ interface EditableCoverImageProps {
 }
 
 const EditableCoverImage = ({
-  imageRef,
   onReplace,
   onRemove,
   disabled = false,
   dropzoneProps,
 }: EditableCoverImageProps) => {
+  const form = useBlogEditorFormContext()
   const [rejectionMessage, setRejectionMessage] = useState<string>('')
   const openRef = useRef<() => void>(null)
+
+  const imageRef = form.getValues()[BlogEditorField.CoverImage.id]
   let image: { url: string; altText?: string } | undefined =
     imageRef && 'url' in imageRef
       ? { url: imageRef.url, altText: imageRef.alt }

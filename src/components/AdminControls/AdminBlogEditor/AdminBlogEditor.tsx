@@ -2,30 +2,37 @@
 
 import { Container, LoadingOverlay, Stack } from '@mantine/core'
 import imageCompression from 'browser-image-compression'
+import { zodResolver } from 'mantine-form-zod-resolver'
 import { useRef, useState } from 'react'
 
-import AdminTextEditor from '~/components/AdminControls/AdminTextEditor/AdminTextEditor'
 import BlogPage from '~/components/Blog/BlogPage'
 import PageContainer from '~/components/PageContainer'
 import { useErrorDialog } from '~/hooks/useErrorDialog'
-import { BlockContent } from '~/schemas/models/blockContent'
 import { Blog } from '~/schemas/models/blog'
+import {
+  BlogEditorFormProvider,
+  useBlogEditorForm,
+} from '~/utils/forms/blogEditorFormContext'
+import {
+  BlogEditorField,
+  blogEditorSchema,
+  getBlogEditorInitialValues,
+} from '~/utils/forms/blogEditorUtils'
 import uploadImagesToSanity, {
   ImageReference,
 } from '~/utils/images/uploadImagesToSanity'
 
 import AdminBlogEditorActionBar from './AdminBlogEditorActionBar/AdminBlogEditorActionBar'
 import AdminBlogTitleEditor from './AdminBlogTitleEditor/AdminBlogTitleEditor'
+import BlogEditorTextEditor from './BlogEditorTextEditor/BlogEditorTextEditor'
 import EditableCoverImage from './EditableCoverImage/EditableCoverImage'
+
+// TODO: show last saved time in editor
 
 interface AdminBlogEditorContentProps {
   documentId: string
   blog?: Blog
 }
-
-// Working cover image, title, and content editor for a blog post.
-// TODO:
-// - clean up any code smells
 
 export default function AdminBlogEditor({
   documentId,
@@ -33,31 +40,36 @@ export default function AdminBlogEditor({
 }: AdminBlogEditorContentProps) {
   const { openErrorDialog } = useErrorDialog()
 
-  const [savedBlog, setSavedBlog] = useState<Blog | undefined>(blog)
+  // Mantine form for managing form state
+  const form = useBlogEditorForm({
+    mode: 'uncontrolled',
+    initialValues: getBlogEditorInitialValues(blog),
+    validate: zodResolver(blogEditorSchema),
+  })
 
-  const [title, setTitle] = useState<string | undefined>(blog?.title)
-  const [content, setContent] = useState<BlockContent | undefined>(
-    blog?.content,
-  )
-  const [coverImage, setCoverImage] = useState<
-    ImageReference | { url: string; alt?: string } | undefined
-  >(blog?.coverImage)
+  // UI and image handling states
+  const [savedBlog, setSavedBlog] = useState<Blog | undefined>(blog)
   const [pendingCoverFile, setPendingCoverFile] = useState<File | null>(null)
   const [pendingRemove, setPendingRemove] = useState<boolean>(false)
+  const [showBlogPreview, setShowBlogPreview] = useState<boolean>(false)
+  const [isSaving, setIsSaving] = useState<boolean>(false)
+
+  // Refs for image handling
   const initialCoverImageRef = useRef<ImageReference | undefined>(
     blog?.coverImage,
   )
   const previewUrlRef = useRef<string | null>(null)
 
-  const [showBlogPreview, setShowBlogPreview] = useState<boolean>(false)
-  const [isSaving, setIsSaving] = useState<boolean>(false)
-
-  const onTitleChange = (value: string) => {
-    setTitle(value)
-  }
-
-  const saveAll = async () => {
+  const handleFormSubmit = async (
+    formValues: any,
+    event?: React.FormEvent<HTMLFormElement>,
+  ) => {
     setIsSaving(true)
+
+    // Get the submitter to determine which button was clicked
+    const submitter = (event?.nativeEvent as SubmitEvent)
+      ?.submitter as HTMLButtonElement
+    const action = submitter?.value || 'save' // default to save
 
     try {
       // Always compute a concrete coverUpdate to send to the server.
@@ -98,15 +110,36 @@ export default function AdminBlogEditor({
         coverUpdate = null
       }
 
+      // Prepare the update payload
+      const updates: any = {
+        title: formValues.title,
+        content: formValues.content,
+        coverImage: coverUpdate,
+      }
+
+      // If publishing, ensure required fields and set state
+      if (action === 'publish') {
+        if (!updates.title || !updates.content || !coverUpdate) {
+          openErrorDialog(
+            'Title, content, and cover image are required to publish.',
+          )
+          setIsSaving(false)
+          return
+        }
+        updates.state = 'published'
+        updates.publishedAt = new Date().toISOString()
+      }
+
+      if (action === 'unpublish') {
+        updates.state = 'draft'
+        updates.publishedAt = null
+      }
+
       const res = await fetch('/api/sanity/blog', {
         method: 'PATCH',
         body: JSON.stringify({
           documentId,
-          updates: {
-            title,
-            content,
-            coverImage: coverUpdate,
-          },
+          updates,
         }),
       })
 
@@ -114,13 +147,20 @@ export default function AdminBlogEditor({
         const responseBody: Partial<Blog & { imageKeyToDelete?: string }> =
           await res.json()
 
+        console.log('response body', responseBody)
+
         setPendingCoverFile(null)
         setPendingRemove(false)
         // Update the initial server-backed reference so future saves will send the correct value
         initialCoverImageRef.current = responseBody.coverImage
-        setCoverImage(responseBody.coverImage)
-        setContent(responseBody.content)
-        setTitle(responseBody.title)
+
+        // Update form values with server response
+        form.setValues({
+          title: responseBody.title,
+          content: responseBody.content,
+          coverImage: responseBody.coverImage,
+        })
+        form.resetDirty()
         setSavedBlog(responseBody as Blog)
 
         if (responseBody.imageKeyToDelete) {
@@ -138,9 +178,15 @@ export default function AdminBlogEditor({
 
         previewUrlRef.current && URL.revokeObjectURL(previewUrlRef.current)
         previewUrlRef.current = null
+      } else {
+        openErrorDialog(
+          `There was an issue ${action === 'publish' ? 'publishing' : 'saving'} the blog.`,
+        )
       }
     } catch (err) {
-      openErrorDialog('There was an issue saving changes to the blog.')
+      openErrorDialog(
+        `There was an issue ${action === 'publish' ? 'publishing' : 'saving'} changes to the blog.`,
+      )
     } finally {
       setIsSaving(false)
     }
@@ -172,7 +218,10 @@ export default function AdminBlogEditor({
     }
     const objectUrl = URL.createObjectURL(fileToUse)
     previewUrlRef.current = objectUrl
-    setCoverImage({ url: objectUrl, alt: fileToUse.name })
+    form.setFieldValue(BlogEditorField.CoverImage.id, {
+      url: objectUrl,
+      alt: fileToUse.name,
+    })
   }
 
   const handleImageRemove = async () => {
@@ -183,7 +232,7 @@ export default function AdminBlogEditor({
       URL.revokeObjectURL(previewUrlRef.current)
       previewUrlRef.current = null
     }
-    setCoverImage(undefined)
+    form.setFieldValue(BlogEditorField.CoverImage.id, undefined)
   }
 
   const BlogPreview = () => {
@@ -191,40 +240,42 @@ export default function AdminBlogEditor({
   }
 
   return (
-    <>
-      <AdminBlogEditorActionBar
-        saveAll={saveAll}
-        togglePreview={() => setShowBlogPreview(!showBlogPreview)}
-        isSaving={isSaving}
-        isPreview={showBlogPreview}
-      />
-      {showBlogPreview ? (
-        <BlogPreview />
-      ) : (
-        <>
-          <EditableCoverImage
-            imageRef={coverImage}
-            onReplace={handleImageReplace}
-            onRemove={coverImage ? handleImageRemove : undefined}
-            disabled={isSaving}
-          />
-          <PageContainer>
-            <Stack>
-              <Container pos="relative" size="xs" px={0}>
-                <LoadingOverlay visible={isSaving} zIndex={150} />
-                <AdminBlogTitleEditor title={title} onChange={onTitleChange} />
-                <AdminTextEditor
-                  initialValue={blog?.content}
-                  fieldName="content"
-                  documentId={documentId}
-                  hideActions
-                  setContentCallback={setContent}
-                />
-              </Container>
-            </Stack>
-          </PageContainer>
-        </>
-      )}
-    </>
+    <BlogEditorFormProvider form={form}>
+      <form onSubmit={form.onSubmit(handleFormSubmit)}>
+        <AdminBlogEditorActionBar
+          togglePreview={() => setShowBlogPreview(!showBlogPreview)}
+          isSaving={isSaving}
+          isPreview={showBlogPreview}
+          isPublished={savedBlog?.state === 'published'}
+        />
+        <div style={{ position: 'relative' }}>
+          <LoadingOverlay visible={isSaving} />
+          {showBlogPreview ? (
+            <BlogPreview />
+          ) : (
+            <>
+              <EditableCoverImage
+                onReplace={handleImageReplace}
+                onRemove={
+                  form.getValues().coverImage ? handleImageRemove : undefined
+                }
+                disabled={isSaving}
+              />
+              <PageContainer>
+                <Stack>
+                  <Container size="xs" px={0}>
+                    <AdminBlogTitleEditor />
+                    <BlogEditorTextEditor
+                      initialValue={blog?.content}
+                      documentId={documentId}
+                    />
+                  </Container>
+                </Stack>
+              </PageContainer>
+            </>
+          )}
+        </div>
+      </form>
+    </BlogEditorFormProvider>
   )
 }

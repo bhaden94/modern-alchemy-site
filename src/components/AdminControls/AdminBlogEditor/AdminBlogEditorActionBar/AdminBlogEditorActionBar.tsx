@@ -5,31 +5,24 @@ import {
   IconDeviceFloppy,
   IconEye,
   IconEyeClosed,
+  IconPencil,
   IconUpload,
 } from '@tabler/icons-react'
 
 import classes from './AdminBlogEditorActionBar.module.css'
 
 interface IAdminBlogEditorActionBar {
-  saveAll: () => Promise<void>
   togglePreview: () => void
   isSaving: boolean
   isPreview: boolean
+  isPublished: boolean
 }
 
-// TODO: action to add
-// - preview button (done)
-//   - Probably create BlogContent that render the page as it would appear to users
-//   - Move blog page.tsx code to the new component
-//   - ON preview, we show that component instead of the admin editor
-// - publish/unpublish button
-// - loading states for buttons only shows on the button clicked
-
 const AdminBlogEditorActionBar = ({
-  saveAll,
   togglePreview,
   isSaving,
   isPreview,
+  isPublished,
 }: IAdminBlogEditorActionBar) => {
   return (
     <Card className={classes.actionBarCard}>
@@ -38,27 +31,26 @@ const AdminBlogEditorActionBar = ({
           leftSection={isPreview ? <IconEyeClosed /> : <IconEye />}
           onClick={togglePreview}
           disabled={isSaving}
-          loading={isSaving}
           variant="subtle"
         >
           Toggle Preview
         </Button>
         <Button
           leftSection={<IconDeviceFloppy />}
-          onClick={saveAll}
+          type="submit"
+          value="save"
           disabled={isSaving}
-          loading={isSaving}
           variant="subtle"
         >
           Save Changes
         </Button>
         <Button
-          leftSection={<IconUpload />}
-          // onClick={saveAll}
+          leftSection={isPublished ? <IconPencil /> : <IconUpload />}
+          type="submit"
+          value={isPublished ? 'unpublish' : 'publish'}
           disabled={isSaving}
-          loading={isSaving}
         >
-          Publish
+          {isPublished ? 'Convert to draft' : 'Publish'}
         </Button>
       </Group>
     </Card>
