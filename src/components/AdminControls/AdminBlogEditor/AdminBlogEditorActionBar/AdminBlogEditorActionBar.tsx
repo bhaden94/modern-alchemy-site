@@ -13,14 +13,14 @@ import classes from './AdminBlogEditorActionBar.module.css'
 
 interface IAdminBlogEditorActionBar {
   togglePreview: () => void
-  isSaving: boolean
+  isSubmitting: boolean
   isPreview: boolean
   isPublished: boolean
 }
 
 const AdminBlogEditorActionBar = ({
   togglePreview,
-  isSaving,
+  isSubmitting,
   isPreview,
   isPublished,
 }: IAdminBlogEditorActionBar) => {
@@ -30,7 +30,7 @@ const AdminBlogEditorActionBar = ({
         <Button
           leftSection={isPreview ? <IconEyeClosed /> : <IconEye />}
           onClick={togglePreview}
-          disabled={isSaving}
+          disabled={isSubmitting}
           variant="subtle"
         >
           Toggle Preview
@@ -39,7 +39,7 @@ const AdminBlogEditorActionBar = ({
           leftSection={<IconDeviceFloppy />}
           type="submit"
           value="save"
-          disabled={isSaving}
+          disabled={isSubmitting}
           variant="subtle"
         >
           Save Changes
@@ -48,7 +48,7 @@ const AdminBlogEditorActionBar = ({
           leftSection={isPublished ? <IconPencil /> : <IconUpload />}
           type="submit"
           value={isPublished ? 'unpublish' : 'publish'}
-          disabled={isSaving}
+          disabled={isSubmitting}
         >
           {isPublished ? 'Convert to draft' : 'Publish'}
         </Button>

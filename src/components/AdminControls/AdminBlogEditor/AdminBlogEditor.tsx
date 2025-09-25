@@ -52,7 +52,7 @@ export default function AdminBlogEditor({
   const [pendingCoverFile, setPendingCoverFile] = useState<File | null>(null)
   const [pendingRemove, setPendingRemove] = useState<boolean>(false)
   const [showBlogPreview, setShowBlogPreview] = useState<boolean>(false)
-  const [isSaving, setIsSaving] = useState<boolean>(false)
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   // Refs for image handling
   const initialCoverImageRef = useRef<ImageReference | undefined>(
@@ -64,7 +64,7 @@ export default function AdminBlogEditor({
     formValues: any,
     event?: React.FormEvent<HTMLFormElement>,
   ) => {
-    setIsSaving(true)
+    setIsSubmitting(true)
 
     // Get the submitter to determine which button was clicked
     const submitter = (event?.nativeEvent as SubmitEvent)
@@ -83,11 +83,11 @@ export default function AdminBlogEditor({
             openErrorDialog(
               'Cover image exceeds size limit. Please compress or choose a smaller image.',
             )
-            setIsSaving(false)
+            setIsSubmitting(false)
           },
           error: () => {
             openErrorDialog('There was a problem uploading the cover image.')
-            setIsSaving(false)
+            setIsSubmitting(false)
           },
         })
 
@@ -123,7 +123,7 @@ export default function AdminBlogEditor({
           openErrorDialog(
             'Title, content, and cover image are required to publish.',
           )
-          setIsSaving(false)
+          setIsSubmitting(false)
           return
         }
         updates.state = 'published'
@@ -188,7 +188,7 @@ export default function AdminBlogEditor({
         `There was an issue ${action === 'publish' ? 'publishing' : 'saving'} changes to the blog.`,
       )
     } finally {
-      setIsSaving(false)
+      setIsSubmitting(false)
     }
   }
 
@@ -244,12 +244,12 @@ export default function AdminBlogEditor({
       <form onSubmit={form.onSubmit(handleFormSubmit)}>
         <AdminBlogEditorActionBar
           togglePreview={() => setShowBlogPreview(!showBlogPreview)}
-          isSaving={isSaving}
+          isSubmitting={isSubmitting}
           isPreview={showBlogPreview}
           isPublished={savedBlog?.state === 'published'}
         />
         <div style={{ position: 'relative' }}>
-          <LoadingOverlay visible={isSaving} />
+          <LoadingOverlay visible={isSubmitting} />
           {showBlogPreview ? (
             <BlogPreview />
           ) : (
@@ -259,7 +259,7 @@ export default function AdminBlogEditor({
                 onRemove={
                   form.getValues().coverImage ? handleImageRemove : undefined
                 }
-                disabled={isSaving}
+                disabled={isSubmitting}
               />
               <PageContainer>
                 <Stack>
