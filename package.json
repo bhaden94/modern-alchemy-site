@@ -74,6 +74,6 @@
     "typescript-plugin-css-modules": "^5.1.0"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=22"
   }
 }
