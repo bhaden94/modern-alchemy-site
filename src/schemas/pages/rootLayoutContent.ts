@@ -38,6 +38,7 @@ export interface RootLayoutContent
   facebookLink?: string
   navigationItems?: NavigationItem[]
   announcement?: Announcement
+  googleTagManagerId?: string
 }
 
 const linkValidation = (
@@ -180,6 +181,11 @@ export default defineType({
           title: 'Title',
         }),
       ],
+    }),
+    defineField({
+      name: 'googleTagManagerId',
+      type: 'string',
+      title: 'Google Tag Manager ID',
     }),
   ],
 })

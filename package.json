@@ -25,6 +25,7 @@
     "@mantine/dropzone": "^7.16.3",
     "@mantine/form": "^7.16.3",
     "@mantine/hooks": "^7.16.3",
+    "@next/third-parties": "^14.2.33",
     "@portabletext/editor": "^1.55.9",
     "@portabletext/react": "3.2.1",
     "@sanity/client": "^7.6.0",
@@ -73,6 +74,6 @@
     "typescript-plugin-css-modules": "^5.1.0"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=22"
   }
 }
