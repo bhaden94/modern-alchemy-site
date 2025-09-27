@@ -26,8 +26,8 @@ import AdminBlogEditorActionBar from './AdminBlogEditorActionBar/AdminBlogEditor
 import AdminBlogTitleEditor from './AdminBlogTitleEditor/AdminBlogTitleEditor'
 import BlogEditorTextEditor from './BlogEditorTextEditor/BlogEditorTextEditor'
 import EditableCoverImage from './EditableCoverImage/EditableCoverImage'
-
-// TODO: show last saved time in editor
+import { useSuccessDialog } from '~/hooks/useSuccessDialog'
+import AdminBlogInformationBar from './AdminBlogInformationBar/AdminBlogInformationBar'
 
 interface AdminBlogEditorContentProps {
   documentId: string
@@ -38,6 +38,7 @@ export default function AdminBlogEditor({
   documentId,
   blog,
 }: AdminBlogEditorContentProps) {
+  const { openSuccessDialog } = useSuccessDialog()
   const { openErrorDialog } = useErrorDialog()
 
   // Mantine form for managing form state
@@ -147,8 +148,6 @@ export default function AdminBlogEditor({
         const responseBody: Partial<Blog & { imageKeyToDelete?: string }> =
           await res.json()
 
-        console.log('response body', responseBody)
-
         setPendingCoverFile(null)
         setPendingRemove(false)
         // Update the initial server-backed reference so future saves will send the correct value
@@ -162,6 +161,8 @@ export default function AdminBlogEditor({
         })
         form.resetDirty()
         setSavedBlog(responseBody as Blog)
+
+        openSuccessDialog('Blog updated.')
 
         if (responseBody.imageKeyToDelete) {
           // Delete image
@@ -247,6 +248,10 @@ export default function AdminBlogEditor({
           isSubmitting={isSubmitting}
           isPreview={showBlogPreview}
           isPublished={savedBlog?.state === 'published'}
+        />
+        <AdminBlogInformationBar
+          updatedAt={savedBlog?.updatedAt}
+          publishedAt={savedBlog?.publishedAt}
         />
         <div style={{ position: 'relative' }}>
           <LoadingOverlay visible={isSubmitting} />
