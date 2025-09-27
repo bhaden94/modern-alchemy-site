@@ -5,6 +5,7 @@ import '@mantine/carousel/styles.css'
 import '@mantine/dates/styles.css'
 
 import { ColorSchemeScript } from '@mantine/core'
+import { GoogleTagManager } from '@next/third-parties/google'
 import { Analytics } from '@vercel/analytics/react'
 import { Metadata } from 'next'
 
@@ -55,6 +56,9 @@ export default async function RootLayout({
     <html lang="en">
       <head>
         <ColorSchemeScript defaultColorScheme={colorScheme} />
+        {content.googleTagManagerId && (
+          <GoogleTagManager gtmId={content.googleTagManagerId} />
+        )}
       </head>
       <body className="flex min-h-screen flex-col">
         <Providers>
