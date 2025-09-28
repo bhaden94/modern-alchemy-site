@@ -1,6 +1,7 @@
 'use client'
 
 import { Card, Divider, Group, Text } from '@mantine/core'
+
 import { formatDate } from '~/utils'
 
 interface IAdminBlogInformationBar {

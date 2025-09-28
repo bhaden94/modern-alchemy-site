@@ -1,8 +1,17 @@
 'use client'
 
-import { Button, Card, Group } from '@mantine/core'
+import {
+  ActionIcon,
+  Button,
+  ButtonProps,
+  Card,
+  Group,
+  Menu,
+  MenuItemProps,
+} from '@mantine/core'
 import {
   IconDeviceFloppy,
+  IconDotsVertical,
   IconEye,
   IconEyeClosed,
   IconPencil,
@@ -16,42 +25,70 @@ interface IAdminBlogEditorActionBar {
   isSubmitting: boolean
   isPreview: boolean
   isPublished: boolean
+  formId: string
 }
+
+type TElementProps = ButtonProps &
+  MenuItemProps &
+  React.ButtonHTMLAttributes<HTMLButtonElement>
 
 const AdminBlogEditorActionBar = ({
   togglePreview,
   isSubmitting,
   isPreview,
   isPublished,
+  formId,
 }: IAdminBlogEditorActionBar) => {
+  const previewProps: TElementProps = {
+    leftSection: isPreview ? <IconEyeClosed /> : <IconEye />,
+    onClick: togglePreview,
+    disabled: isSubmitting,
+  }
+
+  const saveProps: TElementProps = {
+    leftSection: <IconDeviceFloppy />,
+    disabled: isSubmitting,
+    type: 'submit',
+    value: 'save',
+    form: formId,
+  }
+
+  const publishProps: TElementProps = {
+    leftSection: isPublished ? <IconPencil /> : <IconUpload />,
+    disabled: isSubmitting,
+    type: 'submit',
+    value: isPublished ? 'unpublish' : 'publish',
+    form: formId,
+  }
+
+  const publishText = isPublished ? 'Convert to draft' : 'Publish'
+
   return (
     <Card className={classes.actionBarCard}>
-      <Group justify="flex-end" px="1rem" py={0}>
-        <Button
-          leftSection={isPreview ? <IconEyeClosed /> : <IconEye />}
-          onClick={togglePreview}
-          disabled={isSubmitting}
-          variant="subtle"
-        >
+      <Group visibleFrom="sm" justify="flex-end" px="1rem" py={0}>
+        <Button {...previewProps} variant="subtle">
           Toggle Preview
         </Button>
-        <Button
-          leftSection={<IconDeviceFloppy />}
-          type="submit"
-          value="save"
-          disabled={isSubmitting}
-          variant="subtle"
-        >
+        <Button {...saveProps} variant="subtle">
           Save Changes
         </Button>
-        <Button
-          leftSection={isPublished ? <IconPencil /> : <IconUpload />}
-          type="submit"
-          value={isPublished ? 'unpublish' : 'publish'}
-          disabled={isSubmitting}
-        >
-          {isPublished ? 'Convert to draft' : 'Publish'}
-        </Button>
+        <Button {...publishProps}>{publishText}</Button>
+      </Group>
+
+      <Group hiddenFrom="sm" justify="flex-end" px="1rem" py={0}>
+        <Menu position="bottom-end" shadow="sm" keepMounted>
+          <Menu.Target>
+            <ActionIcon variant="subtle">
+              <IconDotsVertical />
+            </ActionIcon>
+          </Menu.Target>
+
+          <Menu.Dropdown>
+            <Menu.Item {...previewProps}>Toggle Preview</Menu.Item>
+            <Menu.Item {...saveProps}>Save Changes</Menu.Item>
+            <Menu.Item {...publishProps}>{publishText}</Menu.Item>
+          </Menu.Dropdown>
+        </Menu>
       </Group>
     </Card>
   )

@@ -8,6 +8,7 @@ import { useRef, useState } from 'react'
 import BlogPage from '~/components/Blog/BlogPage'
 import PageContainer from '~/components/PageContainer'
 import { useErrorDialog } from '~/hooks/useErrorDialog'
+import { useSuccessDialog } from '~/hooks/useSuccessDialog'
 import { Blog } from '~/schemas/models/blog'
 import {
   BlogEditorFormProvider,
@@ -17,17 +18,17 @@ import {
   BlogEditorField,
   blogEditorSchema,
   getBlogEditorInitialValues,
+  TBlogEditorSchema,
 } from '~/utils/forms/blogEditorUtils'
 import uploadImagesToSanity, {
   ImageReference,
 } from '~/utils/images/uploadImagesToSanity'
 
 import AdminBlogEditorActionBar from './AdminBlogEditorActionBar/AdminBlogEditorActionBar'
+import AdminBlogInformationBar from './AdminBlogInformationBar/AdminBlogInformationBar'
 import AdminBlogTitleEditor from './AdminBlogTitleEditor/AdminBlogTitleEditor'
 import BlogEditorTextEditor from './BlogEditorTextEditor/BlogEditorTextEditor'
 import EditableCoverImage from './EditableCoverImage/EditableCoverImage'
-import { useSuccessDialog } from '~/hooks/useSuccessDialog'
-import AdminBlogInformationBar from './AdminBlogInformationBar/AdminBlogInformationBar'
 
 interface AdminBlogEditorContentProps {
   documentId: string
@@ -42,6 +43,7 @@ export default function AdminBlogEditor({
   const { openErrorDialog } = useErrorDialog()
 
   // Mantine form for managing form state
+  const formId = 'blog-editor-form'
   const form = useBlogEditorForm({
     mode: 'uncontrolled',
     initialValues: getBlogEditorInitialValues(blog),
@@ -62,7 +64,7 @@ export default function AdminBlogEditor({
   const previewUrlRef = useRef<string | null>(null)
 
   const handleFormSubmit = async (
-    formValues: any,
+    formValues: TBlogEditorSchema,
     event?: React.FormEvent<HTMLFormElement>,
   ) => {
     setIsSubmitting(true)
@@ -242,12 +244,13 @@ export default function AdminBlogEditor({
 
   return (
     <BlogEditorFormProvider form={form}>
-      <form onSubmit={form.onSubmit(handleFormSubmit)}>
+      <form id={formId} onSubmit={form.onSubmit(handleFormSubmit)}>
         <AdminBlogEditorActionBar
           togglePreview={() => setShowBlogPreview(!showBlogPreview)}
           isSubmitting={isSubmitting}
           isPreview={showBlogPreview}
           isPublished={savedBlog?.state === 'published'}
+          formId={formId}
         />
         <AdminBlogInformationBar
           updatedAt={savedBlog?.updatedAt}
