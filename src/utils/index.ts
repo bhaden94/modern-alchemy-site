@@ -1,3 +1,10 @@
+import speakingurl from 'speakingurl'
+
+export const slugify = (value?: string): string => {
+  const slugifyOpts = { truncate: 200, symbols: true }
+  return value ? speakingurl(value, slugifyOpts) : ''
+}
+
 export function isHttpUrl(url: string | undefined): boolean {
   if (!url) return false
   try {

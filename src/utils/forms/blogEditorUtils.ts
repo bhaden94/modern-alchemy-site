@@ -29,13 +29,3 @@ export const BlogEditorField = {
     placeholder: 'Upload a cover image',
   },
 } as const
-
-export const getBlogEditorInitialValues = (blog?: {
-  title?: string
-  content?: BlockContent
-  coverImage?: ImageReference
-}): TBlogEditorSchema => ({
-  title: blog?.title || undefined,
-  content: blog?.content || undefined,
-  coverImage: blog?.coverImage || undefined,
-})

@@ -72,4 +72,4 @@ export type BaseSanitySchema<T extends string> = {
   _createdAt: string
 }
 
-export type Slug = { _type: 'slug'; current: string }
+export type Slug = { _type: 'slug'; current?: string }

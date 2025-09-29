@@ -8,11 +8,11 @@ import { Artist } from './artist'
 import { BlockContent } from './blockContent'
 
 export interface Blog extends BaseSanitySchema<'blog'> {
-  coverImage?: ImageReference
+  coverImage?: ImageReference | null
   title?: string
-  slug: Slug
+  slug?: Slug
   content?: BlockContent
-  publishedAt?: string
+  publishedAt?: string | null
   updatedAt?: string
   artist: Artist
   state: 'draft' | 'published'
@@ -28,14 +28,6 @@ export default defineType({
       name: 'coverImage',
       type: 'image',
       title: 'Cover Image',
-      validation: (rule) =>
-        rule.custom((value, context) => {
-          const state = (context as any).document?.state
-          if (state === 'published' && !value) {
-            return 'Cover image is required when state is published'
-          }
-          return true
-        }),
     }),
     defineField({
       name: 'title',
@@ -59,7 +51,14 @@ export default defineType({
         maxLength: 96,
         isUnique: (value, context) => context.defaultIsUnique(value, context),
       },
-      validation: (rule) => rule.required(),
+      validation: (rule) =>
+        rule.custom((value, context) => {
+          const state = (context as any).document?.state
+          if (state === 'published' && !value) {
+            return 'Slug is required when state is published'
+          }
+          return true
+        }),
     }),
     defineField({
       name: 'content',

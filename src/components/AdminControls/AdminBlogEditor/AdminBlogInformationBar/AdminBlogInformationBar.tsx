@@ -5,8 +5,8 @@ import { Card, Divider, Group, Text } from '@mantine/core'
 import { formatDate } from '~/utils'
 
 interface IAdminBlogInformationBar {
-  updatedAt?: string
-  publishedAt?: string
+  updatedAt?: string | null
+  publishedAt?: string | null
 }
 
 const AdminBlogInformationBar = ({

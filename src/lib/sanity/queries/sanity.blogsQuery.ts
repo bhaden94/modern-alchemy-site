@@ -26,3 +26,11 @@ export async function getBlogBySlug(
     NEXT_CACHE_CONFIG.BLOG,
   )
 }
+
+const blogByIdQuery = groq`*[_type == "blog" && _id == $id][0]{..., artist->}`
+export async function getBlogById(
+  client: SanityClient,
+  id: string,
+): Promise<Blog> {
+  return await client.fetch(blogByIdQuery, { id: id }, NEXT_CACHE_CONFIG.BLOG)
+}

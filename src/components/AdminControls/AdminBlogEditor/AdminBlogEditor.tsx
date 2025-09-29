@@ -17,7 +17,6 @@ import {
 import {
   BlogEditorField,
   blogEditorSchema,
-  getBlogEditorInitialValues,
   TBlogEditorSchema,
 } from '~/utils/forms/blogEditorUtils'
 import uploadImagesToSanity, {
@@ -29,6 +28,7 @@ import AdminBlogInformationBar from './AdminBlogInformationBar/AdminBlogInformat
 import AdminBlogTitleEditor from './AdminBlogTitleEditor/AdminBlogTitleEditor'
 import BlogEditorTextEditor from './BlogEditorTextEditor/BlogEditorTextEditor'
 import EditableCoverImage from './EditableCoverImage/EditableCoverImage'
+import { slugify } from '~/utils'
 
 interface AdminBlogEditorContentProps {
   documentId: string
@@ -46,7 +46,11 @@ export default function AdminBlogEditor({
   const formId = 'blog-editor-form'
   const form = useBlogEditorForm({
     mode: 'uncontrolled',
-    initialValues: getBlogEditorInitialValues(blog),
+    initialValues: {
+      title: blog?.title,
+      content: blog?.content,
+      coverImage: blog?.coverImage,
+    },
     validate: zodResolver(blogEditorSchema),
   })
 
@@ -58,7 +62,7 @@ export default function AdminBlogEditor({
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   // Refs for image handling
-  const initialCoverImageRef = useRef<ImageReference | undefined>(
+  const initialCoverImageRef = useRef<ImageReference | undefined | null>(
     blog?.coverImage,
   )
   const previewUrlRef = useRef<string | null>(null)
@@ -114,7 +118,7 @@ export default function AdminBlogEditor({
       }
 
       // Prepare the update payload
-      const updates: any = {
+      const updates: Partial<Blog> = {
         title: formValues.title,
         content: formValues.content,
         coverImage: coverUpdate,
@@ -122,15 +126,19 @@ export default function AdminBlogEditor({
 
       // If publishing, ensure required fields and set state
       if (action === 'publish') {
-        if (!updates.title || !updates.content || !coverUpdate) {
-          openErrorDialog(
-            'Title, content, and cover image are required to publish.',
-          )
+        if (!updates.title || !updates.content) {
+          openErrorDialog('Title and content are required to publish.')
           setIsSubmitting(false)
           return
         }
         updates.state = 'published'
         updates.publishedAt = new Date().toISOString()
+        // If there is already a slug, then don't override
+        // Otherwise, set a new slug based on the title
+        updates.slug = {
+          _type: 'slug',
+          current: savedBlog?.slug?.current ?? slugify(formValues.title),
+        }
       }
 
       if (action === 'unpublish') {
@@ -182,9 +190,7 @@ export default function AdminBlogEditor({
         previewUrlRef.current && URL.revokeObjectURL(previewUrlRef.current)
         previewUrlRef.current = null
       } else {
-        openErrorDialog(
-          `There was an issue ${action === 'publish' ? 'publishing' : 'saving'} the blog.`,
-        )
+        openErrorDialog(await res.text())
       }
     } catch (err) {
       openErrorDialog(
