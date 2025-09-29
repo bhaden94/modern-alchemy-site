@@ -13,40 +13,10 @@ import { Blog } from '~/schemas/models/blog'
 
 const token = process.env.SANITY_API_WRITE_TOKEN
 
-const updateField = async (
-  client: SanityClient,
-  documentId: string,
-  fieldName: string,
-  value: unknown,
-): Promise<NextResponse> => {
-  console.log(
-    `Update field for document id: ${documentId}`,
-    `fieldName: ${fieldName}`,
-    `value: ${JSON.stringify(value)}`,
-  )
-
-  const patchOperation = await client
-    .patch(documentId)
-    .set({ [fieldName]: value, updatedAt: new Date().toISOString() })
-    .commit()
-
-  console.log(
-    `Update field completed for document id: ${documentId}`,
-    `${fieldName}: ${JSON.stringify(patchOperation[fieldName])}`,
-  )
-
-  return NextResponse.json(
-    {
-      [fieldName]: patchOperation[fieldName],
-    },
-    { status: 200 },
-  )
-}
-
 const updateFields = async (
   client: SanityClient,
   documentId: string,
-  updates: Record<string, unknown>,
+  updates: Partial<Blog>,
 ): Promise<NextResponse> => {
   console.log(
     `Update fields for document id: ${documentId}`,
@@ -57,10 +27,28 @@ const updateFields = async (
   const blogPost = await client.getDocument<Blog>(documentId)
   const imageKeyToDelete = blogPost?.coverImage?._key
 
-  const patchOperation: Blog & { artist: SanityReference } = await client
-    .patch(documentId)
-    .set({ ...updates, updatedAt: new Date().toISOString() })
-    .commit()
+  if (
+    (updates.state === 'published' || blogPost?.state === 'published') &&
+    (!updates.title || !updates.content || updates.content.length === 0)
+  ) {
+    return new NextResponse(
+      `Cannot publish blog without title and content set.`,
+      {
+        status: 400,
+        statusText: 'MissingRequiredFields',
+      },
+    )
+  }
+
+  const patch = client.patch(documentId)
+  patch.set({ ...updates, updatedAt: new Date().toISOString() })
+
+  if (updates.coverImage === null) {
+    patch.unset(['coverImage'])
+  }
+
+  const patchOperation: Blog & { artist: SanityReference } =
+    await patch.commit()
 
   const artist = (await client.getDocument<Artist>(
     patchOperation.artist._ref,
@@ -89,7 +77,7 @@ export async function PATCH(request: NextRequest) {
 
   const client = getClient(token)
   const body = await request.json()
-  const { documentId, fieldName, value, updates } = body
+  const { documentId, updates } = body
 
   if (!documentId) {
     return new NextResponse(`Error performing PATCH on blog.`, {
@@ -98,20 +86,5 @@ export async function PATCH(request: NextRequest) {
     })
   }
 
-  if (updates && typeof updates === 'object') {
-    return await updateFields(
-      client,
-      documentId,
-      updates as Record<string, unknown>,
-    )
-  }
-
-  if (fieldName && typeof value !== 'undefined') {
-    return await updateField(client, documentId, fieldName, value)
-  }
-
-  return new NextResponse(`Error performing PATCH on blog.`, {
-    status: 400,
-    statusText: 'FieldMissing',
-  })
+  return await updateFields(client, documentId, updates as Partial<Blog>)
 }
