@@ -1,18 +1,18 @@
 import AdminBlogEditor from '~/components/AdminControls/AdminBlogEditor/AdminBlogEditor'
 import PageContainer from '~/components/PageContainer'
-import { getBlogBySlug } from '~/lib/sanity/queries/sanity.blogsQuery'
+import { getBlogById } from '~/lib/sanity/queries/sanity.blogsQuery'
 import { getClient } from '~/lib/sanity/sanity.client'
 
 interface PageParams {
   params: {
     id: string
-    slug: string
+    slug: string // Will be blog _id here
   }
 }
 
 export default async function Page({ params }: PageParams) {
   const client = getClient()
-  const blog = await getBlogBySlug(client, params.slug)
+  const blog = await getBlogById(client, params.slug)
 
   if (!blog) {
     return (
