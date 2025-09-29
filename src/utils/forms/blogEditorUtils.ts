@@ -1,8 +1,5 @@
 import z from 'zod'
 
-import { BlockContent } from '~/schemas/models/blockContent'
-import { ImageReference } from '~/utils/images/uploadImagesToSanity'
-
 export const blogEditorSchema = z.object({
   title: z.string().optional(),
   content: z.any().optional(), // BlockContent is complex, using any for flexibility

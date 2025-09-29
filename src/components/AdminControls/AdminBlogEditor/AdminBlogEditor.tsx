@@ -10,6 +10,7 @@ import PageContainer from '~/components/PageContainer'
 import { useErrorDialog } from '~/hooks/useErrorDialog'
 import { useSuccessDialog } from '~/hooks/useSuccessDialog'
 import { Blog } from '~/schemas/models/blog'
+import { slugify } from '~/utils'
 import {
   BlogEditorFormProvider,
   useBlogEditorForm,
@@ -28,7 +29,6 @@ import AdminBlogInformationBar from './AdminBlogInformationBar/AdminBlogInformat
 import AdminBlogTitleEditor from './AdminBlogTitleEditor/AdminBlogTitleEditor'
 import BlogEditorTextEditor from './BlogEditorTextEditor/BlogEditorTextEditor'
 import EditableCoverImage from './EditableCoverImage/EditableCoverImage'
-import { slugify } from '~/utils'
 
 interface AdminBlogEditorContentProps {
   documentId: string
