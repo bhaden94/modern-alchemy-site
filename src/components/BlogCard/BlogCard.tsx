@@ -1,25 +1,29 @@
 'use client'
 
-import { Box, Button, Group, Image, Overlay, Stack, Title } from '@mantine/core'
-import { IconPencil, IconTrash } from '@tabler/icons-react'
-import Link from 'next/link'
+import { Box, Group, Image, Overlay, Stack, Title } from '@mantine/core'
+import { useRouter } from 'next/navigation'
 
 import { getImageFromRef } from '~/lib/sanity/sanity.image'
 import { Blog } from '~/schemas/models/blog'
-import { NavigationPages } from '~/utils/navigation'
 
-import DeleteWithConfirmation from '../DeleteWithConfirmation/DeleteWithConfirmation'
 import styles from './BlogCard.module.css'
 
 interface IBlogCard {
   blog: Blog
+  blogLink?: string
+  children?: React.ReactNode
 }
 
-const BlogCard = ({ blog }: IBlogCard) => {
+const BlogCard = ({ blog, blogLink, children }: IBlogCard) => {
   const imageUrl = getImageFromRef(blog.coverImage)?.url || '/article.svg'
+  const router = useRouter()
+
+  const onBlogClick = () => {
+    blogLink && router.push(blogLink)
+  }
 
   return (
-    <Box className={styles.blogCard}>
+    <Box className={styles.blogCard} onClick={onBlogClick}>
       {/* TODO: placeholder on image like the rest of the site */}
       <Image
         src={imageUrl}
@@ -42,28 +46,7 @@ const BlogCard = ({ blog }: IBlogCard) => {
             {blog.title || 'Untitled'}
           </Title>
 
-          <Group>
-            {/* TODO: Everything under here should be passed by a parent and not controlled direction in the card component */}
-            {/* In admin page, it is edit/delete button. In normal page it is the artist/date published information */}
-            <Button
-              leftSection={<IconPencil />}
-              size="sm"
-              component={Link}
-              href={`${NavigationPages.EmployeePortal}/${blog.artist._id}/${NavigationPages.Blog}/${blog._id}`}
-              target="_blank"
-              prefetch={false}
-            >
-              Edit
-            </Button>
-            <DeleteWithConfirmation
-              isDeleting={false}
-              disabled={false}
-              onDeleteConfirmed={() => console.log('confirm delete')}
-              deleteButtonText="Delete"
-              confirmationMessage="Are you sure you want to delete this blog post? The operation cannot be undone."
-              buttonProps={{ leftSection: <IconTrash /> }}
-            />
-          </Group>
+          <Group>{children}</Group>
         </Stack>
       </Box>
     </Box>

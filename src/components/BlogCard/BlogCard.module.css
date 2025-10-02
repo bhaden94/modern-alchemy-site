@@ -1,11 +1,11 @@
 .blogCard {
   position: relative;
-  border-radius: 8px;
+  border-radius: var(--mantine-radius-sm);
   overflow: hidden;
   cursor: pointer;
   transition: transform 0.2s ease;
   break-inside: avoid;
-  margin-bottom: 20px;
+  margin-bottom: var(--mantine-spacing-md);
 }
 
 .blogCard:hover .image {
