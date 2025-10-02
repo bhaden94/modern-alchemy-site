@@ -24,6 +24,7 @@ export enum NavigationPages {
   Disclaimer = '/disclaimer',
   Announcement = '/announcement',
   Employment = '/employment',
+  Blog = '/blogs',
 }
 
 interface NavigationLink {

@@ -14,7 +14,7 @@ import { getImageFromRef } from '~/lib/sanity/sanity.image'
 export const generateStaticParams = async () => {
   const client = getClient(undefined)
   const blogs = await getPublishedBlogs(client)
-  return blogs?.map((b) => ({ slug: b.slug.current })) || []
+  return blogs?.map((b) => ({ slug: b.slug?.current })) || []
 }
 
 export async function generateMetadata({

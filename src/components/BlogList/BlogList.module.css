@@ -1,0 +1,14 @@
+.container {
+  column-count: auto;
+  column-width: 315px;
+  column-gap: var(--mantine-spacing-md);
+  width: 100%;
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
+.blog {
+  width: 100%;
+  margin-bottom: var(--mantine-spacing-md);
+  break-inside: avoid;
+}

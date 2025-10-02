@@ -10,6 +10,18 @@ export async function getAllBlogs(client: SanityClient): Promise<Blog[]> {
   return await client.fetch(allBlogsQuery, {}, NEXT_CACHE_CONFIG.BLOG)
 }
 
+const allBlogsByArtistQuery = groq`*[_type == "blog" && references($artistId)] | order(_createdAt desc){..., artist->}`
+export async function getAllBlogsByArtist(
+  client: SanityClient,
+  artistId: string,
+): Promise<Blog[]> {
+  return await client.fetch(
+    allBlogsByArtistQuery,
+    { artistId },
+    NEXT_CACHE_CONFIG.BLOG,
+  )
+}
+
 const publishedBlogsQuery = groq`*[_type == "blog" && state == "published"] | order(publishedAt desc){..., artist->}`
 export async function getPublishedBlogs(client: SanityClient): Promise<Blog[]> {
   return await client.fetch(publishedBlogsQuery, {}, NEXT_CACHE_CONFIG.BLOG)
