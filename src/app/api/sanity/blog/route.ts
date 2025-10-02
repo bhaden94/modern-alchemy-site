@@ -88,3 +88,73 @@ export async function PATCH(request: NextRequest) {
 
   return await updateFields(client, documentId, updates as Partial<Blog>)
 }
+
+export async function PUT(request: NextRequest) {
+  const session = await getServerSession(authOptions)
+  if (!session) return notAuthorizedResponse(request)
+  logAuthorizedRequest(session, request)
+
+  const client = getClient(token)
+  const body = await request.json()
+  const { artistId } = body
+
+  if (!artistId) {
+    return new NextResponse(`Error creating new blog.`, {
+      status: 400,
+      statusText: 'ArtistIdMissing',
+    })
+  }
+
+  try {
+    const newBlog = await client.create({
+      _type: 'blog',
+      state: 'draft',
+      artist: {
+        _type: 'reference',
+        _ref: artistId,
+      },
+      updatedAt: new Date().toISOString(),
+    })
+
+    console.log(`Created new blog document with id: ${newBlog._id}`)
+
+    return NextResponse.json(newBlog, { status: 201 })
+  } catch (error) {
+    console.error('Error creating blog:', error)
+    return new NextResponse(`Error creating new blog.`, {
+      status: 500,
+      statusText: 'BlogCreationFailed',
+    })
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  const session = await getServerSession(authOptions)
+  if (!session) return notAuthorizedResponse(request)
+  logAuthorizedRequest(session, request)
+
+  const client = getClient(token)
+  const body = await request.json()
+  const { documentId } = body
+
+  if (!documentId) {
+    return new NextResponse(`Error deleting blog.`, {
+      status: 400,
+      statusText: 'BlogIdMissing',
+    })
+  }
+
+  try {
+    const deletedBlog = await client.delete(documentId)
+
+    console.log(`Deleted blog document with id: ${deletedBlog._id}`)
+
+    return NextResponse.json(deletedBlog, { status: 200 })
+  } catch (error) {
+    console.error('Error deleting blog:', error)
+    return new NextResponse(`Error deleting blog.`, {
+      status: 500,
+      statusText: 'BlogDeletionFailed',
+    })
+  }
+}
