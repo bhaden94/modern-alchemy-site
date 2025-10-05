@@ -48,13 +48,13 @@ export function formatPhoneNumber(number: string) {
   return null
 }
 
-export function formatDate(date: string) {
+export function formatDate(date: string, withTime: boolean = true) {
   return new Date(date).toLocaleDateString('en-US', {
     month: 'long',
     day: 'numeric',
     year: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
+    hour: withTime ? 'numeric' : undefined,
+    minute: withTime ? 'numeric' : undefined,
   })
 }
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Button } from '@mantine/core'
+import { Box, Button, Group, Stack, Text } from '@mantine/core'
 import { IconPencil, IconTrash } from '@tabler/icons-react'
 import Link from 'next/link'
 import { useState } from 'react'
@@ -8,6 +8,7 @@ import { useState } from 'react'
 import { useErrorDialog } from '~/hooks/useErrorDialog'
 import { useSuccessDialog } from '~/hooks/useSuccessDialog'
 import { Blog } from '~/schemas/models/blog'
+import { formatDate } from '~/utils'
 import { NavigationPages } from '~/utils/navigation'
 
 import BlogCard from '../BlogCard/BlogCard'
@@ -54,25 +55,28 @@ export const AdminBlogList = ({ blogs }: IBlogList) => {
       {blogsList.map((blog) => (
         <div key={blog._id} className={classes.blog}>
           <BlogCard blog={blog}>
-            <Button
-              leftSection={<IconPencil />}
-              size="sm"
-              component={Link}
-              href={`${NavigationPages.EmployeePortal}/${blog.artist._id}/${NavigationPages.Blog}/${blog._id}`}
-              target="_blank"
-              prefetch={false}
-            >
-              Edit
-            </Button>
-            <DeleteWithConfirmation
-              isDeleting={
-                deletingId?.toLocaleLowerCase() === blog._id.toLocaleLowerCase()
-              }
-              onDeleteConfirmed={() => handleBlogDelete(blog._id)}
-              deleteButtonText="Delete"
-              confirmationMessage={`Are you sure you want to delete blog post with title "${blog.title}"? The operation cannot be undone.`}
-              buttonProps={{ leftSection: <IconTrash /> }}
-            />
+            <Group>
+              <Button
+                leftSection={<IconPencil />}
+                size="sm"
+                component={Link}
+                href={`${NavigationPages.EmployeePortal}/${blog.artist._id}/${NavigationPages.Blog}/${blog._id}`}
+                target="_blank"
+                prefetch={false}
+              >
+                Edit
+              </Button>
+              <DeleteWithConfirmation
+                isDeleting={
+                  deletingId?.toLocaleLowerCase() ===
+                  blog._id.toLocaleLowerCase()
+                }
+                onDeleteConfirmed={() => handleBlogDelete(blog._id)}
+                deleteButtonText="Delete"
+                confirmationMessage={`Are you sure you want to delete blog post with title "${blog.title}"? The operation cannot be undone.`}
+                buttonProps={{ leftSection: <IconTrash /> }}
+              />
+            </Group>
           </BlogCard>
         </div>
       ))}
@@ -85,11 +89,17 @@ export const BlogList = ({ blogs }: IBlogList) => {
     <Box className={classes.container}>
       {blogs.map((blog) => (
         <div key={blog._id} className={classes.blog}>
-          {/* TODO: artist name and published at date */}
           <BlogCard
             blog={blog}
             blogLink={`${NavigationPages.Blog}/${blog.slug?.current}`}
-          ></BlogCard>
+          >
+            <Stack gap={0}>
+              <Text c="dimmed">{blog.artist.name}</Text>
+              <Text c="dimmed">
+                {blog.publishedAt && formatDate(blog.publishedAt, false)}
+              </Text>
+            </Stack>
+          </BlogCard>
         </div>
       ))}
     </Box>

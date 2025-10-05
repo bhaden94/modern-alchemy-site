@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Group, Image, Overlay, Stack, Title } from '@mantine/core'
+import { Box, Image, Stack, Title } from '@mantine/core'
 import { useRouter } from 'next/navigation'
 
 import { getImageFromRef } from '~/lib/sanity/sanity.image'
@@ -31,22 +31,15 @@ const BlogCard = ({ blog, blogLink, children }: IBlogCard) => {
         className={styles.image}
       />
 
-      <Overlay
-        color="#000"
-        backgroundOpacity={0.35}
-        className={styles.overlay}
-      />
-
-      {/* Content overlay */}
       <Box className={styles.contentOverlay}>
         <Box />
 
-        <Stack gap="md">
-          <Title order={3} size="h4" className={styles.title}>
+        <Stack gap="sm" p="md">
+          <Title order={2} size="h4" className={styles.title}>
             {blog.title || 'Untitled'}
           </Title>
 
-          <Group>{children}</Group>
+          {children}
         </Stack>
       </Box>
     </Box>
