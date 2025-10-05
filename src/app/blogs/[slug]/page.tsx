@@ -11,17 +11,18 @@ import { getLayoutMetadata } from '~/lib/sanity/queries/sanity.pageContentQuerie
 import { getClient } from '~/lib/sanity/sanity.client'
 import { getImageFromRef } from '~/lib/sanity/sanity.image'
 
-export const generateStaticParams = async () => {
-  const client = getClient(undefined)
-  const blogs = await getPublishedBlogs(client)
-  return (
-    blogs
-      .filter((b) => b.slug?.current)
-      // filter ensures we get only the blogs with a set slug
-      // This ensures we always generate a valid param
-      .map((b) => ({ slug: b.slug!.current })) || []
-  )
-}
+// TODO: fix
+// export const generateStaticParams = async () => {
+//   const client = getClient(undefined)
+//   const blogs = await getPublishedBlogs(client)
+//   return (
+//     blogs
+//       .filter((b) => b.slug?.current)
+//       // filter ensures we get only the blogs with a set slug
+//       // This ensures we always generate a valid param
+//       .map((b) => ({ slug: b.slug!.current })) || []
+//   )
+// }
 
 export async function generateMetadata({
   params,
