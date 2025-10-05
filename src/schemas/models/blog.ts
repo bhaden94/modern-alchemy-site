@@ -35,7 +35,7 @@ export default defineType({
       title: 'Title',
       validation: (rule) =>
         rule.custom((value, context) => {
-          const state = (context as any).document?.state
+          const state = context.document?.state
           if (state === 'published' && !value) {
             return 'Title is required when state is published'
           }
@@ -53,7 +53,7 @@ export default defineType({
       },
       validation: (rule) =>
         rule.custom((value, context) => {
-          const state = (context as any).document?.state
+          const state = context.document?.state
           if (state === 'published' && !value) {
             return 'Slug is required when state is published'
           }
@@ -66,7 +66,7 @@ export default defineType({
       type: 'blockContent',
       validation: (rule) =>
         rule.custom((value, context) => {
-          const state = (context as any).document?.state
+          const state = context.document?.state
           if (state === 'published' && !value) {
             return 'Blog content is required when state is published'
           }
@@ -79,7 +79,7 @@ export default defineType({
       type: 'datetime',
       validation: (rule) =>
         rule.custom((value, context) => {
-          const state = (context as any).document?.state
+          const state = context.document?.state
           if (state === 'published' && !value) {
             return 'Published At is required when state is published'
           }
