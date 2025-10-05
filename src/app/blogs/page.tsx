@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation'
+
 import { BlogList } from '~/components/BlogList/BlogList'
 import PageContainer from '~/components/PageContainer'
 import PageInProgress from '~/components/PageInProgress/PageInProgress'
