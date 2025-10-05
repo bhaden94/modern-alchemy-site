@@ -112,6 +112,7 @@ export async function PUT(request: NextRequest) {
       artist: {
         _type: 'reference',
         _ref: artistId,
+        _weak: true,
       },
       updatedAt: new Date().toISOString(),
     })
