@@ -14,12 +14,15 @@ import { getImageFromRef } from '~/lib/sanity/sanity.image'
 export const generateStaticParams = async () => {
   const client = getClient(undefined)
   const blogs = await getPublishedBlogs(client)
+
+  if (!blogs || blogs.length === 0) return []
+
   return (
     blogs
       .filter((b) => b.slug?.current)
       // filter ensures we get only the blogs with a set slug
       // This ensures we always generate a valid param
-      .map((b) => ({ slug: b.slug!.current })) || []
+      .map((b) => ({ slug: b.slug!.current }))
   )
 }
 
