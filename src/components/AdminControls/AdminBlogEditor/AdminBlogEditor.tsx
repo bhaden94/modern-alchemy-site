@@ -67,6 +67,8 @@ export default function AdminBlogEditor({
   )
   const previewUrlRef = useRef<string | null>(null)
 
+  // TODO: can we use the image image directly as a File?
+  // - Then we could handle this like a regular form and have proper validation on the image during form submit
   const handleFormSubmit = async (
     formValues: TBlogEditorSchema,
     event?: React.FormEvent<HTMLFormElement>,
@@ -209,7 +211,7 @@ export default function AdminBlogEditor({
     try {
       compressedFile = await imageCompression(file, {
         maxSizeMB: 1,
-        maxWidthOrHeight: 1500,
+        maxWidthOrHeight: 1920,
         useWebWorker: true,
       })
     } catch (error) {
