@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation'
 import { BlogList } from '~/components/BlogList/BlogList'
 import PageContainer from '~/components/PageContainer'
 import PageInProgress from '~/components/PageInProgress/PageInProgress'
@@ -13,7 +14,7 @@ export default async function Page() {
   const content = await performPageContentQuery('blogPageContent')
   const blogs = await getPublishedBlogs(client)
 
-  if (!content) return {}
+  if (!content) return notFound()
 
   if (!content.isActive || blogs?.length === 0) {
     return <PageInProgress />
