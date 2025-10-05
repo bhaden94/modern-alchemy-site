@@ -1,3 +1,10 @@
+import speakingurl from 'speakingurl'
+
+export const slugify = (value?: string): string => {
+  const slugifyOpts = { truncate: 200, symbols: true }
+  return value ? speakingurl(value, slugifyOpts) : ''
+}
+
 export function isHttpUrl(url: string | undefined): boolean {
   if (!url) return false
   try {
@@ -41,13 +48,13 @@ export function formatPhoneNumber(number: string) {
   return null
 }
 
-export function formatDate(date: string) {
+export function formatDate(date: string, withTime: boolean = true) {
   return new Date(date).toLocaleDateString('en-US', {
     month: 'long',
     day: 'numeric',
     year: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
+    hour: withTime ? 'numeric' : undefined,
+    minute: withTime ? 'numeric' : undefined,
   })
 }
 

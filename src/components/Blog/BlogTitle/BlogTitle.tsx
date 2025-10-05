@@ -3,7 +3,7 @@ import PageTitle from '~/components/PageTitle/PageTitle'
 import classes from './BlogTitle.module.css'
 
 export interface IBlogTitle {
-  title: string
+  title?: string
 }
 
 const BlogTitle: React.FC<IBlogTitle> = ({ title }) => {

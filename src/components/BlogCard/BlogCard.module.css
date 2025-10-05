@@ -1,0 +1,50 @@
+.blogCard {
+  position: relative;
+  border-radius: var(--mantine-radius-sm);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  break-inside: avoid;
+  margin-bottom: var(--mantine-spacing-md);
+}
+
+.blogCard:hover .image {
+  transform: scale(1.03);
+}
+
+.image {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 500ms ease;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+}
+
+.contentOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 15%,
+    rgba(0, 0, 0, 0.99) 100%
+  );
+}
+
+.title {
+  line-height: 1.2;
+}

@@ -12,6 +12,7 @@ import {
 import { useDisclosure } from '@mantine/hooks'
 import {
   IconArrowBadgeRight,
+  IconArticle,
   IconBook,
   IconBriefcase,
   IconCameraUp,
@@ -46,6 +47,7 @@ interface NestedLink extends BaseLink {
 
 type LinkItem = SimpleLink | NestedLink
 
+// TODO: add blog page for owners and residents
 const links: LinkItem[] = [
   {
     icon: <IconUser stroke={1.5} />,
@@ -66,6 +68,12 @@ const links: LinkItem[] = [
     icon: <IconBook stroke={1.5} />,
     label: 'Bookings',
     page: NavigationPages.EmployeePortalBookings,
+  },
+  {
+    icon: <IconArticle stroke={1.5} />,
+    label: 'Blog Articles',
+    page: NavigationPages.Blog,
+    requiredRoles: ['Owner'],
   },
   {
     icon: <IconEdit stroke={1.5} />,

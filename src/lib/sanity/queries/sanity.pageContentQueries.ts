@@ -4,6 +4,7 @@ import { SanityClient } from 'next-sanity'
 import { AftercareInfoPageContent } from '~/schemas/pages/aftercareInfoPageContent'
 import { AnnouncementPageContent } from '~/schemas/pages/announcementPageContent'
 import { ArtistsPageContent } from '~/schemas/pages/artistsPageContent'
+import { BlogPageContent } from '~/schemas/pages/blogPageContent'
 import { BookingInfoPageContent } from '~/schemas/pages/bookingInfoPageContent'
 import { DisclaimerPageContent } from '~/schemas/pages/disclaimerPageContent'
 import { EmploymentPageContent } from '~/schemas/pages/employmentPageContent'
@@ -25,6 +26,7 @@ type QueryReturnType = {
   disclaimerPageContent: DisclaimerPageContent
   announcementPageContent: AnnouncementPageContent
   employmentPageContent: EmploymentPageContent
+  blogPageContent: BlogPageContent
 }
 
 export async function performPageContentQuery<T extends keyof QueryReturnType>(

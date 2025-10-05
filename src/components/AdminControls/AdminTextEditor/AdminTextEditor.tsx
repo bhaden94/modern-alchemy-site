@@ -28,7 +28,7 @@ import { EventListenerPlugin } from '@portabletext/editor/plugins'
 import { PortableText } from '@portabletext/react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 
 import {
   ExternalLink,
@@ -40,6 +40,7 @@ import {
 } from '~/components/PortableTextComponents/InternalLink'
 import { PortableTextComponents } from '~/components/PortableTextComponents/PortableTextComponents'
 import { useErrorDialog } from '~/hooks/useErrorDialog'
+import { patchBlockContent } from '~/lib/sanity/requests/sanity.blockContent'
 import { normalizeImageReference } from '~/lib/sanity/sanity.image'
 import { BlockContent } from '~/schemas/models/blockContent'
 
@@ -214,10 +215,12 @@ const renderBlock = (
 }
 
 interface IAdminTextEditor {
-  title: string
+  title?: string
   initialValue: BlockContent | undefined
   fieldName: string
   documentId: string
+  hideActions?: boolean
+  setContentCallback?: Dispatch<SetStateAction<BlockContent | undefined>>
 }
 
 const AdminTextEditorComponent = ({
@@ -225,6 +228,8 @@ const AdminTextEditorComponent = ({
   initialValue,
   fieldName,
   documentId,
+  hideActions,
+  setContentCallback,
 }: IAdminTextEditor) => {
   const { openErrorDialog } = useErrorDialog()
   const [value, setValue] = useState<BlockContent | undefined>(initialValue)
@@ -234,6 +239,10 @@ const AdminTextEditorComponent = ({
   const [hasEdited, setHasEdited] = useState<boolean>(false)
 
   const showEditorLoading = editorLoading || isSubmitting
+
+  useEffect(() => {
+    setContentCallback && setContentCallback(value)
+  }, [value, setContentCallback])
 
   const onEditorEvent = (event: EditorEmittedEvent) => {
     if (event.type === 'mutation') {
@@ -253,13 +262,10 @@ const AdminTextEditorComponent = ({
   const onSubmit = async (): Promise<void> => {
     setIsSubmitting(true)
 
-    const response = await fetch('/api/sanity/block-content', {
-      method: 'PATCH',
-      body: JSON.stringify({
-        documentId: documentId,
-        fieldName: fieldName,
-        value: value,
-      }),
+    const response = await patchBlockContent({
+      documentId,
+      fieldName,
+      value,
     })
 
     setIsSubmitting(false)
@@ -300,20 +306,22 @@ const AdminTextEditorComponent = ({
             </Stack>
           </Box>
 
-          <Group justify="space-between">
-            <Button
-              onClick={() => setPreview(!preview)}
-              disabled={showEditorLoading}
-            >
-              {preview ? 'Hide Preview' : 'Show Preview'}
-            </Button>
-            <Button
-              onClick={onSubmit}
-              disabled={showEditorLoading || !hasEdited}
-            >
-              Save
-            </Button>
-          </Group>
+          {!hideActions && (
+            <Group justify="space-between">
+              <Button
+                onClick={() => setPreview(!preview)}
+                disabled={showEditorLoading}
+              >
+                {preview ? 'Hide Preview' : 'Show Preview'}
+              </Button>
+              <Button
+                onClick={onSubmit}
+                disabled={showEditorLoading || !hasEdited}
+              >
+                Save
+              </Button>
+            </Group>
+          )}
         </Stack>
       </EditorProvider>
 

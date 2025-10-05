@@ -7,10 +7,10 @@ import classes from './BlogPublishInfo.module.css'
 export interface IBlogPublishInfo {
   authorName: string
   authorUrl: string
-  publishedAt?: string
+  publishedAt?: string | null
 }
 
-const formatDate = (date?: string): [string, string] => {
+const formatDate = (date?: string | null): [string, string] => {
   const options = { year: 'numeric', month: 'long', day: 'numeric' } as const
   const parsedDate = date ? new Date(date) : undefined
   return [
