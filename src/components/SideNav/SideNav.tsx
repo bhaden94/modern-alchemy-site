@@ -12,6 +12,7 @@ import {
 import { useDisclosure } from '@mantine/hooks'
 import {
   IconArrowBadgeRight,
+  IconArticle,
   IconBook,
   IconBriefcase,
   IconCameraUp,
@@ -67,6 +68,12 @@ const links: LinkItem[] = [
     icon: <IconBook stroke={1.5} />,
     label: 'Bookings',
     page: NavigationPages.EmployeePortalBookings,
+  },
+  {
+    icon: <IconArticle stroke={1.5} />,
+    label: 'Blog Articles',
+    page: NavigationPages.Blog,
+    requiredRoles: ['Owner'],
   },
   {
     icon: <IconEdit stroke={1.5} />,

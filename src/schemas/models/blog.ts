@@ -1,4 +1,4 @@
-import { IconBook } from '@tabler/icons-react'
+import { IconArticle } from '@tabler/icons-react'
 import { defineField, defineType } from 'sanity'
 
 import { ImageReference } from '~/utils/images/uploadImagesToSanity'
@@ -22,7 +22,7 @@ export default defineType({
   name: 'blog',
   type: 'document',
   title: 'Blog',
-  icon: IconBook,
+  icon: IconArticle,
   fields: [
     defineField({
       name: 'coverImage',
