@@ -14,8 +14,6 @@ Places to update for form changes:
   - booking sanity model interface (this file)
 */
 
-// TODO: Generic booking schema for other artist types
-
 export interface Booking extends BaseSanitySchema<'booking'> {
   name: string
   phoneNumber: string

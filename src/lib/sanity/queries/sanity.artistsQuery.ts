@@ -1,4 +1,5 @@
 import { DateValue } from '@mantine/dates'
+import { SanityReference } from '@sanity/client'
 import { groq } from 'next-sanity'
 import { SanityClient } from 'next-sanity'
 import { Observable } from 'rxjs'
@@ -6,7 +7,7 @@ import { validate as uuidValidate } from 'uuid'
 
 import { Artist } from '~/schemas/models/artist'
 
-import { NEXT_CACHE_CONFIG } from '../sanity.client'
+import { getClient, NEXT_CACHE_CONFIG } from '../sanity.client'
 
 const artistsQuery = groq`*[_type == "artist"]`
 export async function getArtists(client: SanityClient): Promise<Artist[]> {
@@ -80,4 +81,13 @@ export function listenForArtistsBookStatusChanges(
 ): Observable<Record<string, any>> {
   const idParam = { id: id }
   return client.listen(artistsBooksStatusChangesById, idParam)
+}
+
+const artistFromRefQuery = groq`*[_type == "artist" && _id == $id][0]`
+export const getArtistFromRef = async (
+  artistRef?: SanityReference,
+): Promise<Artist | undefined> => {
+  const client = getClient(undefined)
+  const idParam = { id: artistRef?._ref }
+  return await client.fetch(artistFromRefQuery, idParam)
 }

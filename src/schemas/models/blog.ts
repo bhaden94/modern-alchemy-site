@@ -1,4 +1,4 @@
-import { IconBook } from '@tabler/icons-react'
+import { IconArticle } from '@tabler/icons-react'
 import { defineField, defineType } from 'sanity'
 
 import { ImageReference } from '~/utils/images/uploadImagesToSanity'
@@ -8,11 +8,11 @@ import { Artist } from './artist'
 import { BlockContent } from './blockContent'
 
 export interface Blog extends BaseSanitySchema<'blog'> {
-  coverImage: ImageReference
-  title: string
-  slug: Slug
-  content: BlockContent
-  publishedAt?: string
+  coverImage?: ImageReference | null
+  title?: string
+  slug?: Slug
+  content?: BlockContent
+  publishedAt?: string | null
   updatedAt?: string
   artist: Artist
   state: 'draft' | 'published'
@@ -22,19 +22,25 @@ export default defineType({
   name: 'blog',
   type: 'document',
   title: 'Blog',
-  icon: IconBook,
+  icon: IconArticle,
   fields: [
     defineField({
       name: 'coverImage',
       type: 'image',
       title: 'Cover Image',
-      validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'title',
       type: 'string',
       title: 'Title',
-      validation: (rule) => rule.required(),
+      validation: (rule) =>
+        rule.custom((value, context) => {
+          const state = context.document?.state
+          if (state === 'published' && !value) {
+            return 'Title is required when state is published'
+          }
+          return true
+        }),
     }),
     defineField({
       name: 'slug',
@@ -45,13 +51,27 @@ export default defineType({
         maxLength: 96,
         isUnique: (value, context) => context.defaultIsUnique(value, context),
       },
-      validation: (rule) => rule.required(),
+      validation: (rule) =>
+        rule.custom((value, context) => {
+          const state = context.document?.state
+          if (state === 'published' && !value) {
+            return 'Slug is required when state is published'
+          }
+          return true
+        }),
     }),
     defineField({
       name: 'content',
       title: 'Content',
       type: 'blockContent',
-      validation: (rule) => rule.required(),
+      validation: (rule) =>
+        rule.custom((value, context) => {
+          const state = context.document?.state
+          if (state === 'published' && !value) {
+            return 'Blog content is required when state is published'
+          }
+          return true
+        }),
     }),
     defineField({
       name: 'publishedAt',
@@ -59,7 +79,7 @@ export default defineType({
       type: 'datetime',
       validation: (rule) =>
         rule.custom((value, context) => {
-          const state = (context as any).document?.state
+          const state = context.document?.state
           if (state === 'published' && !value) {
             return 'Published At is required when state is published'
           }

@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, Group, Popover, Text } from '@mantine/core'
+import { Button, ButtonProps, Group, Popover, Text } from '@mantine/core'
 import { useState } from 'react'
 
 interface IDeleteWithConfirmation {
@@ -9,6 +9,7 @@ interface IDeleteWithConfirmation {
   disabled?: boolean
   confirmationMessage?: string
   deleteButtonText?: string
+  buttonProps?: Partial<ButtonProps>
 }
 
 const DeleteWithConfirmation = ({
@@ -17,6 +18,7 @@ const DeleteWithConfirmation = ({
   disabled = false,
   confirmationMessage = 'Are you sure you want to delete this?',
   deleteButtonText = 'Delete',
+  buttonProps,
 }: IDeleteWithConfirmation) => {
   const [popoverOpened, setPopoverOpened] = useState(false)
 
@@ -39,6 +41,7 @@ const DeleteWithConfirmation = ({
           loading={isDeleting}
           disabled={disabled}
           color="red"
+          {...buttonProps}
         >
           {deleteButtonText}
         </Button>

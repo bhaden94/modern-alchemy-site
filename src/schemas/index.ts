@@ -10,6 +10,7 @@ import aftercareInfoPageContent from './pages/aftercareInfoPageContent'
 import announcementPageContent from './pages/announcementPageContent'
 import artistsPageContent from './pages/artistsPageContent'
 import basePageContent from './pages/basePageContent'
+import blogPageContent from './pages/blogPageContent'
 import bookingInfoPageContent from './pages/bookingInfoPageContent'
 import disclaimerPageContent from './pages/disclaimerPageContent'
 import employmentPageContent from './pages/employmentPageContent'
@@ -36,6 +37,7 @@ export const schemaTypes = {
   bookingInfoPageContent,
   announcementPageContent,
   employmentPageContent,
+  blogPageContent,
   rootLayoutContent,
   layoutMetadataContent,
 }
@@ -55,6 +57,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     bookingInfoPageContent,
     announcementPageContent,
     employmentPageContent,
+    blogPageContent,
     // Models
     artist,
     booking,
@@ -72,4 +75,4 @@ export type BaseSanitySchema<T extends string> = {
   _createdAt: string
 }
 
-export type Slug = { _type: 'slug'; current: string }
+export type Slug = { _type: 'slug'; current?: string }

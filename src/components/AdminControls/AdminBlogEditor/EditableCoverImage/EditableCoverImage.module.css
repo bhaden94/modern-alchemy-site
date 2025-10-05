@@ -1,0 +1,54 @@
+.wrapper {
+  position: relative;
+}
+
+.dropzone {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+
+  &[data-accept] {
+    background-color: var(--dropzone-accept-color);
+    background: var(--dropzone-accept-bg);
+  }
+
+  &[data-reject] {
+    background-color: var(--dropzone-reject-color);
+    background: var(--dropzone-reject-bg);
+  }
+}
+
+.dropzoneAlwaysShownInner {
+  pointer-events: none;
+}
+
+.iconBase {
+  width: rem(52);
+  height: rem(52);
+}
+
+.iconUpload {
+  @inherit: .iconBase;
+  color: var(--mantine-color-primary-6);
+}
+
+.iconX {
+  @inherit: .iconBase;
+  color: var(--mantine-color-red-6);
+}
+
+.iconPhoto {
+  @inherit: .iconBase;
+  color: var(--mantine-color-dimmed);
+}
+
+.toolbarAction {
+  pointer-events: all;
+}

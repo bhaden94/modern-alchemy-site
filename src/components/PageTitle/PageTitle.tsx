@@ -6,7 +6,7 @@ const PageTitle = ({
   title,
   className,
 }: {
-  title: string
+  title?: string
   className?: string
 }) => {
   return (
