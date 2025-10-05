@@ -29,7 +29,7 @@ const updateFields = async (
 
   if (
     (updates.state === 'published' || blogPost?.state === 'published') &&
-    (!updates.title || !updates.content || updates.content.length === 0)
+    (!updates.title || !updates.content || updates.content?.length === 0)
   ) {
     return new NextResponse(
       `Cannot publish blog without title and content set.`,
