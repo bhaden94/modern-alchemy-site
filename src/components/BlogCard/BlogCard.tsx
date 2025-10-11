@@ -1,10 +1,12 @@
 'use client'
 
-import { Box, Image, Stack, Title } from '@mantine/core'
+import { Box, Stack, Title } from '@mantine/core'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 
 import { getImageFromRef } from '~/lib/sanity/sanity.image'
 import { Blog } from '~/schemas/models/blog'
+import { generateNextImagePlaceholder } from '~/utils'
 
 import styles from './BlogCard.module.css'
 
@@ -15,7 +17,13 @@ interface IBlogCard {
 }
 
 const BlogCard = ({ blog, blogLink, children }: IBlogCard) => {
-  const imageUrl = getImageFromRef(blog.coverImage)?.url || '/article.svg'
+  const imageData = getImageFromRef(blog.coverImage)
+  // Get image dimensions for aspect ratio, fallback to common blog aspect ratio
+  const imageWidth = imageData?.metadata?.dimensions?.width || 1
+  const imageHeight = imageData?.metadata?.dimensions?.height || 1
+  const aspectRatio = imageWidth / imageHeight
+
+  const imageUrl = imageData?.url || '/article.svg'
   const router = useRouter()
 
   const onBlogClick = () => {
@@ -23,12 +31,22 @@ const BlogCard = ({ blog, blogLink, children }: IBlogCard) => {
   }
 
   return (
-    <Box className={styles.blogCard} onClick={onBlogClick}>
-      {/* TODO: placeholder on image like the rest of the site */}
+    <Box
+      className={styles.blogCard}
+      style={{ aspectRatio: aspectRatio }}
+      onClick={onBlogClick}
+    >
       <Image
         src={imageUrl}
         alt={blog.title || 'Blog post'}
+        fill
+        sizes="100%"
         className={styles.image}
+        placeholder={
+          imageData
+            ? generateNextImagePlaceholder(imageWidth, imageHeight)
+            : undefined
+        }
       />
 
       <Box className={styles.contentOverlay}>
