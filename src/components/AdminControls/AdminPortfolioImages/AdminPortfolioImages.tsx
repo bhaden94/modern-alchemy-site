@@ -6,10 +6,8 @@ import imageCompression from 'browser-image-compression'
 import { useState } from 'react'
 
 import { useErrorDialog } from '~/hooks/useErrorDialog'
+import { ImageReference, uploadImagesToSanity } from '~/lib/sanity/sanity.image'
 import { MAX_FILES } from '~/utils/forms/bookingFormUtils'
-import uploadImagesToSanity, {
-  ImageReference,
-} from '~/utils/images/uploadImagesToSanity'
 
 import ImageDropzone from '../../ImageDropzone/ImageDropzone'
 import ImageErrors from '../../ImageDropzone/ImageErrors'

@@ -5,8 +5,8 @@ import { useEditor } from '@portabletext/editor'
 import { IconUpload } from '@tabler/icons-react'
 import imageCompression from 'browser-image-compression'
 
+import { uploadImagesToSanity } from '~/lib/sanity/sanity.image'
 import { ACCEPTED_IMAGE_TYPES } from '~/utils/forms/FormConstants'
-import uploadImagesToSanity from '~/utils/images/uploadImagesToSanity'
 
 import BaseToolbarButton from '../BaseToolbarButton/BaseToolbarButton'
 

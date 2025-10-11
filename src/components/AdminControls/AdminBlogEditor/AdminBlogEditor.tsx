@@ -3,12 +3,18 @@
 import { Container, LoadingOverlay, Stack } from '@mantine/core'
 import imageCompression from 'browser-image-compression'
 import { zodResolver } from 'mantine-form-zod-resolver'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 
 import BlogPage from '~/components/Blog/BlogPage'
 import PageContainer from '~/components/PageContainer'
 import { useErrorDialog } from '~/hooks/useErrorDialog'
 import { useSuccessDialog } from '~/hooks/useSuccessDialog'
+import {
+  deleteImagesFromSanity,
+  ImageReference,
+  uploadImagesToSanity,
+} from '~/lib/sanity/sanity.image'
+import { getImageFromRef } from '~/lib/sanity/sanity.image'
 import { Blog } from '~/schemas/models/blog'
 import { slugify } from '~/utils'
 import {
@@ -20,15 +26,48 @@ import {
   blogEditorSchema,
   TBlogEditorSchema,
 } from '~/utils/forms/blogEditorUtils'
-import uploadImagesToSanity, {
-  ImageReference,
-} from '~/utils/images/uploadImagesToSanity'
 
 import AdminBlogEditorActionBar from './AdminBlogEditorActionBar/AdminBlogEditorActionBar'
 import AdminBlogInformationBar from './AdminBlogInformationBar/AdminBlogInformationBar'
 import AdminBlogTitleEditor from './AdminBlogTitleEditor/AdminBlogTitleEditor'
 import BlogEditorTextEditor from './BlogEditorTextEditor/BlogEditorTextEditor'
 import EditableCoverImage from './EditableCoverImage/EditableCoverImage'
+
+// TODO: move these top-level functions to util class for admin blog
+type TFormActions = 'publish' | 'unpublish' | 'save'
+/*
+ * Determines which submit button was clicked
+ */
+const getFormAction = (
+  event?: React.FormEvent<HTMLFormElement>,
+): TFormActions => {
+  const submitter = (event?.nativeEvent as SubmitEvent)
+    ?.submitter as HTMLButtonElement
+
+  return (submitter?.value as TFormActions) || 'save'
+}
+
+const setPublishFields = (
+  updates: Partial<Blog>,
+  formTitle?: string,
+  currentSlug?: string,
+): Partial<Blog> => {
+  updates.state = 'published'
+  updates.publishedAt = new Date().toISOString()
+  updates.slug = {
+    _type: 'slug',
+    current: currentSlug ?? slugify(formTitle),
+  }
+
+  return updates
+}
+
+const setUnPublishFields = (updates: Partial<Blog>): Partial<Blog> => {
+  updates.state = 'draft'
+  updates.publishedAt = null
+
+  return updates
+}
 
 interface AdminBlogEditorContentProps {
   documentId: string
@@ -49,73 +88,66 @@ export default function AdminBlogEditor({
     initialValues: {
       title: blog?.title,
       content: blog?.content,
-      coverImage: blog?.coverImage,
+      // Don't set coverImage in initial values - it will be handled separately
+      coverImage: undefined,
     },
     validate: zodResolver(blogEditorSchema),
   })
 
-  // UI and image handling states
   const [savedBlog, setSavedBlog] = useState<Blog | undefined>(blog)
-  const [pendingCoverFile, setPendingCoverFile] = useState<File | null>(null)
-  const [pendingRemove, setPendingRemove] = useState<boolean>(false)
   const [showBlogPreview, setShowBlogPreview] = useState<boolean>(false)
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
-  // Refs for image handling
-  const initialCoverImageRef = useRef<ImageReference | undefined | null>(
-    blog?.coverImage,
-  )
-  const previewUrlRef = useRef<string | null>(null)
+  // Keep track of server image and if it's marked for removal
+  const [serverCoverImage, setServerCoverImage] = useState<
+    ImageReference | null | undefined
+  >(blog?.coverImage)
+  const [serverImageMarkedForRemoval, setServerImageMarkedForRemoval] =
+    useState<boolean>(false)
 
-  // TODO: can we use the image image directly as a File?
-  // - Then we could handle this like a regular form and have proper validation on the image during form submit
   const handleFormSubmit = async (
     formValues: TBlogEditorSchema,
     event?: React.FormEvent<HTMLFormElement>,
   ) => {
     setIsSubmitting(true)
-
-    // Get the submitter to determine which button was clicked
-    const submitter = (event?.nativeEvent as SubmitEvent)
-      ?.submitter as HTMLButtonElement
-    const action = submitter?.value || 'save' // default to save
+    const action = getFormAction(event)
 
     try {
-      // Always compute a concrete coverUpdate to send to the server.
-      // We never send a client-only preview object URL.
-      let coverUpdate: ImageReference | null =
-        initialCoverImageRef.current ?? null
+      let coverUpdate: ImageReference | null = serverCoverImage ?? null
 
-      if (pendingCoverFile) {
-        const imageReferences = await uploadImagesToSanity([pendingCoverFile], {
-          sizeLimit: () => {
-            openErrorDialog(
-              'Cover image exceeds size limit. Please compress or choose a smaller image.',
-            )
-            setIsSubmitting(false)
+      // Handle cover image upload if a new file was selected
+      if (formValues.coverImage) {
+        const imageReferences = await uploadImagesToSanity(
+          [formValues.coverImage],
+          {
+            sizeLimit: () => {
+              openErrorDialog(
+                'Cover image exceeds size limit. Please compress or choose a smaller image.',
+              )
+              setIsSubmitting(false)
+            },
+            error: () => {
+              openErrorDialog('There was a problem uploading the cover image.')
+              setIsSubmitting(false)
+            },
           },
-          error: () => {
-            openErrorDialog('There was a problem uploading the cover image.')
-            setIsSubmitting(false)
-          },
-        })
+        )
 
         if (
           imageReferences === 'GeneralError' ||
           imageReferences === 'SizeLimitError'
         ) {
-          // errors handled by callbacks above
           return
         }
 
-        // Use the first uploaded image as the cover image reference
         if (imageReferences && imageReferences.length > 0) {
           coverUpdate = imageReferences[0]
         }
       }
 
-      // If user explicitly removed the image, send null to indicate deletion.
-      if (!pendingCoverFile && pendingRemove) {
+      // Handle server image removal
+      // null will unset the field in our API route
+      if (serverImageMarkedForRemoval) {
         coverUpdate = null
       }
 
@@ -126,26 +158,18 @@ export default function AdminBlogEditor({
         coverImage: coverUpdate,
       }
 
-      // If publishing, ensure required fields and set state
       if (action === 'publish') {
         if (!updates.title || !updates.content) {
           openErrorDialog('Title and content are required to publish.')
           setIsSubmitting(false)
           return
         }
-        updates.state = 'published'
-        updates.publishedAt = new Date().toISOString()
-        // If there is already a slug, then don't override
-        // Otherwise, set a new slug based on the title
-        updates.slug = {
-          _type: 'slug',
-          current: savedBlog?.slug?.current ?? slugify(formValues.title),
-        }
+
+        setPublishFields(updates, formValues.title, savedBlog?.slug?.current)
       }
 
       if (action === 'unpublish') {
-        updates.state = 'draft'
-        updates.publishedAt = null
+        setUnPublishFields(updates)
       }
 
       const res = await fetch('/api/sanity/blog', {
@@ -156,43 +180,34 @@ export default function AdminBlogEditor({
         }),
       })
 
-      if (res.ok) {
-        const responseBody: Partial<Blog & { imageKeyToDelete?: string }> =
-          await res.json()
-
-        setPendingCoverFile(null)
-        setPendingRemove(false)
-        // Update the initial server-backed reference so future saves will send the correct value
-        initialCoverImageRef.current = responseBody.coverImage
-
-        // Update form values with server response
-        form.setValues({
-          title: responseBody.title,
-          content: responseBody.content,
-          coverImage: responseBody.coverImage,
-        })
-        form.resetDirty()
-        setSavedBlog(responseBody as Blog)
-
-        openSuccessDialog('Blog updated.')
-
-        if (responseBody.imageKeyToDelete) {
-          // Delete image
-          // Don't block on failed image deletion.
-          fetch('/api/sanity/images', {
-            method: 'DELETE',
-            body: JSON.stringify({
-              imageReferences: [responseBody.imageKeyToDelete],
-            }),
-          }).catch(() => {
-            // swallow errors; deletion is best-effort and should not block the UI
-          })
-        }
-
-        previewUrlRef.current && URL.revokeObjectURL(previewUrlRef.current)
-        previewUrlRef.current = null
-      } else {
+      if (!res.ok) {
         openErrorDialog(await res.text())
+        return
+      }
+
+      const responseBody: Partial<Blog & { imageKeyToDelete?: string }> =
+        await res.json()
+
+      // Update server image reference and reset removal flag
+      setServerCoverImage(responseBody.coverImage)
+      setServerImageMarkedForRemoval(false)
+
+      // Reset form with new values
+      form.setValues({
+        title: responseBody.title,
+        content: responseBody.content,
+        coverImage: undefined, // Always reset to undefined after save
+      })
+      form.resetDirty()
+      setSavedBlog(responseBody as Blog)
+
+      openSuccessDialog('Blog updated.')
+
+      // Clean up old image if needed
+      if (responseBody.imageKeyToDelete) {
+        deleteImagesFromSanity([responseBody.imageKeyToDelete]).catch(() => {
+          // swallow errors; deletion is best-effort
+        })
       }
     } catch (err) {
       openErrorDialog(
@@ -220,30 +235,44 @@ export default function AdminBlogEditor({
     }
 
     const fileToUse = compressedFile || file
-    setPendingCoverFile(fileToUse)
-    setPendingRemove(false)
 
-    // show immediate preview
-    if (previewUrlRef.current) {
-      URL.revokeObjectURL(previewUrlRef.current)
-    }
-    const objectUrl = URL.createObjectURL(fileToUse)
-    previewUrlRef.current = objectUrl
-    form.setFieldValue(BlogEditorField.CoverImage.id, {
-      url: objectUrl,
-      alt: fileToUse.name,
-    })
+    // Set the file in the form and clear any server image removal flag
+    form.setFieldValue(BlogEditorField.CoverImage.id, fileToUse)
+    setServerImageMarkedForRemoval(false)
   }
 
   const handleImageRemove = async () => {
-    // mark for removal; actual deletion will occur when saving
-    setPendingCoverFile(null)
-    setPendingRemove(true)
-    if (previewUrlRef.current) {
-      URL.revokeObjectURL(previewUrlRef.current)
-      previewUrlRef.current = null
-    }
+    // Clear the form field
     form.setFieldValue(BlogEditorField.CoverImage.id, undefined)
+
+    // If there's a server image, mark it for removal
+    if (serverCoverImage && !serverImageMarkedForRemoval) {
+      setServerImageMarkedForRemoval(true)
+    }
+  }
+
+  // Get the current image to display (either from server or form)
+  const getCurrentImage = () => {
+    const formFile = form.getValues().coverImage
+    if (formFile) {
+      // Show preview of selected file
+      return {
+        url: URL.createObjectURL(formFile),
+        alt: formFile.name,
+      }
+    }
+    // Show server image if no file selected and server image not marked for removal
+    if (serverCoverImage && !serverImageMarkedForRemoval) {
+      const serverImage = getImageFromRef(serverCoverImage)
+      if (serverImage) {
+        return {
+          url: serverImage.url,
+          alt: serverImage.altText || '',
+        }
+      }
+    }
+
+    return undefined
   }
 
   const BlogPreview = () => {
@@ -272,10 +301,9 @@ export default function AdminBlogEditor({
             <>
               <EditableCoverImage
                 onReplace={handleImageReplace}
-                onRemove={
-                  form.getValues().coverImage ? handleImageRemove : undefined
-                }
+                onRemove={handleImageRemove}
                 disabled={isSubmitting}
+                currentImage={getCurrentImage()}
               />
               <PageContainer>
                 <Stack>

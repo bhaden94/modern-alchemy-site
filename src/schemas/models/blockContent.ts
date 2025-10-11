@@ -1,6 +1,6 @@
 import { defineArrayMember, defineType, PortableTextBlock } from 'sanity'
 
-import { ImageReference } from '~/utils/images/uploadImagesToSanity'
+import { ImageReference } from '~/lib/sanity/sanity.image'
 
 export interface BlockContentImage extends ImageReference {
   altText?: string

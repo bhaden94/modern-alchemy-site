@@ -8,7 +8,7 @@ import {
   notAuthorizedResponse,
 } from '~/lib/next-auth/auth.utils'
 import { getClient } from '~/lib/sanity/sanity.client'
-import { ImageReference } from '~/utils/images/uploadImagesToSanity'
+import { ImageReference } from '~/lib/sanity/sanity.image'
 
 const token = process.env.SANITY_API_WRITE_TOKEN
 

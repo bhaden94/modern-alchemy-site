@@ -1,7 +1,7 @@
 import { IconScript } from '@tabler/icons-react'
 import { defineArrayMember, defineField, defineType } from 'sanity'
 
-import { ImageReference } from '~/utils/images/uploadImagesToSanity'
+import { ImageReference } from '~/lib/sanity/sanity.image'
 
 import { BaseSanitySchema } from '..'
 import { BlockContent } from '../models/blockContent'

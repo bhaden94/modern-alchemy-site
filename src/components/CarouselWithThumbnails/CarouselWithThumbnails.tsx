@@ -4,7 +4,7 @@ import { Carousel, CarouselProps, Embla } from '@mantine/carousel'
 import { Box, Stack } from '@mantine/core'
 import { useCallback, useEffect, useState } from 'react'
 
-import { ImageReference } from '~/utils/images/uploadImagesToSanity'
+import { ImageReference } from '~/lib/sanity/sanity.image'
 
 import DeleteWithConfirmation from '../DeleteWithConfirmation/DeleteWithConfirmation'
 import CarouselImage from './CarouselImage/CarouselImage'

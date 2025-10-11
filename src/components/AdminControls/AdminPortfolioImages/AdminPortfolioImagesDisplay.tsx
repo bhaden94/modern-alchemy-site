@@ -4,7 +4,7 @@ import { Box, LoadingOverlay, SimpleGrid, Stack, Title } from '@mantine/core'
 
 import CarouselWithThumbnails from '~/components/CarouselWithThumbnails/CarouselWithThumbnails'
 import { useErrorDialog } from '~/hooks/useErrorDialog'
-import { ImageReference } from '~/utils/images/uploadImagesToSanity'
+import { ImageReference } from '~/lib/sanity/sanity.image'
 
 interface IAdminPortfolioImagesDisplay {
   artistId: string

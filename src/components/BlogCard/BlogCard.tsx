@@ -1,8 +1,8 @@
 'use client'
 
 import { Box, Stack, Title } from '@mantine/core'
-import { useRouter } from 'next/navigation'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 
 import { getImageFromRef } from '~/lib/sanity/sanity.image'
 import { Blog } from '~/schemas/models/blog'

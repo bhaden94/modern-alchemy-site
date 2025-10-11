@@ -3,8 +3,8 @@
 import { Box, Group } from '@mantine/core'
 import { useState } from 'react'
 
+import { ImageReference } from '~/lib/sanity/sanity.image'
 import { Artist } from '~/schemas/models/artist'
-import { ImageReference } from '~/utils/images/uploadImagesToSanity'
 
 import AdminHeadshot from './AdminHeadshot/AdminHeadshot'
 import AdminPortfolioImages from './AdminPortfolioImages/AdminPortfolioImages'
