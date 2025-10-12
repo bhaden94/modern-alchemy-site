@@ -16,7 +16,6 @@ import {
 } from '~/lib/sanity/sanity.image'
 import { getImageFromRef } from '~/lib/sanity/sanity.image'
 import { Blog } from '~/schemas/models/blog'
-import { slugify } from '~/utils'
 import {
   BlogEditorFormProvider,
   useBlogEditorForm,
@@ -24,6 +23,9 @@ import {
 import {
   BlogEditorField,
   blogEditorSchema,
+  getFormAction,
+  setPublishFields,
+  setUnPublishFields,
   TBlogEditorSchema,
 } from '~/utils/forms/blogEditorUtils'
 
@@ -32,42 +34,6 @@ import AdminBlogInformationBar from './AdminBlogInformationBar/AdminBlogInformat
 import AdminBlogTitleEditor from './AdminBlogTitleEditor/AdminBlogTitleEditor'
 import BlogEditorTextEditor from './BlogEditorTextEditor/BlogEditorTextEditor'
 import EditableCoverImage from './EditableCoverImage/EditableCoverImage'
-
-// TODO: move these top-level functions to util class for admin blog
-type TFormActions = 'publish' | 'unpublish' | 'save'
-/*
- * Determines which submit button was clicked
- */
-const getFormAction = (
-  event?: React.FormEvent<HTMLFormElement>,
-): TFormActions => {
-  const submitter = (event?.nativeEvent as SubmitEvent)
-    ?.submitter as HTMLButtonElement
-
-  return (submitter?.value as TFormActions) || 'save'
-}
-
-const setPublishFields = (
-  updates: Partial<Blog>,
-  formTitle?: string,
-  currentSlug?: string,
-): Partial<Blog> => {
-  updates.state = 'published'
-  updates.publishedAt = new Date().toISOString()
-  updates.slug = {
-    _type: 'slug',
-    current: currentSlug ?? slugify(formTitle),
-  }
-
-  return updates
-}
-
-const setUnPublishFields = (updates: Partial<Blog>): Partial<Blog> => {
-  updates.state = 'draft'
-  updates.publishedAt = null
-
-  return updates
-}
 
 interface AdminBlogEditorContentProps {
   documentId: string
