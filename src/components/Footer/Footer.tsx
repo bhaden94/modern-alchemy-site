@@ -5,9 +5,9 @@ import { IconBrandFacebook, IconBrandInstagram } from '@tabler/icons-react'
 import Image from 'next/image'
 
 import { getImageFromRef } from '~/lib/sanity/sanity.image'
+import { ImageReference } from '~/lib/sanity/sanity.image'
 import { NavigationItem } from '~/schemas/pages/rootLayoutContent'
 import { Base64Logo } from '~/utils'
-import { ImageReference } from '~/utils/images/uploadImagesToSanity'
 import { ExtraNavLinks } from '~/utils/navigation'
 
 import NavMenuDropdown from '../NavMenu/NavMenuDropdown'

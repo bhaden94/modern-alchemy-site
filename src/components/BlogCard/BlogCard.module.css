@@ -17,6 +17,7 @@
   height: auto;
   display: block;
   transition: transform 500ms ease;
+  object-fit: cover;
 }
 
 .overlay {
@@ -30,12 +31,12 @@
 
 .contentOverlay {
   position: absolute;
-  top: 0;
+  bottom: 0;
   left: 0;
   right: 0;
-  bottom: 0;
   z-index: 2;
   display: flex;
+  height: 100%;
   flex-direction: column;
   justify-content: space-between;
   background: linear-gradient(

@@ -14,11 +14,9 @@ import { useRef, useState } from 'react'
 
 import { useErrorDialog } from '~/hooks/useErrorDialog'
 import { getImageFromRef } from '~/lib/sanity/sanity.image'
+import { ImageReference, uploadImagesToSanity } from '~/lib/sanity/sanity.image'
 import { generateNextImagePlaceholder } from '~/utils'
 import { ACCEPTED_IMAGE_TYPES } from '~/utils/forms/FormConstants'
-import uploadImagesToSanity, {
-  ImageReference,
-} from '~/utils/images/uploadImagesToSanity'
 
 import DeleteWithConfirmation from '../../DeleteWithConfirmation/DeleteWithConfirmation'
 

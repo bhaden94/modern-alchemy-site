@@ -25,6 +25,7 @@ import { SetStateAction, useState } from 'react'
 
 import { useArtist } from '~/hooks/useArtist'
 import { useFormSubmitStates } from '~/hooks/useFormSubmitStates'
+import { uploadImagesToSanity } from '~/lib/sanity/sanity.image'
 import {
   BookingField,
   generateBookingFormSchema,
@@ -43,7 +44,6 @@ import {
   handleImageReject,
   handleImageRemove,
 } from '~/utils/forms/imageHandlingUtils'
-import uploadImagesToSanity from '~/utils/images/uploadImagesToSanity'
 
 import FormErrorAlert from '../../../../FormErrorAlert/FormErrorAlert'
 import ImageDropzone from '../../../../ImageDropzone/ImageDropzone'

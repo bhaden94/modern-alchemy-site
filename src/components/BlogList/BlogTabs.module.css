@@ -1,0 +1,5 @@
+.list {
+  &::before {
+    border-style: none;
+  }
+}

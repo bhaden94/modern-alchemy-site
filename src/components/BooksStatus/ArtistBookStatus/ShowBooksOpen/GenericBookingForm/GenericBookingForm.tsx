@@ -23,6 +23,7 @@ import ImageErrors from '~/components/ImageDropzone/ImageErrors'
 import ImageThumbnails from '~/components/ImageDropzone/ImageThumbnails'
 import { useArtist } from '~/hooks/useArtist'
 import { useFormSubmitStates } from '~/hooks/useFormSubmitStates'
+import { ImageReference, uploadImagesToSanity } from '~/lib/sanity/sanity.image'
 import {
   generateGenericBookingFormSchema,
   GenericBookingField,
@@ -37,8 +38,6 @@ import {
   handleImageReject,
   handleImageRemove,
 } from '~/utils/forms/imageHandlingUtils'
-import uploadImagesToSanity from '~/utils/images/uploadImagesToSanity'
-import { ImageReference } from '~/utils/images/uploadImagesToSanity'
 
 import FormErrorAlert from '../../../../FormErrorAlert/FormErrorAlert'
 import CustomOverlayLoader from '../CustomOverlayLoader/CustomOverlayLoader'
