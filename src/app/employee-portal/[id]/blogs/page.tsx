@@ -13,7 +13,6 @@ import {
   userIsAuthorizedForRoute,
 } from '~/lib/next-auth/auth.utils'
 import { getArtistById } from '~/lib/sanity/queries/sanity.artistsQuery'
-import { getAllBlogsByArtist } from '~/lib/sanity/queries/sanity.blogsQuery'
 import { getClient } from '~/lib/sanity/sanity.client'
 import { NavigationPages } from '~/utils/navigation'
 
@@ -38,24 +37,13 @@ export default async function Page({ params }: PageParams) {
     )
   }
 
-  const blogs = await getAllBlogsByArtist(client, artist._id)
-
-  if (!blogs) {
-    return (
-      <PageContainer>
-        <div>You currently have no blogs.</div>
-      </PageContainer>
-    )
-  }
-
   return (
     <PageContainer>
       <PageTitle title="My Blogs" />
-
       <Group mb="xl" justify="center">
         <CreateBlogButton artistId={artist._id} />
       </Group>
-      <BlogTabs blogs={blogs} />
+      <BlogTabs artistId={artist._id} />
     </PageContainer>
   )
 }
