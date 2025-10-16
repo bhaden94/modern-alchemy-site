@@ -2,7 +2,7 @@ import { Group } from '@mantine/core'
 import { redirect } from 'next/navigation'
 import { getServerSession } from 'next-auth'
 
-import { AdminBlogList } from '~/components/BlogList/BlogList'
+import BlogTabs from '~/components/BlogList/BlogTabs'
 import CreateBlogButton from '~/components/CreateBlogButton/CreateBlogButton'
 import PageContainer from '~/components/PageContainer'
 import PageTitle from '~/components/PageTitle/PageTitle'
@@ -48,16 +48,14 @@ export default async function Page({ params }: PageParams) {
     )
   }
 
-  // TODO: separate published blogs from ones in draft.
-  // Have a tab at the top to switch between published and In-draft blog lists
-
   return (
     <PageContainer>
       <PageTitle title="My Blogs" />
+
       <Group mb="xl" justify="center">
         <CreateBlogButton artistId={artist._id} />
       </Group>
-      <AdminBlogList blogs={blogs} />
+      <BlogTabs blogs={blogs} />
     </PageContainer>
   )
 }
