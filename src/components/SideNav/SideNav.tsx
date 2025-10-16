@@ -47,7 +47,6 @@ interface NestedLink extends BaseLink {
 
 type LinkItem = SimpleLink | NestedLink
 
-// TODO: add blog page for owners and residents
 const links: LinkItem[] = [
   {
     icon: <IconUser stroke={1.5} />,
@@ -73,7 +72,7 @@ const links: LinkItem[] = [
     icon: <IconArticle stroke={1.5} />,
     label: 'Blog Articles',
     page: NavigationPages.Blog,
-    requiredRoles: ['Owner'],
+    requiredRoles: ['Owner', 'Resident'],
   },
   {
     icon: <IconEdit stroke={1.5} />,

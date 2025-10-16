@@ -7,7 +7,7 @@ import {
   StringRule,
 } from 'sanity'
 
-import { ImageReference } from '~/utils/images/uploadImagesToSanity'
+import { ImageReference } from '~/lib/sanity/sanity.image'
 
 import { BaseSanitySchema } from '..'
 

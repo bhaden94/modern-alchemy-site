@@ -1,8 +1,8 @@
 import Image from 'next/image'
 
 import { getImageFromRef } from '~/lib/sanity/sanity.image'
+import { ImageReference } from '~/lib/sanity/sanity.image'
 import { generateNextImagePlaceholder } from '~/utils'
-import { ImageReference } from '~/utils/images/uploadImagesToSanity'
 
 import classes from '../CarouselWithThumbnails.module.css'
 

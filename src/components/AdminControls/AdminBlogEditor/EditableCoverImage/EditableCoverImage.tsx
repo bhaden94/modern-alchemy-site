@@ -10,9 +10,6 @@ import {
 import { IconPhoto, IconUpload, IconX } from '@tabler/icons-react'
 import React, { useRef, useState } from 'react'
 
-import { getImageFromRef } from '~/lib/sanity/sanity.image'
-import { useBlogEditorFormContext } from '~/utils/forms/blogEditorFormContext'
-import { BlogEditorField } from '~/utils/forms/blogEditorUtils'
 import { ACCEPTED_IMAGE_TYPES } from '~/utils/forms/FormConstants'
 
 import CoverImage from '../../../Blog/CoverImage/CoverImage'
@@ -23,6 +20,7 @@ interface EditableCoverImageProps {
   onRemove?: () => void
   disabled?: boolean
   dropzoneProps?: Partial<DropzoneProps>
+  currentImage?: { url: string; alt: string }
 }
 
 const EditableCoverImage = ({
@@ -30,21 +28,13 @@ const EditableCoverImage = ({
   onRemove,
   disabled = false,
   dropzoneProps,
+  currentImage,
 }: EditableCoverImageProps) => {
-  const form = useBlogEditorFormContext()
   const [rejectionMessage, setRejectionMessage] = useState<string>('')
   const openRef = useRef<() => void>(null)
 
-  const imageRef = form.getValues()[BlogEditorField.CoverImage.id]
-  let image: { url: string; altText?: string } | undefined =
-    imageRef && 'url' in imageRef
-      ? { url: imageRef.url, altText: imageRef.alt }
-      : getImageFromRef(imageRef)
-
-  const coverImage: { url: string; alt: string } | undefined = image && {
-    url: image.url,
-    alt: image.altText || 'Editable cover image',
-  }
+  // Use currentImage prop instead of getting from form
+  const image = currentImage
 
   const AlwaysShownInDropzone = () => {
     return (
@@ -125,7 +115,7 @@ const EditableCoverImage = ({
 
   return (
     <div className={classes.wrapper}>
-      <CoverImage image={coverImage} overlayZIndex={1} />
+      <CoverImage image={image} overlayZIndex={1} />
 
       {onReplace && (
         <Dropzone

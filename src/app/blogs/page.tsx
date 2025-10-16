@@ -1,14 +1,35 @@
+import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
-import { BlogList } from '~/components/BlogList/BlogList'
+import BlogList from '~/components/BlogList/BlogList'
 import PageContainer from '~/components/PageContainer'
 import PageInProgress from '~/components/PageInProgress/PageInProgress'
 import PageTitle from '~/components/PageTitle/PageTitle'
 import { getPublishedBlogs } from '~/lib/sanity/queries/sanity.blogsQuery'
-import { performPageContentQuery } from '~/lib/sanity/queries/sanity.pageContentQueries'
+import {
+  getLayoutMetadata,
+  performPageContentQuery,
+} from '~/lib/sanity/queries/sanity.pageContentQueries'
 import { getClient } from '~/lib/sanity/sanity.client'
+import { getImageFromRef } from '~/lib/sanity/sanity.image'
 
-// TODO metadata for page setup
+export async function generateMetadata(): Promise<Metadata> {
+  const client = getClient(undefined)
+  const layout = await getLayoutMetadata(client)
+
+  const title = 'Blogs'
+  const description = `Explore ${layout.businessName}'s latest artist spotlights, studio news, tattoo inspiration, aftercare tips, and culture stories—updated regularly.`
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: getImageFromRef(layout.openGraphImage)?.url,
+    },
+  }
+}
 
 export default async function Page() {
   const client = getClient()
