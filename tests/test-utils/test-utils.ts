@@ -1,0 +1,74 @@
+import { expect, Page } from '@playwright/test'
+
+// export const BASE_URL =
+//   'https://modern-alchemy-site-git-preview-brady-hadens-projects.vercel.app'
+
+// Helper function to navigate to blogs page
+export async function navigateToBlogsPage(
+  page: Page,
+  tab: 'Drafts' | 'Published' | 'All Articles' = 'Drafts',
+) {
+  await page.goto('/')
+  await page.getByRole('link', { name: 'Employee Portal' }).click()
+  await page.waitForURL(/.*\/employee-portal\/.*/, { timeout: 10000 })
+  await page.getByRole('button', { name: 'Settings' }).click()
+  await page.getByRole('link', { name: 'Blog Articles' }).click()
+  await page.waitForSelector('h1:has-text("My Blogs")', { timeout: 10000 })
+
+  // Wait for images to load
+  await page
+    .waitForSelector('img[alt]', { state: 'visible', timeout: 5000 })
+    .catch(() => {
+      console.log('No blog images found or still loading')
+    })
+  await page.waitForTimeout(1000)
+
+  // Select chosen tab
+  await page.getByRole('tab', { name: tab }).click()
+  await expect(page.getByRole('tab', { name: tab })).toHaveAttribute(
+    'aria-selected',
+    'true',
+  )
+  await expect(page.getByRole('tabpanel', { name: tab })).toBeVisible()
+}
+
+export async function fillBlogForm(page: Page, title: string, content: string) {
+  await page.getByRole('textbox', { name: 'Title' }).fill(title)
+  const contentEditor = page.getByRole('textbox').nth(1)
+  await contentEditor.click()
+  await contentEditor.pressSequentially(content, { delay: 10 })
+
+  await page.waitForTimeout(250)
+}
+
+export async function clearBlogForm(page: Page) {
+  await page.getByRole('textbox', { name: 'Title' }).fill('')
+  const contentEditor = page.getByRole('textbox').nth(1)
+  await contentEditor.click()
+  await page.waitForTimeout(250)
+  await page.keyboard.press('Control+A')
+  await page.waitForTimeout(250)
+  await page.keyboard.press('Delete')
+  await page.waitForTimeout(250)
+}
+
+export async function performBlogFormAction(
+  page: Page,
+  action: 'save' | 'publish' = 'save',
+) {
+  // TODO: Handle trying to publish when already published
+  await page
+    .getByRole('button', {
+      name: action === 'publish' ? 'Publish' : 'Save Changes',
+    })
+    .click()
+  await expect(page.getByText(/Blog updated/)).toBeVisible()
+  await page.waitForTimeout(1000) // Wait for save to complete
+
+  // Verify the button changed to "Convert to draft"
+  if (action === 'publish') {
+    await expect(
+      page.getByRole('button', { name: 'Convert to draft' }),
+    ).toBeVisible()
+  }
+}
