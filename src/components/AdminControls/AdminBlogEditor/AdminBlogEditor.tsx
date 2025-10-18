@@ -24,6 +24,7 @@ import {
   BlogEditorField,
   blogEditorSchema,
   getFormAction,
+  isTextEditorEmpty,
   setPublishFields,
   setUnPublishFields,
   TBlogEditorSchema,
@@ -78,6 +79,14 @@ export default function AdminBlogEditor({
     setIsSubmitting(true)
     const action = getFormAction(event)
 
+    if (action === 'publish') {
+      if (!formValues.title || isTextEditorEmpty(formValues.content)) {
+        openErrorDialog('Title and content are required to publish.')
+        setIsSubmitting(false)
+        return
+      }
+    }
+
     try {
       let coverUpdate: ImageReference | null = serverCoverImage ?? null
 
@@ -125,12 +134,6 @@ export default function AdminBlogEditor({
       }
 
       if (action === 'publish') {
-        if (!updates.title || !updates.content) {
-          openErrorDialog('Title and content are required to publish.')
-          setIsSubmitting(false)
-          return
-        }
-
         setPublishFields(updates, formValues.title, savedBlog?.slug?.current)
       }
 
