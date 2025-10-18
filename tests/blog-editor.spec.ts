@@ -284,7 +284,6 @@ test.describe('Blog Editor - Publishing Tests', () => {
     await page.getByRole('button', { name: 'Publish' }).click()
 
     // Verify error message appears
-    // TODO: The editor allows this to publish, which is wrong. Need to fix in editor code;
     await expect(
       page.getByText(/Title and content are required to publish/),
     ).toBeVisible()
