@@ -1,9 +1,13 @@
 import { test, expect, Page } from '@playwright/test'
 import {
+  addCoverImageToBlog,
   clearBlogForm,
   fillBlogForm,
   navigateToBlogsPage,
   performBlogFormAction,
+  removeCoverImageFromBlog,
+  updateCoverImageOfBlog,
+  verifyCoverImageDisplayedInPreview,
   verifyDateTimeUpdated,
 } from './test-utils/test-utils'
 
@@ -11,16 +15,23 @@ import {
 let testBlogDraftTitle: string
 const testBlogDraftContent: string = 'This is test content for the draft blog.'
 let testBlogDraftUrl: string
+
 let testBlogPublishedTitle: string
 const testBlogPublishedContent: string =
   'This is test content for the published blog.'
 let testBlogPublishedUrl: string
+
+let testBlogPublishedWithCoverImageTitle: string
+const testBlogPublishedWithCoverImageContent: string =
+  'This is test content for the published blog with cover image.'
+let testBlogPublishedWithCoverImageUrl: string
 
 // Helper function to create a blog with title and content
 async function createBlogWithContent(
   page: Page,
   title: string,
   content: string,
+  coverImagePath: string | null = null,
   shouldPublish: boolean = false,
 ): Promise<string> {
   await page.getByRole('button', { name: 'Create Article' }).click()
@@ -32,6 +43,10 @@ async function createBlogWithContent(
   // Fill form and save
   await fillBlogForm(page, title, content)
   await performBlogFormAction(page, 'save')
+
+  if (coverImagePath) {
+    await addCoverImageToBlog(page, coverImagePath)
+  }
 
   if (shouldPublish) {
     await performBlogFormAction(page, 'publish')
@@ -77,12 +92,14 @@ test.beforeAll(async ({ browser }) => {
   const timestamp = Date.now()
   testBlogDraftTitle = `Test Editor Draft ${timestamp}`
   testBlogPublishedTitle = `Test Editor Published ${timestamp}`
+  testBlogPublishedWithCoverImageTitle = `Test Editor Published with Cover Image ${timestamp}`
 
   // Create draft blog
   testBlogDraftUrl = await createBlogWithContent(
     page,
     testBlogDraftTitle,
     testBlogDraftContent,
+    null,
     false,
   )
 
@@ -94,6 +111,19 @@ test.beforeAll(async ({ browser }) => {
     page,
     testBlogPublishedTitle,
     testBlogPublishedContent,
+    null,
+    true,
+  )
+
+  // Navigate back to blogs page
+  await navigateToBlogsPage(page)
+
+  // Create published blog with cover image
+  testBlogPublishedWithCoverImageUrl = await createBlogWithContent(
+    page,
+    testBlogPublishedWithCoverImageTitle,
+    testBlogPublishedWithCoverImageContent,
+    'public/tattoo-shop.jpg',
     true,
   )
 
@@ -110,7 +140,12 @@ test.beforeAll(async ({ browser }) => {
     name: testBlogPublishedTitle,
     level: 2,
   })
+  const publishedBlogWithCoverImageHeader = page.getByRole('heading', {
+    name: testBlogPublishedWithCoverImageTitle,
+    level: 2,
+  })
   await expect(publishedBlogHeader).toBeVisible()
+  await expect(publishedBlogWithCoverImageHeader).toBeVisible()
 
   await context.close()
   console.log(
@@ -331,7 +366,7 @@ test.describe('Blog Editor - Cover Image Tests', () => {
     page,
   }) => {
     // Navigate to the published blog which has cover image
-    await navigateToBlogEditor(page, testBlogPublishedUrl)
+    await navigateToBlogEditor(page, testBlogPublishedWithCoverImageUrl)
 
     // Verify cover image controls are present
     await expect(
@@ -350,6 +385,125 @@ test.describe('Blog Editor - Cover Image Tests', () => {
     await expect(
       page.getByRole('button', { name: 'Add cover image' }),
     ).toBeVisible()
+  })
+
+  test('adding a cover image to draft blog and saving succeeds', async ({
+    page,
+  }) => {
+    // Navigate to draft blog
+    await navigateToBlogEditor(page, testBlogDraftUrl)
+    await addCoverImageToBlog(page, 'public/tattoo-shop.jpg')
+
+    // Save the blog
+    await performBlogFormAction(page, 'save')
+
+    // Toggle to preview mode to verify cover image shows
+    await page.getByRole('button', { name: 'Toggle Preview' }).click()
+    await expect(page.getByRole('article')).toBeVisible()
+
+    // Verify cover image is visible in preview (specifically target the cover image, not avatar/content images)
+    const coverImageWrapper = page.locator('article > div[class*="CoverImage"]')
+    await expect(coverImageWrapper).toBeVisible()
+    const coverImage = coverImageWrapper.locator('img')
+    await expect(coverImage).toBeVisible()
+    const imgSrc = await coverImage.getAttribute('src')
+    expect(imgSrc).toBeTruthy()
+    expect(imgSrc).not.toContain('article.svg')
+
+    // Toggle back to editor mode
+    await page.getByRole('button', { name: 'Toggle Preview' }).click()
+
+    await navigateToBlogsPage(page, 'Drafts')
+
+    // Find the blog card and verify it has a cover image (not the fallback)
+    const blogCard = page
+      .getByRole('heading', { name: testBlogDraftTitle, level: 2 })
+      .locator('..')
+      .locator('..')
+      .locator('..')
+    const cardImage = blogCard.locator('img').first()
+    await expect(cardImage).toBeVisible()
+    const cardImgAlt = await cardImage.getAttribute('alt')
+    expect(cardImgAlt).toBe(testBlogDraftTitle)
+
+    // Navigate back to editor to clean up (remove the cover image)
+    await navigateToBlogEditor(page, testBlogDraftUrl)
+    await removeCoverImageFromBlog(page)
+    await performBlogFormAction(page, 'save')
+  })
+
+  test('removing cover image from draft blog and saving succeeds', async ({
+    page,
+  }) => {
+    await navigateToBlogEditor(page, testBlogDraftUrl)
+    await addCoverImageToBlog(page, 'public/tattoo-shop.jpg')
+    await performBlogFormAction(page, 'save')
+
+    await removeCoverImageFromBlog(page)
+    await performBlogFormAction(page, 'save')
+
+    // Toggle to preview mode to verify no cover image shows
+    await page.getByRole('button', { name: 'Toggle Preview' }).click()
+    await expect(page.getByRole('article')).toBeVisible()
+
+    // Verify no cover image in preview (specifically check for CoverImage_wrapper)
+    // Note: There may be other images like avatar or content images, so we target the cover image wrapper specifically
+    const coverImageWrapper = page.locator('article > div[class*="CoverImage"]')
+    const wrapperCount = await coverImageWrapper.count()
+    expect(wrapperCount).toBe(0)
+
+    // Toggle back to editor mode
+    await page.getByRole('button', { name: 'Toggle Preview' }).click()
+
+    // Navigate to blogs page and verify fallback image (article.svg) shows
+    await navigateToBlogsPage(page, 'Drafts')
+
+    // Find the blog card and verify it shows the fallback image
+    const blogCard = page
+      .getByRole('heading', { name: testBlogDraftTitle, level: 2 })
+      .locator('..')
+      .locator('..')
+      .locator('..')
+    const cardImage = blogCard.locator('img').first()
+    await expect(cardImage).toBeVisible()
+    const cardImgSrc = await cardImage.getAttribute('src')
+    expect(cardImgSrc).toContain('article.svg')
+  })
+
+  test('updating cover image on published blog succeeds', async ({ page }) => {
+    // Navigate to published blog with cover image
+    await navigateToBlogEditor(page, testBlogPublishedWithCoverImageUrl)
+
+    await updateCoverImageOfBlog(page, 'public/logo.png')
+
+    // Save the changes
+    await performBlogFormAction(page, 'save')
+
+    // Toggle to preview mode to verify new cover image
+    await page.getByRole('button', { name: 'Toggle Preview' }).click()
+    await expect(page.getByRole('article')).toBeVisible()
+
+    await verifyCoverImageDisplayedInPreview(page)
+
+    // Toggle back to editor
+    await page.getByRole('button', { name: 'Toggle Preview' }).click()
+
+    // Navigate to blogs page and verify updated image shows
+    await navigateToBlogsPage(page, 'Published')
+
+    // Need to go up 3 levels from h2 to reach the blog card container with the image
+    const blogCard = page
+      .getByRole('heading', {
+        name: testBlogPublishedWithCoverImageTitle,
+        level: 2,
+      })
+      .locator('..')
+      .locator('..')
+      .locator('..')
+    const cardImage = blogCard.locator('img').first()
+    await expect(cardImage).toBeVisible()
+    const cardImgAlt = await cardImage.getAttribute('alt')
+    expect(cardImgAlt).toBe(testBlogPublishedWithCoverImageTitle)
   })
 })
 

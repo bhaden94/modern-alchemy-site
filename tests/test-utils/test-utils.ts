@@ -107,3 +107,65 @@ export async function verifyDateTimeUpdated(dateTime: string) {
   expect(parsedDate.getTime()).not.toBeNaN()
   expect(parsedDate.getTime()).toBeLessThanOrEqual(Date.now())
 }
+
+export async function addCoverImageToBlog(page: Page, imagePath: string) {
+  await expect(
+    page.getByRole('button', { name: 'Add cover image' }),
+  ).toBeVisible()
+
+  const fileInput = page.locator('[role="presentation"] input[type="file"]')
+  await fileInput.setInputFiles(imagePath)
+
+  // Wait for image to be processed and displayed
+  await page.waitForTimeout(1000)
+
+  // Verify buttons changed to "Change" and "Remove"
+  await expect(
+    page.getByRole('button', { name: 'Change cover image' }),
+  ).toBeVisible()
+  await expect(
+    page.getByRole('button', { name: 'Remove cover image' }),
+  ).toBeVisible()
+}
+
+export async function removeCoverImageFromBlog(page: Page) {
+  await page.getByRole('button', { name: 'Remove cover image' }).click()
+  await expect(
+    page.getByRole('button', { name: 'Add cover image' }),
+  ).toBeVisible()
+}
+
+export async function updateCoverImageOfBlog(page: Page, imagePath: string) {
+  // Verify current cover image controls
+  await expect(
+    page.getByRole('button', { name: 'Change cover image' }),
+  ).toBeVisible()
+  await expect(
+    page.getByRole('button', { name: 'Remove cover image' }),
+  ).toBeVisible()
+
+  // Click "Change cover image"
+  await page.getByRole('button', { name: 'Change cover image' }).click()
+
+  // Upload a different image
+  const fileInput = page.locator('[role="presentation"] input[type="file"]')
+  await fileInput.setInputFiles(imagePath)
+
+  // Wait for image to be processed and displayed
+  await page.waitForTimeout(500)
+
+  // Verify buttons still show "Change" and "Remove"
+  await expect(
+    page.getByRole('button', { name: 'Change cover image' }),
+  ).toBeVisible()
+  await expect(
+    page.getByRole('button', { name: 'Remove cover image' }),
+  ).toBeVisible()
+}
+
+export async function verifyCoverImageDisplayedInPreview(page: Page) {
+  const coverImageWrapper = page.locator('article > div[class*="CoverImage"]')
+  await expect(coverImageWrapper).toBeVisible()
+  const coverImage = coverImageWrapper.locator('img')
+  await expect(coverImage).toBeVisible()
+}
