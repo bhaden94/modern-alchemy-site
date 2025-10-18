@@ -1,9 +1,6 @@
 import { test, expect, Page } from '@playwright/test'
 import { navigateToBlogsPage } from './test-utils/test-utils'
 
-const BASE_URL =
-  'https://modern-alchemy-site-git-preview-brady-hadens-projects.vercel.app'
-
 // Shared test blog titles created once and reused across tests
 let testBlogDraft: string
 let testBlogForNav: string

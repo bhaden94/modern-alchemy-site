@@ -1,4 +1,5 @@
 import { expect, Page } from '@playwright/test'
+import { parse } from 'date-fns'
 
 // export const BASE_URL =
 //   'https://modern-alchemy-site-git-preview-brady-hadens-projects.vercel.app'
@@ -41,34 +42,68 @@ export async function fillBlogForm(page: Page, title: string, content: string) {
   await page.waitForTimeout(250)
 }
 
-export async function clearBlogForm(page: Page) {
-  await page.getByRole('textbox', { name: 'Title' }).fill('')
-  const contentEditor = page.getByRole('textbox').nth(1)
-  await contentEditor.click()
-  await page.waitForTimeout(250)
-  await page.keyboard.press('Control+A')
-  await page.waitForTimeout(250)
-  await page.keyboard.press('Delete')
-  await page.waitForTimeout(250)
+export async function clearBlogForm(
+  page: Page,
+  options: { clearTitle: boolean; clearContent: boolean } = {
+    clearTitle: true,
+    clearContent: true,
+  },
+) {
+  if (options.clearTitle) {
+    await page.getByRole('textbox', { name: 'Title' }).fill('')
+  }
+
+  if (options.clearContent) {
+    const contentEditor = page.getByRole('textbox').nth(1)
+    await contentEditor.click()
+    await page.waitForTimeout(250)
+    await page.keyboard.press('Control+A')
+    await page.waitForTimeout(250)
+    await page.keyboard.press('Delete')
+    await page.waitForTimeout(250)
+  }
 }
 
 export async function performBlogFormAction(
   page: Page,
-  action: 'save' | 'publish' = 'save',
+  action: 'save' | 'publish' | 'convertToDraft' = 'save',
 ) {
-  // TODO: Handle trying to publish when already published
+  let actionButtonName = ''
+  switch (action) {
+    case 'save':
+      actionButtonName = 'Save Changes'
+      break
+    case 'publish':
+      actionButtonName = 'Publish'
+      break
+    case 'convertToDraft':
+      actionButtonName = 'Convert to draft'
+      break
+  }
+
   await page
     .getByRole('button', {
-      name: action === 'publish' ? 'Publish' : 'Save Changes',
+      name: actionButtonName,
     })
     .click()
   await expect(page.getByText(/Blog updated/)).toBeVisible()
   await page.waitForTimeout(1000) // Wait for save to complete
 
-  // Verify the button changed to "Convert to draft"
   if (action === 'publish') {
     await expect(
       page.getByRole('button', { name: 'Convert to draft' }),
     ).toBeVisible()
   }
+
+  if (action === 'convertToDraft') {
+    await expect(page.getByRole('button', { name: 'Publish' })).toBeVisible()
+  }
+}
+
+export async function verifyDateTimeUpdated(dateTime: string) {
+  const formatString = "MMMM dd, yyyy 'at' hh:mm aa"
+  const parsedDate = parse(dateTime, formatString, new Date())
+
+  expect(parsedDate.getTime()).not.toBeNaN()
+  expect(parsedDate.getTime()).toBeLessThanOrEqual(Date.now())
 }

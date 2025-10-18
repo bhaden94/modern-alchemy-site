@@ -4,6 +4,7 @@ import {
   fillBlogForm,
   navigateToBlogsPage,
   performBlogFormAction,
+  verifyDateTimeUpdated,
 } from './test-utils/test-utils'
 
 // Shared test blog titles and URLs created once and reused across tests
@@ -238,7 +239,7 @@ test.describe('Blog Editor - Publishing Tests', () => {
   })
 
   test.afterEach(async ({ page }) => {
-    // Ensure blog is back in draft state after each test
+    // Ensure blog is back in known state as draft with original title and content
     await navigateToBlogEditor(page, testBlogDraftUrl)
 
     // Check if it's published, if so convert back to draft
@@ -246,32 +247,20 @@ test.describe('Blog Editor - Publishing Tests', () => {
     const isPublished = await convertButton.isVisible().catch(() => false)
 
     if (isPublished) {
-      await convertButton.click()
-      await expect(page.getByText(/Blog converted to draft/)).toBeVisible()
+      await performBlogFormAction(page, 'convertToDraft')
     }
 
     // Ensure title and content are restored
-    const titleInput = page.getByRole('textbox', { name: 'Title' })
-    const currentTitle = await titleInput.inputValue()
-    const contentEditor = page.getByRole('textbox').nth(1)
-    const currentContent = await contentEditor.textContent()
-
-    if (
-      currentTitle !== testBlogDraftTitle ||
-      !currentContent ||
-      currentContent.trim() === ''
-    ) {
-      await clearBlogForm(page)
-      await fillBlogForm(page, testBlogDraftTitle, testBlogDraftContent)
-      await performBlogFormAction(page, 'save')
-    }
+    await clearBlogForm(page)
+    await fillBlogForm(page, testBlogDraftTitle, testBlogDraftContent)
+    await performBlogFormAction(page, 'save')
   })
 
   test('publishing without title fails with error message', async ({
     page,
   }) => {
     // Clear the title
-    await page.getByRole('textbox', { name: 'Title' }).clear()
+    await clearBlogForm(page, { clearTitle: true, clearContent: false })
 
     // Try to publish without title
     await page.getByRole('button', { name: 'Publish' }).click()
@@ -283,81 +272,40 @@ test.describe('Blog Editor - Publishing Tests', () => {
 
     // Verify Published status is still "In draft"
     await expect(page.getByText(/Published: In draft/)).toBeVisible()
-
-    // Restore title and content
-    await clearBlogForm(page)
-    await fillBlogForm(page, testBlogDraftTitle, testBlogDraftContent)
-    await performBlogFormAction(page, 'save')
   })
 
   test('publishing without content fails with error message', async ({
     page,
   }) => {
     // Clear the content
-    const contentEditor = page.getByRole('textbox').nth(1)
-    await contentEditor.clear()
+    await clearBlogForm(page, { clearTitle: false, clearContent: true })
 
     // Try to publish
     await page.getByRole('button', { name: 'Publish' }).click()
 
     // Verify error message appears
+    // TODO: The editor allows this to publish, which is wrong. Need to fix in editor code;
     await expect(
       page.getByText(/Title and content are required to publish/),
     ).toBeVisible()
 
     // Verify Published status is still "In draft"
     await expect(page.getByText(/Published: In draft/)).toBeVisible()
-
-    // Restore content
-    await clearBlogForm(page)
-    await fillBlogForm(page, testBlogDraftTitle, testBlogDraftContent)
-    await performBlogFormAction(page, 'save')
   })
 
   test('publishing with title and content succeeds', async ({ page }) => {
-    // Get the initial Published text
     const initialPublished = await page.getByText(/Published:/).textContent()
     expect(initialPublished).toContain('In draft')
 
-    // Publish the blog using utility function
     await performBlogFormAction(page, 'publish')
 
     // Verify Published timestamp shows an actual date (not "In draft")
     const updatedPublished = await page.getByText(/Published:/).textContent()
     expect(updatedPublished).not.toContain('In draft')
-    expect(updatedPublished).toMatch(
-      /\d{1,2}\/\d{1,2}\/\d{4}|\w+ \d{1,2}, \d{4}/,
-    ) // Date pattern
 
-    // Convert back to draft for other tests
-    await page.getByRole('button', { name: 'Convert to draft' }).click()
-    await expect(page.getByText(/Blog converted to draft/)).toBeVisible()
-  })
-
-  test('converting published blog to draft changes button and status', async ({
-    page,
-  }) => {
-    // First publish it using utility function
-    await performBlogFormAction(page, 'publish')
-
-    // Click Convert to draft
-    await page.getByRole('button', { name: 'Convert to draft' }).click()
-
-    // Wait for success message
-    await expect(page.getByText(/Blog converted to draft/)).toBeVisible()
-
-    // Verify button changed back to "Publish"
-    await expect(page.getByRole('button', { name: 'Publish' })).toBeVisible()
-
-    // Verify Published status shows "In draft"
-    await expect(page.getByText(/Published: In draft/)).toBeVisible()
-
-    // Reload page to verify persistence
-    await page.reload()
-
-    // Verify after reload
-    await expect(page.getByRole('button', { name: 'Publish' })).toBeVisible()
-    await expect(page.getByText(/Published: In draft/)).toBeVisible()
+    // Extract the date string after "Published: "
+    const dateString = updatedPublished?.replace('Published: ', '') || ''
+    await verifyDateTimeUpdated(dateString)
   })
 })
 

@@ -110,3 +110,28 @@ export const setUnPublishFields = (updates: Partial<Blog>): Partial<Blog> => {
 
   return updates
 }
+
+/*
+ * Checks if the text editor content is empty
+ */
+export const isTextEditorEmpty = (content: any): boolean => {
+  // Basic check for empty content
+  if (!content || (Array.isArray(content) && content.length === 0)) {
+    return true
+  }
+
+  // Empty could also be a single array item with a children field that also has a single array item with am empty 'text' field
+  if (
+    Array.isArray(content) &&
+    content.length === 1 &&
+    content[0].children &&
+    Array.isArray(content[0].children) &&
+    content[0].children.length === 1 &&
+    content[0].children[0].text !== undefined &&
+    content[0].children[0].text.trim() === ''
+  ) {
+    return true
+  }
+
+  return false
+}
