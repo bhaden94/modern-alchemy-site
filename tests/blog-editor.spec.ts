@@ -223,11 +223,8 @@ test.describe('Blog Editor Tests', () => {
       .inputValue()
     await page.getByRole('textbox', { name: 'Title' }).fill(`${currentTitle} `)
 
-    // Click Save Changes
-    await page.getByRole('button', { name: 'Save Changes' }).click()
-
-    // Verify success message appears
-    await expect(page.getByText(/Blog updated/)).toBeVisible()
+    // Save changes using utility function
+    await performBlogFormAction(page, 'save')
 
     // Verify Last saved timestamp is present
     await expect(page.getByText(/Last saved:/)).toBeVisible()
@@ -256,18 +253,17 @@ test.describe('Blog Editor - Publishing Tests', () => {
     // Ensure title and content are restored
     const titleInput = page.getByRole('textbox', { name: 'Title' })
     const currentTitle = await titleInput.inputValue()
-    if (currentTitle !== testBlogDraftTitle) {
-      await titleInput.fill(testBlogDraftTitle)
-      await page.getByRole('button', { name: 'Save Changes' }).click()
-      await expect(page.getByText(/Blog updated/)).toBeVisible()
-    }
-
     const contentEditor = page.getByRole('textbox').nth(1)
     const currentContent = await contentEditor.textContent()
-    if (!currentContent || currentContent.trim() === '') {
-      await contentEditor.fill('This is test content for the draft blog.')
-      await page.getByRole('button', { name: 'Save Changes' }).click()
-      await expect(page.getByText(/Blog updated/)).toBeVisible()
+
+    if (
+      currentTitle !== testBlogDraftTitle ||
+      !currentContent ||
+      currentContent.trim() === ''
+    ) {
+      await clearBlogForm(page)
+      await fillBlogForm(page, testBlogDraftTitle, testBlogDraftContent)
+      await performBlogFormAction(page, 'save')
     }
   })
 
@@ -288,10 +284,10 @@ test.describe('Blog Editor - Publishing Tests', () => {
     // Verify Published status is still "In draft"
     await expect(page.getByText(/Published: In draft/)).toBeVisible()
 
-    // Restore title
-    await page.getByRole('textbox', { name: 'Title' }).fill(testBlogDraftTitle)
-    await page.getByRole('button', { name: 'Save Changes' }).click()
-    await expect(page.getByText(/Blog updated/)).toBeVisible()
+    // Restore title and content
+    await clearBlogForm(page)
+    await fillBlogForm(page, testBlogDraftTitle, testBlogDraftContent)
+    await performBlogFormAction(page, 'save')
   })
 
   test('publishing without content fails with error message', async ({
@@ -313,9 +309,9 @@ test.describe('Blog Editor - Publishing Tests', () => {
     await expect(page.getByText(/Published: In draft/)).toBeVisible()
 
     // Restore content
-    await contentEditor.fill('This is test content for the draft blog.')
-    await page.getByRole('button', { name: 'Save Changes' }).click()
-    await expect(page.getByText(/Blog updated/)).toBeVisible()
+    await clearBlogForm(page)
+    await fillBlogForm(page, testBlogDraftTitle, testBlogDraftContent)
+    await performBlogFormAction(page, 'save')
   })
 
   test('publishing with title and content succeeds', async ({ page }) => {
@@ -323,11 +319,8 @@ test.describe('Blog Editor - Publishing Tests', () => {
     const initialPublished = await page.getByText(/Published:/).textContent()
     expect(initialPublished).toContain('In draft')
 
-    // Publish the blog
-    await page.getByRole('button', { name: 'Publish' }).click()
-
-    // Wait for success message (publish shows "Blog updated" message)
-    await expect(page.getByText(/Blog updated/)).toBeVisible()
+    // Publish the blog using utility function
+    await performBlogFormAction(page, 'publish')
 
     // Verify Published timestamp shows an actual date (not "In draft")
     const updatedPublished = await page.getByText(/Published:/).textContent()
@@ -335,11 +328,6 @@ test.describe('Blog Editor - Publishing Tests', () => {
     expect(updatedPublished).toMatch(
       /\d{1,2}\/\d{1,2}\/\d{4}|\w+ \d{1,2}, \d{4}/,
     ) // Date pattern
-
-    // Verify button changed from "Publish" to "Convert to draft"
-    await expect(
-      page.getByRole('button', { name: 'Convert to draft' }),
-    ).toBeVisible()
 
     // Convert back to draft for other tests
     await page.getByRole('button', { name: 'Convert to draft' }).click()
@@ -349,15 +337,8 @@ test.describe('Blog Editor - Publishing Tests', () => {
   test('converting published blog to draft changes button and status', async ({
     page,
   }) => {
-    // First publish it
-    await page.getByRole('button', { name: 'Publish' }).click()
-    await expect(page.getByText(/Blog updated/)).toBeVisible()
-    await page.waitForTimeout(500)
-
-    // Verify "Convert to draft" button is present
-    await expect(
-      page.getByRole('button', { name: 'Convert to draft' }),
-    ).toBeVisible()
+    // First publish it using utility function
+    await performBlogFormAction(page, 'publish')
 
     // Click Convert to draft
     await page.getByRole('button', { name: 'Convert to draft' }).click()
@@ -438,27 +419,17 @@ test.describe('Blog Editor - Complex Workflow', () => {
       await page.getByRole('button', { name: 'Create Article' }).click()
       await page.waitForURL(/.*\/blogs\/[a-zA-Z0-9]+$/)
 
-      // Step 2: Add title and content
-      await page.getByRole('textbox', { name: 'Title' }).fill(uniqueTitle)
-      const contentEditor = page.getByRole('textbox').nth(1)
-      await contentEditor.click()
-      await contentEditor.fill('Content for workflow test.')
+      // Step 2: Add title and content using utility function
+      await fillBlogForm(page, uniqueTitle, 'Content for workflow test.')
 
-      // Step 3: Save
-      await page.getByRole('button', { name: 'Save Changes' }).click()
-      await expect(page.getByText(/Blog updated/)).toBeVisible()
+      // Step 3: Save using utility function
+      await performBlogFormAction(page, 'save')
       await expect(page.getByText(/Published: In draft/)).toBeVisible()
-      await page.waitForTimeout(500)
 
-      // Step 4: Publish
-      await page.getByRole('button', { name: 'Publish' }).click()
-      await expect(page.getByText(/Blog updated/)).toBeVisible()
-      await expect(
-        page.getByRole('button', { name: 'Convert to draft' }),
-      ).toBeVisible()
+      // Step 4: Publish using utility function
+      await performBlogFormAction(page, 'publish')
       const publishedText = await page.getByText(/Published:/).textContent()
       expect(publishedText).not.toContain('In draft')
-      await page.waitForTimeout(500)
 
       // Step 5: Convert back to draft
       await page.getByRole('button', { name: 'Convert to draft' }).click()
@@ -467,14 +438,7 @@ test.describe('Blog Editor - Complex Workflow', () => {
       await expect(page.getByText(/Published: In draft/)).toBeVisible()
 
       // Step 6: Navigate back to blogs page and verify it's in Drafts tab
-      await page.getByRole('button', { name: 'Settings' }).click()
-      await page.getByRole('link', { name: 'Blog Articles' }).click()
-
-      // Should be in Drafts tab
-      await expect(page.getByRole('tab', { name: 'Drafts' })).toHaveAttribute(
-        'aria-selected',
-        'true',
-      )
+      await navigateToBlogsPage(page, 'Drafts')
       await expect(
         page.getByRole('heading', { name: uniqueTitle }),
       ).toBeVisible()
