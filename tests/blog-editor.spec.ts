@@ -162,6 +162,7 @@ test.afterAll(async ({ browser }) => {
   await deleteBlogById(page, testBlogDraftTitle)
   await navigateToBlogsPage(page, 'Published')
   await deleteBlogById(page, testBlogPublishedTitle)
+  await deleteBlogById(page, testBlogPublishedWithCoverImageTitle)
 
   await context.close()
   console.log('✅ Cleaned up test blogs')
@@ -534,7 +535,7 @@ test.describe('Blog Editor - Complex Workflow', () => {
 
       // Step 5: Convert back to draft
       await page.getByRole('button', { name: 'Convert to draft' }).click()
-      await expect(page.getByText(/Blog converted to draft/)).toBeVisible()
+      await expect(page.getByText(/Blog updated/)).toBeVisible()
       await expect(page.getByRole('button', { name: 'Publish' })).toBeVisible()
       await expect(page.getByText(/Published: In draft/)).toBeVisible()
 

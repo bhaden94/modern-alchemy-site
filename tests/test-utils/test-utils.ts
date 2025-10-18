@@ -144,9 +144,6 @@ export async function updateCoverImageOfBlog(page: Page, imagePath: string) {
     page.getByRole('button', { name: 'Remove cover image' }),
   ).toBeVisible()
 
-  // Click "Change cover image"
-  await page.getByRole('button', { name: 'Change cover image' }).click()
-
   // Upload a different image
   const fileInput = page.locator('[role="presentation"] input[type="file"]')
   await fileInput.setInputFiles(imagePath)
