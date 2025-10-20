@@ -12,6 +12,7 @@ import {
 } from '~/lib/sanity/queries/sanity.pageContentQueries'
 import { getClient } from '~/lib/sanity/sanity.client'
 import { getImageFromRef } from '~/lib/sanity/sanity.image'
+import { generateEnhancedMetadata } from '~/utils/seo'
 
 export async function generateMetadata(): Promise<Metadata> {
   const client = getClient(undefined)
@@ -20,15 +21,21 @@ export async function generateMetadata(): Promise<Metadata> {
   const title = 'Blogs'
   const description = `Explore ${layout.businessName}'s latest artist spotlights, studio news, tattoo inspiration, aftercare tips, and culture stories—updated regularly.`
 
-  return {
+  return generateEnhancedMetadata({
     title,
     description,
-    openGraph: {
-      title,
-      description,
-      images: getImageFromRef(layout.openGraphImage)?.url,
-    },
-  }
+    imageUrl: getImageFromRef(layout.openGraphImage)?.url,
+    url: `${process.env.NEXT_PUBLIC_SITE_URL}/blogs`,
+    siteName: layout.businessName,
+    keywords: [
+      'tattoo blog',
+      'tattoo inspiration',
+      'tattoo aftercare',
+      'artist spotlight',
+      layout.city || '',
+      layout.businessName,
+    ].filter(Boolean),
+  })
 }
 
 export default async function Page() {

@@ -12,6 +12,7 @@ import { getClient } from '~/lib/sanity/sanity.client'
 import { getImageFromRef } from '~/lib/sanity/sanity.image'
 import { resolveArtistUrl } from '~/lib/sanity/sanity.links'
 import { formatStylesInSentence } from '~/utils'
+import { generateEnhancedMetadata, generatePersonSchema } from '~/utils/seo'
 
 export const generateStaticParams = async () => {
   const client = getClient(undefined)
@@ -35,15 +36,40 @@ export async function generateMetadata({
   const formattedStyles = formatStylesInSentence(artist.styles)
   const stylesSection = formattedStyles ? `of ${formattedStyles} tattoos ` : ''
 
-  const description = `Explore ${artist.name}’s portfolio ${stylesSection}at ${metadata.businessName} located in ${metadata.location}.`
+  const locationParts = [metadata.city, metadata.state]
+    .filter(Boolean)
+    .join(', ')
+  const description = `Explore ${artist.name}'s portfolio ${stylesSection}at ${metadata.businessName} located in ${locationParts}.`
+
+  const artistImageUrl = getImageFromRef(artist.headshot)?.url
+
+  // Generate Person structured data
+  const personSchema = generatePersonSchema(
+    artist.name,
+    'Tattoo Artist',
+    artistImageUrl,
+    description,
+  )
 
   return {
-    title: title,
-    description: description,
-    openGraph: {
-      title: title,
-      description: description,
-      images: getImageFromRef(artist.headshot)?.url,
+    ...generateEnhancedMetadata({
+      title,
+      description,
+      imageUrl: artistImageUrl,
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/artists/${params.slug}`,
+      siteName: metadata.businessName,
+      keywords: [
+        artist.name,
+        'tattoo artist',
+        ...(artist.styles || []),
+        'tattoo portfolio',
+        metadata.city || '',
+        metadata.state || '',
+        metadata.businessName,
+      ].filter(Boolean),
+    }),
+    other: {
+      'application/ld+json': JSON.stringify(personSchema),
     },
   }
 }

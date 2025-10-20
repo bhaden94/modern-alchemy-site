@@ -14,6 +14,7 @@ import { getClient } from '~/lib/sanity/sanity.client'
 import { getImageFromRef } from '~/lib/sanity/sanity.image'
 import { resolveArtistUrl } from '~/lib/sanity/sanity.links'
 import { formatStylesInSentence, isHttpUrl } from '~/utils'
+import { generateEnhancedMetadata } from '~/utils/seo'
 
 export const generateStaticParams = async () => {
   const client = getClient(undefined)
@@ -36,17 +37,27 @@ export async function generateMetadata({
 
   const formattedStyles = formatStylesInSentence(artist.styles)
   const stylesSection = formattedStyles ? `for ${formattedStyles} tattoos ` : ''
-  const description = `Submit a booking request ${stylesSection}with ${artist.name} at ${metadata.businessName} located in ${metadata.location}.`
+  const locationParts = [metadata.city, metadata.state]
+    .filter(Boolean)
+    .join(', ')
+  const description = `Submit a booking request ${stylesSection}with ${artist.name} at ${metadata.businessName} located in ${locationParts}.`
 
-  return {
-    title: title,
-    description: description,
-    openGraph: {
-      title: title,
-      description: description,
-      images: getImageFromRef(artist.headshot)?.url,
-    },
-  }
+  return generateEnhancedMetadata({
+    title,
+    description,
+    imageUrl: getImageFromRef(artist.headshot)?.url,
+    url: `${process.env.NEXT_PUBLIC_SITE_URL}/booking-request/${params.slug}`,
+    siteName: metadata.businessName,
+    keywords: [
+      artist.name,
+      'tattoo booking',
+      'book tattoo appointment',
+      ...(artist.styles || []),
+      metadata.city || '',
+      metadata.state || '',
+      metadata.businessName,
+    ].filter(Boolean),
+  })
 }
 
 const ArtistBookingRequestPage = async ({
