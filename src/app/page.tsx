@@ -14,35 +14,20 @@ import { generateEnhancedMetadata } from '~/utils/seo'
 
 export async function generateMetadata(): Promise<Metadata> {
   const client = getClient(undefined)
-  const metadata = await getLayoutMetadata(client)
+  const layout = await getLayoutMetadata(client)
   const content = await performPageContentQuery('rootPageContent', client)
 
-  if (!metadata) return {}
-
-  const title = metadata.businessName
-  const locationParts = [metadata.city, metadata.state]
-    .filter(Boolean)
-    .join(', ')
-  const description = content?.heroDescription
-    ? `${content.heroDescription} Located in ${locationParts}.`
-    : metadata.description ||
-      `${metadata.businessName} - Professional tattoo studio in ${metadata.location}`
-
   return generateEnhancedMetadata({
-    title,
-    description,
-    imageUrl: getImageFromRef(metadata.openGraphImage)?.url,
-    url: process.env.NEXT_PUBLIC_SITE_URL,
-    siteName: metadata.businessName,
+    title: layout.businessName,
+    description: layout.description || '',
+    imageUrl: getImageFromRef(layout.openGraphImage)?.url,
+    url: process.env.NEXT_PUBLIC_SITE_URL || '',
+    siteName: layout.businessName,
     keywords: [
-      'tattoo studio',
-      'professional tattoo artist',
-      'custom tattoos',
-      'tattoo shop',
-      metadata.city || '',
-      metadata.state || '',
-      metadata.businessName,
-      'tattoo near me',
+      ...(content?.keywords || []),
+      layout.city || '',
+      layout.state || '',
+      layout.businessName,
     ].filter(Boolean),
   })
 }

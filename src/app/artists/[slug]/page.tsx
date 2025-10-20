@@ -60,9 +60,7 @@ export async function generateMetadata({
       siteName: metadata.businessName,
       keywords: [
         artist.name,
-        'tattoo artist',
         ...(artist.styles || []),
-        'tattoo portfolio',
         metadata.city || '',
         metadata.state || '',
         metadata.businessName,

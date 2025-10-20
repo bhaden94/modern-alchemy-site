@@ -30,9 +30,7 @@ export async function generateMetadata(): Promise<Metadata> {
     url: `${process.env.NEXT_PUBLIC_SITE_URL}/artists`,
     siteName: layout.businessName,
     keywords: [
-      'tattoo artists',
-      'professional tattoo artist',
-      'custom tattoo designs',
+      ...(content.keywords || []),
       layout.city || '',
       layout.state || '',
       layout.businessName,

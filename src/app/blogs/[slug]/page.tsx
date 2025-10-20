@@ -54,10 +54,11 @@ export async function generateMetadata({
       type: 'article',
       siteName: layout.businessName,
       keywords: [
-        'tattoo blog',
+        ...(blog.keywords || []),
         title,
-        layout.businessName,
         layout.city || '',
+        layout.state || '',
+        layout.businessName,
       ].filter(Boolean),
     }),
     other: {
