@@ -2,6 +2,7 @@ import { test, expect, Page } from '@playwright/test'
 import {
   addCoverImageToBlog,
   clearBlogForm,
+  createBlogWithContent,
   fillBlogForm,
   navigateToBlogsPage,
   performBlogFormAction,
@@ -20,40 +21,14 @@ let testBlogPublishedTitle: string
 const testBlogPublishedContent: string =
   'This is test content for the published blog.'
 let testBlogPublishedUrl: string
+let testBlogPublishedSeoSummary: string =
+  'This is a test SEO summary for the published blog.'
+let testBlogPublishedSeoKeywords: string[] = ['test', 'published', 'blog']
 
 let testBlogPublishedWithCoverImageTitle: string
 const testBlogPublishedWithCoverImageContent: string =
   'This is test content for the published blog with cover image.'
 let testBlogPublishedWithCoverImageUrl: string
-
-// Helper function to create a blog with title and content
-async function createBlogWithContent(
-  page: Page,
-  title: string,
-  content: string,
-  coverImagePath: string | null = null,
-  shouldPublish: boolean = false,
-): Promise<string> {
-  await page.getByRole('button', { name: 'Create Article' }).click()
-  await page.waitForURL(/.*\/blogs\/[a-zA-Z0-9]+$/)
-
-  // Store the full URL path for later navigation
-  const fullUrl = page.url()
-
-  // Fill form and save
-  await fillBlogForm(page, title, content)
-  await performBlogFormAction(page, 'save')
-
-  if (coverImagePath) {
-    await addCoverImageToBlog(page, coverImagePath)
-  }
-
-  if (shouldPublish) {
-    await performBlogFormAction(page, 'publish')
-  }
-
-  return fullUrl
-}
 
 // Helper function to navigate to a specific blog by URL
 async function navigateToBlogEditor(page: Page, blogUrl: string) {
@@ -95,37 +70,39 @@ test.beforeAll(async ({ browser }) => {
   testBlogPublishedWithCoverImageTitle = `Test Editor Published with Cover Image ${timestamp}`
 
   // Create draft blog
-  testBlogDraftUrl = await createBlogWithContent(
-    page,
-    testBlogDraftTitle,
-    testBlogDraftContent,
-    null,
-    false,
-  )
+  testBlogDraftUrl = await createBlogWithContent({
+    page: page,
+    title: testBlogDraftTitle,
+    content: testBlogDraftContent,
+    shouldPublish: false,
+  })
 
   // Navigate back to blogs page
   await navigateToBlogsPage(page)
 
   // Create published blog
-  testBlogPublishedUrl = await createBlogWithContent(
-    page,
-    testBlogPublishedTitle,
-    testBlogPublishedContent,
-    null,
-    true,
-  )
+  testBlogPublishedUrl = await createBlogWithContent({
+    page: page,
+    title: testBlogPublishedTitle,
+    content: testBlogPublishedContent,
+    shouldPublish: true,
+    seoSettings: {
+      summary: testBlogPublishedSeoSummary,
+      keywords: testBlogPublishedSeoKeywords,
+    },
+  })
 
   // Navigate back to blogs page
   await navigateToBlogsPage(page)
 
   // Create published blog with cover image
-  testBlogPublishedWithCoverImageUrl = await createBlogWithContent(
-    page,
-    testBlogPublishedWithCoverImageTitle,
-    testBlogPublishedWithCoverImageContent,
-    'public/tattoo-shop.jpg',
-    true,
-  )
+  testBlogPublishedWithCoverImageUrl = await createBlogWithContent({
+    page: page,
+    title: testBlogPublishedWithCoverImageTitle,
+    content: testBlogPublishedWithCoverImageContent,
+    shouldPublish: true,
+    coverImagePath: 'public/tattoo-shop.jpg',
+  })
 
   // Verify blogs exist on blogs page
   await navigateToBlogsPage(page, 'Drafts')
@@ -265,6 +242,30 @@ test.describe('Blog Editor Tests', () => {
 
     // Verify Last saved timestamp is present
     await expect(page.getByText(/Last saved:/)).toBeVisible()
+  })
+})
+
+test.describe('Blog Editor - SEO Settings', () => {
+  test('blog with SEO settings shows in editor', async ({ page }) => {
+    await navigateToBlogEditor(page, testBlogPublishedUrl)
+
+    const seoAccordion = page.getByRole('button', { name: 'SEO Settings' })
+    const isExpanded = await seoAccordion.getAttribute('aria-expanded')
+    if (isExpanded === 'false') {
+      await seoAccordion.click()
+    }
+
+    await expect(page.getByRole('textbox', { name: 'Summary' })).toBeVisible()
+    await expect(page.locator('#keywords')).toBeVisible()
+
+    expect(
+      await page.getByRole('textbox', { name: 'Summary' }).inputValue(),
+    ).toBe(testBlogPublishedSeoSummary)
+
+    for (const keyword of testBlogPublishedSeoKeywords) {
+      const pill = page.locator('.mantine-Pill-label', { hasText: keyword })
+      await expect(pill).toBeVisible()
+    }
   })
 })
 
