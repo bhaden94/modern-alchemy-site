@@ -5,21 +5,37 @@ import Artists from '~/components/Artists/Artists'
 import PageContainer from '~/components/PageContainer'
 import PageInProgress from '~/components/PageInProgress/PageInProgress'
 import { getActiveArtists } from '~/lib/sanity/queries/sanity.artistsQuery'
-import { performPageContentQuery } from '~/lib/sanity/queries/sanity.pageContentQueries'
+import {
+  getLayoutMetadata,
+  performPageContentQuery,
+} from '~/lib/sanity/queries/sanity.pageContentQueries'
 import { getClient } from '~/lib/sanity/sanity.client'
+import { generateEnhancedMetadata } from '~/utils/seo'
 
 export async function generateMetadata(): Promise<Metadata> {
-  const content = await performPageContentQuery('artistsPageContent')
+  const client = getClient(undefined)
+  const content = await performPageContentQuery('artistsPageContent', client)
+  const layout = await getLayoutMetadata(client)
+
   if (!content) return {}
 
-  return {
+  const locationParts = [layout.city, layout.state].filter(Boolean).join(', ')
+  const enhancedDescription = locationParts
+    ? `${content.metadataDescription || 'Meet our talented tattoo artists'} Located in ${locationParts}.`
+    : content.metadataDescription || 'Meet our talented tattoo artists'
+
+  return generateEnhancedMetadata({
     title: content.pageTitle,
-    description: content.metadataDescription,
-    openGraph: {
-      title: content.pageTitle,
-      description: content.metadataDescription,
-    },
-  }
+    description: enhancedDescription,
+    url: `${process.env.NEXT_PUBLIC_SITE_URL}/artists`,
+    siteName: layout.businessName,
+    keywords: [
+      ...(content.keywords || []),
+      layout.city || '',
+      layout.state || '',
+      layout.businessName,
+    ].filter(Boolean),
+  })
 }
 
 const ArtistsShowcasePage = async () => {

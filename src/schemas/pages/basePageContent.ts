@@ -4,6 +4,7 @@ export interface BasePageContent {
   pageTitle: string
   isActive: boolean
   metadataDescription?: string
+  keywords?: string[]
 }
 
 export default defineType({
@@ -27,6 +28,14 @@ export default defineType({
       name: 'metadataDescription',
       type: 'string',
       title: 'Metadata Description',
+    }),
+    defineField({
+      name: 'keywords',
+      type: 'array',
+      title: 'SEO Keywords',
+      description:
+        'Keywords for this page. Will be combined with location-based keywords.',
+      of: [{ type: 'string' }],
     }),
   ],
 })

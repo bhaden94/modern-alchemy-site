@@ -19,6 +19,11 @@ import {
 } from '~/lib/sanity/queries/sanity.pageContentQueries'
 import { getClient } from '~/lib/sanity/sanity.client'
 import { getImageFromRef } from '~/lib/sanity/sanity.image'
+import {
+  generateEnhancedMetadata,
+  generateLocalBusinessSchema,
+  generateOrganizationSchema,
+} from '~/utils/seo'
 import { colorScheme } from '~/utils/theme'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -27,21 +32,24 @@ export async function generateMetadata(): Promise<Metadata> {
 
   if (!metadata) return {}
 
-  return {
-    title: {
-      template: `%s | ${metadata.businessName}`,
-      default: metadata.businessName,
-    },
-    description: metadata.description,
-    openGraph: {
-      title: {
-        template: `%s | ${metadata.businessName}`,
-        default: metadata.businessName,
-      },
-      description: metadata.description,
-      images: getImageFromRef(metadata.openGraphImage)?.url,
-    },
-  }
+  const imageUrl = getImageFromRef(metadata.openGraphImage)?.url
+
+  return generateEnhancedMetadata({
+    title: metadata.businessName,
+    description:
+      metadata.description ||
+      `${metadata.businessName} - Professional tattoo studio in ${metadata.location}`,
+    imageUrl,
+    siteName: metadata.businessName,
+    keywords: [
+      'tattoo studio',
+      'tattoo artist',
+      'custom tattoos',
+      metadata.city || '',
+      metadata.state || '',
+      metadata.businessName,
+    ].filter(Boolean),
+  })
 }
 
 export default async function RootLayout({
@@ -51,6 +59,20 @@ export default async function RootLayout({
 }) {
   const client = getClient(undefined)
   const content = await getRootLayoutContent(client)
+  const metadata = await getLayoutMetadata(client)
+
+  // Generate structured data for local SEO
+  const localBusinessSchema = metadata
+    ? generateLocalBusinessSchema(metadata, process.env.NEXT_PUBLIC_SITE_URL)
+    : null
+
+  const organizationSchema =
+    metadata && content.businessLogo
+      ? generateOrganizationSchema(
+          metadata,
+          getImageFromRef(content.businessLogo)?.url,
+        )
+      : null
 
   return (
     <html lang="en">
@@ -58,6 +80,24 @@ export default async function RootLayout({
         <ColorSchemeScript defaultColorScheme={colorScheme} />
         {content.googleTagManagerId && (
           <GoogleTagManager gtmId={content.googleTagManagerId} />
+        )}
+        {/* LocalBusiness structured data for SEO */}
+        {localBusinessSchema && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(localBusinessSchema),
+            }}
+          />
+        )}
+        {/* Organization structured data */}
+        {organizationSchema && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(organizationSchema),
+            }}
+          />
         )}
       </head>
       <body className="flex min-h-screen flex-col">

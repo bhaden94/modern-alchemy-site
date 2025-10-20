@@ -10,6 +10,7 @@ import { getDefaultMailingList } from '~/lib/sanity/queries/sanity.mailingListQu
 import { getLayoutMetadata } from '~/lib/sanity/queries/sanity.pageContentQueries'
 import { getClient } from '~/lib/sanity/sanity.client'
 import { getImageFromRef } from '~/lib/sanity/sanity.image'
+import { generateArticleSchema, generateEnhancedMetadata } from '~/utils/seo'
 
 export const generateStaticParams = async () => {
   const client = getClient(undefined)
@@ -28,16 +29,40 @@ export async function generateMetadata({
   if (!blog) return {}
   const layout = await getLayoutMetadata(client)
 
-  const title = blog.title
-  const description = `Read ${blog.title} at ${layout.businessName}.`
+  const title = blog.title || 'Blog Post'
+  const locationParts = [layout.city, layout.state].filter(Boolean).join(', ')
+  const description = `Read ${title} at ${layout.businessName}${locationParts ? ` in ${locationParts}` : ''}.`
 
-  return {
+  const blogImageUrl = getImageFromRef(blog.coverImage)?.url
+
+  // Generate Article structured data
+  const articleSchema = generateArticleSchema(
     title,
     description,
-    openGraph: {
+    blog.artist?.name || layout.businessName,
+    blog.publishedAt || blog._createdAt,
+    blogImageUrl,
+    `${process.env.NEXT_PUBLIC_SITE_URL}/blogs/${params.slug}`,
+  )
+
+  return {
+    ...generateEnhancedMetadata({
       title,
       description,
-      images: getImageFromRef(blog.coverImage)?.url,
+      imageUrl: blogImageUrl,
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/blogs/${params.slug}`,
+      type: 'article',
+      siteName: layout.businessName,
+      keywords: [
+        ...(blog.keywords || []),
+        title,
+        layout.city || '',
+        layout.state || '',
+        layout.businessName,
+      ].filter(Boolean),
+    }),
+    other: {
+      'application/ld+json': JSON.stringify(articleSchema),
     },
   }
 }
