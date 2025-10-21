@@ -50,7 +50,7 @@ test.describe('Blogs Page Tests', () => {
     await createBlog(page, testBlogDraft)
 
     // Navigate back to blogs page
-    await page.getByRole('button', { name: 'Settings' }).click()
+    await page.getByRole('button', { name: 'Settings', exact: true }).click()
     await page.getByRole('link', { name: 'Blog Articles' }).click()
     await page.waitForSelector('h1:has-text("My Blogs")')
 
@@ -169,27 +169,19 @@ test.describe('Blogs Page Tests', () => {
       .getByRole('link', { name: 'Edit' })
       .click()
 
-    // Wait for navigation (might open in new tab)
-    await page.waitForTimeout(1000)
-
-    // Get all pages/tabs
-    const context = page.context()
-    const pages = context.pages()
-    const editorPage = pages[pages.length - 1] // Get the last opened page
-
-    // Wait for editor to load
-    await editorPage.waitForURL(/.*\/blogs\/[a-zA-Z0-9-]+$/)
+    // Wait for navigation to editor page
+    await page.waitForURL(/.*\/blogs\/[a-zA-Z0-9-]+$/)
 
     // Verify the title is loaded with our test blog title
-    const titleInput = editorPage.getByRole('textbox', { name: 'Title' })
+    const titleInput = page.getByRole('textbox', { name: 'Title' })
     await expect(titleInput).toHaveValue(testBlogDraft)
 
     // Verify buttons are present
     await expect(
-      editorPage.getByRole('button', { name: 'Toggle Preview' }),
+      page.getByRole('button', { name: 'Toggle Preview' }),
     ).toBeVisible()
     await expect(
-      editorPage.getByRole('button', { name: 'Save Changes' }),
+      page.getByRole('button', { name: 'Save Changes' }),
     ).toBeVisible()
   })
 
@@ -222,7 +214,7 @@ test.describe('Blogs Page Tests', () => {
     await expect(page.getByText(/Published: In draft/)).toBeVisible()
 
     // Navigate back to blogs page to delete the untitled blog
-    await page.getByRole('button', { name: 'Settings' }).click()
+    await page.getByRole('button', { name: 'Settings', exact: true }).click()
     await page.getByRole('link', { name: 'Blog Articles' }).click()
     await page.waitForSelector('h1:has-text("My Blogs")')
 
