@@ -31,7 +31,6 @@ const AdminBlogList = ({
                 size="sm"
                 component={Link}
                 href={`${NavigationPages.EmployeePortal}/${blog.artist._id}/${NavigationPages.Blog}/${blog._id}`}
-                target="_blank"
                 prefetch={false}
               >
                 Edit

@@ -17,6 +17,7 @@ export interface Blog extends BaseSanitySchema<'blog'> {
   artist: Artist
   state: 'draft' | 'published'
   keywords?: string[]
+  summary?: string
 }
 
 export default defineType({
@@ -119,6 +120,13 @@ export default defineType({
       description:
         'Keywords for this blog post. Will be combined with location-based keywords.',
       of: [{ type: 'string' }],
+    }),
+    defineField({
+      name: 'summary',
+      type: 'string',
+      title: 'Summary',
+      description:
+        'A brief summary for SEO purposes (recommended ~160 characters).',
     }),
   ],
 })

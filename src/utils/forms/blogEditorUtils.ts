@@ -47,6 +47,8 @@ export const blogEditorSchema = z.object({
   content: z.any().optional(), // BlockContent is complex, using any for flexibility
   // Now we can properly validate the cover image as a File
   coverImage: z.custom<File>().optional().superRefine(coverImageRefinement),
+  keywords: z.array(z.string()).optional(),
+  summary: z.string().optional(),
 })
 
 // extracting the type
@@ -67,6 +69,16 @@ export const BlogEditorField = {
     id: 'coverImage' as keyof TBlogEditorSchema,
     label: 'Cover Image',
     placeholder: 'Upload a cover image',
+  },
+  Keywords: {
+    id: 'keywords' as keyof TBlogEditorSchema,
+    label: 'Keywords',
+    placeholder: 'Enter a keyword',
+  },
+  Summary: {
+    id: 'summary' as keyof TBlogEditorSchema,
+    label: 'Summary',
+    placeholder: 'Enter a brief summary for SEO purposes (~160 characters)...',
   },
 } as const
 

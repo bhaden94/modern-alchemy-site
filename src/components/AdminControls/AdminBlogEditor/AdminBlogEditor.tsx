@@ -32,6 +32,7 @@ import {
 
 import AdminBlogEditorActionBar from './AdminBlogEditorActionBar/AdminBlogEditorActionBar'
 import AdminBlogInformationBar from './AdminBlogInformationBar/AdminBlogInformationBar'
+import AdminBlogSeoEditor from './AdminBlogSeoEditor/AdminBlogSeoEditor'
 import AdminBlogTitleEditor from './AdminBlogTitleEditor/AdminBlogTitleEditor'
 import BlogEditorTextEditor from './BlogEditorTextEditor/BlogEditorTextEditor'
 import EditableCoverImage from './EditableCoverImage/EditableCoverImage'
@@ -57,6 +58,8 @@ export default function AdminBlogEditor({
       content: blog?.content,
       // Don't set coverImage in initial values - it will be handled separately
       coverImage: undefined,
+      keywords: blog?.keywords || [],
+      summary: blog?.summary,
     },
     validate: zodResolver(blogEditorSchema),
   })
@@ -131,6 +134,8 @@ export default function AdminBlogEditor({
         title: formValues.title,
         content: formValues.content,
         coverImage: coverUpdate,
+        keywords: formValues.keywords,
+        summary: formValues.summary,
       }
 
       if (action === 'publish') {
@@ -166,6 +171,8 @@ export default function AdminBlogEditor({
         title: responseBody.title,
         content: responseBody.content,
         coverImage: undefined, // Always reset to undefined after save
+        keywords: responseBody.keywords || [],
+        summary: responseBody.summary,
       })
       form.resetDirty()
       setSavedBlog(responseBody as Blog)
@@ -277,6 +284,7 @@ export default function AdminBlogEditor({
               <PageContainer>
                 <Stack>
                   <Container size="xs" px={0}>
+                    <AdminBlogSeoEditor disabled={isSubmitting} />
                     <AdminBlogTitleEditor />
                     <BlogEditorTextEditor
                       initialValue={blog?.content}
