@@ -69,7 +69,7 @@ export const sendMail = async (
     text: text,
     attachments: base64Images.map((url, i) => {
       return {
-        filename: `Booking Request Image ${i}`,
+        filename: `Booking Request Image ${i}.jpg`,
         path: url,
       }
     }),
