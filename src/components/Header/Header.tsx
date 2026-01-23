@@ -31,7 +31,14 @@ const Header = ({ logo, navItems }: IHeader) => {
     link: string,
   ) => {
     event.preventDefault()
-    router.push(link)
+
+    // open in new tab if external link
+    if (link.startsWith('http')) {
+      window.open(link, '_blank')
+    } else {
+      router.push(link)
+    }
+
     close()
   }
 

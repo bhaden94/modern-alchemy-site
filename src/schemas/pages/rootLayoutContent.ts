@@ -41,13 +41,18 @@ export interface RootLayoutContent
   googleTagManagerId?: string
 }
 
+const linkDescription =
+  'If this link is meant for a page within the site, it must start with a /. For external links, use the full URL starting with https://.'
+
 const linkValidation = (
   Rule: StringRule,
   required: boolean = false,
 ): RuleBuilder<StringRule, string> =>
   Rule.lowercase().custom((text: string | undefined) => {
     if (!text) return required ? 'Required' : true
-    return text.startsWith('/') ? true : 'Link must start with a /'
+    return text.startsWith('/') || text.startsWith('https://')
+      ? true
+      : 'Link must start with a / for internal links or https:// for external links.'
   })
 
 export default defineType({
@@ -133,6 +138,7 @@ export default defineType({
               name: 'link',
               title: 'Link',
               type: 'string',
+              description: linkDescription,
               validation: (Rule) => linkValidation(Rule),
             }),
             defineField({
@@ -155,6 +161,7 @@ export default defineType({
                       name: 'link',
                       title: 'Link',
                       type: 'string',
+                      description: linkDescription,
                       validation: (Rule) => linkValidation(Rule, true),
                     }),
                   ],
