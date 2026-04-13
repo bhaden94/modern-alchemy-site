@@ -45,7 +45,13 @@ export async function performPageContentQuery<T extends keyof QueryReturnType>(
   return await client.fetch(query, {}, { next: { tags: [param] } })
 }
 
-const rootLayoutContentQuery = groq`*[_type == "rootLayoutContent"][0]`
+const rootLayoutContentQuery = groq`*[_type == "rootLayoutContent"][0]{
+  ...,
+  businessLogo{
+    ...,
+    asset->
+  }
+}`
 export async function getRootLayoutContent(
   client: SanityClient,
 ): Promise<RootLayoutContent> {

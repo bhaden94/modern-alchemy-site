@@ -9,7 +9,6 @@ import { useRouter } from 'next/navigation'
 import { getImageFromRef } from '~/lib/sanity/sanity.image'
 import { ImageReference } from '~/lib/sanity/sanity.image'
 import { NavigationItem } from '~/schemas/pages/rootLayoutContent'
-import { Base64Logo } from '~/utils'
 import { NavigationPages } from '~/utils/navigation'
 
 import NavMenuDropdown from '../NavMenu/NavMenuDropdown'
@@ -26,6 +25,8 @@ interface IHeader {
 const Header = ({ logo, navItems }: IHeader) => {
   const router = useRouter()
   const [opened, { toggle, close }] = useDisclosure(false)
+  const logoImage = getImageFromRef(logo)
+
   const onLinkClick = (
     event: React.MouseEvent<HTMLAnchorElement>,
     link: string,
@@ -65,12 +66,13 @@ const Header = ({ logo, navItems }: IHeader) => {
       <Container size="md" className={classes.inner}>
         <Link href={NavigationPages.Home} className="flex">
           <Image
-            src={getImageFromRef(logo)?.url || ''}
+            src={logoImage?.url || ''}
             alt="Business logo"
-            width={220}
-            height={84}
-            placeholder="blur"
-            blurDataURL={Base64Logo}
+            width={logoImage?.metadata.dimensions?.width || 143}
+            height={logoImage?.metadata.dimensions?.height || 84}
+            style={{ maxHeight: 84, width: 'auto', height: 'auto' }}
+            placeholder={logoImage?.metadata.lqip ? 'blur' : 'empty'}
+            blurDataURL={logoImage?.metadata.lqip}
           />
         </Link>
         <Group gap={5} visibleFrom={hamburgerMenuBreakpoint}>

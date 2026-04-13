@@ -7,7 +7,6 @@ import Image from 'next/image'
 import { getImageFromRef } from '~/lib/sanity/sanity.image'
 import { ImageReference } from '~/lib/sanity/sanity.image'
 import { NavigationItem } from '~/schemas/pages/rootLayoutContent'
-import { Base64Logo } from '~/utils'
 import { ExtraNavLinks } from '~/utils/navigation'
 
 import NavMenuDropdown from '../NavMenu/NavMenuDropdown'
@@ -26,6 +25,7 @@ interface IFooter {
 const Footer = (props: IFooter) => {
   const { logo, copyrightText, logoCaption, instagram, facebook, navItems } =
     props
+  const logoImage = getImageFromRef(logo)
 
   const navGroup = navItems?.map((navItem) => {
     return 'links' in navItem ? (
@@ -46,12 +46,13 @@ const Footer = (props: IFooter) => {
       <Container className="flex flex-col items-center sm:justify-between sm:flex-row">
         <div className="flex flex-col items-center sm:max-w-[250px] sm:items-start">
           <Image
-            src={getImageFromRef(logo)?.url || ''}
+            src={logoImage?.url || ''}
             alt="Business logo"
-            width={120}
-            height={46}
-            placeholder="blur"
-            blurDataURL={Base64Logo}
+            width={logoImage?.metadata.dimensions?.width || 78}
+            height={logoImage?.metadata.dimensions?.height || 46}
+            style={{ maxHeight: 46, width: 'auto', height: 'auto' }}
+            placeholder={logoImage?.metadata.lqip ? 'blur' : 'empty'}
+            blurDataURL={logoImage?.metadata.lqip}
           />
           {logoCaption?.map((line) => (
             <Text
